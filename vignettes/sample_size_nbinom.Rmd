@@ -1,0 +1,220 @@
+---
+title: "Sample Size Calculation for Negative Binomial Outcomes"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Sample Size Calculation for Negative Binomial Outcomes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(nbsample)
+```
+
+This vignette describes the methodology used in the `sample_size_nbinom` function for calculating sample sizes when comparing two treatment groups with negative binomial outcomes. It covers two available methods and how to account for variable accrual rates.
+
+## Methodology
+
+We assume the outcome $Y$ follows a negative binomial distribution with mean $\mu$ and dispersion parameter $k$, such that the variance is given by:
+
+$$ Var(Y) = \mu + k \mu^2 $$
+
+Note that in R's `rnbinom` parameterization, $k = 1/\texttt{size}$.
+
+We wish to test the null hypothesis $H_0: \lambda_1 = \lambda_2$ against the alternative $H_1: \lambda_1 \neq \lambda_2$, where $\lambda_1$ and $\lambda_2$ are the event rates in the control and treatment groups, respectively.
+
+The function implements two methods:
+
+### Method 1: Zhu and Lakkis (2014)
+
+This method is based on the asymptotic normality of the log rate ratio. The sample size for the control group ($n_1$) is:
+
+$$ n_1 = \frac{(z_{\alpha/s} + z_{\beta})^2 \cdot V}{(\log(\mu_1/\mu_2))^2} $$
+
+where $V$ is the variance component:
+$$ V = \left(\frac{1}{\mu_1} + k\right) + \frac{1}{r}\left(\frac{1}{\mu_2} + k\right) $$
+
+where $r = n_2/n_1$ is the allocation ratio, and $\mu_i = \lambda_i \cdot t$ is the expected mean count over exposure duration $t$.
+
+### Method 2: Friede and Schmidli (2010) / Mütze et al. (2018)
+
+This method uses a Wald test statistic and is commonly used in group sequential designs (as implemented in the `gscounts` package). The total sample size $n_{total}$ is calculated as:
+
+$$ n_{total} = \frac{(z_{\alpha/s} + z_{\beta})^2 \cdot \bar{V}}{(\log(\lambda_1/\lambda_2))^2} $$
+
+where $\bar{V}$ is the average variance per subject:
+$$ \bar{V} = \frac{1/ \mu_1 + k}{p_1} + \frac{1/ \mu_2 + k}{p_2} $$
+
+where $p_1 = n_1/n_{total}$ and $p_2 = n_2/n_{total}$ are the allocation proportions.
+
+**Note:** For a fixed design with equal allocation, both methods yield identical sample sizes.
+
+## Average Exposure with Variable Accrual and Dropout
+
+When the accrual rate is not constant or when the trial has a fixed duration with ongoing recruitment, the exposure time for patients will vary. The function calculates an *average exposure* time to use in the sample size formula. Additionally, if a `dropout_rate` is specified, the exposure is adjusted to account for patients leaving the study early.
+
+Let $T$ be the total trial duration. Suppose recruitment occurs in $J$ segments, where the $j$-th segment has accrual rate $R_j$ and duration $D_j$.
+
+If `dropout_rate` is 0:
+
+1.  The number of patients recruited in segment $j$ is $N_j = R_j \cdot D_j$.
+2.  The start time of segment $j$ is $S_{j-1} = \sum_{i=1}^{j-1} D_i$ (with $S_0 = 0$).
+3.  The midpoint of recruitment for segment $j$ is $M_j = S_{j-1} + D_j/2$.
+4.  The average follow-up (exposure) time for patients recruited in segment $j$ is approximately $E_j = T - M_j$.
+
+If `dropout_rate` ($\delta$) > 0, the average exposure is calculated by integrating the exposure function over the recruitment interval:
+
+$$ E_j = \frac{1}{\delta} - \frac{1}{\delta^2 D_j} \left( e^{-\delta u_{min}} - e^{-\delta u_{max}} \right) $$
+where $u_{max}$ and $u_{min}$ are the maximum and minimum potential follow-up times for patients in that segment ($T - S_{j-1}$ and $T - (S_{j-1} + D_j)$ respectively).
+
+### Maximum Follow-up
+
+If `max_followup` ($F$) is specified, the follow-up time for any individual is capped at $F$. This creates three scenarios for a recruitment segment:
+
+1.  **All truncated:** If $u_{min} \ge F$, all patients in the segment have potential follow-up $\ge F$, so their actual follow-up is $F$ (subject to dropout).
+2.  **None truncated:** If $u_{max} \le F$, no patients reach the cap $F$ before the trial ends. The calculation is as above.
+3.  **Partial truncation:** If $u_{min} < F < u_{max}$, patients recruited earlier in the segment are capped at $F$, while those recruited later are followed until the trial end. The segment is split into two parts for calculation.
+
+The overall average exposure used for the calculation is the weighted average:
+
+$$ \bar{t} = \frac{\sum_{j=1}^J N_j E_j}{\sum_{j=1}^J N_j} $$
+
+## Examples
+
+### Basic Calculation (Zhu and Lakkis)
+
+Calculate sample size for:
+*   Control rate $\lambda_1 = 0.5$
+*   Treatment rate $\lambda_2 = 0.3$
+*   Dispersion $k = 0.1$
+*   Power = 80%
+*   Alpha = 0.025 (one-sided)
+*   Fixed exposure duration = 1 year
+
+```{r}
+sample_size_nbinom(
+  lambda1 = 0.5,
+  lambda2 = 0.3,
+  dispersion = 0.1,
+  power = 0.8,
+  alpha = 0.025,
+  sided = 1,
+  exposure = 1,
+  method = "zhu"
+)
+```
+
+### Using Friede et al. Method
+
+```{r}
+sample_size_nbinom(
+  lambda1 = 0.5,
+  lambda2 = 0.3,
+  dispersion = 0.1,
+  power = 0.8,
+  alpha = 0.025,
+  sided = 1,
+  exposure = 1,
+  method = "friede"
+)
+```
+
+### Piecewise Constant Accrual
+
+Consider a trial where recruitment ramps up:
+*   5 patients/month for the first 3 months
+*   10 patients/month for the next 3 months
+*   Total trial duration is 12 months
+
+The function automatically calculates the average exposure based on this accrual pattern.
+
+```{r}
+sample_size_nbinom(
+  lambda1 = 0.5,
+  lambda2 = 0.3,
+  dispersion = 0.1,
+  power = 0.8,
+  accrual_rate = c(5, 10),
+  accrual_duration = c(3, 3),
+  trial_duration = 12
+)
+```
+
+### Accrual with Dropout and Max Follow-up
+
+Same design as above, but with a 5% dropout rate per unit time and a maximum follow-up of 6 months.
+
+```{r}
+sample_size_nbinom(
+  lambda1 = 0.5,
+  lambda2 = 0.3,
+  dispersion = 0.1,
+  power = 0.8,
+  accrual_rate = c(5, 10),
+  accrual_duration = c(3, 3),
+  trial_duration = 12,
+  dropout_rate = 0.05,
+  max_followup = 6
+)
+```
+
+### Calculating Power for Fixed Design
+
+Using the accrual rates and design from the previous example, suppose we want to calculate the power if the treatment effect is smaller ($\lambda_2 = 0.4$ instead of $0.3$). We use the `accrual_rate` computed in the previous step.
+
+```{r}
+# Store the result from the previous calculation
+design_result <- sample_size_nbinom(
+  lambda1 = 0.5,
+  lambda2 = 0.3,
+  dispersion = 0.1,
+  power = 0.8,
+  accrual_rate = c(5, 10),
+  accrual_duration = c(3, 3),
+  trial_duration = 12,
+  dropout_rate = 0.05,
+  max_followup = 6
+)
+
+# Use the computed accrual rates to calculate power for a smaller effect size
+sample_size_nbinom(
+  lambda1 = 0.5,
+  lambda2 = 0.4, # Smaller effect size
+  dispersion = 0.1,
+  power = NULL,  # Request power calculation
+  accrual_rate = design_result$accrual_rate, # Use computed rates
+  accrual_duration = c(3, 3),
+  trial_duration = 12,
+  dropout_rate = 0.05,
+  max_followup = 6
+)
+```
+
+### Unequal Allocation
+
+Sample size with a 2:1 allocation ratio ($n_2 = 2 n_1$).
+
+```{r}
+sample_size_nbinom(
+  lambda1 = 0.5,
+  lambda2 = 0.3,
+  dispersion = 0.1,
+  ratio = 2
+)
+```
+
+## References
+
+Zhu, H., & Lakkis, H. (2014). Sample size calculation for comparing two negative binomial rates in clinical trials. *Statistics in Biopharmaceutical Research*, 6(1), 107-115.
+
+Friede, T., & Schmidli, H. (2010). Sample size estimation for clinical trials with negative binomial rates. *Methods of Information in Medicine*, 49(6), 623-631.
+
+Mütze, T., Glimm, E., Schmidli, H., & Friede, T. (2018). Group sequential designs for negative binomial outcomes. *Statistical Methods in Medical Research*, 27(10), 2978-2993.
+

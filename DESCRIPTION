@@ -1,0 +1,20 @@
+Package: nbsample
+Title: Sample Size Calculation for Negative Binomial Outcomes
+Version: 0.1.0
+Authors@R: 
+    person("Keaven", "Anderson", email = "keaven_anderson@merck.com", role = c("aut", "cre"))
+Description: Provides sample size calculation methods for negative binomial outcomes,
+    including the methods by Zhu and Lakkis (2014) and Friede and Schmidli (2010).
+    Supports piecewise constant accrual rates.
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Imports:
+    stats
+Suggests:
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+Config/testthat/edition: 3
