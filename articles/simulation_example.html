@@ -230,6 +230,24 @@ dataset back to a plain data frame.</p>
 <p><img src="simulation_example_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="Patient timelines with events (dots) and censoring (X)" width="672"></p>
 </div>
 </div>
+<div class="section level2">
+<h2 id="cutting-data-by-analysis-date">Cutting Data by Analysis Date<a class="anchor" aria-label="anchor" href="#cutting-data-by-analysis-date"></a>
+</h2>
+<p>We can truncate the simulated data at an interim analysis date using
+<code><a href="../reference/cut_data_by_date.html">cut_data_by_date()</a></code>. The function returns a single record
+per participant with the truncated follow-up time (<code>tte</code>) and
+number of observed events.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cut_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cut_data_by_date.html">cut_data_by_date</a></span><span class="op">(</span><span class="va">sim_data</span>, cut_date <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">cut_summary</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   id    treatment enroll_time      tte events</span></span>
+<span><span class="co">#&gt; 1  1      Control  0.01757203 1.482428      1</span></span>
+<span><span class="co">#&gt; 2  2      Control  0.02958474 1.470415      0</span></span>
+<span><span class="co">#&gt; 3  3      Control  0.05727338 1.442727      1</span></span>
+<span><span class="co">#&gt; 4  4 Experimental  0.05793124 1.442069      0</span></span>
+<span><span class="co">#&gt; 5  5      Control  0.05910231 1.440898      1</span></span>
+<span><span class="co">#&gt; 6  6 Experimental  0.06569608 1.434304      0</span></span></code></pre></div>
+</div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>

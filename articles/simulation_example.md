@@ -161,3 +161,22 @@ ggplot(sim_plot, aes(x = tte, y = factor(id), color = treatment)) +
 
 ![Patient timelines with events (dots) and censoring
 (X)](simulation_example_files/figure-html/unnamed-chunk-6-1.png)
+
+## Cutting Data by Analysis Date
+
+We can truncate the simulated data at an interim analysis date using
+[`cut_data_by_date()`](https://keaven.github.io/nbDesign/reference/cut_data_by_date.md).
+The function returns a single record per participant with the truncated
+follow-up time (`tte`) and number of observed events.
+
+``` r
+cut_summary <- cut_data_by_date(sim_data, cut_date = 1.5)
+head(cut_summary)
+#>   id    treatment enroll_time      tte events
+#> 1  1      Control  0.01757203 1.482428      1
+#> 2  2      Control  0.02958474 1.470415      0
+#> 3  3      Control  0.05727338 1.442727      1
+#> 4  4 Experimental  0.05793124 1.442069      0
+#> 5  5      Control  0.05910231 1.440898      1
+#> 6  6 Experimental  0.06569608 1.434304      0
+```
