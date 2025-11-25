@@ -248,6 +248,20 @@ number of observed events.</p>
 <span><span class="co">#&gt; 5  5      Control  0.05910231 1.440898      1</span></span>
 <span><span class="co">#&gt; 6  6 Experimental  0.06569608 1.434304      0</span></span></code></pre></div>
 </div>
+<div class="section level2">
+<h2 id="wald-test-mütze-et-al-">Wald Test (Mütze et al.)<a class="anchor" aria-label="anchor" href="#wald-test-m%C3%BCtze-et-al-"></a>
+</h2>
+<p>Using the truncated data we can run a Negative Binomial Wald test as
+described by Mütze et al. (2018).</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mutze_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutze_test.html">mutze_test</a></span><span class="op">(</span><span class="va">cut_summary</span><span class="op">)</span></span>
+<span><span class="va">mutze_res</span><span class="op">$</span><span class="va">group_summary</span></span>
+<span><span class="co">#&gt;      treatment subjects events exposure</span></span>
+<span><span class="co">#&gt; 1      Control       10      6 12.78001</span></span>
+<span><span class="co">#&gt; 2 Experimental       10      6 13.50194</span></span>
+<span><span class="va">mutze_res</span><span class="op">$</span><span class="va">rate_ratio</span></span>
+<span><span class="co">#&gt; [1] 0.9388646</span></span></code></pre></div>
+</div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>

@@ -30,8 +30,10 @@ observed events (`events`).
 ``` r
 enroll_rate <- data.frame(rate = 20 / (5 / 12), duration = 5 / 12)
 fail_rate <- data.frame(treatment = c("Control", "Experimental"), rate = c(0.5, 0.3))
-dropout_rate <- data.frame(treatment = c("Control", "Experimental"),
-                           rate = c(0.1, 0.05), duration = c(100, 100))
+dropout_rate <- data.frame(
+  treatment = c("Control", "Experimental"),
+  rate = c(0.1, 0.05), duration = c(100, 100)
+)
 sim <- nb_sim(enroll_rate, fail_rate, dropout_rate, max_followup = 2, n = 20)
 cut_data_by_date(sim, cut_date = 1)
 #>    id    treatment enroll_time       tte events

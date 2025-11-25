@@ -180,3 +180,18 @@ head(cut_summary)
 #> 5  5      Control  0.05910231 1.440898      1
 #> 6  6 Experimental  0.06569608 1.434304      0
 ```
+
+## Wald Test (Mütze et al.)
+
+Using the truncated data we can run a Negative Binomial Wald test as
+described by Mütze et al. (2018).
+
+``` r
+mutze_res <- mutze_test(cut_summary)
+mutze_res$group_summary
+#>      treatment subjects events exposure
+#> 1      Control       10      6 12.78001
+#> 2 Experimental       10      6 13.50194
+mutze_res$rate_ratio
+#> [1] 0.9388646
+```
