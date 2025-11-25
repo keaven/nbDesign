@@ -110,6 +110,14 @@ summary_stats <- sim_dt[
 print(summary_stats)
 ```
 
+### Inspect First Ten Records
+
+Before plotting, we can look at the first ten records from the simulated dataset.
+
+```{r}
+head(sim_data, 10)
+```
+
 ### Plotting Events
 
 We can visualize the events and censoring times for each subject.
