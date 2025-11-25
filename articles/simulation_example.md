@@ -1,0 +1,163 @@
+# Simulation of Recurrent Events
+
+``` r
+library(nbDesign)
+library(data.table)
+library(ggplot2)
+```
+
+This vignette demonstrates how to use the
+[`nb_sim()`](https://keaven.github.io/nbDesign/reference/nb_sim.md)
+function to simulate a 2-arm clinical trial with recurrent event
+outcomes.
+
+## Simulation Setup
+
+We will simulate a small trial with the following parameters:
+
+- **Enrollment:** 20 patients total, recruited over 5 months with a
+  constant rate.
+- **Treatments:** Two groups (Control vs. Experimental) with a 1:1
+  allocation ratio.
+- **Event Rates:**
+  - Control: 0.5 events per year.
+  - Experimental: 0.3 events per year.
+- **Dropout:**
+  - Control: 10% annual dropout rate.
+  - Experimental: 5% annual dropout rate.
+- **Maximum Follow-up:** Each patient is followed for a maximum of 2
+  years from randomization.
+
+### Defining Input Parameters
+
+``` r
+# Enrollment: rate of 4 patients/month for 5 months -> ~20 patients
+enroll_rate <- data.frame(
+  rate = 4,
+  duration = 5
+)
+
+# Failure rates (events per unit time)
+fail_rate <- data.frame(
+  treatment = c("Control", "Experimental"),
+  rate = c(0.5, 0.3) # events per year (assuming time unit is year, adjust enroll duration if needed)
+)
+
+# Let's ensure time units are consistent.
+# If fail_rate is per year, then durations should be in years.
+# 5 months = 5/12 years.
+enroll_rate <- data.frame(
+  rate = 20 / (5 / 12), # 20 patients over 5/12 years
+  duration = 5 / 12
+)
+
+# Dropout rates (per year)
+dropout_rate <- data.frame(
+  treatment = c("Control", "Experimental"),
+  rate = c(0.1, 0.05),
+  duration = c(100, 100) # constant rate for long duration
+)
+
+# Maximum follow-up per patient (years)
+max_followup <- 2
+```
+
+## Running the Simulation
+
+``` r
+set.seed(123)
+
+sim_data <- nb_sim(
+  enroll_rate = enroll_rate,
+  fail_rate = fail_rate,
+  dropout_rate = dropout_rate,
+  max_followup = max_followup,
+  n = 20
+)
+
+head(sim_data)
+#>   id id treatment enroll_time       tte calendar_time event
+#> 1  1  1   Control  0.01757203 0.6604608     0.6780328     1
+#> 2  1  1   Control  0.01757203 2.0000000     2.0175720     0
+#> 3  2  2   Control  0.02958474 1.5813635     1.6109483     1
+#> 4  2  2   Control  0.02958474 2.0000000     2.0295847     0
+#> 5  3  3   Control  0.05727338 1.1773693     1.2346427     1
+#> 6  3  3   Control  0.05727338 2.0000000     2.0572734     0
+```
+
+The output contains multiple rows per subject: \* `event = 1`: An actual
+recurrent event. \* `event = 0`: The censoring time (either due to
+dropout or reaching `max_followup`).
+
+## Analyzing the Data
+
+We can aggregate the data to calculate the observed event rates and
+total follow-up time for each group.
+
+``` r
+sim_dt <- as.data.table(sim_data)
+sim_dt[, censor_followup := ifelse(event == 0, tte, 0)]
+summary_stats <- sim_dt[
+  ,
+  .(
+    n_subjects = uniqueN(id),
+    total_events = sum(event == 1),
+    total_followup = sum(censor_followup),
+    observed_rate = sum(event == 1) / sum(censor_followup)
+  ),
+  by = treatment
+]
+print(summary_stats)
+#>       treatment n_subjects total_events total_followup observed_rate
+#>          <char>      <int>        <int>          <num>         <num>
+#> 1:      Control         10            9       18.42088     0.4885759
+#> 2: Experimental         10            6       20.00000     0.3000000
+```
+
+### Inspect First Ten Records
+
+Before plotting, we can look at the first ten records from the simulated
+dataset.
+
+``` r
+head(sim_data, 10)
+#>    id id    treatment enroll_time       tte calendar_time event
+#> 1   1  1      Control  0.01757203 0.6604608     0.6780328     1
+#> 2   1  1      Control  0.01757203 2.0000000     2.0175720     0
+#> 3   2  2      Control  0.02958474 1.5813635     1.6109483     1
+#> 4   2  2      Control  0.02958474 2.0000000     2.0295847     0
+#> 5   3  3      Control  0.05727338 1.1773693     1.2346427     1
+#> 6   3  3      Control  0.05727338 2.0000000     2.0572734     0
+#> 7   4  4 Experimental  0.05793124 2.0000000     2.0579312     0
+#> 8   5  5      Control  0.05910231 0.4510840     0.5101863     1
+#> 9   5  5      Control  0.05910231 2.0000000     2.0591023     0
+#> 10  6  6 Experimental  0.06569608 2.0000000     2.0656961     0
+```
+
+### Plotting Events
+
+We can visualize the events and censoring times for each subject. To
+avoid any side-effects from `data.table`, we convert the dataset back to
+a plain data frame.
+
+``` r
+sim_plot <- as.data.frame(sim_data)
+names(sim_plot) <- make.names(names(sim_plot), unique = TRUE)
+events_df <- sim_plot[sim_plot$event == 1, ]
+censor_df <- sim_plot[sim_plot$event == 0, ]
+
+ggplot(sim_plot, aes(x = tte, y = factor(id), color = treatment)) +
+  geom_line(aes(group = id), color = "gray80") +
+  geom_point(data = events_df, shape = 19, size = 2) +
+  geom_point(data = censor_df, shape = 4, size = 3) +
+  labs(
+    title = "Patient Timelines",
+    x = "Time from Randomization (Years)",
+    y = "Patient ID",
+    caption = "Dots = Events, X = Censoring/Dropout"
+  ) +
+  theme_minimal()
+```
+
+![Patient timelines with events (dots) and censoring
+(X)](simulation_example_files/figure-html/unnamed-chunk-6-1.png)
