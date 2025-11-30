@@ -9,7 +9,8 @@ nb_sim(
   fail_rate,
   dropout_rate = NULL,
   max_followup = NULL,
-  n = NULL
+  n = NULL,
+  block = NULL
 )
 }
 \arguments{
@@ -27,6 +28,12 @@ defining the piecewise constant dropout rates.}
 
 \item{n}{Total sample size. If NULL, it is estimated from \code{enroll_rate}.
 If provided, enrollment stops when \code{n} subjects are recruited.}
+
+\item{block}{Block vector for treatment allocation. If NULL (default),
+treatments are assigned in blocks of size 4 with equal allocation, i.e.,
+\code{c("Control", "Control", "Experimental", "Experimental")}.
+If provided, it specifies the block structure, e.g., \code{c(rep("A", 2), rep("B", 2))}
+assigns 2 to group A and 2 to group B in each block.}
 }
 \value{
 A data frame (tibble) with columns:
