@@ -262,6 +262,28 @@ described by Mütze et al. (2018).</p>
 <span><span class="va">mutze_res</span><span class="op">$</span><span class="va">rate_ratio</span></span>
 <span><span class="co">#&gt; [1] 0.9388646</span></span></code></pre></div>
 </div>
+<div class="section level2">
+<h2 id="finding-analysis-date-for-target-events">Finding Analysis Date for Target Events<a class="anchor" aria-label="anchor" href="#finding-analysis-date-for-target-events"></a>
+</h2>
+<p>Often we want to perform an interim analysis not at a fixed calendar
+date, but when a specific number of events have accumulated. We can find
+this date using <code><a href="../reference/get_analysis_date.html">get_analysis_date()</a></code> and then cut the data
+accordingly.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Target 15 total events</span></span>
+<span><span class="va">target_events</span> <span class="op">&lt;-</span> <span class="fl">15</span></span>
+<span><span class="va">analysis_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_analysis_date.html">get_analysis_date</a></span><span class="op">(</span><span class="va">sim_data</span>, planned_events <span class="op">=</span> <span class="va">target_events</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Calendar date for"</span>, <span class="va">target_events</span>, <span class="st">"events:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">analysis_date</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "Calendar date for 15 events: 2.081"</span></span>
+<span></span>
+<span><span class="co"># Cut data at this date</span></span>
+<span><span class="va">cut_events</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cut_data_by_date.html">cut_data_by_date</a></span><span class="op">(</span><span class="va">sim_data</span>, cut_date <span class="op">=</span> <span class="va">analysis_date</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Verify event count</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">cut_events</span><span class="op">$</span><span class="va">events</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 15</span></span></code></pre></div>
+</div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>

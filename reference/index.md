@@ -4,6 +4,8 @@
 
 - [`cut_data_by_date()`](https://keaven.github.io/nbDesign/reference/cut_data_by_date.md)
   : Cut nb_sim data by calendar date
+- [`get_analysis_date()`](https://keaven.github.io/nbDesign/reference/get_analysis_date.md)
+  : Find calendar date for target event count
 - [`mutze_test()`](https://keaven.github.io/nbDesign/reference/mutze_test.md)
   : Wald test for treatment effect using Negative Binomial model (Mütze
   et al.)

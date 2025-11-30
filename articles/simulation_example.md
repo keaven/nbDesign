@@ -195,3 +195,27 @@ mutze_res$group_summary
 mutze_res$rate_ratio
 #> [1] 0.9388646
 ```
+
+## Finding Analysis Date for Target Events
+
+Often we want to perform an interim analysis not at a fixed calendar
+date, but when a specific number of events have accumulated. We can find
+this date using
+[`get_analysis_date()`](https://keaven.github.io/nbDesign/reference/get_analysis_date.md)
+and then cut the data accordingly.
+
+``` r
+# Target 15 total events
+target_events <- 15
+analysis_date <- get_analysis_date(sim_data, planned_events = target_events)
+
+print(paste("Calendar date for", target_events, "events:", round(analysis_date, 3)))
+#> [1] "Calendar date for 15 events: 2.081"
+
+# Cut data at this date
+cut_events <- cut_data_by_date(sim_data, cut_date = analysis_date)
+
+# Verify event count
+sum(cut_events$events)
+#> [1] 15
+```
