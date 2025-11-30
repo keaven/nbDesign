@@ -50,7 +50,8 @@ exponential failure rates (Poisson process), and piecewise exponential dropout.<
 <span>  <span class="va">fail_rate</span>,</span>
 <span>  dropout_rate <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  max_followup <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  n <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  n <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  block <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -81,6 +82,14 @@ defining the piecewise constant dropout rates.</p></dd>
 <dt id="arg-n">n<a class="anchor" aria-label="anchor" href="#arg-n"></a></dt>
 <dd><p>Total sample size. If NULL, it is estimated from <code>enroll_rate</code>.
 If provided, enrollment stops when <code>n</code> subjects are recruited.</p></dd>
+
+
+<dt id="arg-block">block<a class="anchor" aria-label="anchor" href="#arg-block"></a></dt>
+<dd><p>Block vector for treatment allocation. If NULL (default),
+treatments are assigned in blocks of size 4 with equal allocation, i.e.,
+<code>c("Control", "Control", "Experimental", "Experimental")</code>.
+If provided, it specifies the block structure, e.g., <code>c(rep("A", 2), rep("B", 2))</code>
+assigns 2 to group A and 2 to group B in each block.</p></dd>
 
 </dl></div>
     <div class="section level2">

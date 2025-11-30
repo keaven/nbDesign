@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   sample_size_nbinom: sample_size_nbinom.html
   simulation_example: simulation_example.html
-last_built: 2025-11-30T13:15Z
+last_built: 2025-11-30T13:39Z
 urls:
   reference: https://keaven.github.io/nbDesign/reference
   article: https://keaven.github.io/nbDesign/articles

@@ -47,23 +47,23 @@ sim <- nb_sim(enroll_rate, fail_rate, dropout_rate, max_followup = 2, n = 20)
 cut_data_by_date(sim, cut_date = 1)
 #>    id    treatment enroll_time       tte events
 #> 1   1      Control  0.00419837 0.9958016      0
-#> 2   2      Control  0.03844758 0.9615524      0
-#> 3   3 Experimental  0.14626653 0.8537335      0
-#> 4   4      Control  0.16402103 0.8359790      0
-#> 5   5 Experimental  0.17372445 0.8262756      0
+#> 2   2 Experimental  0.03844758 0.9615524      0
+#> 3   3      Control  0.14626653 0.8537335      1
+#> 4   4 Experimental  0.16402103 0.8359790      0
+#> 5   5      Control  0.17372445 0.8262756      0
 #> 6   6      Control  0.18507951 0.8149205      0
 #> 7   7 Experimental  0.18557397 0.8144260      0
-#> 8   8      Control  0.20588002 0.7941200      0
+#> 8   8 Experimental  0.20588002 0.7941200      0
 #> 9   9 Experimental  0.23301460 0.7669854      1
-#> 10 10      Control  0.27367404 0.7263260      2
-#> 11 11 Experimental  0.30090945 0.6990905      0
-#> 12 12 Experimental  0.34461830 0.6553817      0
-#> 13 13 Experimental  0.37061731 0.6293827      1
+#> 10 10      Control  0.27367404 0.7263260      0
+#> 11 11 Experimental  0.30090945 0.6990905      1
+#> 12 12      Control  0.34461830 0.6553817      2
+#> 13 13      Control  0.37061731 0.6293827      0
 #> 14 14      Control  0.37480352 0.6251965      0
-#> 15 15 Experimental  0.41551077 0.5844892      0
+#> 15 15 Experimental  0.41551077 0.5191834      0
 #> 16 16 Experimental  0.41625369 0.5837463      0
-#> 17 17      Control  0.42441302 0.5755870      2
-#> 18 18      Control  0.43226952 0.5677305      0
+#> 17 17      Control  0.42441302 0.5755870      0
+#> 18 18 Experimental  0.43226952 0.5677305      0
 #> 19 19      Control  0.50772960 0.4922704      0
 #> 20 20 Experimental  0.51633101 0.4836690      0
 ```

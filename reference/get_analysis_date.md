@@ -37,5 +37,5 @@ dropout_rate <- data.frame(
 )
 sim <- nb_sim(enroll_rate, fail_rate, dropout_rate, max_followup = 2, n = 40)
 get_analysis_date(sim, planned_events = 15)
-#> [1] 1.002221
+#> [1] 1.375216
 ```

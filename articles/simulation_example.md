@@ -76,13 +76,13 @@ sim_data <- nb_sim(
 )
 
 head(sim_data)
-#>   id id treatment enroll_time       tte calendar_time event
-#> 1  1  1   Control  0.01757203 0.6604608     0.6780328     1
-#> 2  1  1   Control  0.01757203 2.0000000     2.0175720     0
-#> 3  2  2   Control  0.02958474 1.5813635     1.6109483     1
-#> 4  2  2   Control  0.02958474 2.0000000     2.0295847     0
-#> 5  3  3   Control  0.05727338 1.1773693     1.2346427     1
-#> 6  3  3   Control  0.05727338 2.0000000     2.0572734     0
+#>   id id    treatment enroll_time       tte calendar_time event
+#> 1  1  1      Control  0.01757203 2.0000000     2.0175720     0
+#> 2  2  2 Experimental  0.02958474 0.8651927     0.8947775     1
+#> 3  2  2 Experimental  0.02958474 2.0000000     2.0295847     0
+#> 4  3  3 Experimental  0.05727338 2.0000000     2.0572734     0
+#> 5  4  4      Control  0.05793124 2.0000000     2.0579312     0
+#> 6  5  5 Experimental  0.05910231 2.0000000     2.0591023     0
 ```
 
 The output contains multiple rows per subject: \* `event = 1`: An actual
@@ -110,8 +110,8 @@ summary_stats <- sim_dt[
 print(summary_stats)
 #>       treatment n_subjects total_events total_followup observed_rate
 #>          <char>      <int>        <int>          <num>         <num>
-#> 1:      Control         10            9       18.42088     0.4885759
-#> 2: Experimental         10            6       20.00000     0.3000000
+#> 1:      Control         10            6       18.42088     0.3257173
+#> 2: Experimental         10            5       20.00000     0.2500000
 ```
 
 ### Inspect First Ten Records
@@ -122,16 +122,16 @@ dataset.
 ``` r
 head(sim_data, 10)
 #>    id id    treatment enroll_time       tte calendar_time event
-#> 1   1  1      Control  0.01757203 0.6604608     0.6780328     1
-#> 2   1  1      Control  0.01757203 2.0000000     2.0175720     0
-#> 3   2  2      Control  0.02958474 1.5813635     1.6109483     1
-#> 4   2  2      Control  0.02958474 2.0000000     2.0295847     0
-#> 5   3  3      Control  0.05727338 1.1773693     1.2346427     1
-#> 6   3  3      Control  0.05727338 2.0000000     2.0572734     0
-#> 7   4  4 Experimental  0.05793124 2.0000000     2.0579312     0
-#> 8   5  5      Control  0.05910231 0.4510840     0.5101863     1
-#> 9   5  5      Control  0.05910231 2.0000000     2.0591023     0
-#> 10  6  6 Experimental  0.06569608 2.0000000     2.0656961     0
+#> 1   1  1      Control  0.01757203 2.0000000     2.0175720     0
+#> 2   2  2 Experimental  0.02958474 0.8651927     0.8947775     1
+#> 3   2  2 Experimental  0.02958474 2.0000000     2.0295847     0
+#> 4   3  3 Experimental  0.05727338 2.0000000     2.0572734     0
+#> 5   4  4      Control  0.05793124 2.0000000     2.0579312     0
+#> 6   5  5 Experimental  0.05910231 2.0000000     2.0591023     0
+#> 7   6  6 Experimental  0.06569608 2.0000000     2.0656961     0
+#> 8   7  7      Control  0.07224248 0.4510840     0.5233265     1
+#> 9   7  7      Control  0.07224248 2.0000000     2.0722425     0
+#> 10  8  8      Control  0.07526888 2.0000000     2.0752689     0
 ```
 
 ### Plotting Events
@@ -173,11 +173,11 @@ follow-up time (`tte`) and number of observed events.
 cut_summary <- cut_data_by_date(sim_data, cut_date = 1.5)
 head(cut_summary)
 #>   id    treatment enroll_time      tte events
-#> 1  1      Control  0.01757203 1.482428      1
-#> 2  2      Control  0.02958474 1.470415      0
-#> 3  3      Control  0.05727338 1.442727      1
-#> 4  4 Experimental  0.05793124 1.442069      0
-#> 5  5      Control  0.05910231 1.440898      1
+#> 1  1      Control  0.01757203 1.482428      0
+#> 2  2 Experimental  0.02958474 1.470415      1
+#> 3  3 Experimental  0.05727338 1.442727      0
+#> 4  4      Control  0.05793124 1.442069      0
+#> 5  5 Experimental  0.05910231 1.440898      0
 #> 6  6 Experimental  0.06569608 1.434304      0
 ```
 
@@ -190,10 +190,10 @@ described by Mütze et al. (2018).
 mutze_res <- mutze_test(cut_summary)
 mutze_res$group_summary
 #>      treatment subjects events exposure
-#> 1      Control       10      6 12.78001
-#> 2 Experimental       10      6 13.50194
+#> 1      Control       10      6 12.66322
+#> 2 Experimental       10      4 13.63050
 mutze_res$rate_ratio
-#> [1] 0.9388646
+#> [1] 0.5370395
 ```
 
 ## Finding Analysis Date for Target Events
@@ -208,14 +208,15 @@ and then cut the data accordingly.
 # Target 15 total events
 target_events <- 15
 analysis_date <- get_analysis_date(sim_data, planned_events = target_events)
+#> Only 11 events in trial
 
 print(paste("Calendar date for", target_events, "events:", round(analysis_date, 3)))
-#> [1] "Calendar date for 15 events: 2.081"
+#> [1] "Calendar date for 15 events: 2.338"
 
 # Cut data at this date
 cut_events <- cut_data_by_date(sim_data, cut_date = analysis_date)
 
 # Verify event count
 sum(cut_events$events)
-#> [1] 15
+#> [1] 11
 ```

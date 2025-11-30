@@ -12,7 +12,8 @@ nb_sim(
   fail_rate,
   dropout_rate = NULL,
   max_followup = NULL,
-  n = NULL
+  n = NULL,
+  block = NULL
 )
 ```
 
@@ -42,6 +43,15 @@ nb_sim(
 
   Total sample size. If NULL, it is estimated from `enroll_rate`. If
   provided, enrollment stops when `n` subjects are recruited.
+
+- block:
+
+  Block vector for treatment allocation. If NULL (default), treatments
+  are assigned in blocks of size 4 with equal allocation, i.e.,
+  `c("Control", "Control", "Experimental", "Experimental")`. If
+  provided, it specifies the block structure, e.g.,
+  `c(rep("A", 2), rep("B", 2))` assigns 2 to group A and 2 to group B in
+  each block.
 
 ## Value
 

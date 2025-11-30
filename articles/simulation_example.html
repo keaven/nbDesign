@@ -150,13 +150,13 @@ maximum of 2 years from randomization.</li>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sim_data</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   id id treatment enroll_time       tte calendar_time event</span></span>
-<span><span class="co">#&gt; 1  1  1   Control  0.01757203 0.6604608     0.6780328     1</span></span>
-<span><span class="co">#&gt; 2  1  1   Control  0.01757203 2.0000000     2.0175720     0</span></span>
-<span><span class="co">#&gt; 3  2  2   Control  0.02958474 1.5813635     1.6109483     1</span></span>
-<span><span class="co">#&gt; 4  2  2   Control  0.02958474 2.0000000     2.0295847     0</span></span>
-<span><span class="co">#&gt; 5  3  3   Control  0.05727338 1.1773693     1.2346427     1</span></span>
-<span><span class="co">#&gt; 6  3  3   Control  0.05727338 2.0000000     2.0572734     0</span></span></code></pre></div>
+<span><span class="co">#&gt;   id id    treatment enroll_time       tte calendar_time event</span></span>
+<span><span class="co">#&gt; 1  1  1      Control  0.01757203 2.0000000     2.0175720     0</span></span>
+<span><span class="co">#&gt; 2  2  2 Experimental  0.02958474 0.8651927     0.8947775     1</span></span>
+<span><span class="co">#&gt; 3  2  2 Experimental  0.02958474 2.0000000     2.0295847     0</span></span>
+<span><span class="co">#&gt; 4  3  3 Experimental  0.05727338 2.0000000     2.0572734     0</span></span>
+<span><span class="co">#&gt; 5  4  4      Control  0.05793124 2.0000000     2.0579312     0</span></span>
+<span><span class="co">#&gt; 6  5  5 Experimental  0.05910231 2.0000000     2.0591023     0</span></span></code></pre></div>
 <p>The output contains multiple rows per subject: *
 <code>event = 1</code>: An actual recurrent event. *
 <code>event = 0</code>: The censoring time (either due to dropout or
@@ -183,8 +183,8 @@ total follow-up time for each group.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">summary_stats</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       treatment n_subjects total_events total_followup observed_rate</span></span>
 <span><span class="co">#&gt;          &lt;char&gt;      &lt;int&gt;        &lt;int&gt;          &lt;num&gt;         &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:      Control         10            9       18.42088     0.4885759</span></span>
-<span><span class="co">#&gt; 2: Experimental         10            6       20.00000     0.3000000</span></span></code></pre></div>
+<span><span class="co">#&gt; 1:      Control         10            6       18.42088     0.3257173</span></span>
+<span><span class="co">#&gt; 2: Experimental         10            5       20.00000     0.2500000</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="inspect-first-ten-records">Inspect First Ten Records<a class="anchor" aria-label="anchor" href="#inspect-first-ten-records"></a>
 </h3>
@@ -193,16 +193,16 @@ simulated dataset.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sim_data</span>, <span class="fl">10</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    id id    treatment enroll_time       tte calendar_time event</span></span>
-<span><span class="co">#&gt; 1   1  1      Control  0.01757203 0.6604608     0.6780328     1</span></span>
-<span><span class="co">#&gt; 2   1  1      Control  0.01757203 2.0000000     2.0175720     0</span></span>
-<span><span class="co">#&gt; 3   2  2      Control  0.02958474 1.5813635     1.6109483     1</span></span>
-<span><span class="co">#&gt; 4   2  2      Control  0.02958474 2.0000000     2.0295847     0</span></span>
-<span><span class="co">#&gt; 5   3  3      Control  0.05727338 1.1773693     1.2346427     1</span></span>
-<span><span class="co">#&gt; 6   3  3      Control  0.05727338 2.0000000     2.0572734     0</span></span>
-<span><span class="co">#&gt; 7   4  4 Experimental  0.05793124 2.0000000     2.0579312     0</span></span>
-<span><span class="co">#&gt; 8   5  5      Control  0.05910231 0.4510840     0.5101863     1</span></span>
-<span><span class="co">#&gt; 9   5  5      Control  0.05910231 2.0000000     2.0591023     0</span></span>
-<span><span class="co">#&gt; 10  6  6 Experimental  0.06569608 2.0000000     2.0656961     0</span></span></code></pre></div>
+<span><span class="co">#&gt; 1   1  1      Control  0.01757203 2.0000000     2.0175720     0</span></span>
+<span><span class="co">#&gt; 2   2  2 Experimental  0.02958474 0.8651927     0.8947775     1</span></span>
+<span><span class="co">#&gt; 3   2  2 Experimental  0.02958474 2.0000000     2.0295847     0</span></span>
+<span><span class="co">#&gt; 4   3  3 Experimental  0.05727338 2.0000000     2.0572734     0</span></span>
+<span><span class="co">#&gt; 5   4  4      Control  0.05793124 2.0000000     2.0579312     0</span></span>
+<span><span class="co">#&gt; 6   5  5 Experimental  0.05910231 2.0000000     2.0591023     0</span></span>
+<span><span class="co">#&gt; 7   6  6 Experimental  0.06569608 2.0000000     2.0656961     0</span></span>
+<span><span class="co">#&gt; 8   7  7      Control  0.07224248 0.4510840     0.5233265     1</span></span>
+<span><span class="co">#&gt; 9   7  7      Control  0.07224248 2.0000000     2.0722425     0</span></span>
+<span><span class="co">#&gt; 10  8  8      Control  0.07526888 2.0000000     2.0752689     0</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="plotting-events">Plotting Events<a class="anchor" aria-label="anchor" href="#plotting-events"></a>
@@ -241,11 +241,11 @@ number of observed events.</p>
 <code class="sourceCode R"><span><span class="va">cut_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cut_data_by_date.html">cut_data_by_date</a></span><span class="op">(</span><span class="va">sim_data</span>, cut_date <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">cut_summary</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   id    treatment enroll_time      tte events</span></span>
-<span><span class="co">#&gt; 1  1      Control  0.01757203 1.482428      1</span></span>
-<span><span class="co">#&gt; 2  2      Control  0.02958474 1.470415      0</span></span>
-<span><span class="co">#&gt; 3  3      Control  0.05727338 1.442727      1</span></span>
-<span><span class="co">#&gt; 4  4 Experimental  0.05793124 1.442069      0</span></span>
-<span><span class="co">#&gt; 5  5      Control  0.05910231 1.440898      1</span></span>
+<span><span class="co">#&gt; 1  1      Control  0.01757203 1.482428      0</span></span>
+<span><span class="co">#&gt; 2  2 Experimental  0.02958474 1.470415      1</span></span>
+<span><span class="co">#&gt; 3  3 Experimental  0.05727338 1.442727      0</span></span>
+<span><span class="co">#&gt; 4  4      Control  0.05793124 1.442069      0</span></span>
+<span><span class="co">#&gt; 5  5 Experimental  0.05910231 1.440898      0</span></span>
 <span><span class="co">#&gt; 6  6 Experimental  0.06569608 1.434304      0</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -257,10 +257,10 @@ described by Mütze et al. (2018).</p>
 <code class="sourceCode R"><span><span class="va">mutze_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutze_test.html">mutze_test</a></span><span class="op">(</span><span class="va">cut_summary</span><span class="op">)</span></span>
 <span><span class="va">mutze_res</span><span class="op">$</span><span class="va">group_summary</span></span>
 <span><span class="co">#&gt;      treatment subjects events exposure</span></span>
-<span><span class="co">#&gt; 1      Control       10      6 12.78001</span></span>
-<span><span class="co">#&gt; 2 Experimental       10      6 13.50194</span></span>
+<span><span class="co">#&gt; 1      Control       10      6 12.66322</span></span>
+<span><span class="co">#&gt; 2 Experimental       10      4 13.63050</span></span>
 <span><span class="va">mutze_res</span><span class="op">$</span><span class="va">rate_ratio</span></span>
-<span><span class="co">#&gt; [1] 0.9388646</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.5370395</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="finding-analysis-date-for-target-events">Finding Analysis Date for Target Events<a class="anchor" aria-label="anchor" href="#finding-analysis-date-for-target-events"></a>
@@ -273,16 +273,17 @@ accordingly.</p>
 <code class="sourceCode R"><span><span class="co"># Target 15 total events</span></span>
 <span><span class="va">target_events</span> <span class="op">&lt;-</span> <span class="fl">15</span></span>
 <span><span class="va">analysis_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_analysis_date.html">get_analysis_date</a></span><span class="op">(</span><span class="va">sim_data</span>, planned_events <span class="op">=</span> <span class="va">target_events</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Only 11 events in trial</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Calendar date for"</span>, <span class="va">target_events</span>, <span class="st">"events:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">analysis_date</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Calendar date for 15 events: 2.081"</span></span>
+<span><span class="co">#&gt; [1] "Calendar date for 15 events: 2.338"</span></span>
 <span></span>
 <span><span class="co"># Cut data at this date</span></span>
 <span><span class="va">cut_events</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cut_data_by_date.html">cut_data_by_date</a></span><span class="op">(</span><span class="va">sim_data</span>, cut_date <span class="op">=</span> <span class="va">analysis_date</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Verify event count</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">cut_events</span><span class="op">$</span><span class="va">events</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 15</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 11</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
