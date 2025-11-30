@@ -13,7 +13,7 @@ nb_sim(
   dropout_rate = NULL,
   max_followup = NULL,
   n = NULL,
-  block = NULL
+  block = c(rep("Control", 2), rep("Experimental", 2))
 )
 ```
 
@@ -46,10 +46,10 @@ nb_sim(
 
 - block:
 
-  Block vector for treatment allocation. If NULL (default), treatments
-  are assigned in blocks of size 4 with equal allocation, i.e.,
-  `c("Control", "Control", "Experimental", "Experimental")`. If
-  provided, it specifies the block structure, e.g.,
+  Block vector for treatment allocation. Default is
+  `c(rep("Control", 2), rep("Experimental", 2))`. If NULL, simple
+  randomization is used (treatments are assigned with equal
+  probability). If provided, it specifies the block structure, e.g.,
   `c(rep("A", 2), rep("B", 2))` assigns 2 to group A and 2 to group B in
   each block.
 
