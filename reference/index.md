@@ -2,6 +2,8 @@
 
 ## All functions
 
+- [`blinded_ssr()`](https://keaven.github.io/nbDesign/reference/blinded_ssr.md)
+  : Blinded Sample Size Re-estimation for Recurrent Events
 - [`cut_data_by_date()`](https://keaven.github.io/nbDesign/reference/cut_data_by_date.md)
   : Cut nb_sim data by calendar date
 - [`get_analysis_date()`](https://keaven.github.io/nbDesign/reference/get_analysis_date.md)
