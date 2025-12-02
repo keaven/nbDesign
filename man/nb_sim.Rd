@@ -18,7 +18,9 @@ nb_sim(
 the piecewise constant enrollment rates.}
 
 \item{fail_rate}{A data frame with columns \code{treatment} and \code{rate} defining
-the exponential failure rate for each treatment group.}
+the exponential failure rate for each treatment group. Optionally, a \code{dispersion}
+column can be provided to generate data from a Negative Binomial distribution.
+The dispersion parameter \code{k} is such that \eqn{Var(Y) = \mu + k \mu^2}.}
 
 \item{dropout_rate}{A data frame with columns \code{treatment}, \code{rate}, and \code{duration}
 defining the piecewise constant dropout rates.}

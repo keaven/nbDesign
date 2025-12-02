@@ -17,12 +17,12 @@
 #' sim <- nb_sim(enroll_rate, fail_rate, dropout_rate, max_followup = 2, n = 20)
 #' cut_data_by_date(sim, cut_date = 1)
 #' @export
-cut_data_by_date <- function(data, ...) {
+cut_data_by_date <- function(data, cut_date, ...) {
   UseMethod("cut_data_by_date")
 }
 
 #' @export
-cut_data_by_date.default <- function(data, ...) {
+cut_data_by_date.default <- function(data, cut_date, ...) {
   stop("No cut_data_by_date() method for objects of class ", class(data)[1], call. = FALSE)
 }
 

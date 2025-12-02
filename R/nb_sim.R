@@ -6,7 +6,9 @@
 #' @param enroll_rate A data frame with columns \code{rate} and \code{duration} defining
 #'   the piecewise constant enrollment rates.
 #' @param fail_rate A data frame with columns \code{treatment} and \code{rate} defining
-#'   the exponential failure rate for each treatment group.
+#'   the exponential failure rate for each treatment group. Optionally, a \code{dispersion}
+#'   column can be provided to generate data from a Negative Binomial distribution.
+#'   The dispersion parameter \code{k} is such that \eqn{Var(Y) = \mu + k \mu^2}.
 #' @param dropout_rate A data frame with columns \code{treatment}, \code{rate}, and \code{duration}
 #'   defining the piecewise constant dropout rates.
 #' @param max_followup Numeric. Maximum duration of follow-up for each individual
@@ -33,7 +35,7 @@
 #' @export
 #'
 #' @import data.table
-#' @importFrom stats rexp runif
+#' @importFrom stats rexp rgamma
 #' @importFrom utils tail
 #' @importFrom simtrial rpwexp_enroll
 nb_sim <- function(enroll_rate, fail_rate, dropout_rate = NULL, max_followup = NULL, n = NULL, block = c(rep("Control", 2), rep("Experimental", 2))) {
@@ -122,6 +124,25 @@ nb_sim <- function(enroll_rate, fail_rate, dropout_rate = NULL, max_followup = N
 
   if (any(is.na(dt_subjects$lambda))) {
     stop("Each treatment must have an associated failure rate.")
+  }
+
+  # Handle dispersion for Negative Binomial simulation
+  if ("dispersion" %in% names(dt_subjects)) {
+    # For rows with valid positive dispersion, sample lambda from Gamma.
+    # We want the count Y ~ NegBin(mean = lambda*t, dispersion = k).
+    # This is achieved if subject-specific rate L ~ Gamma with
+    # mean = lambda and var = k * lambda^2.
+    # Gamma parameters: shape = 1/k, scale = k * lambda
+    
+    # Identify rows with positive dispersion
+    has_disp <- !is.na(dt_subjects$dispersion) & dt_subjects$dispersion > 0
+    if (any(has_disp)) {
+      dt_subjects[has_disp, lambda := rgamma(
+        sum(has_disp), 
+        shape = 1 / dispersion, 
+        scale = lambda * dispersion
+      )]
+    }
   }
 
   dropout_dt <- NULL
