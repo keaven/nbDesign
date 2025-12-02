@@ -77,6 +77,15 @@ A list containing:
 
   Estimated overall event rate from blinded data.
 
-- information_fraction:
+- info_fraction:
 
-  Estimated information fraction at interim.
+  Estimated information fraction at interim (blinded information /
+  target information).
+
+- blinded_info:
+
+  Estimated statistical information from the blinded interim data.
+
+- target_info:
+
+  Target statistical information required for the planned power.
