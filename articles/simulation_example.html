@@ -285,6 +285,75 @@ accordingly.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">cut_events</span><span class="op">$</span><span class="va">events</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 11</span></span></code></pre></div>
 </div>
+<div class="section level2">
+<h2 id="generating-and-verifying-negative-binomial-data">Generating and Verifying Negative Binomial Data<a class="anchor" aria-label="anchor" href="#generating-and-verifying-negative-binomial-data"></a>
+</h2>
+<p>The <code><a href="../reference/nb_sim.html">nb_sim()</a></code> function can also generate data where the
+counts follow a Negative Binomial distribution. This is achieved by
+providing a <code>dispersion</code> parameter in the
+<code>fail_rate</code> data frame. The dispersion parameter
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
+relates the variance to the mean as
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mi>a</mi><mi>r</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>Y</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>μ</mi><mo>+</mo><mi>k</mi><msup><mi>μ</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">Var(Y) = \mu + k\mu^2</annotation></semantics></math>.</p>
+<div class="section level3">
+<h3 id="simulation-with-dispersion">Simulation with Dispersion<a class="anchor" aria-label="anchor" href="#simulation-with-dispersion"></a>
+</h3>
+<p>We define a scenario with a known dispersion of 0.5.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Define failure rates with dispersion</span></span>
+<span><span class="va">fail_rate_nb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  treatment <span class="op">=</span> <span class="st">"Control"</span>,</span>
+<span>  rate <span class="op">=</span> <span class="fl">10</span>,       <span class="co"># Mean event rate</span></span>
+<span>  dispersion <span class="op">=</span> <span class="fl">0.5</span> <span class="co"># Variance = mean + 0.5 * mean^2</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">enroll_rate_nb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  rate <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  duration <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="co"># Simulate 500 subjects to get a stable estimate</span></span>
+<span><span class="va">sim_nb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nb_sim.html">nb_sim</a></span><span class="op">(</span></span>
+<span>  enroll_rate <span class="op">=</span> <span class="va">enroll_rate_nb</span>,</span>
+<span>  fail_rate <span class="op">=</span> <span class="va">fail_rate_nb</span>,</span>
+<span>  max_followup <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  n <span class="op">=</span> <span class="fl">500</span>,</span>
+<span>  block <span class="op">=</span> <span class="st">"Control"</span> <span class="co"># Assign all to Control for simplicity</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="verifying-the-dispersion-parameter">Verifying the Dispersion Parameter<a class="anchor" aria-label="anchor" href="#verifying-the-dispersion-parameter"></a>
+</h3>
+<p>We can verify that the simulated data reflects the input dispersion
+parameter by estimating it back from the data. We use the Method of
+Moments (MoM) estimator:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>k</mi><mo accent="true">̂</mo></mover><mo>=</mo><mfrac><mrow><mi>V</mi><mi>a</mi><mi>r</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>Y</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mover><mi>Y</mi><mo accent="true">‾</mo></mover></mrow><msup><mover><mi>Y</mi><mo accent="true">‾</mo></mover><mn>2</mn></msup></mfrac></mrow><annotation encoding="application/x-tex"> \hat{k} = \frac{Var(Y) - \bar{Y}}{\bar{Y}^2} </annotation></semantics></math></p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Count events per subject</span></span>
+<span><span class="va">counts_nb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">sim_nb</span><span class="op">)</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">event</span><span class="op">)</span><span class="op">)</span>, by <span class="op">=</span> <span class="va">id</span><span class="op">]</span></span>
+<span></span>
+<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">counts_nb</span><span class="op">$</span><span class="va">events</span><span class="op">)</span></span>
+<span><span class="va">v</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var</a></span><span class="op">(</span><span class="va">counts_nb</span><span class="op">$</span><span class="va">events</span><span class="op">)</span></span>
+<span><span class="va">k_mom</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">v</span> <span class="op">-</span> <span class="va">m</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="va">m</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Also estimate using GLM</span></span>
+<span><span class="co"># We use MASS::glm.nb to fit the negative binomial model</span></span>
+<span><span class="co"># We suppress warnings because fitting intercept-only models on simulated data</span></span>
+<span><span class="co"># can occasionally produce convergence warnings despite valid estimates.</span></span>
+<span><span class="va">k_glm</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/glm.nb.html" class="external-link">glm.nb</a></span><span class="op">(</span><span class="va">events</span> <span class="op">~</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">counts_nb</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fl">1</span> <span class="op">/</span> <span class="va">fit</span><span class="op">$</span><span class="va">theta</span></span>
+<span><span class="op">}</span>, error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="cn">NA</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"True Dispersion:"</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "True Dispersion: 0.5"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Estimated Dispersion (MoM):"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif</a></span><span class="op">(</span><span class="va">k_mom</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "Estimated Dispersion (MoM): 0.5"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Estimated Dispersion (GLM):"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif</a></span><span class="op">(</span><span class="va">k_glm</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "Estimated Dispersion (GLM): 0.512"</span></span></code></pre></div>
+</div>
+</div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>

@@ -20,6 +20,8 @@ guide](https://style.tidyverse.org/).
 
 - [`blinded_ssr()`](https://keaven.github.io/nbDesign/reference/blinded_ssr.md)
   : Blinded Sample Size Re-estimation for Recurrent Events
+- [`calculate_blinded_info()`](https://keaven.github.io/nbDesign/reference/calculate_blinded_info.md)
+  : Calculate Blinded Statistical Information
 - [`cut_data_by_date()`](https://keaven.github.io/nbDesign/reference/cut_data_by_date.md)
   : Cut nb_sim data by calendar date
 - [`get_analysis_date()`](https://keaven.github.io/nbDesign/reference/get_analysis_date.md)

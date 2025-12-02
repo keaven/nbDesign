@@ -66,7 +66,9 @@ the piecewise constant enrollment rates.</p></dd>
 
 <dt id="arg-fail-rate">fail_rate<a class="anchor" aria-label="anchor" href="#arg-fail-rate"></a></dt>
 <dd><p>A data frame with columns <code>treatment</code> and <code>rate</code> defining
-the exponential failure rate for each treatment group.</p></dd>
+the exponential failure rate for each treatment group. Optionally, a <code>dispersion</code>
+column can be provided to generate data from a Negative Binomial distribution.
+The dispersion parameter <code>k</code> is such that \(Var(Y) = \mu + k \mu^2\).</p></dd>
 
 
 <dt id="arg-dropout-rate">dropout_rate<a class="anchor" aria-label="anchor" href="#arg-dropout-rate"></a></dt>

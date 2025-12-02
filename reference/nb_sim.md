@@ -27,7 +27,10 @@ nb_sim(
 - fail_rate:
 
   A data frame with columns `treatment` and `rate` defining the
-  exponential failure rate for each treatment group.
+  exponential failure rate for each treatment group. Optionally, a
+  `dispersion` column can be provided to generate data from a Negative
+  Binomial distribution. The dispersion parameter `k` is such that
+  \\Var(Y) = \mu + k \mu^2\\.
 
 - dropout_rate:
 
