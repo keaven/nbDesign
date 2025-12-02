@@ -39,7 +39,9 @@ A list containing:
 \item{n_total_blinded}{Re-estimated total sample size using blinded estimates.}
 \item{dispersion_blinded}{Estimated dispersion parameter (k) from blinded data.}
 \item{lambda_blinded}{Estimated overall event rate from blinded data.}
-\item{information_fraction}{Estimated information fraction at interim.}
+\item{info_fraction}{Estimated information fraction at interim (blinded information / target information).}
+\item{blinded_info}{Estimated statistical information from the blinded interim data.}
+\item{target_info}{Target statistical information required for the planned power.}
 }
 }
 \description{

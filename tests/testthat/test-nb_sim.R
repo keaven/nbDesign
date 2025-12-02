@@ -3,22 +3,22 @@ test_that("nb_sim generates correct structure", {
   fail_rate <- data.frame(treatment = c("A", "B"), rate = c(0.5, 0.8))
   dropout_rate <- data.frame(treatment = c("A", "B"), rate = c(0.1, 0.1), duration = c(100, 100))
   max_followup <- 5
-  
+
   # Use block matching treatments "A", "B"
   sim <- nb_sim(enroll_rate, fail_rate, dropout_rate, max_followup, n = 100, block = c("A", "B"))
-  
+
   expect_s3_class(sim, "data.frame")
   expect_true(all(c("id", "treatment", "enroll_time", "tte", "event", "calendar_time") %in% names(sim)))
   expect_equal(length(unique(sim$id)), 100)
-  
+
   # Check max followup
   # tte should never exceed max_followup (approx, allow for floating point)
   expect_true(all(sim$tte <= max_followup + 1e-5))
-  
+
   # Check censoring rows exist
   censored <- sim[sim$event == 0, ]
   expect_equal(nrow(censored), 100) # Each subject should have exactly one censoring row
-  
+
   # Check calendar_time calculation
   expect_equal(sim$calendar_time, sim$enroll_time + sim$tte)
 })
@@ -29,19 +29,19 @@ test_that("nb_sim handles dropout", {
   fail_rate <- data.frame(treatment = "A", rate = 0.1)
   dropout_rate <- data.frame(treatment = "A", rate = 100, duration = 10) # Instant dropout
   max_followup <- 10
-  
+
   sim <- nb_sim(enroll_rate, fail_rate, dropout_rate, max_followup, n = 50, block = "A")
-  
+
   # Follow-up times should be very short
   followup_times <- sim$tte[sim$event == 0]
-  expect_true(mean(followup_times) < 1) 
+  expect_true(mean(followup_times) < 1)
 })
 
 test_that("nb_sim respects n argument", {
   enroll_rate <- data.frame(rate = 100, duration = 1) # implies 100
   fail_rate <- data.frame(treatment = "A", rate = 0.1)
   max_followup <- 1
-  
+
   # Force n=50
   sim <- nb_sim(enroll_rate, fail_rate, max_followup = max_followup, n = 50, block = "A")
   expect_equal(length(unique(sim$id)), 50)
