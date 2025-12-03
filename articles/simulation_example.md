@@ -138,7 +138,8 @@ head(sim_data, 10)
 
 We can visualize the events and censoring times for each subject. To
 avoid any side-effects from `data.table`, we convert the dataset back to
-a plain data frame.
+a plain data frame. We also display the 5-day event gap after each event
+where no new events can be recorded.
 
 ``` r
 sim_plot <- as.data.frame(sim_data)
@@ -146,20 +147,34 @@ names(sim_plot) <- make.names(names(sim_plot), unique = TRUE)
 events_df <- sim_plot[sim_plot$event == 1, ]
 censor_df <- sim_plot[sim_plot$event == 0, ]
 
+# Define the default gap (5 days in years)
+gap_duration <- 5 / 365.25
+
+# Create segments for the gap after each event
+events_df$gap_start <- events_df$tte
+events_df$gap_end <- events_df$tte + gap_duration
+
 ggplot(sim_plot, aes(x = tte, y = factor(id), color = treatment)) +
   geom_line(aes(group = id), color = "gray80") +
+  # Add gap segments
+  geom_segment(
+    data = events_df,
+    aes(x = gap_start, xend = gap_end, y = factor(id), yend = factor(id)),
+    color = "gray50", linewidth = 1.5, alpha = 0.5
+  ) +
   geom_point(data = events_df, shape = 19, size = 2) +
   geom_point(data = censor_df, shape = 4, size = 3) +
   labs(
     title = "Patient Timelines",
     x = "Time from Randomization (Years)",
     y = "Patient ID",
-    caption = "Dots = Events, X = Censoring/Dropout"
+    caption = "Dots = Events, Gray Bars = 5-day Gap, X = Censoring/Dropout"
   ) +
   theme_minimal()
 ```
 
-![Patient timelines with events (dots) and censoring
+![Patient timelines with events (dots), 5-day gaps (gray segments), and
+censoring
 (X)](simulation_example_files/figure-html/unnamed-chunk-6-1.png)
 
 ## Cutting Data by Analysis Date
@@ -167,7 +182,9 @@ ggplot(sim_plot, aes(x = tte, y = factor(id), color = treatment)) +
 We can truncate the simulated data at an interim analysis date using
 [`cut_data_by_date()`](https://keaven.github.io/nbDesign/reference/cut_data_by_date.md).
 The function returns a single record per participant with the truncated
-follow-up time (`tte`) and number of observed events.
+follow-up time (`tte`) and number of observed events. By default, a
+5-day gap (`event_gap = 5 / 365.25`) is applied after each event, during
+which no new events are counted and time at risk is excluded.
 
 ``` r
 cut_summary <- cut_data_by_date(sim_data, cut_date = 1.5)
@@ -202,7 +219,8 @@ Often we want to perform an interim analysis not at a fixed calendar
 date, but when a specific number of events have accumulated. We can find
 this date using
 [`get_analysis_date()`](https://keaven.github.io/nbDesign/reference/get_analysis_date.md)
-and then cut the data accordingly.
+and then cut the data accordingly. This function also respects the
+`event_gap` (defaulting to 5 days).
 
 ``` r
 # Target 15 total events

@@ -209,25 +209,39 @@ simulated dataset.</p>
 </h3>
 <p>We can visualize the events and censoring times for each subject. To
 avoid any side-effects from <code>data.table</code>, we convert the
-dataset back to a plain data frame.</p>
+dataset back to a plain data frame. We also display the 5-day event gap
+after each event where no new events can be recorded.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sim_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">sim_data</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">sim_plot</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/make.names.html" class="external-link">make.names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">sim_plot</span><span class="op">)</span>, unique <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">events_df</span> <span class="op">&lt;-</span> <span class="va">sim_plot</span><span class="op">[</span><span class="va">sim_plot</span><span class="op">$</span><span class="va">event</span> <span class="op">==</span> <span class="fl">1</span>, <span class="op">]</span></span>
 <span><span class="va">censor_df</span> <span class="op">&lt;-</span> <span class="va">sim_plot</span><span class="op">[</span><span class="va">sim_plot</span><span class="op">$</span><span class="va">event</span> <span class="op">==</span> <span class="fl">0</span>, <span class="op">]</span></span>
 <span></span>
+<span><span class="co"># Define the default gap (5 days in years)</span></span>
+<span><span class="va">gap_duration</span> <span class="op">&lt;-</span> <span class="fl">5</span> <span class="op">/</span> <span class="fl">365.25</span></span>
+<span></span>
+<span><span class="co"># Create segments for the gap after each event</span></span>
+<span><span class="va">events_df</span><span class="op">$</span><span class="va">gap_start</span> <span class="op">&lt;-</span> <span class="va">events_df</span><span class="op">$</span><span class="va">tte</span></span>
+<span><span class="va">events_df</span><span class="op">$</span><span class="va">gap_end</span> <span class="op">&lt;-</span> <span class="va">events_df</span><span class="op">$</span><span class="va">tte</span> <span class="op">+</span> <span class="va">gap_duration</span></span>
+<span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sim_plot</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">tte</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span>, color <span class="op">=</span> <span class="va">treatment</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>group <span class="op">=</span> <span class="va">id</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"gray80"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="co"># Add gap segments</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html" class="external-link">geom_segment</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">events_df</span>,</span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">gap_start</span>, xend <span class="op">=</span> <span class="va">gap_end</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span>, yend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"gray50"</span>, linewidth <span class="op">=</span> <span class="fl">1.5</span>, alpha <span class="op">=</span> <span class="fl">0.5</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">events_df</span>, shape <span class="op">=</span> <span class="fl">19</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">censor_df</span>, shape <span class="op">=</span> <span class="fl">4</span>, size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"Patient Timelines"</span>,</span>
 <span>    x <span class="op">=</span> <span class="st">"Time from Randomization (Years)"</span>,</span>
 <span>    y <span class="op">=</span> <span class="st">"Patient ID"</span>,</span>
-<span>    caption <span class="op">=</span> <span class="st">"Dots = Events, X = Censoring/Dropout"</span></span>
+<span>    caption <span class="op">=</span> <span class="st">"Dots = Events, Gray Bars = 5-day Gap, X = Censoring/Dropout"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="simulation_example_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="Patient timelines with events (dots) and censoring (X)" width="672"></p>
+<p><img src="simulation_example_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="Patient timelines with events (dots), 5-day gaps (gray segments), and censoring (X)" width="672"></p>
 </div>
 </div>
 <div class="section level2">
@@ -236,7 +250,9 @@ dataset back to a plain data frame.</p>
 <p>We can truncate the simulated data at an interim analysis date using
 <code><a href="../reference/cut_data_by_date.html">cut_data_by_date()</a></code>. The function returns a single record
 per participant with the truncated follow-up time (<code>tte</code>) and
-number of observed events.</p>
+number of observed events. By default, a 5-day gap
+(<code>event_gap = 5 / 365.25</code>) is applied after each event,
+during which no new events are counted and time at risk is excluded.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cut_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cut_data_by_date.html">cut_data_by_date</a></span><span class="op">(</span><span class="va">sim_data</span>, cut_date <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">cut_summary</span><span class="op">)</span></span>
@@ -268,7 +284,8 @@ described by Mütze et al. (2018).</p>
 <p>Often we want to perform an interim analysis not at a fixed calendar
 date, but when a specific number of events have accumulated. We can find
 this date using <code><a href="../reference/get_analysis_date.html">get_analysis_date()</a></code> and then cut the data
-accordingly.</p>
+accordingly. This function also respects the <code>event_gap</code>
+(defaulting to 5 days).</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Target 15 total events</span></span>
 <span><span class="va">target_events</span> <span class="op">&lt;-</span> <span class="fl">15</span></span>
