@@ -31,7 +31,10 @@
 #' @importFrom MASS glm.nb
 #' @importFrom stats qnorm fitted
 #' @importFrom utils tail
-blinded_ssr <- function(data, ratio = 1, lambda1_planning, lambda2_planning, power = 0.8, alpha = 0.025, method = "friede") {
+blinded_ssr <- function(data, ratio = 1, lambda1_planning, lambda2_planning,
+                        power = 0.8, alpha = 0.025, method = "friede",
+                        accrual_rate, accrual_duration, trial_duration,
+                        dropout_rate = 0, max_followup = NULL, event_gap = NULL) {
   # Use calculate_blinded_info for parameter estimation and info calculation
   blind_info_res <- calculate_blinded_info(data, ratio, lambda1_planning, lambda2_planning)
 
@@ -52,7 +55,12 @@ blinded_ssr <- function(data, ratio = 1, lambda1_planning, lambda2_planning, pow
     power = power,
     alpha = alpha,
     ratio = ratio,
-    exposure = 1 # Assuming rates are for the relevant follow-up unit
+    accrual_rate = accrual_rate,
+    accrual_duration = accrual_duration,
+    trial_duration = trial_duration,
+    dropout_rate = dropout_rate,
+    max_followup = max_followup,
+    event_gap = event_gap
   )
 
   # Targeted Final Information
