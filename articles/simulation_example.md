@@ -138,8 +138,9 @@ head(sim_data, 10)
 
 We can visualize the events and censoring times for each subject. To
 avoid any side-effects from `data.table`, we convert the dataset back to
-a plain data frame. We also display the 5-day event gap after each event
-where no new events can be recorded.
+a plain data frame. We also display an event gap after each event where
+no new events can be recorded. For illustration purposes in this plot,
+we show a **30-day gap** so it is visible on the timeline.
 
 ``` r
 sim_plot <- as.data.frame(sim_data)
@@ -147,8 +148,8 @@ names(sim_plot) <- make.names(names(sim_plot), unique = TRUE)
 events_df <- sim_plot[sim_plot$event == 1, ]
 censor_df <- sim_plot[sim_plot$event == 0, ]
 
-# Define the default gap (5 days in years)
-gap_duration <- 5 / 365.25
+# Define a 30-day gap for visualization (default is usually 5 days)
+gap_duration <- 30 / 365.25
 
 # Create segments for the gap after each event
 events_df$gap_start <- events_df$tte
@@ -160,7 +161,7 @@ ggplot(sim_plot, aes(x = tte, y = factor(id), color = treatment)) +
   geom_segment(
     data = events_df,
     aes(x = gap_start, xend = gap_end, y = factor(id), yend = factor(id)),
-    color = "gray50", linewidth = 1.5, alpha = 0.5
+    color = "gray50", linewidth = 2, alpha = 0.7
   ) +
   geom_point(data = events_df, shape = 19, size = 2) +
   geom_point(data = censor_df, shape = 4, size = 3) +
@@ -168,12 +169,12 @@ ggplot(sim_plot, aes(x = tte, y = factor(id), color = treatment)) +
     title = "Patient Timelines",
     x = "Time from Randomization (Years)",
     y = "Patient ID",
-    caption = "Dots = Events, Gray Bars = 5-day Gap, X = Censoring/Dropout"
+    caption = "Dots = Events, Gray Bars = 30-day Gap, X = Censoring/Dropout"
   ) +
   theme_minimal()
 ```
 
-![Patient timelines with events (dots), 5-day gaps (gray segments), and
+![Patient timelines with events (dots), 30-day gaps (gray segments), and
 censoring
 (X)](simulation_example_files/figure-html/unnamed-chunk-6-1.png)
 
