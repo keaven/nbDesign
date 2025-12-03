@@ -210,6 +210,33 @@ sample_size_nbinom(
 )
 ```
 
+## Accounting for Event Gaps
+
+In some recurrent event trials, there may be a mandatory "gap" period after each event during which no new events can be recorded (e.g., a recovery period or administrative window). This effectively reduces the time at risk and thus the effective event rate.
+
+If an `event_gap` ($g$) is specified, the effective event rate $\lambda^*$ used in the sample size calculation is derived as:
+
+$$ \lambda^* = \frac{\lambda}{1 + \lambda \cdot g} $$
+
+This adjustment reflects that for every event that occurs, $g$ units of time are removed from the risk period. The sample size is then calculated using these effective rates $\lambda_1^*$ and $\lambda_2^*$, while maintaining the original effect size ($\log(\lambda_1/\lambda_2)$) in the hypothesis test formulation to ensure the test remains targeted at the underlying rate ratio.
+
+### Example with Event Gap
+
+Calculate sample size assuming a 5-day gap after each event (approx 0.0137 years).
+
+```{r}
+sample_size_nbinom(
+  lambda1 = 0.5,
+  lambda2 = 0.3,
+  dispersion = 0.1,
+  power = 0.8,
+  exposure = 1,
+  event_gap = 5 / 365.25
+)
+```
+
+Note that the required sample size increases compared to the basic calculation (where N=274) because the effective event rates are lower, providing less information.
+
 ## References
 
 Zhu, H., & Lakkis, H. (2014). Sample size calculation for comparing two negative binomial rates in clinical trials. *Statistics in Biopharmaceutical Research*, 6(1), 107-115.

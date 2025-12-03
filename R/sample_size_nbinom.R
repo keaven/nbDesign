@@ -20,6 +20,8 @@
 #' @param trial_duration Total planned duration of the trial.
 #' @param dropout_rate Dropout rate (hazard rate). Default is 0.
 #' @param max_followup Maximum follow-up time for any patient. Default is NULL (infinite).
+#' @param event_gap Gap duration after each event during which no new events are counted.
+#'   Default is NULL (no gap). If provided, the effective event rate is reduced.
 #' @param method Method for sample size calculation. "zhu" for Zhu and Lakkis (2014),
 #'   "friede" for Friede and Schmidli (2010) / Mütze et al. (2018).
 #'
@@ -64,7 +66,7 @@ sample_size_nbinom <- function(lambda1, lambda2, dispersion, power = NULL,
                                alpha = 0.025, sided = 1, exposure = NULL, ratio = 1,
                                accrual_rate = NULL, accrual_duration = NULL,
                                trial_duration = NULL, dropout_rate = 0,
-                               max_followup = NULL, method = "zhu") {
+                               max_followup = NULL, event_gap = NULL, method = "zhu") {
   if (lambda1 <= 0 || lambda2 <= 0) {
     stop("Rates lambda1 and lambda2 must be positive.")
   }
@@ -194,8 +196,17 @@ sample_size_nbinom <- function(lambda1, lambda2, dispersion, power = NULL,
     }
   }
 
-  mu1 <- lambda1 * exposure
-  mu2 <- lambda2 * exposure
+  # Adjust expectations for event_gap if present
+  if (!is.null(event_gap) && !is.na(event_gap) && event_gap > 0) {
+    lambda1_eff <- lambda1 / (1 + lambda1 * event_gap)
+    lambda2_eff <- lambda2 / (1 + lambda2 * event_gap)
+  } else {
+    lambda1_eff <- lambda1
+    lambda2_eff <- lambda2
+  }
+
+  mu1 <- lambda1_eff * exposure
+  mu2 <- lambda2_eff * exposure
   k <- dispersion
 
   z_alpha <- qnorm(1 - alpha / sided)
@@ -210,7 +221,7 @@ sample_size_nbinom <- function(lambda1, lambda2, dispersion, power = NULL,
 
     if (method == "zhu") {
       num <- (z_alpha + z_beta)^2 * ((1 / mu1 + k) + (1 / ratio) * (1 / mu2 + k))
-      den <- (log(mu1 / mu2))^2
+      den <- (log(lambda1 / lambda2))^2
       n1 <- num / den
       n2 <- n1 * ratio
     } else if (method == "friede") {
@@ -246,7 +257,7 @@ sample_size_nbinom <- function(lambda1, lambda2, dispersion, power = NULL,
     if (method == "zhu") {
       # z_beta = sqrt( n1 * (log(mu1/mu2))^2 / V ) - z_alpha
       V <- (1 / mu1 + k) + (1 / ratio) * (1 / mu2 + k)
-      z_beta <- sqrt(n1_c * (log(mu1 / mu2))^2 / V) - z_alpha
+      z_beta <- sqrt(n1_c * (log(lambda1 / lambda2))^2 / V) - z_alpha
     } else if (method == "friede") {
       # z_beta = sqrt( n_total * (log(lambda1/lambda2))^2 / V_bar ) - z_alpha
       p1 <- 1 / (1 + ratio)
