@@ -242,7 +242,7 @@ number of observed events.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">cut_summary</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   id    treatment enroll_time      tte events</span></span>
 <span><span class="co">#&gt; 1  1      Control  0.01757203 1.482428      0</span></span>
-<span><span class="co">#&gt; 2  2 Experimental  0.02958474 1.470415      1</span></span>
+<span><span class="co">#&gt; 2  2 Experimental  0.02958474 1.456726      1</span></span>
 <span><span class="co">#&gt; 3  3 Experimental  0.05727338 1.442727      0</span></span>
 <span><span class="co">#&gt; 4  4      Control  0.05793124 1.442069      0</span></span>
 <span><span class="co">#&gt; 5  5 Experimental  0.05910231 1.440898      0</span></span>
@@ -257,10 +257,10 @@ described by Mütze et al. (2018).</p>
 <code class="sourceCode R"><span><span class="va">mutze_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutze_test.html">mutze_test</a></span><span class="op">(</span><span class="va">cut_summary</span><span class="op">)</span></span>
 <span><span class="va">mutze_res</span><span class="op">$</span><span class="va">group_summary</span></span>
 <span><span class="co">#&gt;      treatment subjects events exposure</span></span>
-<span><span class="co">#&gt; 1      Control       10      6 12.66322</span></span>
-<span><span class="co">#&gt; 2 Experimental       10      4 13.63050</span></span>
+<span><span class="co">#&gt; 1      Control       10      6 12.58109</span></span>
+<span><span class="co">#&gt; 2 Experimental       10      4 13.57575</span></span>
 <span><span class="va">mutze_res</span><span class="op">$</span><span class="va">rate_ratio</span></span>
-<span><span class="co">#&gt; [1] 0.5370395</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.5273708</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="finding-analysis-date-for-target-events">Finding Analysis Date for Target Events<a class="anchor" aria-label="anchor" href="#finding-analysis-date-for-target-events"></a>

@@ -43,16 +43,16 @@ cut_data_by_date(sim, cut_date = 1)
 #>    id    treatment enroll_time       tte events
 #> 1   1      Control  0.00419837 0.9958016      0
 #> 2   2 Experimental  0.03844758 0.9615524      0
-#> 3   3      Control  0.14626653 0.8537335      1
+#> 3   3      Control  0.14626653 0.8400442      1
 #> 4   4 Experimental  0.16402103 0.8359790      0
 #> 5   5      Control  0.17372445 0.8262756      0
 #> 6   6      Control  0.18507951 0.8149205      0
 #> 7   7 Experimental  0.18557397 0.8144260      0
 #> 8   8 Experimental  0.20588002 0.7941200      0
-#> 9   9 Experimental  0.23301460 0.7669854      1
+#> 9   9 Experimental  0.23301460 0.7532961      1
 #> 10 10      Control  0.27367404 0.7263260      0
-#> 11 11 Experimental  0.30090945 0.6990905      1
-#> 12 12      Control  0.34461830 0.6553817      2
+#> 11 11 Experimental  0.30090945 0.6854013      1
+#> 12 12      Control  0.34461830 0.6280032      2
 #> 13 13      Control  0.37061731 0.6293827      0
 #> 14 14      Control  0.37480352 0.6251965      0
 #> 15 15 Experimental  0.41551077 0.5191834      0
