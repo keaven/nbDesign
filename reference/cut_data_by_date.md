@@ -5,7 +5,7 @@ Cut nb_sim data by calendar date
 ## Usage
 
 ``` r
-cut_data_by_date(data, cut_date, ...)
+cut_data_by_date(data, cut_date, event_gap = 5/365.25, ...)
 ```
 
 ## Arguments
@@ -19,16 +19,16 @@ cut_data_by_date(data, cut_date, ...)
 
   Calendar time (relative to trial start) at which to censor follow-up.
 
-- ...:
-
-  Additional arguments passed to methods.
-
 - event_gap:
 
   Gap duration after each event during which no new events are counted.
   Can be a numeric value (default `5 / 365.25`) or a function returning
   a numeric value. The time at risk is reduced by the sum of these gaps
   (truncated by the cut date).
+
+- ...:
+
+  Additional arguments passed to methods.
 
 ## Value
 
