@@ -5,6 +5,8 @@
 #'
 #' @param data A data frame of simulated data, typically from [nb_sim()].
 #' @param planned_events Integer. The target number of events.
+#' @param event_gap Gap duration after each event during which no new events are counted.
+#'   Can be a numeric value (default `5 / 365.25`) or a function returning a numeric value.
 #'
 #' @return Numeric. The calendar date when `planned_events` is achieved.
 #'   If the dataset contains fewer than `planned_events`, returns the maximum
@@ -20,11 +22,44 @@
 #' sim <- nb_sim(enroll_rate, fail_rate, dropout_rate, max_followup = 2, n = 40)
 #' get_analysis_date(sim, planned_events = 15)
 #' @export
-get_analysis_date <- function(data, planned_events) {
+get_analysis_date <- function(data, planned_events, event_gap = 5 / 365.25) {
+  dt <- data.table::as.data.table(data)
+  
   # Filter for actual events (event == 1)
-  events_df <- data[data$event == 1, ]
+  events_dt <- dt[event == 1]
+  
+  # If no events at all
+  if (nrow(events_dt) == 0) {
+    message(sprintf("Only 0 events in trial"))
+    return(max(dt$calendar_time))
+  }
 
-  total_events <- nrow(events_df)
+  # Identify valid events respecting the gap
+  get_valid_indices <- function(tte_vec, gap_rule) {
+    if (length(tte_vec) == 0) return(integer(0))
+    
+    # Sort by tte (time relative to randomization)
+    ord <- order(tte_vec)
+    sorted_tte <- tte_vec[ord]
+    
+    keep_logical <- logical(length(sorted_tte))
+    last_valid_end <- -Inf
+    
+    for (i in seq_along(sorted_tte)) {
+      t <- sorted_tte[i]
+      if (t < last_valid_end) next # Skip if in gap
+      
+      keep_logical[i] <- TRUE
+      
+      g <- if (is.function(gap_rule)) gap_rule() else gap_rule
+      last_valid_end <- t + g
+    }
+    
+    ord[keep_logical]
+  }
+
+  valid_rows <- events_dt[, .SD[get_valid_indices(tte, event_gap)], by = id]
+  total_events <- nrow(valid_rows)
 
   if (total_events < planned_events) {
     message(sprintf("Only %d events in trial", total_events))
@@ -32,9 +67,9 @@ get_analysis_date <- function(data, planned_events) {
     return(max(data$calendar_time))
   }
 
-  # Sort events by calendar time
-  events_df <- events_df[order(events_df$calendar_time), ]
+  # Sort valid events by calendar time
+  valid_times <- sort(valid_rows$calendar_time)
 
   # The calendar time of the planned_events-th event
-  return(events_df$calendar_time[planned_events])
+  return(valid_times[planned_events])
 }

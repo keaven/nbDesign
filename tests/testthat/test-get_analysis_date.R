@@ -13,7 +13,7 @@ test_that("get_analysis_date returns correct time", {
   events_df <- events_df[order(events_df$calendar_time), ]
   target_time <- events_df$calendar_time[5]
 
-  res <- get_analysis_date(sim, planned_events = 5)
+  res <- get_analysis_date(sim, planned_events = 5, event_gap = 0)
   expect_equal(res, target_time)
 })
 
