@@ -45,7 +45,7 @@ total number of events is reached in the simulated dataset.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_analysis_date</span><span class="op">(</span><span class="va">data</span>, <span class="va">planned_events</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_analysis_date</span><span class="op">(</span><span class="va">data</span>, <span class="va">planned_events</span>, event_gap <span class="op">=</span> <span class="fl">5</span><span class="op">/</span><span class="fl">365.25</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -58,6 +58,11 @@ total number of events is reached in the simulated dataset.</p>
 
 <dt id="arg-planned-events">planned_events<a class="anchor" aria-label="anchor" href="#arg-planned-events"></a></dt>
 <dd><p>Integer. The target number of events.</p></dd>
+
+
+<dt id="arg-event-gap">event_gap<a class="anchor" aria-label="anchor" href="#arg-event-gap"></a></dt>
+<dd><p>Gap duration after each event during which no new events are counted.
+Can be a numeric value (default <code>5 / 365.25</code>) or a function returning a numeric value.</p></dd>
 
 </dl></div>
     <div class="section level2">

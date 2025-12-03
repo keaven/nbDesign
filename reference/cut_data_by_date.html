@@ -60,6 +60,12 @@
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments passed to methods.</p></dd>
 
+
+<dt id="arg-event-gap">event_gap<a class="anchor" aria-label="anchor" href="#arg-event-gap"></a></dt>
+<dd><p>Gap duration after each event during which no new events are counted.
+Can be a numeric value (default <code>5 / 365.25</code>) or a function returning a numeric value.
+The time at risk is reduced by the sum of these gaps (truncated by the cut date).</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>

@@ -117,6 +117,21 @@ assigns 2 to group A and 2 to group B in each block.</p></dd>
 
 </dl><p>Multiple rows per subject are returned (one for each event, plus one for the final censoring time).</p>
     </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>The simulation generates data consistent with the Negative Binomial models described
+by Friede and Schmidli (2010) and Mutze et al. (2018). Specifically, it simulates
+a Gamma-distributed frailty variable for each individual (if dispersion &gt; 0),
+which acts as a multiplier for that individual's event rate. Events are then
+generated according to a Poisson process with this subject-specific rate.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+    <p>Friede, T., &amp; Schmidli, H. (2010). Blinded sample size reestimation with count data: methods and applications.
+<em>Statistics in Medicine</em>, 29(10), 1145-1156.</p>
+<p>Mutze, T., Glimm, E., Schmidli, H., &amp; Friede, T. (2018). Blind sample size reestimation in clinical trials with recurrent event data.
+<em>Pharmaceutical Statistics</em>, 17(4), 369-383.</p>
+    </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

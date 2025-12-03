@@ -6,7 +6,7 @@ specified total number of events is reached in the simulated dataset.
 ## Usage
 
 ``` r
-get_analysis_date(data, planned_events)
+get_analysis_date(data, planned_events, event_gap = 5/365.25)
 ```
 
 ## Arguments
@@ -19,6 +19,12 @@ get_analysis_date(data, planned_events)
 - planned_events:
 
   Integer. The target number of events.
+
+- event_gap:
+
+  Gap duration after each event during which no new events are counted.
+  Can be a numeric value (default `5 / 365.25`) or a function returning
+  a numeric value.
 
 ## Value
 

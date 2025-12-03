@@ -23,6 +23,13 @@ cut_data_by_date(data, cut_date, ...)
 
   Additional arguments passed to methods.
 
+- event_gap:
+
+  Gap duration after each event during which no new events are counted.
+  Can be a numeric value (default `5 / 365.25`) or a function returning
+  a numeric value. The time at risk is reduced by the sum of these gaps
+  (truncated by the cut date).
+
 ## Value
 
 A data frame with one row per subject randomized prior to `cut_date`
