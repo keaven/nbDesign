@@ -12,6 +12,10 @@ cut_data_by_date(data, cut_date, ...)
 \item{cut_date}{Calendar time (relative to trial start) at which to censor follow-up.}
 
 \item{...}{Additional arguments passed to methods.}
+
+\item{event_gap}{Gap duration after each event during which no new events are counted.
+Can be a numeric value (default \code{5 / 365.25}) or a function returning a numeric value.
+The time at risk is reduced by the sum of these gaps (truncated by the cut date).}
 }
 \value{
 A data frame with one row per subject randomized prior to \code{cut_date} containing
