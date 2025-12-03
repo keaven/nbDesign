@@ -17,7 +17,13 @@ blinded_ssr(
   lambda2_planning,
   power = 0.8,
   alpha = 0.025,
-  method = "friede"
+  method = "friede",
+  accrual_rate,
+  accrual_duration,
+  trial_duration,
+  dropout_rate = 0,
+  max_followup = NULL,
+  event_gap = NULL
 )
 ```
 
