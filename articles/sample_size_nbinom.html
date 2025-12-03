@@ -585,6 +585,87 @@ We use the <code>accrual_rate</code> computed in the previous step.</p>
 </div>
 </div>
 <div class="section level2">
+<h2 id="accounting-for-event-gaps">Accounting for Event Gaps<a class="anchor" aria-label="anchor" href="#accounting-for-event-gaps"></a>
+</h2>
+<p>In some recurrent event trials, there may be a mandatory “gap” period
+after each event during which no new events can be recorded (e.g., a
+recovery period or administrative window). This effectively reduces the
+time at risk and thus the effective event rate.</p>
+<p>If an <code>event_gap</code>
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>g</mi><annotation encoding="application/x-tex">g</annotation></semantics></math>)
+is specified, the effective event rate
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>λ</mi><mo>*</mo></msup><annotation encoding="application/x-tex">\lambda^*</annotation></semantics></math>
+used in the sample size calculation is derived as:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>λ</mi><mo>*</mo></msup><mo>=</mo><mfrac><mi>λ</mi><mrow><mn>1</mn><mo>+</mo><mi>λ</mi><mo>⋅</mo><mi>g</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex"> \lambda^* = \frac{\lambda}{1 + \lambda \cdot g} </annotation></semantics></math></p>
+<p>This adjustment reflects that for every event that occurs,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>g</mi><annotation encoding="application/x-tex">g</annotation></semantics></math>
+units of time are removed from the risk period. The sample size is then
+calculated using these effective rates
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>λ</mi><mn>1</mn><mo>*</mo></msubsup><annotation encoding="application/x-tex">\lambda_1^*</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>λ</mi><mn>2</mn><mo>*</mo></msubsup><annotation encoding="application/x-tex">\lambda_2^*</annotation></semantics></math>,
+while maintaining the original effect size
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>λ</mi><mn>1</mn></msub><mi>/</mi><msub><mi>λ</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\log(\lambda_1/\lambda_2)</annotation></semantics></math>)
+in the hypothesis test formulation to ensure the test remains targeted
+at the underlying rate ratio.</p>
+<div class="section level3">
+<h3 id="example-with-event-gap">Example with Event Gap<a class="anchor" aria-label="anchor" href="#example-with-event-gap"></a>
+</h3>
+<p>Calculate sample size assuming a 5-day gap after each event (approx
+0.0137 years).</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/sample_size_nbinom.html">sample_size_nbinom</a></span><span class="op">(</span></span>
+<span>  lambda1 <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  lambda2 <span class="op">=</span> <span class="fl">0.3</span>,</span>
+<span>  dispersion <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>  power <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  exposure <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  event_gap <span class="op">=</span> <span class="fl">5</span> <span class="op">/</span> <span class="fl">365.25</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; $n1</span></span>
+<span><span class="co">#&gt; [1] 168</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $n2</span></span>
+<span><span class="co">#&gt; [1] 168</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $n_total</span></span>
+<span><span class="co">#&gt; [1] 336</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $alpha</span></span>
+<span><span class="co">#&gt; [1] 0.025</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $sided</span></span>
+<span><span class="co">#&gt; [1] 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $power</span></span>
+<span><span class="co">#&gt; [1] 0.8</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $exposure</span></span>
+<span><span class="co">#&gt; [1] 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $events_n1</span></span>
+<span><span class="co">#&gt; [1] 83.42896</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $events_n2</span></span>
+<span><span class="co">#&gt; [1] 50.19387</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $total_events</span></span>
+<span><span class="co">#&gt; [1] 133.6228</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $variance</span></span>
+<span><span class="co">#&gt; [1] 0.03309948</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $accrual_rate</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $accrual_duration</span></span>
+<span><span class="co">#&gt; NULL</span></span></code></pre></div>
+<p>Note that the required sample size increases compared to the basic
+calculation (where N=274) because the effective event rates are lower,
+providing less information.</p>
+</div>
+</div>
+<div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <p>Zhu, H., &amp; Lakkis, H. (2014). Sample size calculation for

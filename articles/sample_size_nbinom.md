@@ -461,6 +461,84 @@ sample_size_nbinom(
 #> NULL
 ```
 
+## Accounting for Event Gaps
+
+In some recurrent event trials, there may be a mandatory “gap” period
+after each event during which no new events can be recorded (e.g., a
+recovery period or administrative window). This effectively reduces the
+time at risk and thus the effective event rate.
+
+If an `event_gap` ($g$) is specified, the effective event rate
+$\lambda^{*}$ used in the sample size calculation is derived as:
+
+$$\lambda^{*} = \frac{\lambda}{1 + \lambda \cdot g}$$
+
+This adjustment reflects that for every event that occurs, $g$ units of
+time are removed from the risk period. The sample size is then
+calculated using these effective rates $\lambda_{1}^{*}$ and
+$\lambda_{2}^{*}$, while maintaining the original effect size
+($\log\left( \lambda_{1}/\lambda_{2} \right)$) in the hypothesis test
+formulation to ensure the test remains targeted at the underlying rate
+ratio.
+
+### Example with Event Gap
+
+Calculate sample size assuming a 5-day gap after each event (approx
+0.0137 years).
+
+``` r
+sample_size_nbinom(
+  lambda1 = 0.5,
+  lambda2 = 0.3,
+  dispersion = 0.1,
+  power = 0.8,
+  exposure = 1,
+  event_gap = 5 / 365.25
+)
+#> $n1
+#> [1] 168
+#> 
+#> $n2
+#> [1] 168
+#> 
+#> $n_total
+#> [1] 336
+#> 
+#> $alpha
+#> [1] 0.025
+#> 
+#> $sided
+#> [1] 1
+#> 
+#> $power
+#> [1] 0.8
+#> 
+#> $exposure
+#> [1] 1
+#> 
+#> $events_n1
+#> [1] 83.42896
+#> 
+#> $events_n2
+#> [1] 50.19387
+#> 
+#> $total_events
+#> [1] 133.6228
+#> 
+#> $variance
+#> [1] 0.03309948
+#> 
+#> $accrual_rate
+#> NULL
+#> 
+#> $accrual_duration
+#> NULL
+```
+
+Note that the required sample size increases compared to the basic
+calculation (where N=274) because the effective event rates are lower,
+providing less information.
+
 ## References
 
 Zhu, H., & Lakkis, H. (2014). Sample size calculation for comparing two

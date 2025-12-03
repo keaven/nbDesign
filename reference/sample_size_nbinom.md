@@ -20,6 +20,7 @@ sample_size_nbinom(
   trial_duration = NULL,
   dropout_rate = 0,
   max_followup = NULL,
+  event_gap = NULL,
   method = "zhu"
 )
 ```
@@ -82,6 +83,12 @@ sample_size_nbinom(
 - max_followup:
 
   Maximum follow-up time for any patient. Default is NULL (infinite).
+
+- event_gap:
+
+  Gap duration after each event during which no new events are counted.
+  Default is NULL (no gap). If provided, the effective event rate is
+  reduced.
 
 - method:
 

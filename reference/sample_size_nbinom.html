@@ -59,6 +59,7 @@ binomial distribution for the outcome.</p>
 <span>  trial_duration <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  dropout_rate <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  max_followup <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  event_gap <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"zhu"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -121,6 +122,11 @@ as <code>accrual_rate</code>.</p></dd>
 
 <dt id="arg-max-followup">max_followup<a class="anchor" aria-label="anchor" href="#arg-max-followup"></a></dt>
 <dd><p>Maximum follow-up time for any patient. Default is NULL (infinite).</p></dd>
+
+
+<dt id="arg-event-gap">event_gap<a class="anchor" aria-label="anchor" href="#arg-event-gap"></a></dt>
+<dd><p>Gap duration after each event during which no new events are counted.
+Default is NULL (no gap). If provided, the effective event rate is reduced.</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
