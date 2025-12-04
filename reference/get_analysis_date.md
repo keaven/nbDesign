@@ -14,7 +14,7 @@ get_analysis_date(data, planned_events, event_gap = 5/365.25)
 - data:
 
   A data frame of simulated data, typically from
-  [`nb_sim()`](https://keaven.github.io/nbDesign/reference/nb_sim.md).
+  [`nb_sim()`](https://keaven.github.io/gsDesignNB/reference/nb_sim.md).
 
 - planned_events:
 

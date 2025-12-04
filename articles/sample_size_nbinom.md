@@ -1,7 +1,7 @@
 # Sample Size Calculation for Negative Binomial Outcomes
 
 ``` r
-library(nbDesign)
+library(gsDesignNB)
 ```
 
 This vignette describes the methodology used in the `sample_size_nbinom`
@@ -115,7 +115,8 @@ $$\bar{t} = \frac{\sum\limits_{j = 1}^{J}N_{j}E_{j}}{\sum\limits_{j = 1}^{J}N_{j
 
 Calculate sample size for: \* Control rate $\lambda_{1} = 0.5$ \*
 Treatment rate $\lambda_{2} = 0.3$ \* Dispersion $k = 0.1$ \* Power =
-80% \* Alpha = 0.025 (one-sided) \* Fixed exposure duration = 1 year
+80% \* Alpha = 0.025 (one-sided) \* Accrual over 12 months \* Trial
+duration 12 months (implying exposure approx 6 months)
 
 ``` r
 sample_size_nbinom(
@@ -125,17 +126,19 @@ sample_size_nbinom(
   power = 0.8,
   alpha = 0.025,
   sided = 1,
-  exposure = 1,
+  accrual_rate = 10, # arbitrary, just for average exposure
+  accrual_duration = 12,
+  trial_duration = 12,
   method = "zhu"
 )
 #> $n1
-#> [1] 167
+#> [1] 33
 #> 
 #> $n2
-#> [1] 167
+#> [1] 33
 #> 
 #> $n_total
-#> [1] 334
+#> [1] 66
 #> 
 #> $alpha
 #> [1] 0.025
@@ -147,25 +150,25 @@ sample_size_nbinom(
 #> [1] 0.8
 #> 
 #> $exposure
-#> [1] 1
+#> [1] 6
 #> 
 #> $events_n1
-#> [1] 83.5
+#> [1] 99
 #> 
 #> $events_n2
-#> [1] 50.1
+#> [1] 59.4
 #> 
 #> $total_events
-#> [1] 133.6
+#> [1] 158.4
 #> 
 #> $variance
-#> [1] 0.03313373
+#> [1] 0.03299663
 #> 
 #> $accrual_rate
-#> NULL
+#> [1] 5.5
 #> 
 #> $accrual_duration
-#> NULL
+#> [1] 12
 ```
 
 ### Using Friede et al. Method
@@ -178,17 +181,19 @@ sample_size_nbinom(
   power = 0.8,
   alpha = 0.025,
   sided = 1,
-  exposure = 1,
+  accrual_rate = 10,
+  accrual_duration = 12,
+  trial_duration = 12,
   method = "friede"
 )
 #> $n1
-#> [1] 167
+#> [1] 33
 #> 
 #> $n2
-#> [1] 167
+#> [1] 33
 #> 
 #> $n_total
-#> [1] 334
+#> [1] 66
 #> 
 #> $alpha
 #> [1] 0.025
@@ -200,25 +205,25 @@ sample_size_nbinom(
 #> [1] 0.8
 #> 
 #> $exposure
-#> [1] 1
+#> [1] 6
 #> 
 #> $events_n1
-#> [1] 83.5
+#> [1] 99
 #> 
 #> $events_n2
-#> [1] 50.1
+#> [1] 59.4
 #> 
 #> $total_events
-#> [1] 133.6
+#> [1] 158.4
 #> 
 #> $variance
-#> [1] 0.03313373
+#> [1] 0.03299663
 #> 
 #> $accrual_rate
-#> NULL
+#> [1] 5.5
 #> 
 #> $accrual_duration
-#> NULL
+#> [1] 12
 ```
 
 ### Piecewise Constant Accrual
@@ -419,16 +424,19 @@ sample_size_nbinom(
   lambda1 = 0.5,
   lambda2 = 0.3,
   dispersion = 0.1,
-  ratio = 2
+  ratio = 2,
+  accrual_rate = 10,
+  accrual_duration = 12,
+  trial_duration = 12
 )
 #> $n1
-#> [1] 154
+#> [1] 40
 #> 
 #> $n2
-#> [1] 308
+#> [1] 80
 #> 
 #> $n_total
-#> [1] 462
+#> [1] 120
 #> 
 #> $alpha
 #> [1] 0.025
@@ -437,28 +445,28 @@ sample_size_nbinom(
 #> [1] 1
 #> 
 #> $power
-#> [1] 0.9
+#> [1] 0.9593549
 #> 
 #> $exposure
-#> [1] 1
+#> [1] 6
 #> 
 #> $events_n1
-#> [1] 77
+#> [1] 120
 #> 
 #> $events_n2
-#> [1] 92.4
+#> [1] 144
 #> 
 #> $total_events
-#> [1] 169.4
+#> [1] 264
 #> 
 #> $variance
-#> [1] 0.02478355
+#> [1] 0.01902778
 #> 
 #> $accrual_rate
-#> NULL
+#> [1] 10
 #> 
 #> $accrual_duration
-#> NULL
+#> [1] 12
 ```
 
 ## Accounting for Event Gaps
@@ -492,17 +500,19 @@ sample_size_nbinom(
   lambda2 = 0.3,
   dispersion = 0.1,
   power = 0.8,
-  exposure = 1,
+  accrual_rate = 10,
+  accrual_duration = 12,
+  trial_duration = 12,
   event_gap = 5 / 365.25
 )
 #> $n1
-#> [1] 168
+#> [1] 33
 #> 
 #> $n2
-#> [1] 168
+#> [1] 33
 #> 
 #> $n_total
-#> [1] 336
+#> [1] 66
 #> 
 #> $alpha
 #> [1] 0.025
@@ -514,25 +524,25 @@ sample_size_nbinom(
 #> [1] 0.8
 #> 
 #> $exposure
-#> [1] 1
+#> [1] 6
 #> 
 #> $events_n1
-#> [1] 83.42896
+#> [1] 98.32699
 #> 
 #> $events_n2
-#> [1] 50.19387
+#> [1] 59.15706
 #> 
 #> $total_events
-#> [1] 133.6228
+#> [1] 157.484
 #> 
 #> $variance
-#> [1] 0.03309948
+#> [1] 0.03313491
 #> 
 #> $accrual_rate
-#> NULL
+#> [1] 5.5
 #> 
 #> $accrual_duration
-#> NULL
+#> [1] 12
 ```
 
 Note that the required sample size increases compared to the basic

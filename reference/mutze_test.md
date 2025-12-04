@@ -2,7 +2,7 @@
 
 Fits a Negative Binomial (or Poisson) log-rate model to the aggregated
 subject-level data produced by
-[`cut_data_by_date()`](https://keaven.github.io/nbDesign/reference/cut_data_by_date.md).
+[`cut_data_by_date()`](https://keaven.github.io/gsDesignNB/reference/cut_data_by_date.md).
 The method matches the Wald test described by Mütze et al. (2018) for
 comparing treatment arms with recurrent event outcomes.
 
@@ -18,7 +18,7 @@ mutze_test(data, method = c("nb", "poisson"), conf_level = 0.95)
 
   A data frame with at least the columns `treatment`, `events`, and
   `tte` (follow-up time). Typically output from
-  [`cut_data_by_date()`](https://keaven.github.io/nbDesign/reference/cut_data_by_date.md).
+  [`cut_data_by_date()`](https://keaven.github.io/gsDesignNB/reference/cut_data_by_date.md).
 
 - method:
 

@@ -1,13 +1,13 @@
 # Simulation of Recurrent Events
 
 ``` r
-library(nbDesign)
+library(gsDesignNB)
 library(data.table)
 library(ggplot2)
 ```
 
 This vignette demonstrates how to use the
-[`nb_sim()`](https://keaven.github.io/nbDesign/reference/nb_sim.md)
+[`nb_sim()`](https://keaven.github.io/gsDesignNB/reference/nb_sim.md)
 function to simulate a 2-arm clinical trial with recurrent event
 outcomes.
 
@@ -181,7 +181,7 @@ censoring
 ## Cutting Data by Analysis Date
 
 We can truncate the simulated data at an interim analysis date using
-[`cut_data_by_date()`](https://keaven.github.io/nbDesign/reference/cut_data_by_date.md).
+[`cut_data_by_date()`](https://keaven.github.io/gsDesignNB/reference/cut_data_by_date.md).
 The function returns a single record per participant with the truncated
 follow-up time (`tte`) and number of observed events. By default, a
 5-day gap (`event_gap = 5 / 365.25`) is applied after each event, during
@@ -219,7 +219,7 @@ mutze_res$rate_ratio
 Often we want to perform an interim analysis not at a fixed calendar
 date, but when a specific number of events have accumulated. We can find
 this date using
-[`get_analysis_date()`](https://keaven.github.io/nbDesign/reference/get_analysis_date.md)
+[`get_analysis_date()`](https://keaven.github.io/gsDesignNB/reference/get_analysis_date.md)
 and then cut the data accordingly. This function also respects the
 `event_gap` (defaulting to 5 days).
 
@@ -242,7 +242,8 @@ sum(cut_events$events)
 
 ## Generating and Verifying Negative Binomial Data
 
-The [`nb_sim()`](https://keaven.github.io/nbDesign/reference/nb_sim.md)
+The
+[`nb_sim()`](https://keaven.github.io/gsDesignNB/reference/nb_sim.md)
 function can also generate data where the counts follow a Negative
 Binomial distribution. This is achieved by providing a `dispersion`
 parameter in the `fail_rate` data frame. The dispersion parameter $k$

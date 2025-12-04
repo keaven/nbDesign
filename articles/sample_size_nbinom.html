@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Sample Size Calculation for Negative Binomial Outcomes • nbDesign</title>
+<title>Sample Size Calculation for Negative Binomial Outcomes • gsDesignNB</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
@@ -18,7 +18,7 @@
 
     <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
-    <a class="navbar-brand me-2" href="../index.html">nbDesign</a>
+    <a class="navbar-brand me-2" href="../index.html">gsDesignNB</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
@@ -65,7 +65,7 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://keaven.github.io/nbDesign/">nbDesign</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://keaven.github.io/gsDesignNB/">gsDesignNB</a></span><span class="op">)</span></span></code></pre></div>
 <p>This vignette describes the methodology used in the
 <code>sample_size_nbinom</code> function for calculating sample sizes
 when comparing two treatment groups with negative binomial outcomes. It
@@ -240,8 +240,8 @@ average:</p>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mn>2</mn></msub><mo>=</mo><mn>0.3</mn></mrow><annotation encoding="application/x-tex">\lambda_2 = 0.3</annotation></semantics></math>
 * Dispersion
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">k = 0.1</annotation></semantics></math>
-* Power = 80% * Alpha = 0.025 (one-sided) * Fixed exposure duration = 1
-year</p>
+* Power = 80% * Alpha = 0.025 (one-sided) * Accrual over 12 months *
+Trial duration 12 months (implying exposure approx 6 months)</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sample_size_nbinom.html">sample_size_nbinom</a></span><span class="op">(</span></span>
 <span>  lambda1 <span class="op">=</span> <span class="fl">0.5</span>,</span>
@@ -250,17 +250,19 @@ year</p>
 <span>  power <span class="op">=</span> <span class="fl">0.8</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="fl">0.025</span>,</span>
 <span>  sided <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  exposure <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  accrual_rate <span class="op">=</span> <span class="fl">10</span>, <span class="co"># arbitrary, just for average exposure</span></span>
+<span>  accrual_duration <span class="op">=</span> <span class="fl">12</span>,</span>
+<span>  trial_duration <span class="op">=</span> <span class="fl">12</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"zhu"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; $n1</span></span>
-<span><span class="co">#&gt; [1] 167</span></span>
+<span><span class="co">#&gt; [1] 33</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $n2</span></span>
-<span><span class="co">#&gt; [1] 167</span></span>
+<span><span class="co">#&gt; [1] 33</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $n_total</span></span>
-<span><span class="co">#&gt; [1] 334</span></span>
+<span><span class="co">#&gt; [1] 66</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $alpha</span></span>
 <span><span class="co">#&gt; [1] 0.025</span></span>
@@ -272,25 +274,25 @@ year</p>
 <span><span class="co">#&gt; [1] 0.8</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $exposure</span></span>
-<span><span class="co">#&gt; [1] 1</span></span>
+<span><span class="co">#&gt; [1] 6</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $events_n1</span></span>
-<span><span class="co">#&gt; [1] 83.5</span></span>
+<span><span class="co">#&gt; [1] 99</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $events_n2</span></span>
-<span><span class="co">#&gt; [1] 50.1</span></span>
+<span><span class="co">#&gt; [1] 59.4</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $total_events</span></span>
-<span><span class="co">#&gt; [1] 133.6</span></span>
+<span><span class="co">#&gt; [1] 158.4</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $variance</span></span>
-<span><span class="co">#&gt; [1] 0.03313373</span></span>
+<span><span class="co">#&gt; [1] 0.03299663</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $accrual_rate</span></span>
-<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; [1] 5.5</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $accrual_duration</span></span>
-<span><span class="co">#&gt; NULL</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 12</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="using-friede-et-al--method">Using Friede et al. Method<a class="anchor" aria-label="anchor" href="#using-friede-et-al--method"></a>
@@ -303,17 +305,19 @@ year</p>
 <span>  power <span class="op">=</span> <span class="fl">0.8</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="fl">0.025</span>,</span>
 <span>  sided <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  exposure <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  accrual_rate <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  accrual_duration <span class="op">=</span> <span class="fl">12</span>,</span>
+<span>  trial_duration <span class="op">=</span> <span class="fl">12</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"friede"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; $n1</span></span>
-<span><span class="co">#&gt; [1] 167</span></span>
+<span><span class="co">#&gt; [1] 33</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $n2</span></span>
-<span><span class="co">#&gt; [1] 167</span></span>
+<span><span class="co">#&gt; [1] 33</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $n_total</span></span>
-<span><span class="co">#&gt; [1] 334</span></span>
+<span><span class="co">#&gt; [1] 66</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $alpha</span></span>
 <span><span class="co">#&gt; [1] 0.025</span></span>
@@ -325,25 +329,25 @@ year</p>
 <span><span class="co">#&gt; [1] 0.8</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $exposure</span></span>
-<span><span class="co">#&gt; [1] 1</span></span>
+<span><span class="co">#&gt; [1] 6</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $events_n1</span></span>
-<span><span class="co">#&gt; [1] 83.5</span></span>
+<span><span class="co">#&gt; [1] 99</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $events_n2</span></span>
-<span><span class="co">#&gt; [1] 50.1</span></span>
+<span><span class="co">#&gt; [1] 59.4</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $total_events</span></span>
-<span><span class="co">#&gt; [1] 133.6</span></span>
+<span><span class="co">#&gt; [1] 158.4</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $variance</span></span>
-<span><span class="co">#&gt; [1] 0.03313373</span></span>
+<span><span class="co">#&gt; [1] 0.03299663</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $accrual_rate</span></span>
-<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; [1] 5.5</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $accrual_duration</span></span>
-<span><span class="co">#&gt; NULL</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 12</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="piecewise-constant-accrual">Piecewise Constant Accrual<a class="anchor" aria-label="anchor" href="#piecewise-constant-accrual"></a>
@@ -542,16 +546,19 @@ We use the <code>accrual_rate</code> computed in the previous step.</p>
 <span>  lambda1 <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  lambda2 <span class="op">=</span> <span class="fl">0.3</span>,</span>
 <span>  dispersion <span class="op">=</span> <span class="fl">0.1</span>,</span>
-<span>  ratio <span class="op">=</span> <span class="fl">2</span></span>
+<span>  ratio <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  accrual_rate <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  accrual_duration <span class="op">=</span> <span class="fl">12</span>,</span>
+<span>  trial_duration <span class="op">=</span> <span class="fl">12</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; $n1</span></span>
-<span><span class="co">#&gt; [1] 154</span></span>
+<span><span class="co">#&gt; [1] 40</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $n2</span></span>
-<span><span class="co">#&gt; [1] 308</span></span>
+<span><span class="co">#&gt; [1] 80</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $n_total</span></span>
-<span><span class="co">#&gt; [1] 462</span></span>
+<span><span class="co">#&gt; [1] 120</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $alpha</span></span>
 <span><span class="co">#&gt; [1] 0.025</span></span>
@@ -560,28 +567,28 @@ We use the <code>accrual_rate</code> computed in the previous step.</p>
 <span><span class="co">#&gt; [1] 1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $power</span></span>
-<span><span class="co">#&gt; [1] 0.9</span></span>
+<span><span class="co">#&gt; [1] 0.9593549</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $exposure</span></span>
-<span><span class="co">#&gt; [1] 1</span></span>
+<span><span class="co">#&gt; [1] 6</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $events_n1</span></span>
-<span><span class="co">#&gt; [1] 77</span></span>
+<span><span class="co">#&gt; [1] 120</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $events_n2</span></span>
-<span><span class="co">#&gt; [1] 92.4</span></span>
+<span><span class="co">#&gt; [1] 144</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $total_events</span></span>
-<span><span class="co">#&gt; [1] 169.4</span></span>
+<span><span class="co">#&gt; [1] 264</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $variance</span></span>
-<span><span class="co">#&gt; [1] 0.02478355</span></span>
+<span><span class="co">#&gt; [1] 0.01902778</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $accrual_rate</span></span>
-<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; [1] 10</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $accrual_duration</span></span>
-<span><span class="co">#&gt; NULL</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 12</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -619,17 +626,19 @@ at the underlying rate ratio.</p>
 <span>  lambda2 <span class="op">=</span> <span class="fl">0.3</span>,</span>
 <span>  dispersion <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>  power <span class="op">=</span> <span class="fl">0.8</span>,</span>
-<span>  exposure <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  accrual_rate <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  accrual_duration <span class="op">=</span> <span class="fl">12</span>,</span>
+<span>  trial_duration <span class="op">=</span> <span class="fl">12</span>,</span>
 <span>  event_gap <span class="op">=</span> <span class="fl">5</span> <span class="op">/</span> <span class="fl">365.25</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; $n1</span></span>
-<span><span class="co">#&gt; [1] 168</span></span>
+<span><span class="co">#&gt; [1] 33</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $n2</span></span>
-<span><span class="co">#&gt; [1] 168</span></span>
+<span><span class="co">#&gt; [1] 33</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $n_total</span></span>
-<span><span class="co">#&gt; [1] 336</span></span>
+<span><span class="co">#&gt; [1] 66</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $alpha</span></span>
 <span><span class="co">#&gt; [1] 0.025</span></span>
@@ -641,25 +650,25 @@ at the underlying rate ratio.</p>
 <span><span class="co">#&gt; [1] 0.8</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $exposure</span></span>
-<span><span class="co">#&gt; [1] 1</span></span>
+<span><span class="co">#&gt; [1] 6</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $events_n1</span></span>
-<span><span class="co">#&gt; [1] 83.42896</span></span>
+<span><span class="co">#&gt; [1] 98.32699</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $events_n2</span></span>
-<span><span class="co">#&gt; [1] 50.19387</span></span>
+<span><span class="co">#&gt; [1] 59.15706</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $total_events</span></span>
-<span><span class="co">#&gt; [1] 133.6228</span></span>
+<span><span class="co">#&gt; [1] 157.484</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $variance</span></span>
-<span><span class="co">#&gt; [1] 0.03309948</span></span>
+<span><span class="co">#&gt; [1] 0.03313491</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $accrual_rate</span></span>
-<span><span class="co">#&gt; NULL</span></span>
+<span><span class="co">#&gt; [1] 5.5</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $accrual_duration</span></span>
-<span><span class="co">#&gt; NULL</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 12</span></span></code></pre></div>
 <p>Note that the required sample size increases compared to the basic
 calculation (where N=274) because the effective event rates are lower,
 providing less information.</p>

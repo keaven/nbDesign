@@ -34,7 +34,7 @@ blinded_ssr(
   A data frame containing the blinded interim data. Must include columns
   `events` (number of events) and `tte` (total exposure/follow-up time).
   This is typically the output of
-  [`cut_data_by_date()`](https://keaven.github.io/nbDesign/reference/cut_data_by_date.md).
+  [`cut_data_by_date()`](https://keaven.github.io/gsDesignNB/reference/cut_data_by_date.md).
 
 - ratio:
 
@@ -62,6 +62,32 @@ blinded_ssr(
   Method for sample size recalculation. Currently "friede" (Friede &
   Schmidli 2010) is implemented, which uses the blinded nuisance
   parameter estimates.
+
+- accrual_rate:
+
+  Vector of accrual rates (patients per unit time).
+
+- accrual_duration:
+
+  Vector of durations for each accrual rate. Must be same length as
+  `accrual_rate`.
+
+- trial_duration:
+
+  Total planned duration of the trial.
+
+- dropout_rate:
+
+  Dropout rate (hazard rate). Default is 0.
+
+- max_followup:
+
+  Maximum follow-up time for any patient. Default is NULL (infinite).
+
+- event_gap:
+
+  Gap duration after each event during which no new events are counted.
+  Default is NULL (no gap).
 
 ## Value
 

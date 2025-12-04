@@ -13,11 +13,10 @@ sample_size_nbinom(
   power = NULL,
   alpha = 0.025,
   sided = 1,
-  exposure = NULL,
   ratio = 1,
-  accrual_rate = NULL,
-  accrual_duration = NULL,
-  trial_duration = NULL,
+  accrual_rate,
+  accrual_duration,
+  trial_duration,
   dropout_rate = 0,
   max_followup = NULL,
   event_gap = NULL,
@@ -53,19 +52,13 @@ sample_size_nbinom(
   One-sided or two-sided test. 1 for one-sided, 2 for two-sided. Default
   is 1.
 
-- exposure:
-
-  Duration of exposure. Default is 1. Ignored if `accrual_rate` and
-  related parameters are provided.
-
 - ratio:
 
   Allocation ratio n2/n1. Default is 1.
 
 - accrual_rate:
 
-  Vector of accrual rates (patients per unit time). If provided,
-  `accrual_duration` and `trial_duration` must also be provided.
+  Vector of accrual rates (patients per unit time).
 
 - accrual_duration:
 
@@ -133,15 +126,19 @@ in Medical Research*, 27(10), 2978-2993.
 
 ``` r
 # Calculate sample size for lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1
-sample_size_nbinom(lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, power = 0.8)
+# with fixed recruitment of 10/month for 20 months, 24 month trial duration
+sample_size_nbinom(
+  lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, power = 0.8,
+  accrual_rate = 10, accrual_duration = 20, trial_duration = 24
+)
 #> $n1
-#> [1] 167
+#> [1] 18
 #> 
 #> $n2
-#> [1] 167
+#> [1] 18
 #> 
 #> $n_total
-#> [1] 334
+#> [1] 36
 #> 
 #> $alpha
 #> [1] 0.025
@@ -153,25 +150,25 @@ sample_size_nbinom(lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, power = 0.8)
 #> [1] 0.8
 #> 
 #> $exposure
-#> [1] 1
+#> [1] 14
 #> 
 #> $events_n1
-#> [1] 83.5
+#> [1] 126
 #> 
 #> $events_n2
-#> [1] 50.1
+#> [1] 75.6
 #> 
 #> $total_events
-#> [1] 133.6
+#> [1] 201.6
 #> 
 #> $variance
-#> [1] 0.03313373
+#> [1] 0.03227513
 #> 
 #> $accrual_rate
-#> NULL
+#> [1] 1.8
 #> 
 #> $accrual_duration
-#> NULL
+#> [1] 20
 #> 
 
 # With piecewise accrual
