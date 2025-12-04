@@ -10,6 +10,8 @@
   : Cut nb_sim data by calendar date
 - [`get_analysis_date()`](https://keaven.github.io/gsDesignNB/reference/get_analysis_date.md)
   : Find calendar date for target event count
+- [`gsNBCalendar()`](https://keaven.github.io/gsDesignNB/reference/gsNBCalendar.md)
+  : Group Sequential Design for Negative Binomial Outcomes
 - [`mutze_test()`](https://keaven.github.io/gsDesignNB/reference/mutze_test.md)
   : Wald test for treatment effect using Negative Binomial model (Mütze
   et al.)

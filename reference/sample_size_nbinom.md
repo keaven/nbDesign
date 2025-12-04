@@ -90,7 +90,12 @@ sample_size_nbinom(
 
 ## Value
 
-A list containing:
+An object of class `sample_size_nbinom_result`, which is a list
+containing:
+
+- inputs:
+
+  Named list of the original function arguments.
 
 - n1:
 
