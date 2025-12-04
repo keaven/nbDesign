@@ -10,11 +10,8 @@
 #' @param power Power of the test (1 - beta). Default is 0.9.
 #' @param alpha Significance level. Default is 0.025.
 #' @param sided One-sided or two-sided test. 1 for one-sided, 2 for two-sided. Default is 1.
-#' @param exposure Duration of exposure. Default is 1. Ignored if \code{accrual_rate}
-#'   and related parameters are provided.
 #' @param ratio Allocation ratio n2/n1. Default is 1.
-#' @param accrual_rate Vector of accrual rates (patients per unit time). If provided,
-#'   \code{accrual_duration} and \code{trial_duration} must also be provided.
+#' @param accrual_rate Vector of accrual rates (patients per unit time).
 #' @param accrual_duration Vector of durations for each accrual rate. Must be same length
 #'   as \code{accrual_rate}.
 #' @param trial_duration Total planned duration of the trial.
@@ -50,7 +47,11 @@
 #'
 #' @examples
 #' # Calculate sample size for lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1
-#' sample_size_nbinom(lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, power = 0.8)
+#' # with fixed recruitment of 10/month for 20 months, 24 month trial duration
+#' sample_size_nbinom(
+#'   lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, power = 0.8,
+#'   accrual_rate = 10, accrual_duration = 20, trial_duration = 24
+#' )
 #'
 #' # With piecewise accrual
 #' # 5 patients/month for 3 months, then 10 patients/month for 3 months
@@ -63,9 +64,9 @@
 #'
 #' @importFrom stats pnorm qnorm
 sample_size_nbinom <- function(lambda1, lambda2, dispersion, power = NULL,
-                               alpha = 0.025, sided = 1, exposure = NULL, ratio = 1,
-                               accrual_rate = NULL, accrual_duration = NULL,
-                               trial_duration = NULL, dropout_rate = 0,
+                               alpha = 0.025, sided = 1, ratio = 1,
+                               accrual_rate, accrual_duration,
+                               trial_duration, dropout_rate = 0,
                                max_followup = NULL, event_gap = NULL, method = "zhu") {
   if (lambda1 <= 0 || lambda2 <= 0) {
     stop("Rates lambda1 and lambda2 must be positive.")
@@ -87,13 +88,20 @@ sample_size_nbinom <- function(lambda1, lambda2, dispersion, power = NULL,
   }
 
   # Determine mode: Calculate N or Calculate Power
+  # We don't have 'mode' logic based on missing accrual_rate anymore since it's required.
+  # If power is NULL, solve for N. If power is provided, solve for Power (implied).
+  # BUT: If accrual_rate is fixed (provided), we effectively have a fixed N.
+  # In typical 'solve_n' mode, we want to SCALE the accrual rate to achieve the target power.
+  # In 'solve_power' mode, we keep accrual rate fixed and compute power.
+
   mode <- "solve_n"
-  if (is.null(power)) {
-    if (!is.null(accrual_rate)) {
-      mode <- "solve_power"
-    } else {
-      power <- 0.9 # Default if accrual not provided
-    }
+  if (!is.null(power)) {
+    # We are solving for N (scaling accrual) to meet this power
+    mode <- "solve_n"
+  } else {
+    # Power is null, so we calculate power for the fixed accrual
+    mode <- "solve_power"
+    # Default power? No, we are calculating it.
   }
 
   # Helper function for average exposure over [u_min, u_max] given dropout_rate
@@ -115,86 +123,69 @@ sample_size_nbinom <- function(lambda1, lambda2, dispersion, power = NULL,
   total_n_accrual <- 0
   total_exposure_mass <- 0
 
-  if (!is.null(accrual_rate)) {
-    # Handle variable accrual to calculate average exposure
-    if (is.null(accrual_duration) || is.null(trial_duration)) {
-      stop("If accrual_rate is provided, accrual_duration and trial_duration must also be provided.")
-    }
-    if (length(accrual_rate) != length(accrual_duration)) {
-      stop("accrual_rate and accrual_duration must have the same length.")
-    }
+  # Handle variable accrual to calculate average exposure
+  # Accrual arguments are now mandatory, so no checks for is.null needed (R will error if missing)
+  
+  if (length(accrual_rate) != length(accrual_duration)) {
+    stop("accrual_rate and accrual_duration must have the same length.")
+  }
 
-    total_accrual_time <- sum(accrual_duration)
-    if (total_accrual_time > trial_duration) {
-      stop("Total accrual duration cannot exceed trial duration.")
-    }
+  total_accrual_time <- sum(accrual_duration)
+  if (total_accrual_time > trial_duration) {
+    stop("Total accrual duration cannot exceed trial duration.")
+  }
 
-    for (i in seq_along(accrual_rate)) {
-      r <- accrual_rate[i]
-      d <- accrual_duration[i]
+  for (i in seq_along(accrual_rate)) {
+    r <- accrual_rate[i]
+    d <- accrual_duration[i]
 
-      n_seg <- r * d
-      if (n_seg > 0) {
-        # Potential follow-up range (administrative censoring only)
-        u_max <- trial_duration - current_time
-        u_min <- trial_duration - (current_time + d)
+    n_seg <- r * d
+    if (n_seg > 0) {
+      # Potential follow-up range (administrative censoring only)
+      u_max <- trial_duration - current_time
+      u_min <- trial_duration - (current_time + d)
 
-        avg_followup <- 0
+      avg_followup <- 0
 
-        if (is.null(max_followup) || is.infinite(max_followup) || u_max <= max_followup) {
-          # Case 1: No truncation by max_followup (or negligible)
-          avg_followup <- avg_exp_func(u_min, u_max, dropout_rate)
-        } else if (u_min >= max_followup) {
-          # Case 2: All truncated by max_followup
-          # Effectively fixed exposure of max_followup
-          if (dropout_rate == 0) {
-            avg_followup <- max_followup
-          } else {
-            avg_followup <- (1 - exp(-dropout_rate * max_followup)) / dropout_rate
-          }
+      if (is.null(max_followup) || is.infinite(max_followup) || u_max <= max_followup) {
+        # Case 1: No truncation by max_followup (or negligible)
+        avg_followup <- avg_exp_func(u_min, u_max, dropout_rate)
+      } else if (u_min >= max_followup) {
+        # Case 2: All truncated by max_followup
+        # Effectively fixed exposure of max_followup
+        if (dropout_rate == 0) {
+          avg_followup <- max_followup
         } else {
-          # Case 3: Split
-          tau_star <- trial_duration - max_followup
-          d1 <- tau_star - current_time
-          d2 <- (current_time + d) - tau_star
+          avg_followup <- (1 - exp(-dropout_rate * max_followup)) / dropout_rate
+        }
+      } else {
+        # Case 3: Split
+        tau_star <- trial_duration - max_followup
+        d1 <- tau_star - current_time
+        d2 <- (current_time + d) - tau_star
 
-          if (dropout_rate == 0) {
-            avg_1 <- max_followup
-          } else {
-            avg_1 <- (1 - exp(-dropout_rate * max_followup)) / dropout_rate
-          }
-
-          avg_2 <- avg_exp_func(u_min, max_followup, dropout_rate)
-          avg_followup <- (d1 * avg_1 + d2 * avg_2) / d
+        if (dropout_rate == 0) {
+          avg_1 <- max_followup
+        } else {
+          avg_1 <- (1 - exp(-dropout_rate * max_followup)) / dropout_rate
         }
 
-        total_n_accrual <- total_n_accrual + n_seg
-        total_exposure_mass <- total_exposure_mass + n_seg * avg_followup
+        avg_2 <- avg_exp_func(u_min, max_followup, dropout_rate)
+        avg_followup <- (d1 * avg_1 + d2 * avg_2) / d
       }
-      current_time <- current_time + d
-    }
 
-    if (total_n_accrual == 0) {
-      stop("Accrual results in 0 patients.")
+      total_n_accrual <- total_n_accrual + n_seg
+      total_exposure_mass <- total_exposure_mass + n_seg * avg_followup
     }
-
-    exposure <- total_exposure_mass / total_n_accrual
-  } else {
-    # No accrual info provided
-    if (is.null(exposure)) {
-      exposure <- 1 # Default if not provided
-    }
-
-    # Adjust exposure if max_followup is provided (act as a cap)
-    if (!is.null(max_followup) && !is.infinite(max_followup)) {
-      exposure <- min(exposure, max_followup)
-    }
-
-    # If dropout_rate > 0, adjust fixed exposure
-    if (dropout_rate > 0) {
-      exposure <- (1 - exp(-dropout_rate * exposure)) / dropout_rate
-    }
+    current_time <- current_time + d
   }
+
+  if (total_n_accrual == 0) {
+    stop("Accrual results in 0 patients.")
+  }
+
+  exposure <- total_exposure_mass / total_n_accrual
+
 
   # Adjust expectations for event_gap if present
   if (!is.null(event_gap) && !is.na(event_gap) && event_gap > 0) {

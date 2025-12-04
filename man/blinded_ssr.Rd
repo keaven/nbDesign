@@ -37,6 +37,20 @@ This is typically the output of \code{\link[=cut_data_by_date]{cut_data_by_date(
 
 \item{method}{Method for sample size recalculation. Currently "friede" (Friede & Schmidli 2010)
 is implemented, which uses the blinded nuisance parameter estimates.}
+
+\item{accrual_rate}{Vector of accrual rates (patients per unit time).}
+
+\item{accrual_duration}{Vector of durations for each accrual rate. Must be same length
+as \code{accrual_rate}.}
+
+\item{trial_duration}{Total planned duration of the trial.}
+
+\item{dropout_rate}{Dropout rate (hazard rate). Default is 0.}
+
+\item{max_followup}{Maximum follow-up time for any patient. Default is NULL (infinite).}
+
+\item{event_gap}{Gap duration after each event during which no new events are counted.
+Default is NULL (no gap).}
 }
 \value{
 A list containing:

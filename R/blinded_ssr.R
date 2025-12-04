@@ -16,6 +16,14 @@
 #' @param alpha One-sided significance level. Default is 0.025.
 #' @param method Method for sample size recalculation. Currently "friede" (Friede & Schmidli 2010)
 #'   is implemented, which uses the blinded nuisance parameter estimates.
+#' @param accrual_rate Vector of accrual rates (patients per unit time).
+#' @param accrual_duration Vector of durations for each accrual rate. Must be same length
+#'   as \code{accrual_rate}.
+#' @param trial_duration Total planned duration of the trial.
+#' @param dropout_rate Dropout rate (hazard rate). Default is 0.
+#' @param max_followup Maximum follow-up time for any patient. Default is NULL (infinite).
+#' @param event_gap Gap duration after each event during which no new events are counted.
+#'   Default is NULL (no gap).
 #'
 #' @return A list containing:
 #'   \describe{

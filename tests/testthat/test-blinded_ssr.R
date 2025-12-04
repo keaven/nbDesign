@@ -13,7 +13,15 @@ test_that("blinded_ssr estimates dispersion and rate", {
 
   cut <- cut_data_by_date(sim, cut_date = 5)
 
-  res <- blinded_ssr(cut, lambda1_planning = 0.5, lambda2_planning = 0.3)
+  # Mock accrual params for blinded_ssr (needed for sample size recalc)
+  res <- blinded_ssr(
+    cut,
+    lambda1_planning = 0.5, 
+    lambda2_planning = 0.3,
+    accrual_rate = 100,
+    accrual_duration = 1,
+    trial_duration = 10
+  )
 
   # Since data is Poisson, k should be near 0, but mixture effect might inflate it slightly
   # Allow more noise

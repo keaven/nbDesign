@@ -1,21 +1,30 @@
 # source(testthat::test_path("../../R/sample_size_nbinom.R")) # Not needed in package context
 
 test_that("sample_size_nbinom calculates correctly", {
-  # Basic calculation
-  res <- sample_size_nbinom(lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, power = 0.8)
+  # Basic calculation - now requires accrual params
+  # To get exposure=1, e.g. trial=2, accrual=2 (uniform 0-2). Avg fup = 2 - 1 = 1.
+  
+  res <- sample_size_nbinom(
+    lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, power = 0.8,
+    accrual_rate = 10, accrual_duration = 2, trial_duration = 2
+  )
   expect_type(res, "list")
   expect_true(res$n1 > 0)
   expect_true(res$n2 > 0)
   expect_equal(res$n_total, res$n1 + res$n2)
+  expect_equal(res$exposure, 1)
 
   # Check Poisson limit (dispersion = 0)
-  res_nb_0 <- sample_size_nbinom(lambda1 = 0.5, lambda2 = 0.3, dispersion = 0, power = 0.8)
+  res_nb_0 <- sample_size_nbinom(
+    lambda1 = 0.5, lambda2 = 0.3, dispersion = 0, power = 0.8,
+    accrual_rate = 10, accrual_duration = 2, trial_duration = 2
+  )
 
   # Manual Poisson calculation
   alpha <- 0.025
   beta <- 0.2
-  mu1 <- 0.5
-  mu2 <- 0.3
+  mu1 <- 0.5 * 1 # exposure 1
+  mu2 <- 0.3 * 1
   z_a <- qnorm(1 - alpha) # one-sided alpha = 0.025 corresponds to sided=1 default
   z_b <- qnorm(1 - beta)
   num <- (z_a + z_b)^2 * (1 / mu1 + 1 / mu2)
@@ -25,12 +34,15 @@ test_that("sample_size_nbinom calculates correctly", {
   expect_equal(res_nb_0$n1, n_poisson)
 
   # Check ratio
-  res_ratio <- sample_size_nbinom(lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, ratio = 2)
+  res_ratio <- sample_size_nbinom(
+    lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, ratio = 2,
+    accrual_rate = 10, accrual_duration = 2, trial_duration = 2
+  )
   expect_equal(res_ratio$n2, 2 * res_ratio$n1)
 
   # Error handling
-  expect_error(sample_size_nbinom(lambda1 = -1, lambda2 = 0.3, dispersion = 0.1))
-  expect_error(sample_size_nbinom(lambda1 = 0.5, lambda2 = 0.3, dispersion = -1))
+  expect_error(sample_size_nbinom(lambda1 = -1, lambda2 = 0.3, dispersion = 0.1, accrual_rate = 1, accrual_duration = 1, trial_duration = 1))
+  expect_error(sample_size_nbinom(lambda1 = 0.5, lambda2 = 0.3, dispersion = -1, accrual_rate = 1, accrual_duration = 1, trial_duration = 1))
 
   # Variable accrual
   # Case 1: Uniform accrual over [0, 10], trial ends at 10. Avg exposure = 5.
@@ -39,13 +51,6 @@ test_that("sample_size_nbinom calculates correctly", {
     accrual_rate = 10, accrual_duration = 10, trial_duration = 10
   )
   expect_equal(res_accrual$exposure, 5)
-
-  # Compare to manual calculation with exposure = 5
-  res_manual <- sample_size_nbinom(
-    lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, power = 0.8,
-    exposure = 5
-  )
-  expect_equal(res_accrual$n_total, res_manual$n_total)
 
   # Case 2: Piecewise accrual
   # Rate 10 for 5 units, Rate 20 for 5 units. Trial duration 15.
@@ -59,13 +64,14 @@ test_that("sample_size_nbinom calculates correctly", {
   expect_equal(res_piecewise$exposure, 1375 / 150)
 
   # Error checks for accrual
-  expect_error(sample_size_nbinom(lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, accrual_rate = 10)) # Missing duration
+  expect_error(sample_size_nbinom(lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, accrual_rate = 10, trial_duration = 10)) # Missing duration
   expect_error(sample_size_nbinom(lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, accrual_rate = 10, accrual_duration = c(5, 5), trial_duration = 10)) # Mismatch
   expect_error(sample_size_nbinom(lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, accrual_rate = 10, accrual_duration = 11, trial_duration = 10)) # Accrual > Trial
 
   # Test Friede method
   res_friede <- sample_size_nbinom(
-    lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, power = 0.8, method = "friede"
+    lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, power = 0.8, method = "friede",
+    accrual_rate = 10, accrual_duration = 2, trial_duration = 2
   )
   expect_type(res_friede, "list")
   expect_true(res_friede$n1 > 0)
@@ -74,7 +80,8 @@ test_that("sample_size_nbinom calculates correctly", {
   # Friede and Zhu methods usually give similar but slightly different results
   # because variance estimation details differ slightly or are equivalent under specific conditions
   res_zhu <- sample_size_nbinom(
-    lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, power = 0.8, method = "zhu"
+    lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, power = 0.8, method = "zhu",
+    accrual_rate = 10, accrual_duration = 2, trial_duration = 2
   )
 
   # In this implementation:
@@ -96,11 +103,20 @@ test_that("sample_size_nbinom calculates correctly", {
   # Zhu V = (1/mu1+k) + 0.5(1/mu2+k)
   # Friede n_total = C * V_bar. n1 = C * V_bar / 3 = C * ( (1/mu1+k) + 0.5(1/mu2+k) ) = C * Zhu_V
   # So they should still be identical for n1.
-  res_zhu_r2 <- sample_size_nbinom(lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, ratio = 2, method = "zhu")
-  res_friede_r2 <- sample_size_nbinom(lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, ratio = 2, method = "friede")
+  res_zhu_r2 <- sample_size_nbinom(
+    lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, ratio = 2, method = "zhu",
+    accrual_rate = 10, accrual_duration = 2, trial_duration = 2
+  )
+  res_friede_r2 <- sample_size_nbinom(
+    lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, ratio = 2, method = "friede",
+    accrual_rate = 10, accrual_duration = 2, trial_duration = 2
+  )
 
   expect_equal(res_zhu_r2$n1, res_friede_r2$n1)
 
   # Error check for unknown method
-  expect_error(sample_size_nbinom(lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, method = "unknown"))
+  expect_error(sample_size_nbinom(
+    lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, method = "unknown",
+    accrual_rate = 10, accrual_duration = 2, trial_duration = 2
+  ))
 })

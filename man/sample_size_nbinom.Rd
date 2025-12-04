@@ -11,11 +11,10 @@ sample_size_nbinom(
   power = NULL,
   alpha = 0.025,
   sided = 1,
-  exposure = NULL,
   ratio = 1,
-  accrual_rate = NULL,
-  accrual_duration = NULL,
-  trial_duration = NULL,
+  accrual_rate,
+  accrual_duration,
+  trial_duration,
   dropout_rate = 0,
   max_followup = NULL,
   event_gap = NULL,
@@ -36,13 +35,9 @@ Note that this is equivalent to \code{1/size} in R's \code{rnbinom} parameteriza
 
 \item{sided}{One-sided or two-sided test. 1 for one-sided, 2 for two-sided. Default is 1.}
 
-\item{exposure}{Duration of exposure. Default is 1. Ignored if \code{accrual_rate}
-and related parameters are provided.}
-
 \item{ratio}{Allocation ratio n2/n1. Default is 1.}
 
-\item{accrual_rate}{Vector of accrual rates (patients per unit time). If provided,
-\code{accrual_duration} and \code{trial_duration} must also be provided.}
+\item{accrual_rate}{Vector of accrual rates (patients per unit time).}
 
 \item{accrual_duration}{Vector of durations for each accrual rate. Must be same length
 as \code{accrual_rate}.}
@@ -74,7 +69,11 @@ binomial distribution for the outcome.
 }
 \examples{
 # Calculate sample size for lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1
-sample_size_nbinom(lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, power = 0.8)
+# with fixed recruitment of 10/month for 20 months, 24 month trial duration
+sample_size_nbinom(
+  lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, power = 0.8,
+  accrual_rate = 10, accrual_duration = 20, trial_duration = 24
+)
 
 # With piecewise accrual
 # 5 patients/month for 3 months, then 10 patients/month for 3 months
