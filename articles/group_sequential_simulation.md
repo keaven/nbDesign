@@ -462,47 +462,52 @@ boundaries](group_sequential_simulation_files/figure-html/plot-z-stats-1.png)
 
 ## Design Summary
 
+The [`summary()`](https://rdrr.io/r/base/summary.html) function provides
+a textual overview of the group sequential design:
+
 ``` r
-cat("=== Group Sequential Design Summary ===\n\n")
-#> === Group Sequential Design Summary ===
-cat("Trial Parameters:\n")
-#> Trial Parameters:
-cat(sprintf("  Enrollment duration: 1 year\n"))
-#>   Enrollment duration: 1 year
-cat(sprintf("  Trial duration: 2 years\n"))
-#>   Trial duration: 2 years
-cat(sprintf("  Control rate: %.1f events/year\n", nb_ss$inputs$lambda1))
-#>   Control rate: 1.5 events/year
-cat(sprintf("  Experimental rate: %.1f events/year\n", nb_ss$inputs$lambda2))
-#>   Experimental rate: 1.0 events/year
-cat(sprintf("  Rate ratio: %.2f\n", nb_ss$inputs$lambda2 / nb_ss$inputs$lambda1))
-#>   Rate ratio: 0.67
-cat(sprintf("  Dispersion: %.1f\n", nb_ss$inputs$dispersion))
-#>   Dispersion: 0.5
-cat(sprintf("\n"))
-cat("Sample Size:\n")
-#> Sample Size:
-cat(sprintf("  Fixed design N: %d\n", ceiling(nb_ss$n_total)))
-#>   Fixed design N: 270
-cat(sprintf("  GS max N: %d (inflation: %.1f%%)\n", 
-            ceiling(max(gs_nb$n_total)), 
-            (max(gs_nb$n.I) - 1) * 100))
-#>   GS max N: 288 (inflation: 6.6%)
-cat(sprintf("\n"))
-cat("Analysis Schedule:\n")
-#> Analysis Schedule:
-for (i in 1:3) {
-  cat(sprintf("  Analysis %d: Month %d (info frac: %.3f)\n", 
-              i, analysis_times[i] * 12, gs_nb$timing[i]))
-}
-#>   Analysis 1: Month 10 (info frac: 0.417)
-#>   Analysis 2: Month 18 (info frac: 0.750)
-#>   Analysis 3: Month 24 (info frac: 1.000)
-cat(sprintf("\n"))
-cat("Spending Times (usTime): %.1f, %.1f, %.1f\n", 
-    gs_nb$usTime[1], gs_nb$usTime[2], gs_nb$usTime[3])
-#> Spending Times (usTime): %.1f, %.1f, %.1f
-#>  0.1 0.2 1
+summary(gs_nb)
+#> Asymmetric two-sided with non-binding futility bound group sequential design
+#> for negative binomial outcomes, 3 analyses, total sample size 287.8, 90 percent
+#> power, 2.5 percent (1-sided) Type I error. Control rate 1.5000, treatment rate
+#> 1.0000, risk ratio 0.6667, dispersion 0.5000. Accrual duration 1.0, trial
+#> duration 2.0, average exposure 1.50. Randomization ratio 1:1.
+```
+
+For detailed boundary information, use
+[`gsDesign::gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.html):
+
+``` r
+gsDesign::gsBoundSummary(gs_nb)
+#>                Analysis               Value Efficacy Futility
+#>               IA 1: 42%                   Z   3.5037   0.1140
+#>  N/Fixed design N: 0.44         p (1-sided)   0.0002   0.4546
+#>                             ~delta at bound   1.6218   0.0528
+#>                         P(Cross) if delta=0   0.0002   0.5454
+#>                         P(Cross) if delta=1   0.0896   0.0204
+#>               IA 2: 75%                   Z   3.3600   1.2080
+#>   N/Fixed design N: 0.8         p (1-sided)   0.0004   0.1135
+#>                             ~delta at bound   1.1593   0.4168
+#>                         P(Cross) if delta=0   0.0006   0.8929
+#>                         P(Cross) if delta=1   0.3321   0.0545
+#>                   Final                   Z   1.9611   1.9611
+#>  N/Fixed design N: 1.07         p (1-sided)   0.0249   0.0249
+#>                             ~delta at bound   0.5860   0.5860
+#>                         P(Cross) if delta=0   0.0225   0.9775
+#>                         P(Cross) if delta=1   0.9000   0.1000
+```
+
+After rounding to integer sample sizes with
+[`toInteger()`](https://keaven.github.io/gsDesignNB/reference/toInteger.md):
+
+``` r
+gs_nb_int <- toInteger(gs_nb)
+summary(gs_nb_int)
+#> Asymmetric two-sided with non-binding futility bound group sequential design
+#> for negative binomial outcomes, 3 analyses, total sample size 288.0, 90 percent
+#> power, 2.5 percent (1-sided) Type I error. Control rate 1.5000, treatment rate
+#> 1.0000, risk ratio 0.6667, dispersion 0.5000. Accrual duration 1.0, trial
+#> duration 2.0, average exposure 1.50. Randomization ratio 1:1.
 ```
 
 ## Notes

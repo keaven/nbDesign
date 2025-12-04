@@ -1,0 +1,50 @@
+# Summary for gsNB Objects
+
+Provides a textual summary of a group sequential design for negative
+binomial outcomes, similar to the summary provided by
+[`gsDesign`](https://keaven.github.io/gsDesign/reference/gsDesign.html).
+For tabular output, use
+[`gsBoundSummary`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.html)
+directly on the gsNB object.
+
+## Usage
+
+``` r
+# S3 method for class 'gsNB'
+summary(object, ...)
+```
+
+## Arguments
+
+- object:
+
+  An object of class `gsNB`.
+
+- ...:
+
+  Additional arguments (currently ignored).
+
+## Value
+
+A character string summarizing the design (invisibly). The summary is
+also printed to the console.
+
+## Examples
+
+``` r
+nb_ss <- sample_size_nbinom(
+  lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, power = 0.9,
+  accrual_rate = 10, accrual_duration = 20, trial_duration = 24
+)
+gs_design <- gsNBCalendar(nb_ss, k = 3)
+summary(gs_design)
+#> Asymmetric two-sided with non-binding futility bound group sequential design
+#> for negative binomial outcomes, 3 analyses, total sample size 51.4, 90 percent
+#> power, 2.5 percent (1-sided) Type I error. Control rate 0.5000, treatment rate
+#> 0.3000, risk ratio 0.6000, dispersion 0.1000. Accrual duration 20.0, trial
+#> duration 24.0, average exposure 14.00. Randomization ratio 1:1.
+#> 
+
+# For tabular bounds summary, use gsBoundSummary directly:
+# gsDesign::gsBoundSummary(gs_design)
+```

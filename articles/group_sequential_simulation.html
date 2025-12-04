@@ -649,47 +649,45 @@ outcomes, this relates to the total exposure and event counts.</p>
 <div class="section level2">
 <h2 id="design-summary">Design Summary<a class="anchor" aria-label="anchor" href="#design-summary"></a>
 </h2>
+<p>The <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> function provides a textual overview of
+the group sequential design:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"=== Group Sequential Design Summary ===\n\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; === Group Sequential Design Summary ===</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Trial Parameters:\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Trial Parameters:</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"  Enrollment duration: 1 year\n"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   Enrollment duration: 1 year</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"  Trial duration: 2 years\n"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   Trial duration: 2 years</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"  Control rate: %.1f events/year\n"</span>, <span class="va">nb_ss</span><span class="op">$</span><span class="va">inputs</span><span class="op">$</span><span class="va">lambda1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   Control rate: 1.5 events/year</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"  Experimental rate: %.1f events/year\n"</span>, <span class="va">nb_ss</span><span class="op">$</span><span class="va">inputs</span><span class="op">$</span><span class="va">lambda2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   Experimental rate: 1.0 events/year</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"  Rate ratio: %.2f\n"</span>, <span class="va">nb_ss</span><span class="op">$</span><span class="va">inputs</span><span class="op">$</span><span class="va">lambda2</span> <span class="op">/</span> <span class="va">nb_ss</span><span class="op">$</span><span class="va">inputs</span><span class="op">$</span><span class="va">lambda1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   Rate ratio: 0.67</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"  Dispersion: %.1f\n"</span>, <span class="va">nb_ss</span><span class="op">$</span><span class="va">inputs</span><span class="op">$</span><span class="va">dispersion</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   Dispersion: 0.5</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"\n"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Sample Size:\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Sample Size:</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"  Fixed design N: %d\n"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">nb_ss</span><span class="op">$</span><span class="va">n_total</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   Fixed design N: 270</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"  GS max N: %d (inflation: %.1f%%)\n"</span>, </span>
-<span>            <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">gs_nb</span><span class="op">$</span><span class="va">n_total</span><span class="op">)</span><span class="op">)</span>, </span>
-<span>            <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">gs_nb</span><span class="op">$</span><span class="va">n.I</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   GS max N: 288 (inflation: 6.6%)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"\n"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Analysis Schedule:\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Analysis Schedule:</span></span>
-<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"  Analysis %d: Month %d (info frac: %.3f)\n"</span>, </span>
-<span>              <span class="va">i</span>, <span class="va">analysis_times</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">*</span> <span class="fl">12</span>, <span class="va">gs_nb</span><span class="op">$</span><span class="va">timing</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span><span class="co">#&gt;   Analysis 1: Month 10 (info frac: 0.417)</span></span>
-<span><span class="co">#&gt;   Analysis 2: Month 18 (info frac: 0.750)</span></span>
-<span><span class="co">#&gt;   Analysis 3: Month 24 (info frac: 1.000)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"\n"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Spending Times (usTime): %.1f, %.1f, %.1f\n"</span>, </span>
-<span>    <span class="va">gs_nb</span><span class="op">$</span><span class="va">usTime</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">gs_nb</span><span class="op">$</span><span class="va">usTime</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">gs_nb</span><span class="op">$</span><span class="va">usTime</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Spending Times (usTime): %.1f, %.1f, %.1f</span></span>
-<span><span class="co">#&gt;  0.1 0.2 1</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">gs_nb</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Asymmetric two-sided with non-binding futility bound group sequential design</span></span>
+<span><span class="co">#&gt; for negative binomial outcomes, 3 analyses, total sample size 287.8, 90 percent</span></span>
+<span><span class="co">#&gt; power, 2.5 percent (1-sided) Type I error. Control rate 1.5000, treatment rate</span></span>
+<span><span class="co">#&gt; 1.0000, risk ratio 0.6667, dispersion 0.5000. Accrual duration 1.0, trial</span></span>
+<span><span class="co">#&gt; duration 2.0, average exposure 1.50. Randomization ratio 1:1.</span></span></code></pre></div>
+<p>For detailed boundary information, use
+<code><a href="https://keaven.github.io/gsDesign/reference/gsBoundSummary.html" class="external-link">gsDesign::gsBoundSummary()</a></code>:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="https://keaven.github.io/gsDesign/reference/gsBoundSummary.html" class="external-link">gsBoundSummary</a></span><span class="op">(</span><span class="va">gs_nb</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                Analysis               Value Efficacy Futility</span></span>
+<span><span class="co">#&gt;               IA 1: 42%                   Z   3.5037   0.1140</span></span>
+<span><span class="co">#&gt;  N/Fixed design N: 0.44         p (1-sided)   0.0002   0.4546</span></span>
+<span><span class="co">#&gt;                             ~delta at bound   1.6218   0.0528</span></span>
+<span><span class="co">#&gt;                         P(Cross) if delta=0   0.0002   0.5454</span></span>
+<span><span class="co">#&gt;                         P(Cross) if delta=1   0.0896   0.0204</span></span>
+<span><span class="co">#&gt;               IA 2: 75%                   Z   3.3600   1.2080</span></span>
+<span><span class="co">#&gt;   N/Fixed design N: 0.8         p (1-sided)   0.0004   0.1135</span></span>
+<span><span class="co">#&gt;                             ~delta at bound   1.1593   0.4168</span></span>
+<span><span class="co">#&gt;                         P(Cross) if delta=0   0.0006   0.8929</span></span>
+<span><span class="co">#&gt;                         P(Cross) if delta=1   0.3321   0.0545</span></span>
+<span><span class="co">#&gt;                   Final                   Z   1.9611   1.9611</span></span>
+<span><span class="co">#&gt;  N/Fixed design N: 1.07         p (1-sided)   0.0249   0.0249</span></span>
+<span><span class="co">#&gt;                             ~delta at bound   0.5860   0.5860</span></span>
+<span><span class="co">#&gt;                         P(Cross) if delta=0   0.0225   0.9775</span></span>
+<span><span class="co">#&gt;                         P(Cross) if delta=1   0.9000   0.1000</span></span></code></pre></div>
+<p>After rounding to integer sample sizes with
+<code><a href="../reference/toInteger.html">toInteger()</a></code>:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gs_nb_int</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/toInteger.html">toInteger</a></span><span class="op">(</span><span class="va">gs_nb</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">gs_nb_int</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Asymmetric two-sided with non-binding futility bound group sequential design</span></span>
+<span><span class="co">#&gt; for negative binomial outcomes, 3 analyses, total sample size 288.0, 90 percent</span></span>
+<span><span class="co">#&gt; power, 2.5 percent (1-sided) Type I error. Control rate 1.5000, treatment rate</span></span>
+<span><span class="co">#&gt; 1.0000, risk ratio 0.6667, dispersion 0.5000. Accrual duration 1.0, trial</span></span>
+<span><span class="co">#&gt; duration 2.0, average exposure 1.50. Randomization ratio 1:1.</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="notes">Notes<a class="anchor" aria-label="anchor" href="#notes"></a>
