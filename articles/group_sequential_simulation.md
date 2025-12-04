@@ -93,7 +93,8 @@ gs_nb <- gsNBCalendar(
   test.type = 4,           # Two-sided asymmetric, non-binding futility
   timing = timing,
   usTime = c(0.1, 0.2, 1), # Conservative efficacy spending
-  lsTime = NULL            # Futility spending based on information time
+  lsTime = NULL,           # Futility spending based on information time
+  analysis_times = analysis_times * 12  # Calendar times in months
 )
 
 # Display design bounds
@@ -490,20 +491,20 @@ summary(gs_nb)
 #> duration 2.0, average exposure 1.50. Randomization ratio 1:1.
 ```
 
-For detailed boundary information, use
-[`gsDesign::gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.html).
-We set `logdelta = TRUE` since the test statistic is based on the log
-rate ratio. The `~RR at bound` displays the rate ratio
+For detailed boundary information, use `gsBoundSummary()`. We set
+`logdelta = TRUE` since the test statistic is based on the log rate
+ratio. The `~RR at bound` displays the rate ratio
 ($\lambda_{2}/\lambda_{1}$), where values \< 1 indicate treatment
 benefit:
 
 ``` r
 gsDesign::gsBoundSummary(gs_nb, 
-                         deltaname = "RR", 
-                         logdelta = TRUE,
-                         Nname = "Information",
-                         digits = 4,
-                         ddigits = 2) |>
+               deltaname = "RR", 
+               logdelta = TRUE,
+               Nname = "Information",
+               timename = "Month",
+               digits = 4,
+               ddigits = 2) |>
   gt() |>
   tab_header(title = "Group Sequential Design Bounds")
 ```

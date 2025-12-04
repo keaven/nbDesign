@@ -169,7 +169,8 @@ which provides more conservative early spending.</p>
 <span>  test.type <span class="op">=</span> <span class="fl">4</span>,           <span class="co"># Two-sided asymmetric, non-binding futility</span></span>
 <span>  timing <span class="op">=</span> <span class="va">timing</span>,</span>
 <span>  usTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">1</span><span class="op">)</span>, <span class="co"># Conservative efficacy spending</span></span>
-<span>  lsTime <span class="op">=</span> <span class="cn">NULL</span>            <span class="co"># Futility spending based on information time</span></span>
+<span>  lsTime <span class="op">=</span> <span class="cn">NULL</span>,           <span class="co"># Futility spending based on information time</span></span>
+<span>  analysis_times <span class="op">=</span> <span class="va">analysis_times</span> <span class="op">*</span> <span class="fl">12</span>  <span class="co"># Calendar times in months</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Display design bounds</span></span>
@@ -2020,19 +2021,20 @@ the group sequential design:</p>
 <span><span class="co">#&gt; power, 2.5 percent (1-sided) Type I error. Control rate 1.5000, treatment rate</span></span>
 <span><span class="co">#&gt; 1.0000, risk ratio 0.6667, dispersion 0.5000. Accrual duration 1.0, trial</span></span>
 <span><span class="co">#&gt; duration 2.0, average exposure 1.50. Randomization ratio 1:1.</span></span></code></pre></div>
-<p>For detailed boundary information, use
-<code><a href="https://keaven.github.io/gsDesign/reference/gsBoundSummary.html" class="external-link">gsDesign::gsBoundSummary()</a></code>. We set
-<code>logdelta = TRUE</code> since the test statistic is based on the
-log rate ratio. The <code>~RR at bound</code> displays the rate ratio
+<p>For detailed boundary information, use <code>gsBoundSummary()</code>.
+We set <code>logdelta = TRUE</code> since the test statistic is based on
+the log rate ratio. The <code>~RR at bound</code> displays the rate
+ratio
 (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mn>2</mn></msub><mi>/</mi><msub><mi>λ</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\lambda_2/\lambda_1</annotation></semantics></math>),
 where values &lt; 1 indicate treatment benefit:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="https://keaven.github.io/gsDesign/reference/gsBoundSummary.html" class="external-link">gsBoundSummary</a></span><span class="op">(</span><span class="va">gs_nb</span>, </span>
-<span>                         deltaname <span class="op">=</span> <span class="st">"RR"</span>, </span>
-<span>                         logdelta <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                         Nname <span class="op">=</span> <span class="st">"Information"</span>,</span>
-<span>                         digits <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>                         ddigits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>               deltaname <span class="op">=</span> <span class="st">"RR"</span>, </span>
+<span>               logdelta <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>               Nname <span class="op">=</span> <span class="st">"Information"</span>,</span>
+<span>               timename <span class="op">=</span> <span class="st">"Month"</span>,</span>
+<span>               digits <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>               ddigits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Group Sequential Design Bounds"</span><span class="op">)</span></span></code></pre></div>
 <div id="kqexxlnaky" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">

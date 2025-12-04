@@ -62,7 +62,8 @@ sample size calculations from <code><a href="sample_size_nbinom.html">sample_siz
 <span>  tol <span class="op">=</span> <span class="fl">1e-06</span>,</span>
 <span>  r <span class="op">=</span> <span class="fl">18</span>,</span>
 <span>  usTime <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  lsTime <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  lsTime <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  analysis_times <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -157,6 +158,12 @@ Default is 18.</p></dd>
 <dt id="arg-lstime">lsTime<a class="anchor" aria-label="anchor" href="#arg-lstime"></a></dt>
 <dd><p>Spending time for lower bound (optional).</p></dd>
 
+
+<dt id="arg-analysis-times">analysis_times<a class="anchor" aria-label="anchor" href="#arg-analysis-times"></a></dt>
+<dd><p>Optional vector of calendar times for each analysis.
+If provided, must have length k. These times are stored in the <code>T</code>
+element and displayed by <code><a href="https://keaven.github.io/gsDesign/reference/gsBoundSummary.html" class="external-link">gsBoundSummary</a></code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -170,6 +177,9 @@ and <code>sample_size_nbinom_result</code>. Contains all elements from
 
 <dt>n2</dt>
 <dd><p>Sample size per analysis for group 2</p></dd>
+
+<dt>T</dt>
+<dd><p>Calendar time at each analysis (if <code>analysis_times</code> provided)</p></dd>
 
 
 </dl></div>
@@ -187,8 +197,9 @@ Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.</p>
 <span class="r-in"><span>  accrual_rate <span class="op">=</span> <span class="fl">10</span>, accrual_duration <span class="op">=</span> <span class="fl">20</span>, trial_duration <span class="op">=</span> <span class="fl">24</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Then create a group sequential design</span></span></span>
-<span class="r-in"><span><span class="va">gs_design</span> <span class="op">&lt;-</span> <span class="fu">gsNBCalendar</span><span class="op">(</span><span class="va">nb_ss</span>, k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Then create a group sequential design with analysis times</span></span></span>
+<span class="r-in"><span><span class="va">gs_design</span> <span class="op">&lt;-</span> <span class="fu">gsNBCalendar</span><span class="op">(</span><span class="va">nb_ss</span>, k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">4</span>,</span></span>
+<span class="r-in"><span>                         analysis_times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">18</span>, <span class="fl">24</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

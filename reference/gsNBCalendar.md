@@ -23,7 +23,8 @@ gsNBCalendar(
   tol = 1e-06,
   r = 18,
   usTime = NULL,
-  lsTime = NULL
+  lsTime = NULL,
+  analysis_times = NULL
 )
 ```
 
@@ -127,6 +128,13 @@ gsNBCalendar(
 
   Spending time for lower bound (optional).
 
+- analysis_times:
+
+  Optional vector of calendar times for each analysis. If provided, must
+  have length k. These times are stored in the `T` element and displayed
+  by
+  [`gsBoundSummary`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.html).
+
 ## Value
 
 An object of class `gsNB` which inherits from `gsDesign` and
@@ -146,6 +154,10 @@ plus:
 
   Sample size per analysis for group 2
 
+- T:
+
+  Calendar time at each analysis (if `analysis_times` provided)
+
 ## References
 
 Jennison, C. and Turnbull, B.W. (2000), *Group Sequential Methods with
@@ -160,6 +172,7 @@ nb_ss <- sample_size_nbinom(
   accrual_rate = 10, accrual_duration = 20, trial_duration = 24
 )
 
-# Then create a group sequential design
-gs_design <- gsNBCalendar(nb_ss, k = 3, test.type = 4)
+# Then create a group sequential design with analysis times
+gs_design <- gsNBCalendar(nb_ss, k = 3, test.type = 4,
+                         analysis_times = c(10, 18, 24))
 ```
