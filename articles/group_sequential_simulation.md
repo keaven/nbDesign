@@ -118,33 +118,31 @@ print(gs_nb)
 #> Upper bound spending computations assume
 #> trial continues if lower bound is crossed.
 #> 
-#>            Sample
-#>             Size   ----Lower bounds----  ----Upper bounds-----
-#>   Analysis Ratio*  Z   Nominal p Spend+  Z   Nominal p Spend++
-#>          1  0.444 0.11    0.5454 0.0204 3.50    0.0002  0.0002
-#>          2  0.799 1.21    0.8865 0.0341 3.36    0.0004  0.0003
-#>          3  1.066 1.96    0.9751 0.0455 1.96    0.0249  0.0244
-#>      Total                       0.1000                 0.0250 
+#>                ----Lower bounds----  ----Upper bounds-----
+#>   Analysis N   Z   Nominal p Spend+  Z   Nominal p Spend++
+#>          1 29 0.11    0.5454 0.0204 3.50    0.0002  0.0002
+#>          2 52 1.21    0.8865 0.0341 3.36    0.0004  0.0003
+#>          3 69 1.96    0.9751 0.0455 1.96    0.0249  0.0244
+#>      Total                   0.1000                 0.0250 
 #> + lower bound beta spending (under H1):
 #>  Hwang-Shih-DeCani spending function with gamma = -2.
 #> ++ alpha spending:
 #>  Hwang-Shih-DeCani spending function with gamma = -4.
-#> * Sample size ratio compared to fixed design with no interim
 #> 
 #> Boundary crossing probabilities and expected sample size
 #> assume any cross stops the trial
 #> 
 #> Upper boundary (power or Type I Error)
 #>           Analysis
-#>    Theta      1      2      3  Total   E{N}
-#>   0.0000 0.0002 0.0003 0.0220 0.0225 0.6340
-#>   3.2415 0.0896 0.2425 0.5679 0.9000 0.9239
+#>    Theta      1      2      3  Total E{N}
+#>   0.0000 0.0002 0.0003 0.0220 0.0225 40.5
+#>   0.4054 0.0896 0.2425 0.5679 0.9000 59.1
 #> 
 #> Lower boundary (futility or Type II Error)
 #>           Analysis
 #>    Theta      1      2      3  Total
 #>   0.0000 0.5454 0.3475 0.0846 0.9775
-#>   3.2415 0.0204 0.0341 0.0455 0.1000
+#>   0.4054 0.0204 0.0341 0.0455 0.1000
 ```
 
 ## Simulation Study
@@ -503,7 +501,7 @@ benefit:
 gsDesign::gsBoundSummary(gs_nb, 
                          deltaname = "RR", 
                          logdelta = TRUE,
-                         Nname = "N",
+                         Nname = "Information",
                          digits = 4,
                          ddigits = 2) |>
   gt() |>
@@ -514,17 +512,17 @@ gsDesign::gsBoundSummary(gs_nb,
 |--------------------------------|---------------------|----------|----------|
 | Analysis                       | Value               | Efficacy | Futility |
 | IA 1: 42%                      | Z                   | 3.5037   | 0.1140   |
-| N: 0.44                        | p (1-sided)         | 0.0002   | 0.4546   |
+| Information: 28.4              | p (1-sided)         | 0.0002   | 0.4546   |
 |                                | ~RR at bound        | 0.5181   | 0.9788   |
 |                                | P(Cross) if RR=1    | 0.0002   | 0.5454   |
 |                                | P(Cross) if RR=0.67 | 0.0896   | 0.0204   |
 | IA 2: 75%                      | Z                   | 3.3600   | 1.2080   |
-| N: 0.8                         | p (1-sided)         | 0.0004   | 0.1135   |
+| Information: 51.13             | p (1-sided)         | 0.0004   | 0.1135   |
 |                                | ~RR at bound        | 0.6250   | 0.8445   |
 |                                | P(Cross) if RR=1    | 0.0006   | 0.8929   |
 |                                | P(Cross) if RR=0.67 | 0.3321   | 0.0545   |
 | Final                          | Z                   | 1.9611   | 1.9611   |
-| N: 1.07                        | p (1-sided)         | 0.0249   | 0.0249   |
+| Information: 68.17             | p (1-sided)         | 0.0249   | 0.0249   |
 |                                | ~RR at bound        | 0.7885   | 0.7885   |
 |                                | P(Cross) if RR=1    | 0.0225   | 0.9775   |
 |                                | P(Cross) if RR=0.67 | 0.9000   | 0.1000   |

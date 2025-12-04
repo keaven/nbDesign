@@ -15,7 +15,6 @@ gsNBCalendar(
   beta = 0.1,
   astar = 0,
   delta = 0,
-  n.fix = 1,
   timing = 1,
   sfu = gsDesign::sfHSD,
   sfupar = -4,
@@ -86,10 +85,6 @@ gsNBCalendar(
 - delta:
 
   Standardized effect size. Default is 0 (computed from design).
-
-- n.fix:
-
-  Sample size inflation factor. Default is 1.
 
 - timing:
 

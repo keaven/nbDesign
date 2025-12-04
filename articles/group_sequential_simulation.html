@@ -194,33 +194,31 @@ which provides more conservative early spending.</p>
 <span><span class="co">#&gt; Upper bound spending computations assume</span></span>
 <span><span class="co">#&gt; trial continues if lower bound is crossed.</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;            Sample</span></span>
-<span><span class="co">#&gt;             Size   ----Lower bounds----  ----Upper bounds-----</span></span>
-<span><span class="co">#&gt;   Analysis Ratio*  Z   Nominal p Spend+  Z   Nominal p Spend++</span></span>
-<span><span class="co">#&gt;          1  0.444 0.11    0.5454 0.0204 3.50    0.0002  0.0002</span></span>
-<span><span class="co">#&gt;          2  0.799 1.21    0.8865 0.0341 3.36    0.0004  0.0003</span></span>
-<span><span class="co">#&gt;          3  1.066 1.96    0.9751 0.0455 1.96    0.0249  0.0244</span></span>
-<span><span class="co">#&gt;      Total                       0.1000                 0.0250 </span></span>
+<span><span class="co">#&gt;                ----Lower bounds----  ----Upper bounds-----</span></span>
+<span><span class="co">#&gt;   Analysis N   Z   Nominal p Spend+  Z   Nominal p Spend++</span></span>
+<span><span class="co">#&gt;          1 29 0.11    0.5454 0.0204 3.50    0.0002  0.0002</span></span>
+<span><span class="co">#&gt;          2 52 1.21    0.8865 0.0341 3.36    0.0004  0.0003</span></span>
+<span><span class="co">#&gt;          3 69 1.96    0.9751 0.0455 1.96    0.0249  0.0244</span></span>
+<span><span class="co">#&gt;      Total                   0.1000                 0.0250 </span></span>
 <span><span class="co">#&gt; + lower bound beta spending (under H1):</span></span>
 <span><span class="co">#&gt;  Hwang-Shih-DeCani spending function with gamma = -2.</span></span>
 <span><span class="co">#&gt; ++ alpha spending:</span></span>
 <span><span class="co">#&gt;  Hwang-Shih-DeCani spending function with gamma = -4.</span></span>
-<span><span class="co">#&gt; * Sample size ratio compared to fixed design with no interim</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Boundary crossing probabilities and expected sample size</span></span>
 <span><span class="co">#&gt; assume any cross stops the trial</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Upper boundary (power or Type I Error)</span></span>
 <span><span class="co">#&gt;           Analysis</span></span>
-<span><span class="co">#&gt;    Theta      1      2      3  Total   E{N}</span></span>
-<span><span class="co">#&gt;   0.0000 0.0002 0.0003 0.0220 0.0225 0.6340</span></span>
-<span><span class="co">#&gt;   3.2415 0.0896 0.2425 0.5679 0.9000 0.9239</span></span>
+<span><span class="co">#&gt;    Theta      1      2      3  Total E{N}</span></span>
+<span><span class="co">#&gt;   0.0000 0.0002 0.0003 0.0220 0.0225 40.5</span></span>
+<span><span class="co">#&gt;   0.4054 0.0896 0.2425 0.5679 0.9000 59.1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Lower boundary (futility or Type II Error)</span></span>
 <span><span class="co">#&gt;           Analysis</span></span>
 <span><span class="co">#&gt;    Theta      1      2      3  Total</span></span>
 <span><span class="co">#&gt;   0.0000 0.5454 0.3475 0.0846 0.9775</span></span>
-<span><span class="co">#&gt;   3.2415 0.0204 0.0341 0.0455 0.1000</span></span></code></pre></div>
+<span><span class="co">#&gt;   0.4054 0.0204 0.0341 0.0455 0.1000</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -2032,7 +2030,7 @@ where values &lt; 1 indicate treatment benefit:</p>
 <code class="sourceCode R"><span><span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="https://keaven.github.io/gsDesign/reference/gsBoundSummary.html" class="external-link">gsBoundSummary</a></span><span class="op">(</span><span class="va">gs_nb</span>, </span>
 <span>                         deltaname <span class="op">=</span> <span class="st">"RR"</span>, </span>
 <span>                         logdelta <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                         Nname <span class="op">=</span> <span class="st">"N"</span>,</span>
+<span>                         Nname <span class="op">=</span> <span class="st">"Information"</span>,</span>
 <span>                         digits <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>                         ddigits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -2506,7 +2504,7 @@ where values &lt; 1 indicate treatment benefit:</p>
 <td headers="Futility" class="gt_row gt_right">0.1140</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">N: 0.44</td>
+<td headers="Analysis" class="gt_row gt_left">Information: 28.4</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
 <td headers="Efficacy" class="gt_row gt_right">0.0002</td>
 <td headers="Futility" class="gt_row gt_right">0.4546</td>
@@ -2536,7 +2534,7 @@ where values &lt; 1 indicate treatment benefit:</p>
 <td headers="Futility" class="gt_row gt_right">1.2080</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">N: 0.8</td>
+<td headers="Analysis" class="gt_row gt_left">Information: 51.13</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
 <td headers="Efficacy" class="gt_row gt_right">0.0004</td>
 <td headers="Futility" class="gt_row gt_right">0.1135</td>
@@ -2566,7 +2564,7 @@ where values &lt; 1 indicate treatment benefit:</p>
 <td headers="Futility" class="gt_row gt_right">1.9611</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">N: 1.07</td>
+<td headers="Analysis" class="gt_row gt_left">Information: 68.17</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
 <td headers="Efficacy" class="gt_row gt_right">0.0249</td>
 <td headers="Futility" class="gt_row gt_right">0.0249</td>
