@@ -278,8 +278,8 @@ summary_by_analysis |>
   cols_label(
     analysis = "Analysis",
     analysis_time = "Time (yrs)",
-    mean_n_enrolled = "N Enrolled",
-    mean_total_events = "Total Events",
+    mean_enrolled = "N Enrolled",
+    mean_events_total = "Total Events",
     mean_events_ctrl = "Ctrl Events",
     mean_events_exp = "Exp Events",
     mean_exposure_ctrl = "Ctrl Exposure",

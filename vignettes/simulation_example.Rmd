@@ -192,8 +192,7 @@ mutze_res <- mutze_test(cut_summary)
 mutze_res$group_summary |>
   gt() |>
   tab_header(title = "Mütze Test: Group Summary") |>
-  fmt_number(columns = c(total_events, total_time, mean_events), decimals = 2) |>
-  fmt_number(columns = c(rate_estimate, dispersion_estimate), decimals = 4)
+  fmt_number(columns = c(events, exposure), decimals = 2)
 mutze_res$rate_ratio
 ```
 
