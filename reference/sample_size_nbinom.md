@@ -131,6 +131,50 @@ sample_size_nbinom(
   lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, power = 0.8,
   accrual_rate = 10, accrual_duration = 20, trial_duration = 24
 )
+#> $inputs
+#> $inputs$lambda1
+#> [1] 0.5
+#> 
+#> $inputs$lambda2
+#> [1] 0.3
+#> 
+#> $inputs$dispersion
+#> [1] 0.1
+#> 
+#> $inputs$power
+#> [1] 0.8
+#> 
+#> $inputs$alpha
+#> [1] 0.025
+#> 
+#> $inputs$sided
+#> [1] 1
+#> 
+#> $inputs$ratio
+#> [1] 1
+#> 
+#> $inputs$accrual_rate
+#> [1] 10
+#> 
+#> $inputs$accrual_duration
+#> [1] 20
+#> 
+#> $inputs$trial_duration
+#> [1] 24
+#> 
+#> $inputs$dropout_rate
+#> [1] 0
+#> 
+#> $inputs$max_followup
+#> NULL
+#> 
+#> $inputs$event_gap
+#> NULL
+#> 
+#> $inputs$method
+#> [1] "zhu"
+#> 
+#> 
 #> $n1
 #> [1] 18
 #> 
@@ -170,6 +214,8 @@ sample_size_nbinom(
 #> $accrual_duration
 #> [1] 20
 #> 
+#> attr(,"class")
+#> [1] "sample_size_nbinom_result" "list"                     
 
 # With piecewise accrual
 # 5 patients/month for 3 months, then 10 patients/month for 3 months
@@ -179,6 +225,50 @@ sample_size_nbinom(
   accrual_rate = c(5, 10), accrual_duration = c(3, 3),
   trial_duration = 12
 )
+#> $inputs
+#> $inputs$lambda1
+#> [1] 0.5
+#> 
+#> $inputs$lambda2
+#> [1] 0.3
+#> 
+#> $inputs$dispersion
+#> [1] 0.1
+#> 
+#> $inputs$power
+#> [1] 0.8
+#> 
+#> $inputs$alpha
+#> [1] 0.025
+#> 
+#> $inputs$sided
+#> [1] 1
+#> 
+#> $inputs$ratio
+#> [1] 1
+#> 
+#> $inputs$accrual_rate
+#> [1]  5 10
+#> 
+#> $inputs$accrual_duration
+#> [1] 3 3
+#> 
+#> $inputs$trial_duration
+#> [1] 12
+#> 
+#> $inputs$dropout_rate
+#> [1] 0
+#> 
+#> $inputs$max_followup
+#> NULL
+#> 
+#> $inputs$event_gap
+#> NULL
+#> 
+#> $inputs$method
+#> [1] "zhu"
+#> 
+#> 
 #> $n1
 #> [1] 25
 #> 
@@ -218,4 +308,6 @@ sample_size_nbinom(
 #> $accrual_duration
 #> [1] 3 3
 #> 
+#> attr(,"class")
+#> [1] "sample_size_nbinom_result" "list"                     
 ```

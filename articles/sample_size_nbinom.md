@@ -131,6 +131,50 @@ sample_size_nbinom(
   trial_duration = 12,
   method = "zhu"
 )
+#> $inputs
+#> $inputs$lambda1
+#> [1] 0.5
+#> 
+#> $inputs$lambda2
+#> [1] 0.3
+#> 
+#> $inputs$dispersion
+#> [1] 0.1
+#> 
+#> $inputs$power
+#> [1] 0.8
+#> 
+#> $inputs$alpha
+#> [1] 0.025
+#> 
+#> $inputs$sided
+#> [1] 1
+#> 
+#> $inputs$ratio
+#> [1] 1
+#> 
+#> $inputs$accrual_rate
+#> [1] 10
+#> 
+#> $inputs$accrual_duration
+#> [1] 12
+#> 
+#> $inputs$trial_duration
+#> [1] 12
+#> 
+#> $inputs$dropout_rate
+#> [1] 0
+#> 
+#> $inputs$max_followup
+#> NULL
+#> 
+#> $inputs$event_gap
+#> NULL
+#> 
+#> $inputs$method
+#> [1] "zhu"
+#> 
+#> 
 #> $n1
 #> [1] 33
 #> 
@@ -169,6 +213,9 @@ sample_size_nbinom(
 #> 
 #> $accrual_duration
 #> [1] 12
+#> 
+#> attr(,"class")
+#> [1] "sample_size_nbinom_result" "list"
 ```
 
 ### Using Friede et al. Method
@@ -186,6 +233,50 @@ sample_size_nbinom(
   trial_duration = 12,
   method = "friede"
 )
+#> $inputs
+#> $inputs$lambda1
+#> [1] 0.5
+#> 
+#> $inputs$lambda2
+#> [1] 0.3
+#> 
+#> $inputs$dispersion
+#> [1] 0.1
+#> 
+#> $inputs$power
+#> [1] 0.8
+#> 
+#> $inputs$alpha
+#> [1] 0.025
+#> 
+#> $inputs$sided
+#> [1] 1
+#> 
+#> $inputs$ratio
+#> [1] 1
+#> 
+#> $inputs$accrual_rate
+#> [1] 10
+#> 
+#> $inputs$accrual_duration
+#> [1] 12
+#> 
+#> $inputs$trial_duration
+#> [1] 12
+#> 
+#> $inputs$dropout_rate
+#> [1] 0
+#> 
+#> $inputs$max_followup
+#> NULL
+#> 
+#> $inputs$event_gap
+#> NULL
+#> 
+#> $inputs$method
+#> [1] "friede"
+#> 
+#> 
 #> $n1
 #> [1] 33
 #> 
@@ -224,6 +315,9 @@ sample_size_nbinom(
 #> 
 #> $accrual_duration
 #> [1] 12
+#> 
+#> attr(,"class")
+#> [1] "sample_size_nbinom_result" "list"
 ```
 
 ### Piecewise Constant Accrual
@@ -245,6 +339,50 @@ sample_size_nbinom(
   accrual_duration = c(3, 3),
   trial_duration = 12
 )
+#> $inputs
+#> $inputs$lambda1
+#> [1] 0.5
+#> 
+#> $inputs$lambda2
+#> [1] 0.3
+#> 
+#> $inputs$dispersion
+#> [1] 0.1
+#> 
+#> $inputs$power
+#> [1] 0.8
+#> 
+#> $inputs$alpha
+#> [1] 0.025
+#> 
+#> $inputs$sided
+#> [1] 1
+#> 
+#> $inputs$ratio
+#> [1] 1
+#> 
+#> $inputs$accrual_rate
+#> [1]  5 10
+#> 
+#> $inputs$accrual_duration
+#> [1] 3 3
+#> 
+#> $inputs$trial_duration
+#> [1] 12
+#> 
+#> $inputs$dropout_rate
+#> [1] 0
+#> 
+#> $inputs$max_followup
+#> NULL
+#> 
+#> $inputs$event_gap
+#> NULL
+#> 
+#> $inputs$method
+#> [1] "zhu"
+#> 
+#> 
 #> $n1
 #> [1] 25
 #> 
@@ -283,6 +421,9 @@ sample_size_nbinom(
 #> 
 #> $accrual_duration
 #> [1] 3 3
+#> 
+#> attr(,"class")
+#> [1] "sample_size_nbinom_result" "list"
 ```
 
 ### Accrual with Dropout and Max Follow-up
@@ -302,6 +443,50 @@ sample_size_nbinom(
   dropout_rate = 0.05,
   max_followup = 6
 )
+#> $inputs
+#> $inputs$lambda1
+#> [1] 0.5
+#> 
+#> $inputs$lambda2
+#> [1] 0.3
+#> 
+#> $inputs$dispersion
+#> [1] 0.1
+#> 
+#> $inputs$power
+#> [1] 0.8
+#> 
+#> $inputs$alpha
+#> [1] 0.025
+#> 
+#> $inputs$sided
+#> [1] 1
+#> 
+#> $inputs$ratio
+#> [1] 1
+#> 
+#> $inputs$accrual_rate
+#> [1]  5 10
+#> 
+#> $inputs$accrual_duration
+#> [1] 3 3
+#> 
+#> $inputs$trial_duration
+#> [1] 12
+#> 
+#> $inputs$dropout_rate
+#> [1] 0.05
+#> 
+#> $inputs$max_followup
+#> [1] 6
+#> 
+#> $inputs$event_gap
+#> NULL
+#> 
+#> $inputs$method
+#> [1] "zhu"
+#> 
+#> 
 #> $n1
 #> [1] 37
 #> 
@@ -340,6 +525,9 @@ sample_size_nbinom(
 #> 
 #> $accrual_duration
 #> [1] 3 3
+#> 
+#> attr(,"class")
+#> [1] "sample_size_nbinom_result" "list"
 ```
 
 ### Calculating Power for Fixed Design
@@ -375,6 +563,50 @@ sample_size_nbinom(
   dropout_rate = 0.05,
   max_followup = 6
 )
+#> $inputs
+#> $inputs$lambda1
+#> [1] 0.5
+#> 
+#> $inputs$lambda2
+#> [1] 0.4
+#> 
+#> $inputs$dispersion
+#> [1] 0.1
+#> 
+#> $inputs$power
+#> NULL
+#> 
+#> $inputs$alpha
+#> [1] 0.025
+#> 
+#> $inputs$sided
+#> [1] 1
+#> 
+#> $inputs$ratio
+#> [1] 1
+#> 
+#> $inputs$accrual_rate
+#> [1]  8.222222 16.444444
+#> 
+#> $inputs$accrual_duration
+#> [1] 3 3
+#> 
+#> $inputs$trial_duration
+#> [1] 12
+#> 
+#> $inputs$dropout_rate
+#> [1] 0.05
+#> 
+#> $inputs$max_followup
+#> [1] 6
+#> 
+#> $inputs$event_gap
+#> NULL
+#> 
+#> $inputs$method
+#> [1] "zhu"
+#> 
+#> 
 #> $n1
 #> [1] 37
 #> 
@@ -413,6 +645,9 @@ sample_size_nbinom(
 #> 
 #> $accrual_duration
 #> [1] 3 3
+#> 
+#> attr(,"class")
+#> [1] "sample_size_nbinom_result" "list"
 ```
 
 ### Unequal Allocation
@@ -429,6 +664,50 @@ sample_size_nbinom(
   accrual_duration = 12,
   trial_duration = 12
 )
+#> $inputs
+#> $inputs$lambda1
+#> [1] 0.5
+#> 
+#> $inputs$lambda2
+#> [1] 0.3
+#> 
+#> $inputs$dispersion
+#> [1] 0.1
+#> 
+#> $inputs$power
+#> NULL
+#> 
+#> $inputs$alpha
+#> [1] 0.025
+#> 
+#> $inputs$sided
+#> [1] 1
+#> 
+#> $inputs$ratio
+#> [1] 2
+#> 
+#> $inputs$accrual_rate
+#> [1] 10
+#> 
+#> $inputs$accrual_duration
+#> [1] 12
+#> 
+#> $inputs$trial_duration
+#> [1] 12
+#> 
+#> $inputs$dropout_rate
+#> [1] 0
+#> 
+#> $inputs$max_followup
+#> NULL
+#> 
+#> $inputs$event_gap
+#> NULL
+#> 
+#> $inputs$method
+#> [1] "zhu"
+#> 
+#> 
 #> $n1
 #> [1] 40
 #> 
@@ -467,6 +746,9 @@ sample_size_nbinom(
 #> 
 #> $accrual_duration
 #> [1] 12
+#> 
+#> attr(,"class")
+#> [1] "sample_size_nbinom_result" "list"
 ```
 
 ## Accounting for Event Gaps
@@ -505,6 +787,50 @@ sample_size_nbinom(
   trial_duration = 12,
   event_gap = 5 / 365.25
 )
+#> $inputs
+#> $inputs$lambda1
+#> [1] 0.5
+#> 
+#> $inputs$lambda2
+#> [1] 0.3
+#> 
+#> $inputs$dispersion
+#> [1] 0.1
+#> 
+#> $inputs$power
+#> [1] 0.8
+#> 
+#> $inputs$alpha
+#> [1] 0.025
+#> 
+#> $inputs$sided
+#> [1] 1
+#> 
+#> $inputs$ratio
+#> [1] 1
+#> 
+#> $inputs$accrual_rate
+#> [1] 10
+#> 
+#> $inputs$accrual_duration
+#> [1] 12
+#> 
+#> $inputs$trial_duration
+#> [1] 12
+#> 
+#> $inputs$dropout_rate
+#> [1] 0
+#> 
+#> $inputs$max_followup
+#> NULL
+#> 
+#> $inputs$event_gap
+#> [1] 0.01368925
+#> 
+#> $inputs$method
+#> [1] "zhu"
+#> 
+#> 
 #> $n1
 #> [1] 33
 #> 
@@ -543,6 +869,9 @@ sample_size_nbinom(
 #> 
 #> $accrual_duration
 #> [1] 12
+#> 
+#> attr(,"class")
+#> [1] "sample_size_nbinom_result" "list"
 ```
 
 Note that the required sample size increases compared to the basic
