@@ -131,91 +131,15 @@ sample_size_nbinom(
   trial_duration = 12,
   method = "zhu"
 )
-#> $inputs
-#> $inputs$lambda1
-#> [1] 0.5
+#> Sample Size for Negative Binomial Outcome
+#> ==========================================
 #> 
-#> $inputs$lambda2
-#> [1] 0.3
-#> 
-#> $inputs$dispersion
-#> [1] 0.1
-#> 
-#> $inputs$power
-#> [1] 0.8
-#> 
-#> $inputs$alpha
-#> [1] 0.025
-#> 
-#> $inputs$sided
-#> [1] 1
-#> 
-#> $inputs$ratio
-#> [1] 1
-#> 
-#> $inputs$accrual_rate
-#> [1] 10
-#> 
-#> $inputs$accrual_duration
-#> [1] 12
-#> 
-#> $inputs$trial_duration
-#> [1] 12
-#> 
-#> $inputs$dropout_rate
-#> [1] 0
-#> 
-#> $inputs$max_followup
-#> NULL
-#> 
-#> $inputs$event_gap
-#> NULL
-#> 
-#> $inputs$method
-#> [1] "zhu"
-#> 
-#> 
-#> $n1
-#> [1] 33
-#> 
-#> $n2
-#> [1] 33
-#> 
-#> $n_total
-#> [1] 66
-#> 
-#> $alpha
-#> [1] 0.025
-#> 
-#> $sided
-#> [1] 1
-#> 
-#> $power
-#> [1] 0.8
-#> 
-#> $exposure
-#> [1] 6
-#> 
-#> $events_n1
-#> [1] 99
-#> 
-#> $events_n2
-#> [1] 59.4
-#> 
-#> $total_events
-#> [1] 158.4
-#> 
-#> $variance
-#> [1] 0.03299663
-#> 
-#> $accrual_rate
-#> [1] 5.5
-#> 
-#> $accrual_duration
-#> [1] 12
-#> 
-#> attr(,"class")
-#> [1] "sample_size_nbinom_result" "list"
+#> Sample size:     n1 = 33, n2 = 33, total = 66
+#> Expected events: 158.4 (n1: 99.0, n2: 59.4)
+#> Power: 80%, Alpha: 0.025 (1-sided)
+#> Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)
+#> Dispersion: 0.1000, Avg exposure: 6.00
+#> Accrual: 12.0, Trial duration: 12.0
 ```
 
 ### Using Friede et al. Method
@@ -233,91 +157,15 @@ sample_size_nbinom(
   trial_duration = 12,
   method = "friede"
 )
-#> $inputs
-#> $inputs$lambda1
-#> [1] 0.5
+#> Sample Size for Negative Binomial Outcome
+#> ==========================================
 #> 
-#> $inputs$lambda2
-#> [1] 0.3
-#> 
-#> $inputs$dispersion
-#> [1] 0.1
-#> 
-#> $inputs$power
-#> [1] 0.8
-#> 
-#> $inputs$alpha
-#> [1] 0.025
-#> 
-#> $inputs$sided
-#> [1] 1
-#> 
-#> $inputs$ratio
-#> [1] 1
-#> 
-#> $inputs$accrual_rate
-#> [1] 10
-#> 
-#> $inputs$accrual_duration
-#> [1] 12
-#> 
-#> $inputs$trial_duration
-#> [1] 12
-#> 
-#> $inputs$dropout_rate
-#> [1] 0
-#> 
-#> $inputs$max_followup
-#> NULL
-#> 
-#> $inputs$event_gap
-#> NULL
-#> 
-#> $inputs$method
-#> [1] "friede"
-#> 
-#> 
-#> $n1
-#> [1] 33
-#> 
-#> $n2
-#> [1] 33
-#> 
-#> $n_total
-#> [1] 66
-#> 
-#> $alpha
-#> [1] 0.025
-#> 
-#> $sided
-#> [1] 1
-#> 
-#> $power
-#> [1] 0.8
-#> 
-#> $exposure
-#> [1] 6
-#> 
-#> $events_n1
-#> [1] 99
-#> 
-#> $events_n2
-#> [1] 59.4
-#> 
-#> $total_events
-#> [1] 158.4
-#> 
-#> $variance
-#> [1] 0.03299663
-#> 
-#> $accrual_rate
-#> [1] 5.5
-#> 
-#> $accrual_duration
-#> [1] 12
-#> 
-#> attr(,"class")
-#> [1] "sample_size_nbinom_result" "list"
+#> Sample size:     n1 = 33, n2 = 33, total = 66
+#> Expected events: 158.4 (n1: 99.0, n2: 59.4)
+#> Power: 80%, Alpha: 0.025 (1-sided)
+#> Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)
+#> Dispersion: 0.1000, Avg exposure: 6.00
+#> Accrual: 12.0, Trial duration: 12.0
 ```
 
 ### Piecewise Constant Accrual
@@ -339,91 +187,15 @@ sample_size_nbinom(
   accrual_duration = c(3, 3),
   trial_duration = 12
 )
-#> $inputs
-#> $inputs$lambda1
-#> [1] 0.5
+#> Sample Size for Negative Binomial Outcome
+#> ==========================================
 #> 
-#> $inputs$lambda2
-#> [1] 0.3
-#> 
-#> $inputs$dispersion
-#> [1] 0.1
-#> 
-#> $inputs$power
-#> [1] 0.8
-#> 
-#> $inputs$alpha
-#> [1] 0.025
-#> 
-#> $inputs$sided
-#> [1] 1
-#> 
-#> $inputs$ratio
-#> [1] 1
-#> 
-#> $inputs$accrual_rate
-#> [1]  5 10
-#> 
-#> $inputs$accrual_duration
-#> [1] 3 3
-#> 
-#> $inputs$trial_duration
-#> [1] 12
-#> 
-#> $inputs$dropout_rate
-#> [1] 0
-#> 
-#> $inputs$max_followup
-#> NULL
-#> 
-#> $inputs$event_gap
-#> NULL
-#> 
-#> $inputs$method
-#> [1] "zhu"
-#> 
-#> 
-#> $n1
-#> [1] 25
-#> 
-#> $n2
-#> [1] 25
-#> 
-#> $n_total
-#> [1] 50
-#> 
-#> $alpha
-#> [1] 0.025
-#> 
-#> $sided
-#> [1] 1
-#> 
-#> $power
-#> [1] 0.8
-#> 
-#> $exposure
-#> [1] 8.5
-#> 
-#> $events_n1
-#> [1] 106.25
-#> 
-#> $events_n2
-#> [1] 63.75
-#> 
-#> $total_events
-#> [1] 170
-#> 
-#> $variance
-#> [1] 0.03309804
-#> 
-#> $accrual_rate
-#> [1]  5.555556 11.111111
-#> 
-#> $accrual_duration
-#> [1] 3 3
-#> 
-#> attr(,"class")
-#> [1] "sample_size_nbinom_result" "list"
+#> Sample size:     n1 = 25, n2 = 25, total = 50
+#> Expected events: 170.0 (n1: 106.2, n2: 63.7)
+#> Power: 80%, Alpha: 0.025 (1-sided)
+#> Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)
+#> Dispersion: 0.1000, Avg exposure: 8.50
+#> Accrual: 6.0, Trial duration: 12.0
 ```
 
 ### Accrual with Dropout and Max Follow-up
@@ -443,91 +215,15 @@ sample_size_nbinom(
   dropout_rate = 0.05,
   max_followup = 6
 )
-#> $inputs
-#> $inputs$lambda1
-#> [1] 0.5
+#> Sample Size for Negative Binomial Outcome
+#> ==========================================
 #> 
-#> $inputs$lambda2
-#> [1] 0.3
-#> 
-#> $inputs$dispersion
-#> [1] 0.1
-#> 
-#> $inputs$power
-#> [1] 0.8
-#> 
-#> $inputs$alpha
-#> [1] 0.025
-#> 
-#> $inputs$sided
-#> [1] 1
-#> 
-#> $inputs$ratio
-#> [1] 1
-#> 
-#> $inputs$accrual_rate
-#> [1]  5 10
-#> 
-#> $inputs$accrual_duration
-#> [1] 3 3
-#> 
-#> $inputs$trial_duration
-#> [1] 12
-#> 
-#> $inputs$dropout_rate
-#> [1] 0.05
-#> 
-#> $inputs$max_followup
-#> [1] 6
-#> 
-#> $inputs$event_gap
-#> NULL
-#> 
-#> $inputs$method
-#> [1] "zhu"
-#> 
-#> 
-#> $n1
-#> [1] 37
-#> 
-#> $n2
-#> [1] 37
-#> 
-#> $n_total
-#> [1] 74
-#> 
-#> $alpha
-#> [1] 0.025
-#> 
-#> $sided
-#> [1] 1
-#> 
-#> $power
-#> [1] 0.8
-#> 
-#> $exposure
-#> [1] 5.183636
-#> 
-#> $events_n1
-#> [1] 95.89726
-#> 
-#> $events_n2
-#> [1] 57.53836
-#> 
-#> $total_events
-#> [1] 153.4356
-#> 
-#> $variance
-#> [1] 0.03321294
-#> 
-#> $accrual_rate
-#> [1]  8.222222 16.444444
-#> 
-#> $accrual_duration
-#> [1] 3 3
-#> 
-#> attr(,"class")
-#> [1] "sample_size_nbinom_result" "list"
+#> Sample size:     n1 = 37, n2 = 37, total = 74
+#> Expected events: 153.4 (n1: 95.9, n2: 57.5)
+#> Power: 80%, Alpha: 0.025 (1-sided)
+#> Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)
+#> Dispersion: 0.1000, Avg exposure: 5.18
+#> Accrual: 6.0, Trial duration: 12.0
 ```
 
 ### Calculating Power for Fixed Design
@@ -563,91 +259,15 @@ sample_size_nbinom(
   dropout_rate = 0.05,
   max_followup = 6
 )
-#> $inputs
-#> $inputs$lambda1
-#> [1] 0.5
+#> Sample Size for Negative Binomial Outcome
+#> ==========================================
 #> 
-#> $inputs$lambda2
-#> [1] 0.4
-#> 
-#> $inputs$dispersion
-#> [1] 0.1
-#> 
-#> $inputs$power
-#> NULL
-#> 
-#> $inputs$alpha
-#> [1] 0.025
-#> 
-#> $inputs$sided
-#> [1] 1
-#> 
-#> $inputs$ratio
-#> [1] 1
-#> 
-#> $inputs$accrual_rate
-#> [1]  8.222222 16.444444
-#> 
-#> $inputs$accrual_duration
-#> [1] 3 3
-#> 
-#> $inputs$trial_duration
-#> [1] 12
-#> 
-#> $inputs$dropout_rate
-#> [1] 0.05
-#> 
-#> $inputs$max_followup
-#> [1] 6
-#> 
-#> $inputs$event_gap
-#> NULL
-#> 
-#> $inputs$method
-#> [1] "zhu"
-#> 
-#> 
-#> $n1
-#> [1] 37
-#> 
-#> $n2
-#> [1] 37
-#> 
-#> $n_total
-#> [1] 74
-#> 
-#> $alpha
-#> [1] 0.025
-#> 
-#> $sided
-#> [1] 1
-#> 
-#> $power
-#> [1] 0.2589364
-#> 
-#> $exposure
-#> [1] 5.183636
-#> 
-#> $events_n1
-#> [1] 95.89726
-#> 
-#> $events_n2
-#> [1] 76.71781
-#> 
-#> $total_events
-#> [1] 172.6151
-#> 
-#> $variance
-#> [1] 0.02886802
-#> 
-#> $accrual_rate
-#> [1]  8.222222 16.444444
-#> 
-#> $accrual_duration
-#> [1] 3 3
-#> 
-#> attr(,"class")
-#> [1] "sample_size_nbinom_result" "list"
+#> Sample size:     n1 = 37, n2 = 37, total = 74
+#> Expected events: 172.6 (n1: 95.9, n2: 76.7)
+#> Power: 26%, Alpha: 0.025 (1-sided)
+#> Rates: control = 0.5000, treatment = 0.4000 (RR = 0.8000)
+#> Dispersion: 0.1000, Avg exposure: 5.18
+#> Accrual: 6.0, Trial duration: 12.0
 ```
 
 ### Unequal Allocation
@@ -664,91 +284,15 @@ sample_size_nbinom(
   accrual_duration = 12,
   trial_duration = 12
 )
-#> $inputs
-#> $inputs$lambda1
-#> [1] 0.5
+#> Sample Size for Negative Binomial Outcome
+#> ==========================================
 #> 
-#> $inputs$lambda2
-#> [1] 0.3
-#> 
-#> $inputs$dispersion
-#> [1] 0.1
-#> 
-#> $inputs$power
-#> NULL
-#> 
-#> $inputs$alpha
-#> [1] 0.025
-#> 
-#> $inputs$sided
-#> [1] 1
-#> 
-#> $inputs$ratio
-#> [1] 2
-#> 
-#> $inputs$accrual_rate
-#> [1] 10
-#> 
-#> $inputs$accrual_duration
-#> [1] 12
-#> 
-#> $inputs$trial_duration
-#> [1] 12
-#> 
-#> $inputs$dropout_rate
-#> [1] 0
-#> 
-#> $inputs$max_followup
-#> NULL
-#> 
-#> $inputs$event_gap
-#> NULL
-#> 
-#> $inputs$method
-#> [1] "zhu"
-#> 
-#> 
-#> $n1
-#> [1] 40
-#> 
-#> $n2
-#> [1] 80
-#> 
-#> $n_total
-#> [1] 120
-#> 
-#> $alpha
-#> [1] 0.025
-#> 
-#> $sided
-#> [1] 1
-#> 
-#> $power
-#> [1] 0.9593549
-#> 
-#> $exposure
-#> [1] 6
-#> 
-#> $events_n1
-#> [1] 120
-#> 
-#> $events_n2
-#> [1] 144
-#> 
-#> $total_events
-#> [1] 264
-#> 
-#> $variance
-#> [1] 0.01902778
-#> 
-#> $accrual_rate
-#> [1] 10
-#> 
-#> $accrual_duration
-#> [1] 12
-#> 
-#> attr(,"class")
-#> [1] "sample_size_nbinom_result" "list"
+#> Sample size:     n1 = 40, n2 = 80, total = 120
+#> Expected events: 264.0 (n1: 120.0, n2: 144.0)
+#> Power: 96%, Alpha: 0.025 (1-sided)
+#> Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)
+#> Dispersion: 0.1000, Avg exposure: 6.00
+#> Accrual: 12.0, Trial duration: 12.0
 ```
 
 ## Accounting for Event Gaps
@@ -787,91 +331,15 @@ sample_size_nbinom(
   trial_duration = 12,
   event_gap = 5 / 365.25
 )
-#> $inputs
-#> $inputs$lambda1
-#> [1] 0.5
+#> Sample Size for Negative Binomial Outcome
+#> ==========================================
 #> 
-#> $inputs$lambda2
-#> [1] 0.3
-#> 
-#> $inputs$dispersion
-#> [1] 0.1
-#> 
-#> $inputs$power
-#> [1] 0.8
-#> 
-#> $inputs$alpha
-#> [1] 0.025
-#> 
-#> $inputs$sided
-#> [1] 1
-#> 
-#> $inputs$ratio
-#> [1] 1
-#> 
-#> $inputs$accrual_rate
-#> [1] 10
-#> 
-#> $inputs$accrual_duration
-#> [1] 12
-#> 
-#> $inputs$trial_duration
-#> [1] 12
-#> 
-#> $inputs$dropout_rate
-#> [1] 0
-#> 
-#> $inputs$max_followup
-#> NULL
-#> 
-#> $inputs$event_gap
-#> [1] 0.01368925
-#> 
-#> $inputs$method
-#> [1] "zhu"
-#> 
-#> 
-#> $n1
-#> [1] 33
-#> 
-#> $n2
-#> [1] 33
-#> 
-#> $n_total
-#> [1] 66
-#> 
-#> $alpha
-#> [1] 0.025
-#> 
-#> $sided
-#> [1] 1
-#> 
-#> $power
-#> [1] 0.8
-#> 
-#> $exposure
-#> [1] 6
-#> 
-#> $events_n1
-#> [1] 98.32699
-#> 
-#> $events_n2
-#> [1] 59.15706
-#> 
-#> $total_events
-#> [1] 157.484
-#> 
-#> $variance
-#> [1] 0.03313491
-#> 
-#> $accrual_rate
-#> [1] 5.5
-#> 
-#> $accrual_duration
-#> [1] 12
-#> 
-#> attr(,"class")
-#> [1] "sample_size_nbinom_result" "list"
+#> Sample size:     n1 = 33, n2 = 33, total = 66
+#> Expected events: 157.5 (n1: 98.3, n2: 59.2)
+#> Power: 80%, Alpha: 0.025 (1-sided)
+#> Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)
+#> Dispersion: 0.1000, Avg exposure: 6.00
+#> Accrual: 12.0, Trial duration: 12.0
 ```
 
 Note that the required sample size increases compared to the basic

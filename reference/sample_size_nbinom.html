@@ -164,189 +164,35 @@ for negative binomial outcomes. <em>Statistical Methods in Medical Research</em>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Calculate sample size for lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1</span></span></span>
 <span class="r-in"><span><span class="co"># with fixed recruitment of 10/month for 20 months, 24 month trial duration</span></span></span>
-<span class="r-in"><span><span class="fu">sample_size_nbinom</span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">sample_size_nbinom</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  lambda1 <span class="op">=</span> <span class="fl">0.5</span>, lambda2 <span class="op">=</span> <span class="fl">0.3</span>, dispersion <span class="op">=</span> <span class="fl">0.1</span>, power <span class="op">=</span> <span class="fl">0.8</span>,</span></span>
 <span class="r-in"><span>  accrual_rate <span class="op">=</span> <span class="fl">10</span>, accrual_duration <span class="op">=</span> <span class="fl">20</span>, trial_duration <span class="op">=</span> <span class="fl">24</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$lambda1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$lambda2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$dispersion</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$power</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$alpha</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.025</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$sided</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$ratio</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$accrual_rate</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$accrual_duration</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$trial_duration</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$dropout_rate</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$max_followup</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$event_gap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$method</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "zhu"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $n1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $n2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $n_total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 36</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $alpha</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.025</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $sided</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $power</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $exposure</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 14</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $events_n1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 126</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $events_n2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 75.6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $total_events</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 201.6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $variance</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.03227513</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $accrual_rate</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $accrual_duration</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "sample_size_nbinom_result" "list"                     </span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fixed sample size design for negative binomial outcome, total sample size 36</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (n1=18, n2=18), 80 percent power, 2.5 percent (1-sided) Type I error. Control</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rate 0.5000, treatment rate 0.3000, risk ratio 0.6000, dispersion 0.1000.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Accrual duration 20.0, trial duration 24.0, average exposure 14.00. Expected</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> events 201.6. Randomization ratio 1:1.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># With piecewise accrual</span></span></span>
 <span class="r-in"><span><span class="co"># 5 patients/month for 3 months, then 10 patients/month for 3 months</span></span></span>
 <span class="r-in"><span><span class="co"># Trial ends at month 12.</span></span></span>
-<span class="r-in"><span><span class="fu">sample_size_nbinom</span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu">sample_size_nbinom</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  lambda1 <span class="op">=</span> <span class="fl">0.5</span>, lambda2 <span class="op">=</span> <span class="fl">0.3</span>, dispersion <span class="op">=</span> <span class="fl">0.1</span>, power <span class="op">=</span> <span class="fl">0.8</span>,</span></span>
 <span class="r-in"><span>  accrual_rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span>, accrual_duration <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  trial_duration <span class="op">=</span> <span class="fl">12</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$lambda1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">x2</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fixed sample size design for negative binomial outcome, total sample size 50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (n1=25, n2=25), 80 percent power, 2.5 percent (1-sided) Type I error. Control</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rate 0.5000, treatment rate 0.3000, risk ratio 0.6000, dispersion 0.1000.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Accrual duration 6.0, trial duration 12.0, average exposure 8.50. Expected</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> events 170.0. Randomization ratio 1:1.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$lambda2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$dispersion</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$power</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$alpha</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.025</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$sided</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$ratio</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$accrual_rate</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  5 10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$accrual_duration</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$trial_duration</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$dropout_rate</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$max_followup</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$event_gap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $inputs$method</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "zhu"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $n1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $n2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $n_total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $alpha</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.025</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $sided</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $power</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $exposure</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 8.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $events_n1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 106.25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $events_n2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 63.75</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $total_events</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 170</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $variance</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.03309804</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $accrual_rate</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  5.555556 11.111111</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $accrual_duration</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "sample_size_nbinom_result" "list"                     </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

@@ -4,6 +4,7 @@
 library(gsDesignNB)
 library(data.table)
 library(ggplot2)
+library(gt)
 ```
 
 This vignette demonstrates how to use the
@@ -107,12 +108,25 @@ summary_stats <- sim_dt[
   ),
   by = treatment
 ]
-print(summary_stats)
-#>       treatment n_subjects total_events total_followup observed_rate
-#>          <char>      <int>        <int>          <num>         <num>
-#> 1:      Control         10            6       18.42088     0.3257173
-#> 2: Experimental         10            5       20.00000     0.2500000
+summary_stats |>
+  gt() |>
+  tab_header(title = "Summary Statistics by Treatment") |>
+  cols_label(
+    treatment = "Treatment",
+    n_subjects = "N",
+    total_events = "Events",
+    total_followup = "Follow-up",
+    observed_rate = "Rate"
+  ) |>
+  fmt_number(columns = total_followup, decimals = 2) |>
+  fmt_number(columns = observed_rate, decimals = 3)
 ```
+
+| Summary Statistics by Treatment |     |        |           |       |
+|---------------------------------|-----|--------|-----------|-------|
+| Treatment                       | N   | Events | Follow-up | Rate  |
+| Control                         | 10  | 6      | 18.42     | 0.326 |
+| Experimental                    | 10  | 5      | 20.00     | 0.250 |
 
 ### Inspect First Ten Records
 
@@ -206,10 +220,19 @@ described by Mütze et al. (2018).
 
 ``` r
 mutze_res <- mutze_test(cut_summary)
-mutze_res$group_summary
-#>      treatment subjects events exposure
-#> 1      Control       10      6 12.58109
-#> 2 Experimental       10      4 13.57575
+mutze_res$group_summary |>
+  gt() |>
+  tab_header(title = "Mütze Test: Group Summary") |>
+  fmt_number(columns = c(events, exposure), decimals = 2)
+```
+
+| Mütze Test: Group Summary |          |        |          |
+|---------------------------|----------|--------|----------|
+| treatment                 | subjects | events | exposure |
+| Control                   | 10       | 6.00   | 12.58    |
+| Experimental              | 10       | 4.00   | 13.58    |
+
+``` r
 mutze_res$rate_ratio
 #> [1] 0.5273708
 ```

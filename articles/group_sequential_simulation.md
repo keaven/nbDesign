@@ -4,6 +4,7 @@
 library(gsDesignNB)
 library(data.table)
 library(ggplot2)
+library(gt)
 ```
 
 This vignette demonstrates how to create and simulate a group sequential
@@ -302,23 +303,30 @@ summary_by_analysis <- as.data.table(all_results)[
   by = .(analysis, analysis_time)
 ]
 
-knitr::kable(
-  summary_by_analysis,
-  digits = 2,
-  col.names = c("Analysis", "Time (yrs)", "N Enrolled", "Total Events",
-                "Ctrl Events", "Exp Events", "Ctrl Exposure", "Exp Exposure",
-                "Mean Z", "SD Z"),
-  caption = "Summary Statistics by Analysis"
-)
+summary_by_analysis |>
+  gt() |>
+  tab_header(title = "Summary Statistics by Analysis") |>
+  cols_label(
+    analysis = "Analysis",
+    analysis_time = "Time (yrs)",
+    mean_enrolled = "N Enrolled",
+    mean_events_total = "Total Events",
+    mean_events_ctrl = "Ctrl Events",
+    mean_events_exp = "Exp Events",
+    mean_exposure_ctrl = "Ctrl Exposure",
+    mean_exposure_exp = "Exp Exposure",
+    mean_z = "Mean Z",
+    sd_z = "SD Z"
+  ) |>
+  fmt_number(decimals = 2)
 ```
 
-| Analysis | Time (yrs) | N Enrolled | Total Events | Ctrl Events | Exp Events | Ctrl Exposure | Exp Exposure | Mean Z | SD Z |
-|---------:|-----------:|-----------:|-------------:|------------:|-----------:|--------------:|-------------:|-------:|-----:|
-|        1 |       0.83 |     226.24 |       116.24 |       68.72 |      47.52 |         45.85 |        46.14 |  -1.77 | 1.07 |
-|        2 |       1.50 |     270.00 |       331.27 |      196.80 |     134.47 |        132.20 |       132.93 |  -2.76 | 0.96 |
-|        3 |       2.00 |     270.00 |       492.12 |      289.16 |     202.97 |        198.56 |       199.71 |  -2.92 | 0.69 |
-
-Summary Statistics by Analysis
+| Summary Statistics by Analysis |            |            |              |             |            |               |              |        |      |
+|--------------------------------|------------|------------|--------------|-------------|------------|---------------|--------------|--------|------|
+| Analysis                       | Time (yrs) | N Enrolled | Total Events | Ctrl Events | Exp Events | Ctrl Exposure | Exp Exposure | Mean Z | SD Z |
+| 1.00                           | 0.83       | 226.24     | 116.24       | 68.72       | 47.52      | 45.85         | 46.14        | −1.77  | 1.07 |
+| 2.00                           | 1.50       | 270.00     | 331.27       | 196.80      | 134.47     | 132.20        | 132.93       | −2.76  | 0.96 |
+| 3.00                           | 2.00       | 270.00     | 492.12       | 289.16      | 202.97     | 198.56        | 199.71       | −2.92  | 0.69 |
 
 ### Statistical Information
 
@@ -341,21 +349,24 @@ info_by_analysis <- as.data.table(all_results)[
 # Normalize to get observed information fractions
 info_by_analysis[, observed_info_frac := mean_info / max(mean_info)]
 
-knitr::kable(
-  info_by_analysis,
-  digits = 3,
-  col.names = c("Analysis", "Mean Information", "Planned Info Frac", "Observed Info Frac"),
-  caption = "Information by Analysis"
-)
+info_by_analysis |>
+  gt() |>
+  tab_header(title = "Information by Analysis") |>
+  cols_label(
+    analysis = "Analysis",
+    mean_info = "Mean Information",
+    planned_info_frac = "Planned Info Frac",
+    observed_info_frac = "Observed Info Frac"
+  ) |>
+  fmt_number(decimals = 3)
 ```
 
-| Analysis | Mean Information | Planned Info Frac | Observed Info Frac |
-|---------:|-----------------:|------------------:|-------------------:|
-|        1 |           27.736 |             0.417 |              0.233 |
-|        2 |           79.522 |             0.750 |              0.668 |
-|        3 |          119.059 |             1.000 |              1.000 |
-
-Information by Analysis
+| Information by Analysis |                  |                   |                    |
+|-------------------------|------------------|-------------------|--------------------|
+| Analysis                | Mean Information | Planned Info Frac | Observed Info Frac |
+| 1.000                   | 27.736           | 0.417             | 0.233              |
+| 2.000                   | 79.522           | 0.750             | 0.668              |
+| 3.000                   | 119.059          | 1.000             | 1.000              |
 
 ### Boundary Crossings and Power
 
@@ -374,21 +385,25 @@ crossing_summary <- as.data.table(all_results)[
 crossing_summary[, prob_cross_upper := n_cross_upper / n_sims]
 crossing_summary[, prob_cross_lower := n_cross_lower / n_sims]
 
-knitr::kable(
-  crossing_summary[, .(analysis, n_cross_upper, prob_cross_upper, n_cross_lower, prob_cross_lower)],
-  digits = 3,
-  col.names = c("Analysis", "N Cross Upper", "P(Cross Upper)", "N Cross Lower", "P(Cross Lower)"),
-  caption = "Boundary Crossing by Analysis"
-)
+crossing_summary[, .(analysis, n_cross_upper, prob_cross_upper, n_cross_lower, prob_cross_lower)] |>
+  gt() |>
+  tab_header(title = "Boundary Crossing by Analysis") |>
+  cols_label(
+    analysis = "Analysis",
+    n_cross_upper = "N Cross Upper",
+    prob_cross_upper = "P(Cross Upper)",
+    n_cross_lower = "N Cross Lower",
+    prob_cross_lower = "P(Cross Lower)"
+  ) |>
+  fmt_number(columns = starts_with("prob"), decimals = 3)
 ```
 
-| Analysis | N Cross Upper | P(Cross Upper) | N Cross Lower | P(Cross Lower) |
-|---------:|--------------:|---------------:|--------------:|---------------:|
-|        1 |             3 |           0.06 |             2 |           0.04 |
-|        2 |            11 |           0.22 |             2 |           0.04 |
-|        3 |            29 |           0.58 |             3 |           0.06 |
-
-Boundary Crossing by Analysis
+| Boundary Crossing by Analysis |               |                |               |                |
+|-------------------------------|---------------|----------------|---------------|----------------|
+| Analysis                      | N Cross Upper | P(Cross Upper) | N Cross Lower | P(Cross Lower) |
+| 1                             | 3             | 0.060          | 2             | 0.040          |
+| 2                             | 11            | 0.220          | 2             | 0.040          |
+| 3                             | 29            | 0.580          | 3             | 0.060          |
 
 ### Overall Power
 
@@ -439,7 +454,8 @@ bounds_df <- data.frame(
 )
 
 ggplot(plot_data, aes(x = factor(analysis), y = z_flipped)) +
-  geom_jitter(width = 0.1, alpha = 0.5, color = "steelblue") +
+  geom_violin(fill = "steelblue", alpha = 0.5, color = "steelblue") +
+  geom_boxplot(width = 0.1, fill = "white", outlier.shape = NA) +
   geom_hline(data = bounds_df, aes(yintercept = upper), 
              linetype = "dashed", color = "darkgreen", linewidth = 1) +
   geom_hline(data = bounds_df, aes(yintercept = lower), 
@@ -453,8 +469,10 @@ ggplot(plot_data, aes(x = factor(analysis), y = z_flipped)) +
   ) +
   theme_minimal() +
   ylim(c(-4, 6))
-#> Warning: Removed 23 rows containing missing values or values outside the scale range
-#> (`geom_point()`).
+#> Warning: Removed 23 rows containing non-finite outside the scale range
+#> (`stat_ydensity()`).
+#> Warning: Removed 23 rows containing non-finite outside the scale range
+#> (`stat_boxplot()`).
 ```
 
 ![Z-statistics across analyses with group sequential
@@ -475,27 +493,65 @@ summary(gs_nb)
 ```
 
 For detailed boundary information, use
-[`gsDesign::gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.html):
+[`gsDesign::gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.html).
+We set `logdelta = TRUE` since the test statistic is based on the log
+rate ratio. The `~RR at bound` displays the rate ratio
+($\lambda_{2}/\lambda_{1}$), where values \< 1 indicate treatment
+benefit:
 
 ``` r
-gsDesign::gsBoundSummary(gs_nb)
-#>                Analysis               Value Efficacy Futility
-#>               IA 1: 42%                   Z   3.5037   0.1140
-#>  N/Fixed design N: 0.44         p (1-sided)   0.0002   0.4546
-#>                             ~delta at bound   1.6218   0.0528
-#>                         P(Cross) if delta=0   0.0002   0.5454
-#>                         P(Cross) if delta=1   0.0896   0.0204
-#>               IA 2: 75%                   Z   3.3600   1.2080
-#>   N/Fixed design N: 0.8         p (1-sided)   0.0004   0.1135
-#>                             ~delta at bound   1.1593   0.4168
-#>                         P(Cross) if delta=0   0.0006   0.8929
-#>                         P(Cross) if delta=1   0.3321   0.0545
-#>                   Final                   Z   1.9611   1.9611
-#>  N/Fixed design N: 1.07         p (1-sided)   0.0249   0.0249
-#>                             ~delta at bound   0.5860   0.5860
-#>                         P(Cross) if delta=0   0.0225   0.9775
-#>                         P(Cross) if delta=1   0.9000   0.1000
+gsDesign::gsBoundSummary(gs_nb, 
+                         deltaname = "RR", 
+                         logdelta = TRUE,
+                         Nname = "N",
+                         digits = 4,
+                         ddigits = 2) |>
+  gt() |>
+  tab_header(title = "Group Sequential Design Bounds")
 ```
+
+| Group Sequential Design Bounds |                     |          |          |
+|--------------------------------|---------------------|----------|----------|
+| Analysis                       | Value               | Efficacy | Futility |
+| IA 1: 42%                      | Z                   | 3.5037   | 0.1140   |
+| N: 0.44                        | p (1-sided)         | 0.0002   | 0.4546   |
+|                                | ~RR at bound        | 0.5181   | 0.9788   |
+|                                | P(Cross) if RR=1    | 0.0002   | 0.5454   |
+|                                | P(Cross) if RR=0.67 | 0.0896   | 0.0204   |
+| IA 2: 75%                      | Z                   | 3.3600   | 1.2080   |
+| N: 0.8                         | p (1-sided)         | 0.0004   | 0.1135   |
+|                                | ~RR at bound        | 0.6250   | 0.8445   |
+|                                | P(Cross) if RR=1    | 0.0006   | 0.8929   |
+|                                | P(Cross) if RR=0.67 | 0.3321   | 0.0545   |
+| Final                          | Z                   | 1.9611   | 1.9611   |
+| N: 1.07                        | p (1-sided)         | 0.0249   | 0.0249   |
+|                                | ~RR at bound        | 0.7885   | 0.7885   |
+|                                | P(Cross) if RR=1    | 0.0225   | 0.9775   |
+|                                | P(Cross) if RR=0.67 | 0.9000   | 0.1000   |
+
+Note that `P(Cross) if RR=0.67` corresponds to the design’s alternate
+hypothesis (treatment rate / control rate = 0.67).
+
+Sample sizes at each analysis:
+
+``` r
+data.frame(
+  Analysis = 1:gs_nb$k,
+  n1 = gs_nb$n1,
+  n2 = gs_nb$n2,
+  n_total = gs_nb$n_total
+) |>
+  gt() |>
+  tab_header(title = "Sample Sizes at Each Analysis") |>
+  fmt_number(columns = c(n1, n2, n_total), decimals = 1)
+```
+
+| Sample Sizes at Each Analysis |       |       |         |
+|-------------------------------|-------|-------|---------|
+| Analysis                      | n1    | n2    | n_total |
+| 1                             | 60.0  | 60.0  | 119.9   |
+| 2                             | 107.9 | 107.9 | 215.9   |
+| 3                             | 143.9 | 143.9 | 287.8   |
 
 After rounding to integer sample sizes with
 [`toInteger()`](https://keaven.github.io/gsDesignNB/reference/toInteger.md):

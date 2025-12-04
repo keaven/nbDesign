@@ -19,9 +19,15 @@
   : Simulate Recurrent Events with Fixed Follow-up
 - [`print(`*`<gsNBsummary>`*`)`](https://keaven.github.io/gsDesignNB/reference/print.gsNBsummary.md)
   : Print Method for gsNBsummary Objects
+- [`print(`*`<sample_size_nbinom_result>`*`)`](https://keaven.github.io/gsDesignNB/reference/print.sample_size_nbinom_result.md)
+  : Print Method for sample_size_nbinom_result Objects
+- [`print(`*`<sample_size_nbinom_summary>`*`)`](https://keaven.github.io/gsDesignNB/reference/print.sample_size_nbinom_summary.md)
+  : Print Method for sample_size_nbinom_summary Objects
 - [`sample_size_nbinom()`](https://keaven.github.io/gsDesignNB/reference/sample_size_nbinom.md)
   : Sample Size Calculation for Negative Binomial Distribution
 - [`summary(`*`<gsNB>`*`)`](https://keaven.github.io/gsDesignNB/reference/summary.gsNB.md)
   : Summary for gsNB Objects
+- [`summary(`*`<sample_size_nbinom_result>`*`)`](https://keaven.github.io/gsDesignNB/reference/summary.sample_size_nbinom_result.md)
+  : Summary for sample_size_nbinom_result Objects
 - [`toInteger()`](https://keaven.github.io/gsDesignNB/reference/toInteger.md)
   : Convert Group Sequential Design to Integer Sample Sizes

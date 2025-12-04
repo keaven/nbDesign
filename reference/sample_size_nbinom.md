@@ -132,187 +132,33 @@ in Medical Research*, 27(10), 2978-2993.
 ``` r
 # Calculate sample size for lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1
 # with fixed recruitment of 10/month for 20 months, 24 month trial duration
-sample_size_nbinom(
+x <- sample_size_nbinom(
   lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, power = 0.8,
   accrual_rate = 10, accrual_duration = 20, trial_duration = 24
 )
-#> $inputs
-#> $inputs$lambda1
-#> [1] 0.5
-#> 
-#> $inputs$lambda2
-#> [1] 0.3
-#> 
-#> $inputs$dispersion
-#> [1] 0.1
-#> 
-#> $inputs$power
-#> [1] 0.8
-#> 
-#> $inputs$alpha
-#> [1] 0.025
-#> 
-#> $inputs$sided
-#> [1] 1
-#> 
-#> $inputs$ratio
-#> [1] 1
-#> 
-#> $inputs$accrual_rate
-#> [1] 10
-#> 
-#> $inputs$accrual_duration
-#> [1] 20
-#> 
-#> $inputs$trial_duration
-#> [1] 24
-#> 
-#> $inputs$dropout_rate
-#> [1] 0
-#> 
-#> $inputs$max_followup
-#> NULL
-#> 
-#> $inputs$event_gap
-#> NULL
-#> 
-#> $inputs$method
-#> [1] "zhu"
-#> 
-#> 
-#> $n1
-#> [1] 18
-#> 
-#> $n2
-#> [1] 18
-#> 
-#> $n_total
-#> [1] 36
-#> 
-#> $alpha
-#> [1] 0.025
-#> 
-#> $sided
-#> [1] 1
-#> 
-#> $power
-#> [1] 0.8
-#> 
-#> $exposure
-#> [1] 14
-#> 
-#> $events_n1
-#> [1] 126
-#> 
-#> $events_n2
-#> [1] 75.6
-#> 
-#> $total_events
-#> [1] 201.6
-#> 
-#> $variance
-#> [1] 0.03227513
-#> 
-#> $accrual_rate
-#> [1] 1.8
-#> 
-#> $accrual_duration
-#> [1] 20
-#> 
-#> attr(,"class")
+class(x)
 #> [1] "sample_size_nbinom_result" "list"                     
+summary(x)
+#> Fixed sample size design for negative binomial outcome, total sample size 36
+#> (n1=18, n2=18), 80 percent power, 2.5 percent (1-sided) Type I error. Control
+#> rate 0.5000, treatment rate 0.3000, risk ratio 0.6000, dispersion 0.1000.
+#> Accrual duration 20.0, trial duration 24.0, average exposure 14.00. Expected
+#> events 201.6. Randomization ratio 1:1.
+#> 
 
 # With piecewise accrual
 # 5 patients/month for 3 months, then 10 patients/month for 3 months
 # Trial ends at month 12.
-sample_size_nbinom(
+x2 <- sample_size_nbinom(
   lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, power = 0.8,
   accrual_rate = c(5, 10), accrual_duration = c(3, 3),
   trial_duration = 12
 )
-#> $inputs
-#> $inputs$lambda1
-#> [1] 0.5
+summary(x2)
+#> Fixed sample size design for negative binomial outcome, total sample size 50
+#> (n1=25, n2=25), 80 percent power, 2.5 percent (1-sided) Type I error. Control
+#> rate 0.5000, treatment rate 0.3000, risk ratio 0.6000, dispersion 0.1000.
+#> Accrual duration 6.0, trial duration 12.0, average exposure 8.50. Expected
+#> events 170.0. Randomization ratio 1:1.
 #> 
-#> $inputs$lambda2
-#> [1] 0.3
-#> 
-#> $inputs$dispersion
-#> [1] 0.1
-#> 
-#> $inputs$power
-#> [1] 0.8
-#> 
-#> $inputs$alpha
-#> [1] 0.025
-#> 
-#> $inputs$sided
-#> [1] 1
-#> 
-#> $inputs$ratio
-#> [1] 1
-#> 
-#> $inputs$accrual_rate
-#> [1]  5 10
-#> 
-#> $inputs$accrual_duration
-#> [1] 3 3
-#> 
-#> $inputs$trial_duration
-#> [1] 12
-#> 
-#> $inputs$dropout_rate
-#> [1] 0
-#> 
-#> $inputs$max_followup
-#> NULL
-#> 
-#> $inputs$event_gap
-#> NULL
-#> 
-#> $inputs$method
-#> [1] "zhu"
-#> 
-#> 
-#> $n1
-#> [1] 25
-#> 
-#> $n2
-#> [1] 25
-#> 
-#> $n_total
-#> [1] 50
-#> 
-#> $alpha
-#> [1] 0.025
-#> 
-#> $sided
-#> [1] 1
-#> 
-#> $power
-#> [1] 0.8
-#> 
-#> $exposure
-#> [1] 8.5
-#> 
-#> $events_n1
-#> [1] 106.25
-#> 
-#> $events_n2
-#> [1] 63.75
-#> 
-#> $total_events
-#> [1] 170
-#> 
-#> $variance
-#> [1] 0.03309804
-#> 
-#> $accrual_rate
-#> [1]  5.555556 11.111111
-#> 
-#> $accrual_duration
-#> [1] 3 3
-#> 
-#> attr(,"class")
-#> [1] "sample_size_nbinom_result" "list"                     
 ```
