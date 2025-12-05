@@ -94,7 +94,7 @@ analysis_times <- c(10, 18, 24) / 12  # Convert months to years
 # For timing, we use calendar time fractions
 timing <- analysis_times / max(analysis_times)
 
-# Create group sequential design
+# Create group sequential design with integer sample sizes
 gs_nb <- gsNBCalendar(
   x = nb_ss,
   k = 3,
@@ -103,7 +103,7 @@ gs_nb <- gsNBCalendar(
   usTime = c(0.1, 0.2, 1), # Conservative efficacy spending
   lsTime = NULL,           # Futility spending based on information time
   analysis_times = analysis_times * 12  # Calendar times in months
-)
+) |> toInteger()
 
 # Display design bounds
 cat("\nGroup Sequential Design Boundaries:\n")
@@ -435,7 +435,11 @@ gsDesign::gsBoundSummary(gs_nb,
                          digits = 4,
                          ddigits = 2) |>
   gt() |>
-  tab_header(title = "Group Sequential Design Bounds")
+  tab_header(
+    title = "Group Sequential Design Bounds for Negative Binomial Outcome",
+    subtitle = paste0("N = ", ceiling(gs_nb$n_total[gs_nb$k]), 
+                      ", Expected events = ", round(gs_nb$nb_design$total_events, 1))
+  )
 ```
 
 Note that `P(Cross) if RR=0.67` corresponds to the design's alternate hypothesis 
