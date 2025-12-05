@@ -90,7 +90,7 @@ mutze_test(cut)
 #> $model
 #> 
 #> Call:  MASS::glm.nb(formula = events ~ treatment + offset(log(tte)), 
-#>     data = df, init.theta = 3256.232756, link = log)
+#>     data = df, init.theta = 3256.232807, link = log)
 #> 
 #> Coefficients:
 #>           (Intercept)  treatmentExperimental  
