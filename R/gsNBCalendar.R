@@ -163,6 +163,88 @@ gsNBCalendar <- function(x,
 }
 
 
+#' Compute Statistical Information at Analysis Time
+#'
+#' Computes the statistical information for the log rate ratio at a given
+#' analysis time, accounting for staggered enrollment and varying exposure times.
+#'
+#' @param analysis_time The calendar time of the analysis.
+#' @param accrual_rate The enrollment rate (subjects per time unit).
+#' @param accrual_duration The duration of the enrollment period.
+#' @param lambda1 Event rate for group 1 (control).
+#' @param lambda2 Event rate for group 2 (treatment).
+#' @param dispersion The negative binomial dispersion parameter.
+#' @param ratio Allocation ratio (n2/n1). Default is 1.
+#'
+#' @return The statistical information (inverse of variance) at the analysis time.
+#'
+#' @details
+#' For subjects enrolled at time \code{t}, their exposure at analysis time \code{T}
+#' is \code{T - t}. The function integrates over all enrolled subjects to compute
+#' the total expected events and variance of the log rate ratio.
+#'
+#' The variance formula for the log rate ratio is:
+#' \deqn{Var = \sum_i \frac{1/\mu_{1i} + k}{n_{1i}} + \frac{1/\mu_{2i} + k}{n_{2i}}}
+#'
+#' where \eqn{\mu_{ji} = \lambda_j \times exposure_i} and \eqn{k} is the dispersion.
+#'
+#' @export
+#'
+#' @examples
+#' # Compute information at month 12 for a trial with:
+#' # - 10 subjects/month enrollment rate
+#' # - 20 month enrollment period
+#' # - Control event rate 0.5, treatment rate 0.3
+#' # - Dispersion 0.1
+#' compute_info_at_time(
+#'   analysis_time = 12,
+#'   accrual_rate = 10,
+#'   accrual_duration = 20,
+#'   lambda1 = 0.5,
+#'   lambda2 = 0.3,
+#'   dispersion = 0.1
+#' )
+compute_info_at_time <- function(analysis_time, accrual_rate, accrual_duration,
+                                  lambda1, lambda2, dispersion, ratio = 1) {
+  # Number of subjects enrolled by analysis_time
+  enrollment_time <- min(analysis_time, accrual_duration)
+  n_total <- accrual_rate * enrollment_time
+  n1 <- n_total / (1 + ratio)
+  n2 <- n_total * ratio / (1 + ratio)
+
+
+  # For uniform enrollment, the average exposure is:
+
+  # If analysis_time <= accrual_duration: avg_exposure = analysis_time / 2
+  # If analysis_time > accrual_duration: 
+  #   Subjects enrolled at time t have exposure = analysis_time - t
+  #   For t in [0, accrual_duration], avg_exposure = analysis_time - accrual_duration/2
+
+  if (analysis_time <= accrual_duration) {
+    # Still enrolling - average exposure is half the analysis time
+    avg_exposure <- analysis_time / 2
+  } else {
+    # Enrollment complete - average exposure is analysis_time minus midpoint of enrollment
+    avg_exposure <- analysis_time - accrual_duration / 2
+  }
+
+  # Expected events per subject
+  mu1 <- lambda1 * avg_exposure
+  mu2 <- lambda2 * avg_exposure
+
+  # Variance of log rate ratio
+  # Var(log(lambda2/lambda1)) = (1/mu1 + k)/n1 + (1/mu2 + k)/n2
+  k <- dispersion
+  variance <- (1 / mu1 + k) / n1 + (1 / mu2 + k) / n2
+
+
+  # Information is inverse of variance
+  info <- 1 / variance
+
+  return(info)
+}
+
+
 #' Summary for gsNB Objects
 #'
 #' Provides a textual summary of a group sequential design for negative binomial
@@ -310,6 +392,10 @@ toInteger.gsDesign <- function(x, ratio = x$ratio, roundUpFinal = TRUE, ...) {
 #' interim sample sizes remain as expected (non-integer) values based on
 #' the information fraction.
 #'
+#' When \code{analysis_times} were provided to \code{\link{gsNBCalendar}},
+#' the statistical information (\code{n.I}) is recomputed at each analysis
+#' time based on the new sample size and expected exposures.
+#'
 #' @export
 toInteger.gsNB <- function(x, ratio = x$nb_design$inputs$ratio, roundUpFinal = TRUE, ...) {
   # Make a copy of the object
@@ -349,10 +435,46 @@ toInteger.gsNB <- function(x, ratio = x$nb_design$inputs$ratio, roundUpFinal = T
   result$n1 <- n_total_new / (1 + ratio)
   result$n2 <- n_total_new * ratio / (1 + ratio)
 
-  # Update n.I to reflect the new sample sizes
-  # n.I is relative to the fixed sample size
-  n_total_fixed <- x$nb_design$n_total
-  result$n.I <- n_total_new / n_total_fixed
+  # Update n.I (statistical information) at each analysis
+
+  # If analysis_times (T) are available, compute information at each time
+  # accounting for enrollment and exposure
+  if (!is.null(x$T)) {
+    # Get design parameters from nb_design
+    nb <- x$nb_design
+    lambda1 <- nb$inputs$lambda1
+    lambda2 <- nb$inputs$lambda2
+    dispersion <- nb$inputs$dispersion
+
+    # Compute accrual rate based on new final sample size
+    # accrual_rate = n_total_final / accrual_duration
+    accrual_duration <- nb$accrual_duration
+    new_accrual_rate <- n_total_new[k] / accrual_duration
+
+    # Compute information at each analysis time
+    info_at_analyses <- numeric(k)
+    for (i in seq_len(k)) {
+      info_at_analyses[i] <- compute_info_at_time(
+        analysis_time = x$T[i],
+        accrual_rate = new_accrual_rate,
+        accrual_duration = accrual_duration,
+        lambda1 = lambda1,
+        lambda2 = lambda2,
+        dispersion = dispersion,
+        ratio = ratio
+      )
+    }
+    result$n.I <- info_at_analyses
+
+    # Update n.fix to be the final analysis information
+    result$n.fix <- info_at_analyses[k]
+
+    # Update timing based on new information fractions
+    result$timing <- info_at_analyses / info_at_analyses[k]
+  } else {
+    # No analysis times - use simple scaling
+    result$n.I <- result$timing * result$n.fix
+  }
 
   result
 }

@@ -39,6 +39,10 @@ the randomization ratio and ensuring monotonically increasing sample sizes acros
 analyses. Only the final analysis sample size is rounded to an integer;
 interim sample sizes remain as expected (non-integer) values based on
 the information fraction.
+
+When \code{analysis_times} were provided to \code{\link{gsNBCalendar}},
+the statistical information (\code{n.I}) is recomputed at each analysis
+time based on the new sample size and expected exposures.
 }
 \section{Methods (by class)}{
 \itemize{

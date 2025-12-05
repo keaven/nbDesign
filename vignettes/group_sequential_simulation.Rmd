@@ -252,7 +252,7 @@ for (sim in 1:n_sims) {
 all_results <- do.call(rbind, results)
 ```
 
-## Results Summary
+## Simulation Results Summary
 
 ### Events and Exposure by Analysis
 
