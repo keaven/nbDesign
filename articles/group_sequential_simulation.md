@@ -86,7 +86,7 @@ analysis_times <- c(10, 18, 24) / 12  # Convert months to years
 # For timing, we use calendar time fractions
 timing <- analysis_times / max(analysis_times)
 
-# Create group sequential design
+# Create group sequential design with integer sample sizes
 gs_nb <- gsNBCalendar(
   x = nb_ss,
   k = 3,
@@ -95,7 +95,7 @@ gs_nb <- gsNBCalendar(
   usTime = c(0.1, 0.2, 1), # Conservative efficacy spending
   lsTime = NULL,           # Futility spending based on information time
   analysis_times = analysis_times * 12  # Calendar times in months
-)
+) |> toInteger()
 
 # Display design bounds
 cat("\nGroup Sequential Design Boundaries:\n")
@@ -121,9 +121,9 @@ print(gs_nb)
 #> 
 #>                ----Lower bounds----  ----Upper bounds-----
 #>   Analysis N   Z   Nominal p Spend+  Z   Nominal p Spend++
-#>          1 29 0.11    0.5454 0.0204 3.50    0.0002  0.0002
-#>          2 52 1.21    0.8865 0.0341 3.36    0.0004  0.0003
-#>          3 69 1.96    0.9751 0.0455 1.96    0.0249  0.0244
+#>          1  1 0.11    0.5454 0.0204 3.50    0.0002  0.0002
+#>          2  1 1.21    0.8865 0.0341 3.36    0.0004  0.0003
+#>          3  2 1.96    0.9751 0.0455 1.96    0.0249  0.0244
 #>      Total                   0.1000                 0.0250 
 #> + lower bound beta spending (under H1):
 #>  Hwang-Shih-DeCani spending function with gamma = -2.
@@ -485,7 +485,7 @@ a textual overview of the group sequential design:
 ``` r
 summary(gs_nb)
 #> Asymmetric two-sided with non-binding futility bound group sequential design
-#> for negative binomial outcomes, 3 analyses, total sample size 287.8, 90 percent
+#> for negative binomial outcomes, 3 analyses, total sample size 288.0, 90 percent
 #> power, 2.5 percent (1-sided) Type I error. Control rate 1.5000, treatment rate
 #> 1.0000, risk ratio 0.6667, dispersion 0.5000. Accrual duration 1.0, trial
 #> duration 2.0, average exposure 1.50. Randomization ratio 1:1.
@@ -506,27 +506,32 @@ gsDesign::gsBoundSummary(gs_nb,
                          digits = 4,
                          ddigits = 2) |>
   gt() |>
-  tab_header(title = "Group Sequential Design Bounds")
+  tab_header(
+    title = "Group Sequential Design Bounds for Negative Binomial Outcome",
+    subtitle = paste0("N = ", ceiling(gs_nb$n_total[gs_nb$k]), 
+                      ", Expected events = ", round(gs_nb$nb_design$total_events, 1))
+  )
 ```
 
-| Group Sequential Design Bounds |                     |          |          |
-|--------------------------------|---------------------|----------|----------|
-| Analysis                       | Value               | Efficacy | Futility |
-| IA 1: 42%                      | Z                   | 3.5037   | 0.1140   |
-| Information: 28.4              | p (1-sided)         | 0.0002   | 0.4546   |
-|                                | ~RR at bound        | 0.5181   | 0.9788   |
-|                                | P(Cross) if RR=1    | 0.0002   | 0.5454   |
-|                                | P(Cross) if RR=0.67 | 0.0896   | 0.0204   |
-| IA 2: 75%                      | Z                   | 3.3600   | 1.2080   |
-| Information: 51.13             | p (1-sided)         | 0.0004   | 0.1135   |
-|                                | ~RR at bound        | 0.6250   | 0.8445   |
-|                                | P(Cross) if RR=1    | 0.0006   | 0.8929   |
-|                                | P(Cross) if RR=0.67 | 0.3321   | 0.0545   |
-| Final                          | Z                   | 1.9611   | 1.9611   |
-| Information: 68.17             | p (1-sided)         | 0.0249   | 0.0249   |
-|                                | ~RR at bound        | 0.7885   | 0.7885   |
-|                                | P(Cross) if RR=1    | 0.0225   | 0.9775   |
-|                                | P(Cross) if RR=0.67 | 0.9000   | 0.1000   |
+| Group Sequential Design Bounds for Negative Binomial Outcome |                     |          |          |
+|--------------------------------------------------------------|---------------------|----------|----------|
+| N = 288, Expected events = 506.2                             |                     |          |          |
+| Analysis                                                     | Value               | Efficacy | Futility |
+| IA 1: 42%                                                    | Z                   | 3.5037   | 0.1140   |
+| Information: 0.44                                            | p (1-sided)         | 0.0002   | 0.4546   |
+|                                                              | ~RR at bound        | 0.0052   | 0.8428   |
+|                                                              | P(Cross) if RR=1    | 0.0002   | 0.5454   |
+|                                                              | P(Cross) if RR=0.67 | 0.0896   | 0.0204   |
+| IA 2: 75%                                                    | Z                   | 3.3600   | 1.2080   |
+| Information: 0.8                                             | p (1-sided)         | 0.0004   | 0.1135   |
+|                                                              | ~RR at bound        | 0.0233   | 0.2590   |
+|                                                              | P(Cross) if RR=1    | 0.0006   | 0.8929   |
+|                                                              | P(Cross) if RR=0.67 | 0.3321   | 0.0545   |
+| Final                                                        | Z                   | 1.9611   | 1.9611   |
+| Information: 1.07                                            | p (1-sided)         | 0.0249   | 0.0249   |
+|                                                              | ~RR at bound        | 0.1497   | 0.1497   |
+|                                                              | P(Cross) if RR=1    | 0.0225   | 0.9775   |
+|                                                              | P(Cross) if RR=0.67 | 0.9000   | 0.1000   |
 
 Note that `P(Cross) if RR=0.67` corresponds to the design’s alternate
 hypothesis (treatment rate / control rate = 0.67).
@@ -548,9 +553,9 @@ data.frame(
 | Sample Sizes at Each Analysis |       |       |         |
 |-------------------------------|-------|-------|---------|
 | Analysis                      | n1    | n2    | n_total |
-| 1                             | 60.0  | 60.0  | 119.9   |
-| 2                             | 107.9 | 107.9 | 215.9   |
-| 3                             | 143.9 | 143.9 | 287.8   |
+| 1                             | 60.0  | 60.0  | 120.0   |
+| 2                             | 108.0 | 108.0 | 216.0   |
+| 3                             | 144.0 | 144.0 | 288.0   |
 
 After rounding to integer sample sizes with
 [`toInteger()`](https://keaven.github.io/gsDesignNB/reference/toInteger.md):

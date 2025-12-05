@@ -162,7 +162,7 @@ which provides more conservative early spending.</p>
 <span><span class="co"># For timing, we use calendar time fractions</span></span>
 <span><span class="va">timing</span> <span class="op">&lt;-</span> <span class="va">analysis_times</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">analysis_times</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Create group sequential design</span></span>
+<span><span class="co"># Create group sequential design with integer sample sizes</span></span>
 <span><span class="va">gs_nb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsNBCalendar.html">gsNBCalendar</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">nb_ss</span>,</span>
 <span>  k <span class="op">=</span> <span class="fl">3</span>,</span>
@@ -171,7 +171,7 @@ which provides more conservative early spending.</p>
 <span>  usTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">1</span><span class="op">)</span>, <span class="co"># Conservative efficacy spending</span></span>
 <span>  lsTime <span class="op">=</span> <span class="cn">NULL</span>,           <span class="co"># Futility spending based on information time</span></span>
 <span>  analysis_times <span class="op">=</span> <span class="va">analysis_times</span> <span class="op">*</span> <span class="fl">12</span>  <span class="co"># Calendar times in months</span></span>
-<span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/toInteger.html">toInteger</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Display design bounds</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\nGroup Sequential Design Boundaries:\n"</span><span class="op">)</span></span>
@@ -197,9 +197,9 @@ which provides more conservative early spending.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;                ----Lower bounds----  ----Upper bounds-----</span></span>
 <span><span class="co">#&gt;   Analysis N   Z   Nominal p Spend+  Z   Nominal p Spend++</span></span>
-<span><span class="co">#&gt;          1 29 0.11    0.5454 0.0204 3.50    0.0002  0.0002</span></span>
-<span><span class="co">#&gt;          2 52 1.21    0.8865 0.0341 3.36    0.0004  0.0003</span></span>
-<span><span class="co">#&gt;          3 69 1.96    0.9751 0.0455 1.96    0.0249  0.0244</span></span>
+<span><span class="co">#&gt;          1  1 0.11    0.5454 0.0204 3.50    0.0002  0.0002</span></span>
+<span><span class="co">#&gt;          2  1 1.21    0.8865 0.0341 3.36    0.0004  0.0003</span></span>
+<span><span class="co">#&gt;          3  2 1.96    0.9751 0.0455 1.96    0.0249  0.0244</span></span>
 <span><span class="co">#&gt;      Total                   0.1000                 0.0250 </span></span>
 <span><span class="co">#&gt; + lower bound beta spending (under H1):</span></span>
 <span><span class="co">#&gt;  Hwang-Shih-DeCani spending function with gamma = -2.</span></span>
@@ -2017,7 +2017,7 @@ the group sequential design:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">gs_nb</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Asymmetric two-sided with non-binding futility bound group sequential design</span></span>
-<span><span class="co">#&gt; for negative binomial outcomes, 3 analyses, total sample size 287.8, 90 percent</span></span>
+<span><span class="co">#&gt; for negative binomial outcomes, 3 analyses, total sample size 288.0, 90 percent</span></span>
 <span><span class="co">#&gt; power, 2.5 percent (1-sided) Type I error. Control rate 1.5000, treatment rate</span></span>
 <span><span class="co">#&gt; 1.0000, risk ratio 0.6667, dispersion 0.5000. Accrual duration 1.0, trial</span></span>
 <span><span class="co">#&gt; duration 2.0, average exposure 1.50. Randomization ratio 1:1.</span></span></code></pre></div>
@@ -2036,7 +2036,11 @@ where values &lt; 1 indicate treatment benefit:</p>
 <span>                         digits <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>                         ddigits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Group Sequential Design Bounds"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Group Sequential Design Bounds for Negative Binomial Outcome"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"N = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">gs_nb</span><span class="op">$</span><span class="va">n_total</span><span class="op">[</span><span class="va">gs_nb</span><span class="op">$</span><span class="va">k</span><span class="op">]</span><span class="op">)</span>, </span>
+<span>                      <span class="st">", Expected events = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">gs_nb</span><span class="op">$</span><span class="va">nb_design</span><span class="op">$</span><span class="va">total_events</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
 <div id="kqexxlnaky" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#kqexxlnaky table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -2489,7 +2493,10 @@ where values &lt; 1 indicate treatment benefit:</p>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead>
 <tr class="gt_heading">
-<td colspan="4" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>Group Sequential Design Bounds</td>
+<td colspan="4" class="gt_heading gt_title gt_font_normal" style>Group Sequential Design Bounds for Negative Binomial Outcome</td>
+    </tr>
+<tr class="gt_heading">
+<td colspan="4" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>N = 288, Expected events = 506.2</td>
     </tr>
 <tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Analysis">Analysis</th>
@@ -2506,7 +2513,7 @@ where values &lt; 1 indicate treatment benefit:</p>
 <td headers="Futility" class="gt_row gt_right">0.1140</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Information: 28.4</td>
+<td headers="Analysis" class="gt_row gt_left">Information: 0.44</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
 <td headers="Efficacy" class="gt_row gt_right">0.0002</td>
 <td headers="Futility" class="gt_row gt_right">0.4546</td>
@@ -2514,8 +2521,8 @@ where values &lt; 1 indicate treatment benefit:</p>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.5181</td>
-<td headers="Futility" class="gt_row gt_right">0.9788</td>
+<td headers="Efficacy" class="gt_row gt_right">0.0052</td>
+<td headers="Futility" class="gt_row gt_right">0.8428</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
@@ -2536,7 +2543,7 @@ where values &lt; 1 indicate treatment benefit:</p>
 <td headers="Futility" class="gt_row gt_right">1.2080</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Information: 51.13</td>
+<td headers="Analysis" class="gt_row gt_left">Information: 0.8</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
 <td headers="Efficacy" class="gt_row gt_right">0.0004</td>
 <td headers="Futility" class="gt_row gt_right">0.1135</td>
@@ -2544,8 +2551,8 @@ where values &lt; 1 indicate treatment benefit:</p>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.6250</td>
-<td headers="Futility" class="gt_row gt_right">0.8445</td>
+<td headers="Efficacy" class="gt_row gt_right">0.0233</td>
+<td headers="Futility" class="gt_row gt_right">0.2590</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
@@ -2566,7 +2573,7 @@ where values &lt; 1 indicate treatment benefit:</p>
 <td headers="Futility" class="gt_row gt_right">1.9611</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Information: 68.17</td>
+<td headers="Analysis" class="gt_row gt_left">Information: 1.07</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
 <td headers="Efficacy" class="gt_row gt_right">0.0249</td>
 <td headers="Futility" class="gt_row gt_right">0.0249</td>
@@ -2574,8 +2581,8 @@ where values &lt; 1 indicate treatment benefit:</p>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.7885</td>
-<td headers="Futility" class="gt_row gt_right">0.7885</td>
+<td headers="Efficacy" class="gt_row gt_right">0.1497</td>
+<td headers="Futility" class="gt_row gt_right">0.1497</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
@@ -3072,19 +3079,19 @@ design’s alternate hypothesis (treatment rate / control rate =
 <td headers="Analysis" class="gt_row gt_right">1</td>
 <td headers="n1" class="gt_row gt_right">60.0</td>
 <td headers="n2" class="gt_row gt_right">60.0</td>
-<td headers="n_total" class="gt_row gt_right">119.9</td>
+<td headers="n_total" class="gt_row gt_right">120.0</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_right">2</td>
-<td headers="n1" class="gt_row gt_right">107.9</td>
-<td headers="n2" class="gt_row gt_right">107.9</td>
-<td headers="n_total" class="gt_row gt_right">215.9</td>
+<td headers="n1" class="gt_row gt_right">108.0</td>
+<td headers="n2" class="gt_row gt_right">108.0</td>
+<td headers="n_total" class="gt_row gt_right">216.0</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_right">3</td>
-<td headers="n1" class="gt_row gt_right">143.9</td>
-<td headers="n2" class="gt_row gt_right">143.9</td>
-<td headers="n_total" class="gt_row gt_right">287.8</td>
+<td headers="n1" class="gt_row gt_right">144.0</td>
+<td headers="n2" class="gt_row gt_right">144.0</td>
+<td headers="n_total" class="gt_row gt_right">288.0</td>
 </tr>
 </tbody>
 </table>
