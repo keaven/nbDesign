@@ -499,12 +499,12 @@ benefit:
 
 ``` r
 gsDesign::gsBoundSummary(gs_nb, 
-               deltaname = "RR", 
-               logdelta = TRUE,
-               Nname = "Information",
-               timename = "Month",
-               digits = 4,
-               ddigits = 2) |>
+                         deltaname = "RR", 
+                         logdelta = TRUE,
+                         Nname = "Information",
+                         timename = "Month",
+                         digits = 4,
+                         ddigits = 2) |>
   gt() |>
   tab_header(title = "Group Sequential Design Bounds")
 ```
