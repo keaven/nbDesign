@@ -50,6 +50,11 @@ increasing sample sizes across analyses. Only the final analysis sample
 size is rounded to an integer; interim sample sizes remain as expected
 (non-integer) values based on the information fraction.
 
+When `analysis_times` were provided to
+[`gsNBCalendar`](https://keaven.github.io/gsDesignNB/reference/gsNBCalendar.md),
+the statistical information (`n.I`) is recomputed at each analysis time
+based on the new sample size and expected exposures.
+
 ## Methods (by class)
 
 - `toInteger(gsDesign)`: Method for gsDesign objects (calls

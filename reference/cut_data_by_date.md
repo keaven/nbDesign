@@ -48,24 +48,24 @@ dropout_rate <- data.frame(
 sim <- nb_sim(enroll_rate, fail_rate, dropout_rate, max_followup = 2, n = 20)
 cut_data_by_date(sim, cut_date = 1)
 #>    id    treatment enroll_time       tte events
-#> 1   1      Control  0.00419837 0.9958016      0
-#> 2   2 Experimental  0.03844758 0.9615524      0
-#> 3   3      Control  0.14626653 0.8400442      1
-#> 4   4 Experimental  0.16402103 0.8359790      0
-#> 5   5      Control  0.17372445 0.8262756      0
-#> 6   6      Control  0.18507951 0.8149205      0
-#> 7   7 Experimental  0.18557397 0.8144260      0
-#> 8   8 Experimental  0.20588002 0.7941200      0
-#> 9   9 Experimental  0.23301460 0.7532961      1
-#> 10 10      Control  0.27367404 0.7263260      0
-#> 11 11 Experimental  0.30090945 0.6854013      1
-#> 12 12      Control  0.34461830 0.6280032      2
-#> 13 13      Control  0.37061731 0.6293827      0
-#> 14 14      Control  0.37480352 0.6251965      0
-#> 15 15 Experimental  0.41551077 0.5191834      0
-#> 16 16 Experimental  0.41625369 0.5837463      0
-#> 17 17      Control  0.42441302 0.5755870      0
-#> 18 18 Experimental  0.43226952 0.5677305      0
-#> 19 19      Control  0.50772960 0.4922704      0
-#> 20 20 Experimental  0.51633101 0.4836690      0
+#> 1   1      Control   0.1078190 0.8784918      1
+#> 2   2      Control   0.1255735 0.8744265      0
+#> 3   3 Experimental   0.1352769 0.8647231      0
+#> 4   4 Experimental   0.1466319 0.8533681      0
+#> 5   5 Experimental   0.1471264 0.8391843      1
+#> 6   6      Control   0.1674324 0.8325676      0
+#> 7   7 Experimental   0.1945670 0.8054330      0
+#> 8   8      Control   0.2352265 0.7647735      0
+#> 9   9      Control   0.2624619 0.6964704      3
+#> 10 10      Control   0.3061707 0.6664508      2
+#> 11 11 Experimental   0.3321697 0.6678303      0
+#> 12 12 Experimental   0.3363559 0.6636441      0
+#> 13 13      Control   0.3770632 0.5955583      2
+#> 14 14 Experimental   0.3778061 0.6221939      0
+#> 15 15      Control   0.3859654 0.6140346      0
+#> 16 16 Experimental   0.3938219 0.6061781      0
+#> 17 17      Control   0.4692820 0.5307180      0
+#> 18 18 Experimental   0.4778834 0.5221166      0
+#> 19 19 Experimental   0.4804876 0.5058231      1
+#> 20 20      Control   0.4879944 0.5120056      0
 ```

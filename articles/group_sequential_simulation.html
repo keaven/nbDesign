@@ -184,8 +184,8 @@ which provides more conservative early spending.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"   %d        %.3f      %.3f      %.3f\n"</span>,</span>
 <span>              <span class="va">i</span>, <span class="va">gs_nb</span><span class="op">$</span><span class="va">timing</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="va">gs_nb</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="va">gs_nb</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="co">#&gt;    1        0.417      3.504      0.114</span></span>
-<span><span class="co">#&gt;    2        0.750      3.360      1.208</span></span>
+<span><span class="co">#&gt;    1        0.911      3.504      0.114</span></span>
+<span><span class="co">#&gt;    2        0.978      3.360      1.208</span></span>
 <span><span class="co">#&gt;    3        1.000      1.961      1.961</span></span>
 <span></span>
 <span><span class="co"># Print the gsDesign object for full details</span></span>
@@ -195,12 +195,12 @@ which provides more conservative early spending.</p>
 <span><span class="co">#&gt; Upper bound spending computations assume</span></span>
 <span><span class="co">#&gt; trial continues if lower bound is crossed.</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;                ----Lower bounds----  ----Upper bounds-----</span></span>
-<span><span class="co">#&gt;   Analysis N   Z   Nominal p Spend+  Z   Nominal p Spend++</span></span>
-<span><span class="co">#&gt;          1  1 0.11    0.5454 0.0204 3.50    0.0002  0.0002</span></span>
-<span><span class="co">#&gt;          2  1 1.21    0.8865 0.0341 3.36    0.0004  0.0003</span></span>
-<span><span class="co">#&gt;          3  2 1.96    0.9751 0.0455 1.96    0.0249  0.0244</span></span>
-<span><span class="co">#&gt;      Total                   0.1000                 0.0250 </span></span>
+<span><span class="co">#&gt;                 ----Lower bounds----  ----Upper bounds-----</span></span>
+<span><span class="co">#&gt;   Analysis  N   Z   Nominal p Spend+  Z   Nominal p Spend++</span></span>
+<span><span class="co">#&gt;          1 123 0.11    0.5454 0.0204 3.50    0.0002  0.0002</span></span>
+<span><span class="co">#&gt;          2 132 1.21    0.8865 0.0341 3.36    0.0004  0.0003</span></span>
+<span><span class="co">#&gt;          3 135 1.96    0.9751 0.0455 1.96    0.0249  0.0244</span></span>
+<span><span class="co">#&gt;      Total                    0.1000                 0.0250 </span></span>
 <span><span class="co">#&gt; + lower bound beta spending (under H1):</span></span>
 <span><span class="co">#&gt;  Hwang-Shih-DeCani spending function with gamma = -2.</span></span>
 <span><span class="co">#&gt; ++ alpha spending:</span></span>
@@ -359,7 +359,7 @@ of the group sequential design.</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="results-summary">Results Summary<a class="anchor" aria-label="anchor" href="#results-summary"></a>
+<h2 id="simulation-results-summary">Simulation Results Summary<a class="anchor" aria-label="anchor" href="#simulation-results-summary"></a>
 </h2>
 <div class="section level3">
 <h3 id="events-and-exposure-by-analysis">Events and Exposure by Analysis<a class="anchor" aria-label="anchor" href="#events-and-exposure-by-analysis"></a>
@@ -1401,13 +1401,13 @@ outcomes, this relates to the total exposure and event counts.</p>
 <tr>
 <td headers="analysis" class="gt_row gt_right">1.000</td>
 <td headers="mean_info" class="gt_row gt_right">27.736</td>
-<td headers="planned_info_frac" class="gt_row gt_right">0.417</td>
+<td headers="planned_info_frac" class="gt_row gt_right">0.911</td>
 <td headers="observed_info_frac" class="gt_row gt_right">0.233</td>
 </tr>
 <tr>
 <td headers="analysis" class="gt_row gt_right">2.000</td>
 <td headers="mean_info" class="gt_row gt_right">79.522</td>
-<td headers="planned_info_frac" class="gt_row gt_right">0.750</td>
+<td headers="planned_info_frac" class="gt_row gt_right">0.978</td>
 <td headers="observed_info_frac" class="gt_row gt_right">0.668</td>
 </tr>
 <tr>
@@ -2507,13 +2507,13 @@ where values &lt; 1 indicate treatment benefit:</p>
 </thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="Analysis" class="gt_row gt_left">IA 1: 42%</td>
+<td headers="Analysis" class="gt_row gt_left">IA 1: 91%</td>
 <td headers="Value" class="gt_row gt_left">Z</td>
 <td headers="Efficacy" class="gt_row gt_right">3.5037</td>
 <td headers="Futility" class="gt_row gt_right">0.1140</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Information: 0.44</td>
+<td headers="Analysis" class="gt_row gt_left">Information: 122.51</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
 <td headers="Efficacy" class="gt_row gt_right">0.0002</td>
 <td headers="Futility" class="gt_row gt_right">0.4546</td>
@@ -2521,8 +2521,8 @@ where values &lt; 1 indicate treatment benefit:</p>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0052</td>
-<td headers="Futility" class="gt_row gt_right">0.8428</td>
+<td headers="Efficacy" class="gt_row gt_right">0.7286</td>
+<td headers="Futility" class="gt_row gt_right">0.9897</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
@@ -2537,13 +2537,13 @@ where values &lt; 1 indicate treatment benefit:</p>
 <td headers="Futility" class="gt_row gt_right">0.0204</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">IA 2: 75%</td>
+<td headers="Analysis" class="gt_row gt_left">IA 2: 98%</td>
 <td headers="Value" class="gt_row gt_left">Z</td>
 <td headers="Efficacy" class="gt_row gt_right">3.3600</td>
 <td headers="Futility" class="gt_row gt_right">1.2080</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Information: 0.8</td>
+<td headers="Analysis" class="gt_row gt_left">Information: 131.48</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
 <td headers="Efficacy" class="gt_row gt_right">0.0004</td>
 <td headers="Futility" class="gt_row gt_right">0.1135</td>
@@ -2551,8 +2551,8 @@ where values &lt; 1 indicate treatment benefit:</p>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0233</td>
-<td headers="Futility" class="gt_row gt_right">0.2590</td>
+<td headers="Efficacy" class="gt_row gt_right">0.7459</td>
+<td headers="Futility" class="gt_row gt_right">0.9000</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
@@ -2573,7 +2573,7 @@ where values &lt; 1 indicate treatment benefit:</p>
 <td headers="Futility" class="gt_row gt_right">1.9611</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Information: 1.07</td>
+<td headers="Analysis" class="gt_row gt_left">Information: 134.46</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
 <td headers="Efficacy" class="gt_row gt_right">0.0249</td>
 <td headers="Futility" class="gt_row gt_right">0.0249</td>
@@ -2581,8 +2581,8 @@ where values &lt; 1 indicate treatment benefit:</p>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.1497</td>
-<td headers="Futility" class="gt_row gt_right">0.1497</td>
+<td headers="Efficacy" class="gt_row gt_right">0.8444</td>
+<td headers="Futility" class="gt_row gt_right">0.8444</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>

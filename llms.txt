@@ -22,6 +22,8 @@ guide](https://style.tidyverse.org/).
   : Blinded Sample Size Re-estimation for Recurrent Events
 - [`calculate_blinded_info()`](https://keaven.github.io/gsDesignNB/reference/calculate_blinded_info.md)
   : Calculate Blinded Statistical Information
+- [`compute_info_at_time()`](https://keaven.github.io/gsDesignNB/reference/compute_info_at_time.md)
+  : Compute Statistical Information at Analysis Time
 - [`cut_data_by_date()`](https://keaven.github.io/gsDesignNB/reference/cut_data_by_date.md)
   : Cut nb_sim data by calendar date
 - [`get_analysis_date()`](https://keaven.github.io/gsDesignNB/reference/get_analysis_date.md)

@@ -108,8 +108,8 @@ for (i in 1:3) {
   cat(sprintf("   %d        %.3f      %.3f      %.3f\n",
               i, gs_nb$timing[i], gs_nb$upper$bound[i], gs_nb$lower$bound[i]))
 }
-#>    1        0.417      3.504      0.114
-#>    2        0.750      3.360      1.208
+#>    1        0.911      3.504      0.114
+#>    2        0.978      3.360      1.208
 #>    3        1.000      1.961      1.961
 
 # Print the gsDesign object for full details
@@ -119,12 +119,12 @@ print(gs_nb)
 #> Upper bound spending computations assume
 #> trial continues if lower bound is crossed.
 #> 
-#>                ----Lower bounds----  ----Upper bounds-----
-#>   Analysis N   Z   Nominal p Spend+  Z   Nominal p Spend++
-#>          1  1 0.11    0.5454 0.0204 3.50    0.0002  0.0002
-#>          2  1 1.21    0.8865 0.0341 3.36    0.0004  0.0003
-#>          3  2 1.96    0.9751 0.0455 1.96    0.0249  0.0244
-#>      Total                   0.1000                 0.0250 
+#>                 ----Lower bounds----  ----Upper bounds-----
+#>   Analysis  N   Z   Nominal p Spend+  Z   Nominal p Spend++
+#>          1 123 0.11    0.5454 0.0204 3.50    0.0002  0.0002
+#>          2 132 1.21    0.8865 0.0341 3.36    0.0004  0.0003
+#>          3 135 1.96    0.9751 0.0455 1.96    0.0249  0.0244
+#>      Total                    0.1000                 0.0250 
 #> + lower bound beta spending (under H1):
 #>  Hwang-Shih-DeCani spending function with gamma = -2.
 #> ++ alpha spending:
@@ -281,7 +281,7 @@ for (sim in 1:n_sims) {
 all_results <- do.call(rbind, results)
 ```
 
-## Results Summary
+## Simulation Results Summary
 
 ### Events and Exposure by Analysis
 
@@ -363,8 +363,8 @@ info_by_analysis |>
 | Information by Analysis |                  |                   |                    |
 |-------------------------|------------------|-------------------|--------------------|
 | Analysis                | Mean Information | Planned Info Frac | Observed Info Frac |
-| 1.000                   | 27.736           | 0.417             | 0.233              |
-| 2.000                   | 79.522           | 0.750             | 0.668              |
+| 1.000                   | 27.736           | 0.911             | 0.233              |
+| 2.000                   | 79.522           | 0.978             | 0.668              |
 | 3.000                   | 119.059          | 1.000             | 1.000              |
 
 ### Boundary Crossings and Power
@@ -517,19 +517,19 @@ gsDesign::gsBoundSummary(gs_nb,
 |--------------------------------------------------------------|---------------------|----------|----------|
 | N = 288, Expected events = 506.2                             |                     |          |          |
 | Analysis                                                     | Value               | Efficacy | Futility |
-| IA 1: 42%                                                    | Z                   | 3.5037   | 0.1140   |
-| Information: 0.44                                            | p (1-sided)         | 0.0002   | 0.4546   |
-|                                                              | ~RR at bound        | 0.0052   | 0.8428   |
+| IA 1: 91%                                                    | Z                   | 3.5037   | 0.1140   |
+| Information: 122.51                                          | p (1-sided)         | 0.0002   | 0.4546   |
+|                                                              | ~RR at bound        | 0.7286   | 0.9897   |
 |                                                              | P(Cross) if RR=1    | 0.0002   | 0.5454   |
 |                                                              | P(Cross) if RR=0.67 | 0.0896   | 0.0204   |
-| IA 2: 75%                                                    | Z                   | 3.3600   | 1.2080   |
-| Information: 0.8                                             | p (1-sided)         | 0.0004   | 0.1135   |
-|                                                              | ~RR at bound        | 0.0233   | 0.2590   |
+| IA 2: 98%                                                    | Z                   | 3.3600   | 1.2080   |
+| Information: 131.48                                          | p (1-sided)         | 0.0004   | 0.1135   |
+|                                                              | ~RR at bound        | 0.7459   | 0.9000   |
 |                                                              | P(Cross) if RR=1    | 0.0006   | 0.8929   |
 |                                                              | P(Cross) if RR=0.67 | 0.3321   | 0.0545   |
 | Final                                                        | Z                   | 1.9611   | 1.9611   |
-| Information: 1.07                                            | p (1-sided)         | 0.0249   | 0.0249   |
-|                                                              | ~RR at bound        | 0.1497   | 0.1497   |
+| Information: 134.46                                          | p (1-sided)         | 0.0249   | 0.0249   |
+|                                                              | ~RR at bound        | 0.8444   | 0.8444   |
 |                                                              | P(Cross) if RR=1    | 0.0225   | 0.9775   |
 |                                                              | P(Cross) if RR=0.67 | 0.9000   | 0.1000   |
 
