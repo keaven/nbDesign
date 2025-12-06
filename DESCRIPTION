@@ -1,6 +1,6 @@
 Package: gsDesignNB
 Title: Sample Size Calculation and Simulation for Negative Binomial Outcomes
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: 
     person("Keaven", "Anderson", email = "keaven_anderson@merck.com", role = c("aut", "cre"))
 Author: Keaven Anderson [aut, cre]
