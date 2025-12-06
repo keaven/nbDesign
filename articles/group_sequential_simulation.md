@@ -218,6 +218,8 @@ for (sim in 1:n_sims) {
     events_total = NA_integer_,
     exposure_ctrl = NA_real_,
     exposure_exp = NA_real_,
+    blinded_info = NA_real_,
+    unblinded_info = NA_real_,
     z_stat = NA_real_,
     p_value = NA_real_,
     cross_upper = NA,
@@ -270,12 +272,59 @@ for (sim in 1:n_sims) {
         sim_results$z_stat[k] <- test_result$z
         sim_results$p_value[k] <- test_result$p_value
         
+        # Calculate unblinded information (approx)
+        evt_ctrl <- sim_results$events_ctrl[k]
+        evt_exp <- sim_results$events_exp[k]
+        if (evt_ctrl > 0 && evt_exp > 0) {
+           sim_results$unblinded_info[k] <- 1 / (1/evt_ctrl + 1/evt_exp)
+        }
+        
+        # Calculate blinded information and update bounds
+        blinded_est <- calculate_blinded_info(
+          cut_data,
+          ratio = nb_ss$inputs$ratio,
+          lambda1_planning = nb_ss$inputs$lambda1,
+          lambda2_planning = nb_ss$inputs$lambda2
+        )
+        sim_results$blinded_info[k] <- blinded_est$blinded_info
+        
+        # Update design with observed information fraction
+        max_info <- gs_nb$n.fix
+        if (k == 3) {
+          frac <- 1
+        } else {
+          frac <- min(blinded_est$blinded_info / max_info, 0.999)
+        }
+        
+        # Current timing
+        current_timing <- gs_nb$timing
+        current_timing[k] <- frac
+        
+        # Safety check for timing order
+        if (k > 1 && current_timing[k] <= current_timing[k-1]) current_timing[k] <- current_timing[k-1] + 0.001
+        if (k < 3 && current_timing[k+1] <= current_timing[k]) current_timing[k+1] <- current_timing[k] + 0.001
+        
+        # Recompute bounds
+        temp_gs <- gsDesign::gsDesign(
+          k = 3,
+          test.type = 4,
+          alpha = 0.025,
+          beta = 0.1,
+          sfu = gsDesign::sfLinear, sfupar = c(.5, .5),
+          sfl = gsDesign::sfHSD, sflpar = -8,
+          timing = current_timing,
+          n.fix = max_info
+        )
+        
+        upper_bound <- temp_gs$upper$bound[k]
+        lower_bound <- temp_gs$lower$bound[k]
+        
         # Check boundaries (one-sided: reject if z < -upper bound for benefit)
         # For rate ratio < 1 (experimental better), log(RR) < 0, so z < 0
         z_eff <- -test_result$z  # Flip sign for efficacy direction
         
-        sim_results$cross_upper[k] <- z_eff > gs_nb$upper$bound[k]
-        sim_results$cross_lower[k] <- z_eff < gs_nb$lower$bound[k]
+        sim_results$cross_upper[k] <- z_eff > upper_bound
+        sim_results$cross_lower[k] <- z_eff < lower_bound
         
         if (sim_results$cross_upper[k] || sim_results$cross_lower[k]) {
           stopped <- TRUE
@@ -334,7 +383,7 @@ summary_by_analysis |>
 |--------------------------------|---------------|------------|--------------|-------------|------------|---------------|--------------|--------|------|
 | Analysis                       | Time (months) | N Enrolled | Total Events | Ctrl Events | Exp Events | Ctrl Exposure | Exp Exposure | Mean Z | SD Z |
 | 1.00                           | 10.00         | 297.20     | 142.52       | 83.90       | 58.62      | 685.75        | 701.06       | −1.94  | 0.90 |
-| 2.00                           | 18.00         | 356.00     | 405.71       | 238.09      | 167.62     | 1,972.81      | 2,017.60     | −3.06  | 0.94 |
+| 2.00                           | 18.00         | 356.00     | 406.06       | 238.23      | 167.83     | 1,975.69      | 2,020.50     | −3.05  | 0.93 |
 | 3.00                           | 24.00         | 356.00     | 606.86       | 343.57      | 263.29     | 2,966.91      | 3,018.13     | −2.53  | 0.43 |
 
 ### Statistical Information
@@ -344,12 +393,12 @@ precision of the treatment effect estimate. For negative binomial
 outcomes, this relates to the total exposure and event counts.
 
 ``` r
-# Information proxy: inverse variance of log rate ratio
-# For large samples: Var(log RR) ≈ 1/events_ctrl + 1/events_exp
+# Summarize information (using blinded estimate from simulation)
 info_by_analysis <- as.data.table(all_results)[
   ,
   .(
-    mean_info = mean(1 / (1/events_ctrl + 1/events_exp), na.rm = TRUE)
+    mean_blinded = mean(blinded_info, na.rm = TRUE),
+    mean_unblinded = mean(unblinded_info, na.rm = TRUE)
   ),
   by = analysis
 ]
@@ -359,7 +408,8 @@ info_by_analysis[, planned_info := gs_nb$n.I[analysis]]
 
 # Normalize to get observed information fractions (relative to planned max)
 max_planned_info <- tail(gs_nb$n.I, 1)
-info_by_analysis[, observed_info_frac := mean_info / max_planned_info]
+info_by_analysis[, observed_frac_blinded := mean_blinded / max_planned_info]
+info_by_analysis[, observed_frac_unblinded := mean_unblinded / max_planned_info]
 info_by_analysis[, planned_info_frac := planned_info / max_planned_info]
 
 info_by_analysis |>
@@ -367,20 +417,22 @@ info_by_analysis |>
   tab_header(title = "Information by Analysis") |>
   cols_label(
     analysis = "Analysis",
-    mean_info = "Mean Info (Obs)",
+    mean_blinded = "Mean Info (Blinded)",
+    mean_unblinded = "Mean Info (Unblinded)",
     planned_info = "Planned Info",
     planned_info_frac = "Planned Frac",
-    observed_info_frac = "Observed Frac"
+    observed_frac_blinded = "Obs Frac (Blind)",
+    observed_frac_unblinded = "Obs Frac (Unblind)"
   ) |>
   fmt_number(decimals = 3)
 ```
 
-| Information by Analysis |                 |              |               |              |
-|-------------------------|-----------------|--------------|---------------|--------------|
-| Analysis                | Mean Info (Obs) | Planned Info | Observed Frac | Planned Frac |
-| 1.000                   | 34.267          | 33.000       | 0.365         | 0.352        |
-| 2.000                   | 98.111          | 74.250       | 1.046         | 0.792        |
-| 3.000                   | 148.991         | 93.789       | 1.589         | 1.000        |
+| Information by Analysis |                     |                       |              |                  |                    |              |
+|-------------------------|---------------------|-----------------------|--------------|------------------|--------------------|--------------|
+| Analysis                | Mean Info (Blinded) | Mean Info (Unblinded) | Planned Info | Obs Frac (Blind) | Obs Frac (Unblind) | Planned Frac |
+| 1.000                   | 27.101              | 34.267                | 33.000       | 0.289            | 0.365              | 0.352        |
+| 2.000                   | 61.502              | 98.215                | 74.250       | 0.656            | 1.047              | 0.792        |
+| 3.000                   | 74.991              | 148.991               | 93.789       | 0.800            | 1.589              | 1.000        |
 
 ### Boundary Crossings and Power
 
@@ -425,9 +477,9 @@ crossing_summary[, .(analysis, n_cross_upper, cum_prob_cross_upper, design_cum_p
 | Boundary Crossing and Power |               |                 |                    |
 |-----------------------------|---------------|-----------------|--------------------|
 | Analysis                    | N Cross Upper | Cum Power (Sim) | Cum Power (Design) |
-| 1                           | 16            | 0.32            | 1.000              |
-| 2                           | 27            | 0.86            | 1.000              |
-| 3                           | 5             | 0.96            | 1.000              |
+| 1                           | 15            | 0.30            | 1.000              |
+| 2                           | 28            | 0.86            | 1.000              |
+| 3                           | 4             | 0.94            | 1.000              |
 
 ### Overall Power
 
@@ -456,9 +508,9 @@ cat("\n=== Overall Operating Characteristics ===\n")
 cat(sprintf("Number of simulations: %d\n", n_sims))
 #> Number of simulations: 50
 cat(sprintf("Overall Power (P[reject H0]): %.1f%%\n", overall_power * 100))
-#> Overall Power (P[reject H0]): 96.0%
+#> Overall Power (P[reject H0]): 94.0%
 cat(sprintf("Futility Stopping Rate: %.1f%%\n", overall_futility * 100))
-#> Futility Stopping Rate: 4.0%
+#> Futility Stopping Rate: 6.0%
 cat(sprintf("Design Power (target): %.1f%%\n", (1 - gs_nb$beta) * 100))
 #> Design Power (target): 90.0%
 ```
@@ -497,9 +549,9 @@ ggplot(plot_data, aes(x = factor(analysis), y = z_flipped)) +
   ) +
   theme_minimal() +
   ylim(c(-4, 6))
-#> Warning: Removed 59 rows containing non-finite outside the scale range
+#> Warning: Removed 58 rows containing non-finite outside the scale range
 #> (`stat_ydensity()`).
-#> Warning: Removed 59 rows containing non-finite outside the scale range
+#> Warning: Removed 58 rows containing non-finite outside the scale range
 #> (`stat_boxplot()`).
 ```
 

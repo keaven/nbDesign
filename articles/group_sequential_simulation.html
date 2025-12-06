@@ -825,6 +825,8 @@ of the group sequential design.</p>
 <span>    events_total <span class="op">=</span> <span class="cn">NA_integer_</span>,</span>
 <span>    exposure_ctrl <span class="op">=</span> <span class="cn">NA_real_</span>,</span>
 <span>    exposure_exp <span class="op">=</span> <span class="cn">NA_real_</span>,</span>
+<span>    blinded_info <span class="op">=</span> <span class="cn">NA_real_</span>,</span>
+<span>    unblinded_info <span class="op">=</span> <span class="cn">NA_real_</span>,</span>
 <span>    z_stat <span class="op">=</span> <span class="cn">NA_real_</span>,</span>
 <span>    p_value <span class="op">=</span> <span class="cn">NA_real_</span>,</span>
 <span>    cross_upper <span class="op">=</span> <span class="cn">NA</span>,</span>
@@ -877,12 +879,59 @@ of the group sequential design.</p>
 <span>        <span class="va">sim_results</span><span class="op">$</span><span class="va">z_stat</span><span class="op">[</span><span class="va">k</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">test_result</span><span class="op">$</span><span class="va">z</span></span>
 <span>        <span class="va">sim_results</span><span class="op">$</span><span class="va">p_value</span><span class="op">[</span><span class="va">k</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">test_result</span><span class="op">$</span><span class="va">p_value</span></span>
 <span>        </span>
+<span>        <span class="co"># Calculate unblinded information (approx)</span></span>
+<span>        <span class="va">evt_ctrl</span> <span class="op">&lt;-</span> <span class="va">sim_results</span><span class="op">$</span><span class="va">events_ctrl</span><span class="op">[</span><span class="va">k</span><span class="op">]</span></span>
+<span>        <span class="va">evt_exp</span> <span class="op">&lt;-</span> <span class="va">sim_results</span><span class="op">$</span><span class="va">events_exp</span><span class="op">[</span><span class="va">k</span><span class="op">]</span></span>
+<span>        <span class="kw">if</span> <span class="op">(</span><span class="va">evt_ctrl</span> <span class="op">&gt;</span> <span class="fl">0</span> <span class="op">&amp;&amp;</span> <span class="va">evt_exp</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span>           <span class="va">sim_results</span><span class="op">$</span><span class="va">unblinded_info</span><span class="op">[</span><span class="va">k</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="va">evt_ctrl</span> <span class="op">+</span> <span class="fl">1</span><span class="op">/</span><span class="va">evt_exp</span><span class="op">)</span></span>
+<span>        <span class="op">}</span></span>
+<span>        </span>
+<span>        <span class="co"># Calculate blinded information and update bounds</span></span>
+<span>        <span class="va">blinded_est</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calculate_blinded_info.html">calculate_blinded_info</a></span><span class="op">(</span></span>
+<span>          <span class="va">cut_data</span>,</span>
+<span>          ratio <span class="op">=</span> <span class="va">nb_ss</span><span class="op">$</span><span class="va">inputs</span><span class="op">$</span><span class="va">ratio</span>,</span>
+<span>          lambda1_planning <span class="op">=</span> <span class="va">nb_ss</span><span class="op">$</span><span class="va">inputs</span><span class="op">$</span><span class="va">lambda1</span>,</span>
+<span>          lambda2_planning <span class="op">=</span> <span class="va">nb_ss</span><span class="op">$</span><span class="va">inputs</span><span class="op">$</span><span class="va">lambda2</span></span>
+<span>        <span class="op">)</span></span>
+<span>        <span class="va">sim_results</span><span class="op">$</span><span class="va">blinded_info</span><span class="op">[</span><span class="va">k</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">blinded_est</span><span class="op">$</span><span class="va">blinded_info</span></span>
+<span>        </span>
+<span>        <span class="co"># Update design with observed information fraction</span></span>
+<span>        <span class="va">max_info</span> <span class="op">&lt;-</span> <span class="va">gs_nb</span><span class="op">$</span><span class="va">n.fix</span></span>
+<span>        <span class="kw">if</span> <span class="op">(</span><span class="va">k</span> <span class="op">==</span> <span class="fl">3</span><span class="op">)</span> <span class="op">{</span></span>
+<span>          <span class="va">frac</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span>        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>          <span class="va">frac</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">blinded_est</span><span class="op">$</span><span class="va">blinded_info</span> <span class="op">/</span> <span class="va">max_info</span>, <span class="fl">0.999</span><span class="op">)</span></span>
+<span>        <span class="op">}</span></span>
+<span>        </span>
+<span>        <span class="co"># Current timing</span></span>
+<span>        <span class="va">current_timing</span> <span class="op">&lt;-</span> <span class="va">gs_nb</span><span class="op">$</span><span class="va">timing</span></span>
+<span>        <span class="va">current_timing</span><span class="op">[</span><span class="va">k</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">frac</span></span>
+<span>        </span>
+<span>        <span class="co"># Safety check for timing order</span></span>
+<span>        <span class="kw">if</span> <span class="op">(</span><span class="va">k</span> <span class="op">&gt;</span> <span class="fl">1</span> <span class="op">&amp;&amp;</span> <span class="va">current_timing</span><span class="op">[</span><span class="va">k</span><span class="op">]</span> <span class="op">&lt;=</span> <span class="va">current_timing</span><span class="op">[</span><span class="va">k</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="va">current_timing</span><span class="op">[</span><span class="va">k</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">current_timing</span><span class="op">[</span><span class="va">k</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="fl">0.001</span></span>
+<span>        <span class="kw">if</span> <span class="op">(</span><span class="va">k</span> <span class="op">&lt;</span> <span class="fl">3</span> <span class="op">&amp;&amp;</span> <span class="va">current_timing</span><span class="op">[</span><span class="va">k</span><span class="op">+</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;=</span> <span class="va">current_timing</span><span class="op">[</span><span class="va">k</span><span class="op">]</span><span class="op">)</span> <span class="va">current_timing</span><span class="op">[</span><span class="va">k</span><span class="op">+</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">current_timing</span><span class="op">[</span><span class="va">k</span><span class="op">]</span> <span class="op">+</span> <span class="fl">0.001</span></span>
+<span>        </span>
+<span>        <span class="co"># Recompute bounds</span></span>
+<span>        <span class="va">temp_gs</span> <span class="op">&lt;-</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="https://keaven.github.io/gsDesign/reference/gsDesign.html" class="external-link">gsDesign</a></span><span class="op">(</span></span>
+<span>          k <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>          test.type <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>          alpha <span class="op">=</span> <span class="fl">0.025</span>,</span>
+<span>          beta <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>          sfu <span class="op">=</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="va"><a href="https://keaven.github.io/gsDesign/reference/sfLinear.html" class="external-link">sfLinear</a></span>, sfupar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">.5</span><span class="op">)</span>,</span>
+<span>          sfl <span class="op">=</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="va"><a href="https://keaven.github.io/gsDesign/reference/sfHSD.html" class="external-link">sfHSD</a></span>, sflpar <span class="op">=</span> <span class="op">-</span><span class="fl">8</span>,</span>
+<span>          timing <span class="op">=</span> <span class="va">current_timing</span>,</span>
+<span>          n.fix <span class="op">=</span> <span class="va">max_info</span></span>
+<span>        <span class="op">)</span></span>
+<span>        </span>
+<span>        <span class="va">upper_bound</span> <span class="op">&lt;-</span> <span class="va">temp_gs</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span><span class="op">[</span><span class="va">k</span><span class="op">]</span></span>
+<span>        <span class="va">lower_bound</span> <span class="op">&lt;-</span> <span class="va">temp_gs</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span><span class="op">[</span><span class="va">k</span><span class="op">]</span></span>
+<span>        </span>
 <span>        <span class="co"># Check boundaries (one-sided: reject if z &lt; -upper bound for benefit)</span></span>
 <span>        <span class="co"># For rate ratio &lt; 1 (experimental better), log(RR) &lt; 0, so z &lt; 0</span></span>
 <span>        <span class="va">z_eff</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="va">test_result</span><span class="op">$</span><span class="va">z</span>  <span class="co"># Flip sign for efficacy direction</span></span>
 <span>        </span>
-<span>        <span class="va">sim_results</span><span class="op">$</span><span class="va">cross_upper</span><span class="op">[</span><span class="va">k</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">z_eff</span> <span class="op">&gt;</span> <span class="va">gs_nb</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span><span class="op">[</span><span class="va">k</span><span class="op">]</span></span>
-<span>        <span class="va">sim_results</span><span class="op">$</span><span class="va">cross_lower</span><span class="op">[</span><span class="va">k</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">z_eff</span> <span class="op">&lt;</span> <span class="va">gs_nb</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span><span class="op">[</span><span class="va">k</span><span class="op">]</span></span>
+<span>        <span class="va">sim_results</span><span class="op">$</span><span class="va">cross_upper</span><span class="op">[</span><span class="va">k</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">z_eff</span> <span class="op">&gt;</span> <span class="va">upper_bound</span></span>
+<span>        <span class="va">sim_results</span><span class="op">$</span><span class="va">cross_lower</span><span class="op">[</span><span class="va">k</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">z_eff</span> <span class="op">&lt;</span> <span class="va">lower_bound</span></span>
 <span>        </span>
 <span>        <span class="kw">if</span> <span class="op">(</span><span class="va">sim_results</span><span class="op">$</span><span class="va">cross_upper</span><span class="op">[</span><span class="va">k</span><span class="op">]</span> <span class="op">||</span> <span class="va">sim_results</span><span class="op">$</span><span class="va">cross_lower</span><span class="op">[</span><span class="va">k</span><span class="op">]</span><span class="op">)</span> <span class="op">{</span></span>
 <span>          <span class="va">stopped</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span></span>
@@ -1421,13 +1470,13 @@ of the group sequential design.</p>
 <td headers="analysis" class="gt_row gt_right">2.00</td>
 <td headers="analysis_time" class="gt_row gt_right">18.00</td>
 <td headers="mean_enrolled" class="gt_row gt_right">356.00</td>
-<td headers="mean_events_total" class="gt_row gt_right">405.71</td>
-<td headers="mean_events_ctrl" class="gt_row gt_right">238.09</td>
-<td headers="mean_events_exp" class="gt_row gt_right">167.62</td>
-<td headers="mean_exposure_ctrl" class="gt_row gt_right">1,972.81</td>
-<td headers="mean_exposure_exp" class="gt_row gt_right">2,017.60</td>
-<td headers="mean_z" class="gt_row gt_right">−3.06</td>
-<td headers="sd_z" class="gt_row gt_right">0.94</td>
+<td headers="mean_events_total" class="gt_row gt_right">406.06</td>
+<td headers="mean_events_ctrl" class="gt_row gt_right">238.23</td>
+<td headers="mean_events_exp" class="gt_row gt_right">167.83</td>
+<td headers="mean_exposure_ctrl" class="gt_row gt_right">1,975.69</td>
+<td headers="mean_exposure_exp" class="gt_row gt_right">2,020.50</td>
+<td headers="mean_z" class="gt_row gt_right">−3.05</td>
+<td headers="sd_z" class="gt_row gt_right">0.93</td>
 </tr>
 <tr>
 <td headers="analysis" class="gt_row gt_right">3.00</td>
@@ -1452,12 +1501,12 @@ of the group sequential design.</p>
 precision of the treatment effect estimate. For negative binomial
 outcomes, this relates to the total exposure and event counts.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Information proxy: inverse variance of log rate ratio</span></span>
-<span><span class="co"># For large samples: Var(log RR) ≈ 1/events_ctrl + 1/events_exp</span></span>
+<code class="sourceCode R"><span><span class="co"># Summarize information (using blinded estimate from simulation)</span></span>
 <span><span class="va">info_by_analysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">all_results</span><span class="op">)</span><span class="op">[</span></span>
 <span>  ,</span>
 <span>  <span class="fu">.</span><span class="op">(</span></span>
-<span>    mean_info <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="va">events_ctrl</span> <span class="op">+</span> <span class="fl">1</span><span class="op">/</span><span class="va">events_exp</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>    mean_blinded <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">blinded_info</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    mean_unblinded <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">unblinded_info</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  by <span class="op">=</span> <span class="va">analysis</span></span>
 <span><span class="op">]</span></span>
@@ -1467,7 +1516,8 @@ outcomes, this relates to the total exposure and event counts.</p>
 <span></span>
 <span><span class="co"># Normalize to get observed information fractions (relative to planned max)</span></span>
 <span><span class="va">max_planned_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">gs_nb</span><span class="op">$</span><span class="va">n.I</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">info_by_analysis</span><span class="op">[</span>, <span class="va">observed_info_frac</span> <span class="op">:=</span> <span class="va">mean_info</span> <span class="op">/</span> <span class="va">max_planned_info</span><span class="op">]</span></span>
+<span><span class="va">info_by_analysis</span><span class="op">[</span>, <span class="va">observed_frac_blinded</span> <span class="op">:=</span> <span class="va">mean_blinded</span> <span class="op">/</span> <span class="va">max_planned_info</span><span class="op">]</span></span>
+<span><span class="va">info_by_analysis</span><span class="op">[</span>, <span class="va">observed_frac_unblinded</span> <span class="op">:=</span> <span class="va">mean_unblinded</span> <span class="op">/</span> <span class="va">max_planned_info</span><span class="op">]</span></span>
 <span><span class="va">info_by_analysis</span><span class="op">[</span>, <span class="va">planned_info_frac</span> <span class="op">:=</span> <span class="va">planned_info</span> <span class="op">/</span> <span class="va">max_planned_info</span><span class="op">]</span></span>
 <span></span>
 <span><span class="va">info_by_analysis</span> <span class="op">|&gt;</span></span>
@@ -1475,10 +1525,12 @@ outcomes, this relates to the total exposure and event counts.</p>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Information by Analysis"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/cols_label.html" class="external-link">cols_label</a></span><span class="op">(</span></span>
 <span>    analysis <span class="op">=</span> <span class="st">"Analysis"</span>,</span>
-<span>    mean_info <span class="op">=</span> <span class="st">"Mean Info (Obs)"</span>,</span>
+<span>    mean_blinded <span class="op">=</span> <span class="st">"Mean Info (Blinded)"</span>,</span>
+<span>    mean_unblinded <span class="op">=</span> <span class="st">"Mean Info (Unblinded)"</span>,</span>
 <span>    planned_info <span class="op">=</span> <span class="st">"Planned Info"</span>,</span>
 <span>    planned_info_frac <span class="op">=</span> <span class="st">"Planned Frac"</span>,</span>
-<span>    observed_info_frac <span class="op">=</span> <span class="st">"Observed Frac"</span></span>
+<span>    observed_frac_blinded <span class="op">=</span> <span class="st">"Obs Frac (Blind)"</span>,</span>
+<span>    observed_frac_unblinded <span class="op">=</span> <span class="st">"Obs Frac (Unblind)"</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span>decimals <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <div id="rxqaqfdpnt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -1933,36 +1985,44 @@ outcomes, this relates to the total exposure and event counts.</p>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead>
 <tr class="gt_heading">
-<td colspan="5" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>Information by Analysis</td>
+<td colspan="7" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>Information by Analysis</td>
     </tr>
 <tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="analysis">Analysis</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="mean_info">Mean Info (Obs)</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="mean_blinded">Mean Info (Blinded)</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="mean_unblinded">Mean Info (Unblinded)</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="planned_info">Planned Info</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="observed_info_frac">Observed Frac</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="observed_frac_blinded">Obs Frac (Blind)</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="observed_frac_unblinded">Obs Frac (Unblind)</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="planned_info_frac">Planned Frac</th>
     </tr>
 </thead>
 <tbody class="gt_table_body">
 <tr>
 <td headers="analysis" class="gt_row gt_right">1.000</td>
-<td headers="mean_info" class="gt_row gt_right">34.267</td>
+<td headers="mean_blinded" class="gt_row gt_right">27.101</td>
+<td headers="mean_unblinded" class="gt_row gt_right">34.267</td>
 <td headers="planned_info" class="gt_row gt_right">33.000</td>
-<td headers="observed_info_frac" class="gt_row gt_right">0.365</td>
+<td headers="observed_frac_blinded" class="gt_row gt_right">0.289</td>
+<td headers="observed_frac_unblinded" class="gt_row gt_right">0.365</td>
 <td headers="planned_info_frac" class="gt_row gt_right">0.352</td>
 </tr>
 <tr>
 <td headers="analysis" class="gt_row gt_right">2.000</td>
-<td headers="mean_info" class="gt_row gt_right">98.111</td>
+<td headers="mean_blinded" class="gt_row gt_right">61.502</td>
+<td headers="mean_unblinded" class="gt_row gt_right">98.215</td>
 <td headers="planned_info" class="gt_row gt_right">74.250</td>
-<td headers="observed_info_frac" class="gt_row gt_right">1.046</td>
+<td headers="observed_frac_blinded" class="gt_row gt_right">0.656</td>
+<td headers="observed_frac_unblinded" class="gt_row gt_right">1.047</td>
 <td headers="planned_info_frac" class="gt_row gt_right">0.792</td>
 </tr>
 <tr>
 <td headers="analysis" class="gt_row gt_right">3.000</td>
-<td headers="mean_info" class="gt_row gt_right">148.991</td>
+<td headers="mean_blinded" class="gt_row gt_right">74.991</td>
+<td headers="mean_unblinded" class="gt_row gt_right">148.991</td>
 <td headers="planned_info" class="gt_row gt_right">93.789</td>
-<td headers="observed_info_frac" class="gt_row gt_right">1.589</td>
+<td headers="observed_frac_blinded" class="gt_row gt_right">0.800</td>
+<td headers="observed_frac_unblinded" class="gt_row gt_right">1.589</td>
 <td headers="planned_info_frac" class="gt_row gt_right">1.000</td>
 </tr>
 </tbody>
@@ -2472,20 +2532,20 @@ outcomes, this relates to the total exposure and event counts.</p>
 <tbody class="gt_table_body">
 <tr>
 <td headers="analysis" class="gt_row gt_right">1</td>
-<td headers="n_cross_upper" class="gt_row gt_right">16</td>
-<td headers="cum_prob_cross_upper" class="gt_row gt_right">0.32</td>
+<td headers="n_cross_upper" class="gt_row gt_right">15</td>
+<td headers="cum_prob_cross_upper" class="gt_row gt_right">0.30</td>
 <td headers="design_cum_power" class="gt_row gt_right">1.000</td>
 </tr>
 <tr>
 <td headers="analysis" class="gt_row gt_right">2</td>
-<td headers="n_cross_upper" class="gt_row gt_right">27</td>
+<td headers="n_cross_upper" class="gt_row gt_right">28</td>
 <td headers="cum_prob_cross_upper" class="gt_row gt_right">0.86</td>
 <td headers="design_cum_power" class="gt_row gt_right">1.000</td>
 </tr>
 <tr>
 <td headers="analysis" class="gt_row gt_right">3</td>
-<td headers="n_cross_upper" class="gt_row gt_right">5</td>
-<td headers="cum_prob_cross_upper" class="gt_row gt_right">0.96</td>
+<td headers="n_cross_upper" class="gt_row gt_right">4</td>
+<td headers="cum_prob_cross_upper" class="gt_row gt_right">0.94</td>
 <td headers="design_cum_power" class="gt_row gt_right">1.000</td>
 </tr>
 </tbody>
@@ -2520,9 +2580,9 @@ outcomes, this relates to the total exposure and event counts.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Number of simulations: %d\n"</span>, <span class="va">n_sims</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Number of simulations: 50</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Overall Power (P[reject H0]): %.1f%%\n"</span>, <span class="va">overall_power</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Overall Power (P[reject H0]): 96.0%</span></span>
+<span><span class="co">#&gt; Overall Power (P[reject H0]): 94.0%</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Futility Stopping Rate: %.1f%%\n"</span>, <span class="va">overall_futility</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Futility Stopping Rate: 4.0%</span></span>
+<span><span class="co">#&gt; Futility Stopping Rate: 6.0%</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Design Power (target): %.1f%%\n"</span>, <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">gs_nb</span><span class="op">$</span><span class="va">beta</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Design Power (target): 90.0%</span></span></code></pre></div>
 </div>
@@ -2561,9 +2621,9 @@ outcomes, this relates to the total exposure and event counts.</p>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Removed 59 rows containing non-finite outside the scale range</span></span>
+<span><span class="co">#&gt; Warning: Removed 58 rows containing non-finite outside the scale range</span></span>
 <span><span class="co">#&gt; (`stat_ydensity()`).</span></span>
-<span><span class="co">#&gt; Warning: Removed 59 rows containing non-finite outside the scale range</span></span>
+<span><span class="co">#&gt; Warning: Removed 58 rows containing non-finite outside the scale range</span></span>
 <span><span class="co">#&gt; (`stat_boxplot()`).</span></span></code></pre></div>
 <p><img src="group_sequential_simulation_files/figure-html/plot-z-stats-1.png" class="r-plt" alt="Z-statistics across analyses with group sequential boundaries" width="672"></p>
 </div>
