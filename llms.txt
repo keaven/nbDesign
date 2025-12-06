@@ -54,7 +54,7 @@ guide](https://style.tidyverse.org/).
 
 ### All vignettes
 
-- [Group Sequential Design
+- [Group Sequential Design and
   Simulation](https://keaven.github.io/gsDesignNB/articles/group_sequential_simulation.md):
 - [Sample Size Calculation for Negative Binomial
   Outcomes](https://keaven.github.io/gsDesignNB/articles/sample_size_nbinom.md):
