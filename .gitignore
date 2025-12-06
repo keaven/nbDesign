@@ -7,3 +7,4 @@ nbDesign_*.tar.gz
 docs/
 inst/doc
 .DS_Store
+..Rcheck/
