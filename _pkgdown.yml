@@ -10,6 +10,7 @@ reference:
       - sample_size_nbinom
       - print.sample_size_nbinom_result
       - summary.sample_size_nbinom_result
+      - print.sample_size_nbinom_summary
 
   - title: "Group Sequential Design"
     desc: >
