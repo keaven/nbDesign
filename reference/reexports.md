@@ -5,6 +5,7 @@ to see their documentation.
 
 - gsDesign:
 
+  [`gsBoundSummary`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.html),
   `sfBetaDist`, `sfCauchy`,
   [`sfExponential`](https://keaven.github.io/gsDesign/reference/sfExponential.html),
   `sfExtremeValue`, `sfExtremeValue2`, `sfGapped`,

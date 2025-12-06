@@ -80,4 +80,5 @@ for convenience.
   [`sfXG1`](https://keaven.github.io/gsDesignNB/reference/reexports.md)
   [`sfXG2`](https://keaven.github.io/gsDesignNB/reference/reexports.md)
   [`sfXG3`](https://keaven.github.io/gsDesignNB/reference/reexports.md)
+  [`gsBoundSummary`](https://keaven.github.io/gsDesignNB/reference/reexports.md)
   : Objects exported from other packages

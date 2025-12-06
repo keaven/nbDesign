@@ -71,6 +71,7 @@ nb_ss
 #> Dispersion: 0.5000, Avg exposure (calendar): 12.00
 #> Avg exposure (at-risk): n1 = 11.09, n2 = 11.38
 #> Accrual: 12.0, Trial duration: 24.0
+#> Max follow-up: 12.0
 ```
 
 ### Group Sequential Design
@@ -96,10 +97,9 @@ gs_nb <- gsNBCalendar(
   test.type = 4,           # Two-sided asymmetric, non-binding futility
   sfu = sfLinear,          # Linear spending function for upper bound
   sfupar = c(.5, .5),      # Identity function
-  sfl = sfLinear,          # Same lower spending
-  sflpar = c(.5, .5),
-  usTime = c(.1, .2, 1),   # Conservative efficacy spending: 10%, 20% at IAs
-  lsTime = c(.1, .4, 1),   # Futility spending more aggressive at IA2
+  sfl = sfHSD,             # HSD spending for lower bound
+  sflpar = -8,             # Conservative futility bound
+  lsTime = NULL,           # Spending based on information
   analysis_times = analysis_times  # Calendar times in months
 ) |> toInteger() # Round to integer sample size
 ```
@@ -109,11 +109,11 @@ Textual group sequential design summary:
 ``` r
 summary(gs_nb)
 #> Asymmetric two-sided with non-binding futility bound group sequential design
-#> for negative binomial outcomes, 3 analyses, total sample size 378.0, 90 percent
+#> for negative binomial outcomes, 3 analyses, total sample size 396.0, 90 percent
 #> power, 2.5 percent (1-sided) Type I error. Control rate 0.1250, treatment rate
 #> 0.0833, risk ratio 0.6667, dispersion 0.5000. Accrual duration 12.0, trial
-#> duration 24.0, average exposure (calendar) 12.00, (at-risk n1=11.09, n2=11.38).
-#> Randomization ratio 1:1.
+#> duration 24.0, max follow-up 12.0, average exposure (calendar) 12.00, (at-risk
+#> n1=11.09, n2=11.38). Randomization ratio 1:1.
 ```
 
 Tabular summary:
@@ -138,22 +138,22 @@ gs_nb |>
 
 | Group Sequential Design Bounds for Negative Binomial Outcome |                     |          |          |
 |--------------------------------------------------------------|---------------------|----------|----------|
-| N = 378, Expected events = 415.5                             |                     |          |          |
+| N = 396, Expected events = 415.5                             |                     |          |          |
 | Analysis                                                     | Value               | Efficacy | Futility |
-| IA 1: 35%                                                    | Z                   | 2.8070   | -0.4001  |
-| Information: 31.5                                            | p (1-sided)         | 0.0025   | 0.6554   |
-|                                                              | ~RR at bound        | 0.6060   | 1.0740   |
-|                                                              | P(Cross) if RR=1    | 0.0025   | 0.3446   |
-|                                                              | P(Cross) if RR=0.67 | 0.1892   | 0.0100   |
-| IA 2: 79%                                                    | Z                   | 2.7403   | 0.9175   |
-| Information: 70.88                                           | p (1-sided)         | 0.0031   | 0.1794   |
-|                                                              | ~RR at bound        | 0.7218   | 0.8966   |
-|                                                              | P(Cross) if RR=1    | 0.0050   | 0.8259   |
-|                                                              | P(Cross) if RR=0.67 | 0.5121   | 0.0400   |
-| Final                                                        | Z                   | 1.9964   | 1.9964   |
-| Information: 89.53                                           | p (1-sided)         | 0.0229   | 0.0229   |
-|                                                              | ~RR at bound        | 0.8095   | 0.8095   |
-|                                                              | P(Cross) if RR=1    | 0.0235   | 0.9765   |
+| IA 1: 35%                                                    | Z                   | 2.3940   | -1.3506  |
+| Information: 33                                              | p (1-sided)         | 0.0083   | 0.9116   |
+|                                                              | ~RR at bound        | 0.6588   | 1.2655   |
+|                                                              | P(Cross) if RR=1    | 0.0083   | 0.0884   |
+|                                                              | P(Cross) if RR=0.67 | 0.3357   | 0.0004   |
+| IA 2: 79%                                                    | Z                   | 2.2938   | 0.3133   |
+| Information: 74.25                                           | p (1-sided)         | 0.0109   | 0.3770   |
+|                                                              | ~RR at bound        | 0.7660   | 0.9642   |
+|                                                              | P(Cross) if RR=1    | 0.0167   | 0.6243   |
+|                                                              | P(Cross) if RR=0.67 | 0.7068   | 0.0069   |
+| Final                                                        | Z                   | 2.1999   | 2.1999   |
+| Information: 93.79                                           | p (1-sided)         | 0.0139   | 0.0139   |
+|                                                              | ~RR at bound        | 0.7965   | 0.7965   |
+|                                                              | P(Cross) if RR=1    | 0.0250   | 0.9750   |
 |                                                              | P(Cross) if RR=0.67 | 0.9000   | 0.1000   |
 
 ## Simulation Study
@@ -334,8 +334,8 @@ summary_by_analysis |>
 |--------------------------------|---------------|------------|--------------|-------------|------------|---------------|--------------|--------|------|
 | Analysis                       | Time (months) | N Enrolled | Total Events | Ctrl Events | Exp Events | Ctrl Exposure | Exp Exposure | Mean Z | SD Z |
 | 1.00                           | 10.00         | 297.20     | 142.52       | 83.90       | 58.62      | 685.75        | 701.06       | −1.94  | 0.90 |
-| 2.00                           | 18.00         | 356.00     | 405.56       | 239.02      | 166.54     | 1,976.21      | 2,022.33     | −3.14  | 0.90 |
-| 3.00                           | 24.00         | 356.00     | 611.25       | 350.62      | 260.62     | 2,973.48      | 3,031.30     | −2.87  | 0.50 |
+| 2.00                           | 18.00         | 356.00     | 405.71       | 238.09      | 167.62     | 1,972.81      | 2,017.60     | −3.06  | 0.94 |
+| 3.00                           | 24.00         | 356.00     | 606.86       | 343.57      | 263.29     | 2,966.91      | 3,018.13     | −2.53  | 0.43 |
 
 ### Statistical Information
 
@@ -349,33 +349,38 @@ outcomes, this relates to the total exposure and event counts.
 info_by_analysis <- as.data.table(all_results)[
   ,
   .(
-    mean_info = mean(1 / (1/events_ctrl + 1/events_exp), na.rm = TRUE),
-    planned_info_frac = unique(gs_nb$timing[analysis])
+    mean_info = mean(1 / (1/events_ctrl + 1/events_exp), na.rm = TRUE)
   ),
   by = analysis
 ]
 
-# Normalize to get observed information fractions
-info_by_analysis[, observed_info_frac := mean_info / max(mean_info)]
+# Add planned information from design
+info_by_analysis[, planned_info := gs_nb$n.I[analysis]]
+
+# Normalize to get observed information fractions (relative to planned max)
+max_planned_info <- tail(gs_nb$n.I, 1)
+info_by_analysis[, observed_info_frac := mean_info / max_planned_info]
+info_by_analysis[, planned_info_frac := planned_info / max_planned_info]
 
 info_by_analysis |>
   gt() |>
   tab_header(title = "Information by Analysis") |>
   cols_label(
     analysis = "Analysis",
-    mean_info = "Mean Information",
-    planned_info_frac = "Planned Info Frac",
-    observed_info_frac = "Observed Info Frac"
+    mean_info = "Mean Info (Obs)",
+    planned_info = "Planned Info",
+    planned_info_frac = "Planned Frac",
+    observed_info_frac = "Observed Frac"
   ) |>
   fmt_number(decimals = 3)
 ```
 
-| Information by Analysis |                  |                   |                    |
-|-------------------------|------------------|-------------------|--------------------|
-| Analysis                | Mean Information | Planned Info Frac | Observed Info Frac |
-| 1.000                   | 34.267           | 0.352             | 0.229              |
-| 2.000                   | 97.910           | 0.792             | 0.655              |
-| 3.000                   | 149.406          | 1.000             | 1.000              |
+| Information by Analysis |                 |              |               |              |
+|-------------------------|-----------------|--------------|---------------|--------------|
+| Analysis                | Mean Info (Obs) | Planned Info | Observed Frac | Planned Frac |
+| 1.000                   | 34.267          | 33.000       | 0.365         | 0.352        |
+| 2.000                   | 98.111          | 74.250       | 1.046         | 0.792        |
+| 3.000                   | 148.991         | 93.789       | 1.589         | 1.000        |
 
 ### Boundary Crossings and Power
 
@@ -394,25 +399,35 @@ crossing_summary <- as.data.table(all_results)[
 crossing_summary[, prob_cross_upper := n_cross_upper / n_sims]
 crossing_summary[, prob_cross_lower := n_cross_lower / n_sims]
 
-crossing_summary[, .(analysis, n_cross_upper, prob_cross_upper, n_cross_lower, prob_cross_lower)] |>
+# Cumulative power (Sim)
+crossing_summary[, cum_prob_cross_upper := cumsum(prob_cross_upper)]
+
+# Cumulative power (Design)
+# Drift parameter for alternative: |log(RR)| * sqrt(I_max)
+# Note: gs_nb$n.fix is the information at final analysis
+log_rr <- log(nb_ss$inputs$lambda2 / nb_ss$inputs$lambda1)
+theta <- abs(log_rr) * sqrt(gs_nb$n.fix)
+design_probs <- gsDesign::gsProbability(d = gs_nb, theta = theta)
+crossing_summary[, design_cum_power := cumsum(design_probs$upper$prob)[analysis]]
+
+crossing_summary[, .(analysis, n_cross_upper, cum_prob_cross_upper, design_cum_power)] |>
   gt() |>
-  tab_header(title = "Boundary Crossing by Analysis") |>
+  tab_header(title = "Boundary Crossing and Power") |>
   cols_label(
     analysis = "Analysis",
     n_cross_upper = "N Cross Upper",
-    prob_cross_upper = "P(Cross Upper)",
-    n_cross_lower = "N Cross Lower",
-    prob_cross_lower = "P(Cross Lower)"
+    cum_prob_cross_upper = "Cum Power (Sim)",
+    design_cum_power = "Cum Power (Design)"
   ) |>
-  fmt_number(columns = starts_with("prob"), decimals = 3)
+  fmt_number(columns = contains("power"), decimals = 3)
 ```
 
-| Boundary Crossing by Analysis |               |                |               |                |
-|-------------------------------|---------------|----------------|---------------|----------------|
-| Analysis                      | N Cross Upper | P(Cross Upper) | N Cross Lower | P(Cross Lower) |
-| 1                             | 9             | 0.180          | 0             | 0.000          |
-| 2                             | 25            | 0.500          | 0             | 0.000          |
-| 3                             | 16            | 0.320          | 0             | 0.000          |
+| Boundary Crossing and Power |               |                 |                    |
+|-----------------------------|---------------|-----------------|--------------------|
+| Analysis                    | N Cross Upper | Cum Power (Sim) | Cum Power (Design) |
+| 1                           | 16            | 0.32            | 1.000              |
+| 2                           | 27            | 0.86            | 1.000              |
+| 3                           | 5             | 0.96            | 1.000              |
 
 ### Overall Power
 
@@ -441,9 +456,9 @@ cat("\n=== Overall Operating Characteristics ===\n")
 cat(sprintf("Number of simulations: %d\n", n_sims))
 #> Number of simulations: 50
 cat(sprintf("Overall Power (P[reject H0]): %.1f%%\n", overall_power * 100))
-#> Overall Power (P[reject H0]): 100.0%
+#> Overall Power (P[reject H0]): 96.0%
 cat(sprintf("Futility Stopping Rate: %.1f%%\n", overall_futility * 100))
-#> Futility Stopping Rate: 0.0%
+#> Futility Stopping Rate: 4.0%
 cat(sprintf("Design Power (target): %.1f%%\n", (1 - gs_nb$beta) * 100))
 #> Design Power (target): 90.0%
 ```
@@ -465,10 +480,14 @@ bounds_df <- data.frame(
 ggplot(plot_data, aes(x = factor(analysis), y = z_flipped)) +
   geom_violin(fill = "steelblue", alpha = 0.5, color = "steelblue") +
   geom_boxplot(width = 0.1, fill = "white", outlier.shape = NA) +
-  geom_hline(data = bounds_df, aes(yintercept = upper), 
+  # Draw bounds as lines connecting analyses
+  geom_line(data = bounds_df, aes(x = analysis, y = upper, group = 1), 
              linetype = "dashed", color = "darkgreen", linewidth = 1) +
-  geom_hline(data = bounds_df, aes(yintercept = lower), 
+  geom_line(data = bounds_df, aes(x = analysis, y = lower, group = 1), 
              linetype = "dashed", color = "darkred", linewidth = 1) +
+  # Draw points for bounds
+  geom_point(data = bounds_df, aes(x = analysis, y = upper), color = "darkgreen") +
+  geom_point(data = bounds_df, aes(x = analysis, y = lower), color = "darkred") +
   geom_hline(yintercept = 0, color = "gray50") +
   labs(
     title = "Simulated Z-Statistics by Analysis",
@@ -478,9 +497,9 @@ ggplot(plot_data, aes(x = factor(analysis), y = z_flipped)) +
   ) +
   theme_minimal() +
   ylim(c(-4, 6))
-#> Warning: Removed 43 rows containing non-finite outside the scale range
+#> Warning: Removed 59 rows containing non-finite outside the scale range
 #> (`stat_ydensity()`).
-#> Warning: Removed 43 rows containing non-finite outside the scale range
+#> Warning: Removed 59 rows containing non-finite outside the scale range
 #> (`stat_boxplot()`).
 ```
 
@@ -495,16 +514,17 @@ a textual overview of the group sequential design:
 ``` r
 summary(gs_nb)
 #> Asymmetric two-sided with non-binding futility bound group sequential design
-#> for negative binomial outcomes, 3 analyses, total sample size 378.0, 90 percent
+#> for negative binomial outcomes, 3 analyses, total sample size 396.0, 90 percent
 #> power, 2.5 percent (1-sided) Type I error. Control rate 0.1250, treatment rate
 #> 0.0833, risk ratio 0.6667, dispersion 0.5000. Accrual duration 12.0, trial
-#> duration 24.0, average exposure (calendar) 12.00, (at-risk n1=11.09, n2=11.38).
-#> Randomization ratio 1:1.
+#> duration 24.0, max follow-up 12.0, average exposure (calendar) 12.00, (at-risk
+#> n1=11.09, n2=11.38). Randomization ratio 1:1.
 ```
 
-For detailed boundary information, use `gsBoundSummary()`. We set
-`logdelta = TRUE` since the test statistic is based on the log rate
-ratio. The `~RR at bound` displays the rate ratio
+For detailed boundary information, use
+[`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.html).
+We set `logdelta = TRUE` since the test statistic is based on the log
+rate ratio. The `~RR at bound` displays the rate ratio
 ($\lambda_{2}/\lambda_{1}$), where values \< 1 indicate treatment
 benefit:
 
@@ -526,22 +546,22 @@ gsDesign::gsBoundSummary(gs_nb,
 
 | Group Sequential Design Bounds for Negative Binomial Outcome |                     |          |          |
 |--------------------------------------------------------------|---------------------|----------|----------|
-| N = 378, Expected events = 415.5                             |                     |          |          |
+| N = 396, Expected events = 415.5                             |                     |          |          |
 | Analysis                                                     | Value               | Efficacy | Futility |
-| IA 1: 35%                                                    | Z                   | 2.8070   | -0.4001  |
-| Information: 31.5                                            | p (1-sided)         | 0.0025   | 0.6554   |
-|                                                              | ~RR at bound        | 0.6060   | 1.0740   |
-|                                                              | P(Cross) if RR=1    | 0.0025   | 0.3446   |
-|                                                              | P(Cross) if RR=0.67 | 0.1892   | 0.0100   |
-| IA 2: 79%                                                    | Z                   | 2.7403   | 0.9175   |
-| Information: 70.88                                           | p (1-sided)         | 0.0031   | 0.1794   |
-|                                                              | ~RR at bound        | 0.7218   | 0.8966   |
-|                                                              | P(Cross) if RR=1    | 0.0050   | 0.8259   |
-|                                                              | P(Cross) if RR=0.67 | 0.5121   | 0.0400   |
-| Final                                                        | Z                   | 1.9964   | 1.9964   |
-| Information: 89.53                                           | p (1-sided)         | 0.0229   | 0.0229   |
-|                                                              | ~RR at bound        | 0.8095   | 0.8095   |
-|                                                              | P(Cross) if RR=1    | 0.0235   | 0.9765   |
+| IA 1: 35%                                                    | Z                   | 2.3940   | -1.3506  |
+| Information: 33                                              | p (1-sided)         | 0.0083   | 0.9116   |
+|                                                              | ~RR at bound        | 0.6588   | 1.2655   |
+|                                                              | P(Cross) if RR=1    | 0.0083   | 0.0884   |
+|                                                              | P(Cross) if RR=0.67 | 0.3357   | 0.0004   |
+| IA 2: 79%                                                    | Z                   | 2.2938   | 0.3133   |
+| Information: 74.25                                           | p (1-sided)         | 0.0109   | 0.3770   |
+|                                                              | ~RR at bound        | 0.7660   | 0.9642   |
+|                                                              | P(Cross) if RR=1    | 0.0167   | 0.6243   |
+|                                                              | P(Cross) if RR=0.67 | 0.7068   | 0.0069   |
+| Final                                                        | Z                   | 2.1999   | 2.1999   |
+| Information: 93.79                                           | p (1-sided)         | 0.0139   | 0.0139   |
+|                                                              | ~RR at bound        | 0.7965   | 0.7965   |
+|                                                              | P(Cross) if RR=1    | 0.0250   | 0.9750   |
 |                                                              | P(Cross) if RR=0.67 | 0.9000   | 0.1000   |
 
 Note that `P(Cross) if RR=0.67` corresponds to the design’s alternate
@@ -564,9 +584,9 @@ data.frame(
 | Sample Sizes at Each Analysis |       |       |         |
 |-------------------------------|-------|-------|---------|
 | Analysis                      | n1    | n2    | n_total |
-| 1                             | 63.0  | 63.0  | 126.0   |
-| 2                             | 126.0 | 126.0 | 252.0   |
-| 3                             | 189.0 | 189.0 | 378.0   |
+| 1                             | 66.0  | 66.0  | 132.0   |
+| 2                             | 132.0 | 132.0 | 264.0   |
+| 3                             | 198.0 | 198.0 | 396.0   |
 
 After rounding to integer sample sizes with
 [`toInteger()`](https://keaven.github.io/gsDesignNB/reference/toInteger.md):
@@ -575,11 +595,11 @@ After rounding to integer sample sizes with
 gs_nb_int <- toInteger(gs_nb)
 summary(gs_nb_int)
 #> Asymmetric two-sided with non-binding futility bound group sequential design
-#> for negative binomial outcomes, 3 analyses, total sample size 378.0, 90 percent
+#> for negative binomial outcomes, 3 analyses, total sample size 396.0, 90 percent
 #> power, 2.5 percent (1-sided) Type I error. Control rate 0.1250, treatment rate
 #> 0.0833, risk ratio 0.6667, dispersion 0.5000. Accrual duration 12.0, trial
-#> duration 24.0, average exposure (calendar) 12.00, (at-risk n1=11.09, n2=11.38).
-#> Randomization ratio 1:1.
+#> duration 24.0, max follow-up 12.0, average exposure (calendar) 12.00, (at-risk
+#> n1=11.09, n2=11.38). Randomization ratio 1:1.
 ```
 
 ## Notes

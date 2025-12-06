@@ -228,6 +228,7 @@ sample_size_nbinom(
 #> Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)
 #> Dispersion: 0.1000, Avg exposure (calendar): 5.18
 #> Accrual: 6.0, Trial duration: 12.0
+#> Max follow-up: 6.0
 ```
 
 ### Calculating Power for Fixed Design
@@ -273,6 +274,7 @@ sample_size_nbinom(
 #> Rates: control = 0.5000, treatment = 0.4000 (RR = 0.8000)
 #> Dispersion: 0.1000, Avg exposure (calendar): 5.18
 #> Accrual: 6.0, Trial duration: 12.0
+#> Max follow-up: 6.0
 ```
 
 ### Unequal Allocation
