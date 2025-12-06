@@ -75,8 +75,9 @@ Now we convert this a group sequential design with 3 analyses after 10,
 for the fixed design. The relative enrollment rates will be increased to
 increase the sample size as with standard group sequential design
 theory. We specify `usTime = c(0.1, 0.2, 1)` which along with the
-`sfLinear()` spending function will spend 10%, 20% and 100% of the
-cumulative $\alpha$ at the 3 planned analyses regardless of the observed
+[`sfLinear()`](https://keaven.github.io/gsDesign/reference/sfLinear.html)
+spending function will spend 10%, 20% and 100% of the cumulative
+$\alpha$ at the 3 planned analyses regardless of the observed
 statistical information at each analysis.
 
 ``` r
