@@ -306,27 +306,33 @@ sample_size_nbinom(
 In some recurrent event trials, there may be a mandatory “gap” period
 after each event during which no new events can be recorded (e.g., a
 recovery period or administrative window). This effectively reduces the
-time at risk and thus the effective event rate.
+time at risk. The package provides two methods to account for this:
 
-If an `event_gap` ($g$) is specified, the effective event rate
-$\lambda^{*}$ used in the sample size calculation is derived as:
+1.  **Zhu and Lakkis (`method = "zhu"`)**: The event rates are adjusted
+    to “effective rates” $\lambda^{*} = \lambda/(1 + \lambda g)$, while
+    the exposure time remains the calendar duration. This is the
+    standard method described in Zhu and Lakkis (2014).
+2.  **Anderson-Zhang-Gemini (`method = "AZG"`)**: The event rates remain
+    the original planning rates $\lambda$, but the exposure is adjusted
+    to “at-risk exposure” $E_{risk} = E_{cal}/(1 + \lambda g)$.
 
-$$\lambda^{*} = \frac{\lambda}{1 + \lambda \cdot g}$$
+Both methods yield identical sample sizes and power because the expected
+number of events is the same
+($\mu = \lambda^{*}E_{cal} = \lambda E_{risk}$). However, the **AZG**
+method provides a more intuitive summary by reporting the actual
+time-at-risk, which differs between treatment groups (since the gap
+reduction depends on the event rate). We recommend the **AZG** method
+for design planning as it preserves the interpretation of the input
+rates, while the **Zhu** method is useful for reproducing literature
+results.
 
-This adjustment reflects that for every event that occurs, $g$ units of
-time are removed from the risk period. The sample size is then
-calculated using these effective rates $\lambda_{1}^{*}$ and
-$\lambda_{2}^{*}$, while maintaining the original effect size
-($\log\left( \lambda_{1}/\lambda_{2} \right)$) in the hypothesis test
-formulation to ensure the test remains targeted at the underlying rate
-ratio.
-
-### Example with Event Gap
+### Example with Event Gap (AZG vs Zhu)
 
 Calculate sample size assuming a 5-day gap after each event (approx
 0.0137 years).
 
 ``` r
+# Using AZG Method (Recommended)
 sample_size_nbinom(
   lambda1 = 0.5,
   lambda2 = 0.3,
@@ -335,7 +341,37 @@ sample_size_nbinom(
   accrual_rate = 10,
   accrual_duration = 12,
   trial_duration = 12,
-  event_gap = 5 / 365.25
+  event_gap = 5 / 365.25,
+  method = "AZG"
+)
+#> Sample Size for Negative Binomial Outcome
+#> ==========================================
+#> 
+#> Method:          AZG
+#> Sample size:     n1 = 33, n2 = 33, total = 66
+#> Expected events: 157.5 (n1: 98.3, n2: 59.2)
+#> Power: 80%, Alpha: 0.025 (1-sided)
+#> Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)
+#> Dispersion: 0.1000, Avg exposure (calendar): 6.00
+#> Avg exposure (at-risk): n1 = 5.96, n2 = 5.98
+#> Accrual: 12.0, Trial duration: 12.0
+```
+
+Note the output reports “Avg exposure (at-risk)” which differs for n1
+and n2.
+
+``` r
+# Using Zhu Method (Standard)
+sample_size_nbinom(
+  lambda1 = 0.5,
+  lambda2 = 0.3,
+  dispersion = 0.1,
+  power = 0.8,
+  accrual_rate = 10,
+  accrual_duration = 12,
+  trial_duration = 12,
+  event_gap = 5 / 365.25,
+  method = "zhu"
 )
 #> Sample Size for Negative Binomial Outcome
 #> ==========================================
@@ -349,9 +385,8 @@ sample_size_nbinom(
 #> Accrual: 12.0, Trial duration: 12.0
 ```
 
-Note that the required sample size increases compared to the basic
-calculation (where N=274) because the effective event rates are lower,
-providing less information.
+Both methods result in the same total sample size, but the Zhu method
+reports the calendar exposure and adjusted rates.
 
 ## References
 
