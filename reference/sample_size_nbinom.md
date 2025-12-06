@@ -86,7 +86,9 @@ sample_size_nbinom(
 - method:
 
   Method for sample size calculation. "zhu" for Zhu and Lakkis (2014),
-  "friede" for Friede and Schmidli (2010) / Mütze et al. (2018).
+  "friede" for Friede and Schmidli (2010) / Mütze et al. (2018), or
+  "AZG" for the Anderson-Zhang-Gemini method which adjusts exposure for
+  event gaps rather than rates.
 
 ## Value
 
@@ -111,7 +113,15 @@ containing:
 
 - exposure:
 
-  Average exposure time used in calculation
+  Average exposure time used in calculation (calendar time)
+
+- exposure1:
+
+  Average at-risk exposure time for group 1 (if AZG method)
+
+- exposure2:
+
+  Average at-risk exposure time for group 2 (if AZG method)
 
 ## References
 
@@ -139,11 +149,11 @@ x <- sample_size_nbinom(
 class(x)
 #> [1] "sample_size_nbinom_result" "list"                     
 summary(x)
-#> Fixed sample size design for negative binomial outcome, total sample size 36
-#> (n1=18, n2=18), 80 percent power, 2.5 percent (1-sided) Type I error. Control
-#> rate 0.5000, treatment rate 0.3000, risk ratio 0.6000, dispersion 0.1000.
-#> Accrual duration 20.0, trial duration 24.0, average exposure 14.00. Expected
-#> events 201.6. Randomization ratio 1:1.
+#> Fixed sample size design for negative binomial outcome (zhu method), total
+#> sample size 36 (n1=18, n2=18), 80 percent power, 2.5 percent (1-sided) Type I
+#> error. Control rate 0.5000, treatment rate 0.3000, risk ratio 0.6000,
+#> dispersion 0.1000. Accrual duration 20.0, trial duration 24.0, average exposure
+#> 14.00. Expected events 201.6. Randomization ratio 1:1.
 #> 
 
 # With piecewise accrual
@@ -155,10 +165,10 @@ x2 <- sample_size_nbinom(
   trial_duration = 12
 )
 summary(x2)
-#> Fixed sample size design for negative binomial outcome, total sample size 50
-#> (n1=25, n2=25), 80 percent power, 2.5 percent (1-sided) Type I error. Control
-#> rate 0.5000, treatment rate 0.3000, risk ratio 0.6000, dispersion 0.1000.
-#> Accrual duration 6.0, trial duration 12.0, average exposure 8.50. Expected
-#> events 170.0. Randomization ratio 1:1.
+#> Fixed sample size design for negative binomial outcome (zhu method), total
+#> sample size 50 (n1=25, n2=25), 80 percent power, 2.5 percent (1-sided) Type I
+#> error. Control rate 0.5000, treatment rate 0.3000, risk ratio 0.6000,
+#> dispersion 0.1000. Accrual duration 6.0, trial duration 12.0, average exposure
+#> 8.50. Expected events 170.0. Randomization ratio 1:1.
 #> 
 ```

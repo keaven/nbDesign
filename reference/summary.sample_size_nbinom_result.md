@@ -35,10 +35,10 @@ x <- sample_size_nbinom(
 class(x)
 #> [1] "sample_size_nbinom_result" "list"                     
 summary(x)
-#> Fixed sample size design for negative binomial outcome, total sample size 36
-#> (n1=18, n2=18), 80 percent power, 2.5 percent (1-sided) Type I error. Control
-#> rate 0.5000, treatment rate 0.3000, risk ratio 0.6000, dispersion 0.1000.
-#> Accrual duration 20.0, trial duration 24.0, average exposure 14.00. Expected
-#> events 201.6. Randomization ratio 1:1.
+#> Fixed sample size design for negative binomial outcome (zhu method), total
+#> sample size 36 (n1=18, n2=18), 80 percent power, 2.5 percent (1-sided) Type I
+#> error. Control rate 0.5000, treatment rate 0.3000, risk ratio 0.6000,
+#> dispersion 0.1000. Accrual duration 20.0, trial duration 24.0, average exposure
+#> 14.00. Expected events 201.6. Randomization ratio 1:1.
 #> 
 ```

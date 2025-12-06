@@ -80,10 +80,9 @@ simulate the design to confirm design operating characteristicsusing
 <p>We design a trial with the following characteristics:</p>
 <ul>
 <li>
-<strong>Enrollment:</strong> 1 year (12 months) with a constant
-rate</li>
+<strong>Enrollment:</strong> 12 months with a constant rate</li>
 <li>
-<strong>Trial Duration:</strong> 2 years (24 months)</li>
+<strong>Trial Duration:</strong> 24 months</li>
 <li>
 <strong>Analyses:</strong>
 <ul>
@@ -95,8 +94,9 @@ rate</li>
 <li>
 <strong>Event Rates:</strong>
 <ul>
-<li><p>Control: 1.5 events per year</p></li>
-<li><p>Experimental: 1.0 events per year (rate ratio = 0.67)</p></li>
+<li><p>Control: 0.125 events per month (1.5 per year)</p></li>
+<li><p>Experimental: 0.0833 events per month (1.0 per year; rate ratio =
+0.67)</p></li>
 </ul>
 </li>
 <li>
@@ -112,19 +112,19 @@ rate</li>
 <p>First, we calculate the required sample size for a fixed design:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Sample size calculation</span></span>
-<span><span class="co"># Enrollment: constant rate over 1 year</span></span>
-<span><span class="co"># Trial duration: 2 years</span></span>
+<span><span class="co"># Enrollment: constant rate over 12 months</span></span>
+<span><span class="co"># Trial duration: 24 months</span></span>
 <span><span class="va">nb_ss</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sample_size_nbinom.html">sample_size_nbinom</a></span><span class="op">(</span></span>
-<span>  lambda1 <span class="op">=</span> <span class="fl">1.5</span>,           <span class="co"># Control event rate (per year)</span></span>
-<span>  lambda2 <span class="op">=</span> <span class="fl">1.0</span>,           <span class="co"># Experimental event rate (per year)</span></span>
+<span>  lambda1 <span class="op">=</span> <span class="fl">1.5</span> <span class="op">/</span> <span class="fl">12</span>,      <span class="co"># Control event rate (per month)</span></span>
+<span>  lambda2 <span class="op">=</span> <span class="fl">1.0</span> <span class="op">/</span> <span class="fl">12</span>,      <span class="co"># Experimental event rate (per month)</span></span>
 <span>  dispersion <span class="op">=</span> <span class="fl">0.5</span>,        <span class="co"># Overdispersion parameter</span></span>
 <span>  power <span class="op">=</span> <span class="fl">0.9</span>,             <span class="co"># 90% power</span></span>
 <span>  alpha <span class="op">=</span> <span class="fl">0.025</span>,           <span class="co"># One-sided alpha</span></span>
-<span>  accrual_rate <span class="op">=</span> <span class="fl">100</span>,      <span class="co"># Patients per year (will determine total n)</span></span>
-<span>  accrual_duration <span class="op">=</span> <span class="fl">1</span>,    <span class="co"># 1 year enrollment</span></span>
-<span>  trial_duration <span class="op">=</span> <span class="fl">2</span>,      <span class="co"># 2 year trial</span></span>
-<span>  max_followup <span class="op">=</span> <span class="fl">1</span>,        <span class="co"># 1 year of follow-up per patient</span></span>
-<span>  event_gap <span class="op">=</span> <span class="fl">20</span> <span class="op">/</span> <span class="fl">365.25</span>, <span class="co"># Minimum gap between events is 20 days</span></span>
+<span>  accrual_rate <span class="op">=</span> <span class="fl">100</span> <span class="op">/</span> <span class="fl">12</span>, <span class="co"># Patients per month (will determine total n)</span></span>
+<span>  accrual_duration <span class="op">=</span> <span class="fl">12</span>,   <span class="co"># 12 months enrollment</span></span>
+<span>  trial_duration <span class="op">=</span> <span class="fl">24</span>,     <span class="co"># 24 months trial</span></span>
+<span>  max_followup <span class="op">=</span> <span class="fl">12</span>,       <span class="co"># 12 months of follow-up per patient</span></span>
+<span>  event_gap <span class="op">=</span> <span class="fl">20</span> <span class="op">/</span> <span class="fl">30.4375</span>, <span class="co"># Minimum gap between events is 20 days</span></span>
 <span>  method <span class="op">=</span> <span class="st">"zhu"</span>           <span class="co"># Zhu and Lakkis sample size method</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -135,12 +135,13 @@ rate</li>
 <span><span class="co">#&gt; Sample Size for Negative Binomial Outcome</span></span>
 <span><span class="co">#&gt; ==========================================</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Method:          zhu</span></span>
 <span><span class="co">#&gt; Sample size:     n1 = 178, n2 = 178, total = 356</span></span>
 <span><span class="co">#&gt; Expected events: 415.5 (n1: 246.7, n2: 168.8)</span></span>
 <span><span class="co">#&gt; Power: 90%, Alpha: 0.025 (1-sided)</span></span>
-<span><span class="co">#&gt; Rates: control = 1.5000, treatment = 1.0000 (RR = 0.6667)</span></span>
-<span><span class="co">#&gt; Dispersion: 0.5000, Avg exposure: 1.00</span></span>
-<span><span class="co">#&gt; Accrual: 1.0, Trial duration: 2.0</span></span></code></pre></div>
+<span><span class="co">#&gt; Rates: control = 0.1250, treatment = 0.0833 (RR = 0.6667)</span></span>
+<span><span class="co">#&gt; Dispersion: 0.5000, Avg exposure: 12.00</span></span>
+<span><span class="co">#&gt; Accrual: 12.0, Trial duration: 24.0</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="group-sequential-design">Group Sequential Design<a class="anchor" aria-label="anchor" href="#group-sequential-design"></a>
@@ -156,8 +157,8 @@ the <code><a href="https://keaven.github.io/gsDesign/reference/sfLinear.html" cl
 at the 3 planned analyses regardless of the observed statistical
 information at each analysis.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Analysis times (in years, for simulation)</span></span>
-<span><span class="va">analysis_times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">18</span>, <span class="fl">24</span><span class="op">)</span> <span class="op">/</span> <span class="fl">12</span>  <span class="co"># Convert months to years</span></span>
+<code class="sourceCode R"><span><span class="co"># Analysis times (in months)</span></span>
+<span><span class="va">analysis_times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">18</span>, <span class="fl">24</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Create group sequential design with integer sample sizes</span></span>
 <span><span class="va">gs_nb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsNBCalendar.html">gsNBCalendar</a></span><span class="op">(</span></span>
@@ -170,16 +171,16 @@ information at each analysis.</p>
 <span>  sflpar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">.5</span><span class="op">)</span>,</span>
 <span>  usTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">.2</span>, <span class="fl">1</span><span class="op">)</span>,   <span class="co"># Conservative efficacy spending: 10%, 20% at IAs</span></span>
 <span>  lsTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">.4</span>, <span class="fl">1</span><span class="op">)</span>,   <span class="co"># Futility spending more aggressive at IA2</span></span>
-<span>  analysis_times <span class="op">=</span> <span class="va">analysis_times</span> <span class="op">*</span> <span class="fl">12</span>  <span class="co"># Calendar times in months</span></span>
+<span>  analysis_times <span class="op">=</span> <span class="va">analysis_times</span>  <span class="co"># Calendar times in months</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/toInteger.html">toInteger</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># Round to integer sample size</span></span></code></pre></div>
 <p>Textual group sequential design summary:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">gs_nb</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Asymmetric two-sided with non-binding futility bound group sequential design</span></span>
 <span><span class="co">#&gt; for negative binomial outcomes, 3 analyses, total sample size 378.0, 90 percent</span></span>
-<span><span class="co">#&gt; power, 2.5 percent (1-sided) Type I error. Control rate 1.5000, treatment rate</span></span>
-<span><span class="co">#&gt; 1.0000, risk ratio 0.6667, dispersion 0.5000. Accrual duration 1.0, trial</span></span>
-<span><span class="co">#&gt; duration 2.0, average exposure 1.00. Randomization ratio 1:1.</span></span></code></pre></div>
+<span><span class="co">#&gt; power, 2.5 percent (1-sided) Type I error. Control rate 0.1250, treatment rate</span></span>
+<span><span class="co">#&gt; 0.0833, risk ratio 0.6667, dispersion 0.5000. Accrual duration 12.0, trial</span></span>
+<span><span class="co">#&gt; duration 24.0, average exposure 12.00. Randomization ratio 1:1.</span></span></code></pre></div>
 <p>Tabular summary:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gs_nb</span> <span class="op">|&gt;</span> </span>
@@ -187,7 +188,7 @@ information at each analysis.</p>
 <span>    deltaname <span class="op">=</span> <span class="st">"RR"</span>, </span>
 <span>    logdelta <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>    Nname <span class="op">=</span> <span class="st">"Information"</span>,</span>
-<span>    timename <span class="op">=</span> <span class="st">"Year"</span>,</span>
+<span>    timename <span class="op">=</span> <span class="st">"Month"</span>,</span>
 <span>    digits <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>    ddigits <span class="op">=</span> <span class="fl">2</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -663,13 +664,13 @@ information at each analysis.</p>
 </thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="Analysis" class="gt_row gt_left">IA 1: 91%</td>
+<td headers="Analysis" class="gt_row gt_left">IA 1: 35%</td>
 <td headers="Value" class="gt_row gt_left">Z</td>
 <td headers="Efficacy" class="gt_row gt_right">2.8070</td>
 <td headers="Futility" class="gt_row gt_right">-0.4001</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Information: 160.79</td>
+<td headers="Analysis" class="gt_row gt_left">Information: 31.5</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
 <td headers="Efficacy" class="gt_row gt_right">0.0025</td>
 <td headers="Futility" class="gt_row gt_right">0.6554</td>
@@ -677,8 +678,8 @@ information at each analysis.</p>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.8011</td>
-<td headers="Futility" class="gt_row gt_right">1.0321</td>
+<td headers="Efficacy" class="gt_row gt_right">0.6060</td>
+<td headers="Futility" class="gt_row gt_right">1.0740</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
@@ -693,13 +694,13 @@ information at each analysis.</p>
 <td headers="Futility" class="gt_row gt_right">0.0100</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">IA 2: 98%</td>
+<td headers="Analysis" class="gt_row gt_left">IA 2: 79%</td>
 <td headers="Value" class="gt_row gt_left">Z</td>
 <td headers="Efficacy" class="gt_row gt_right">2.7403</td>
 <td headers="Futility" class="gt_row gt_right">0.9175</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Information: 172.57</td>
+<td headers="Analysis" class="gt_row gt_left">Information: 70.88</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
 <td headers="Efficacy" class="gt_row gt_right">0.0031</td>
 <td headers="Futility" class="gt_row gt_right">0.1794</td>
@@ -707,8 +708,8 @@ information at each analysis.</p>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.8114</td>
-<td headers="Futility" class="gt_row gt_right">0.9324</td>
+<td headers="Efficacy" class="gt_row gt_right">0.7218</td>
+<td headers="Futility" class="gt_row gt_right">0.8966</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
@@ -729,7 +730,7 @@ information at each analysis.</p>
 <td headers="Futility" class="gt_row gt_right">1.9964</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Information: 176.48</td>
+<td headers="Analysis" class="gt_row gt_left">Information: 89.53</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
 <td headers="Efficacy" class="gt_row gt_right">0.0229</td>
 <td headers="Futility" class="gt_row gt_right">0.0229</td>
@@ -737,8 +738,8 @@ information at each analysis.</p>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.8603</td>
-<td headers="Futility" class="gt_row gt_right">0.8603</td>
+<td headers="Efficacy" class="gt_row gt_right">0.8095</td>
+<td headers="Futility" class="gt_row gt_right">0.8095</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
@@ -769,28 +770,28 @@ of the group sequential design.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
 <span><span class="va">n_sims</span> <span class="op">&lt;-</span> <span class="fl">50</span></span>
 <span></span>
-<span><span class="co"># Enrollment rate (patients per year) to achieve target sample size</span></span>
+<span><span class="co"># Enrollment rate (patients per month) to achieve target sample size</span></span>
 <span><span class="va">n_target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">nb_ss</span><span class="op">$</span><span class="va">n_total</span><span class="op">)</span></span>
-<span><span class="va">enroll_rate_val</span> <span class="op">&lt;-</span> <span class="va">n_target</span> <span class="op">/</span> <span class="fl">1</span>  <span class="co"># All enrolled in 1 year</span></span>
+<span><span class="va">enroll_rate_val</span> <span class="op">&lt;-</span> <span class="va">n_target</span> <span class="op">/</span> <span class="fl">12</span>  <span class="co"># All enrolled in 12 months</span></span>
 <span></span>
 <span><span class="co"># Define enrollment</span></span>
 <span><span class="va">enroll_rate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  rate <span class="op">=</span> <span class="va">enroll_rate_val</span>,</span>
-<span>  duration <span class="op">=</span> <span class="fl">1</span>  <span class="co"># 1 year enrollment</span></span>
+<span>  duration <span class="op">=</span> <span class="fl">12</span>  <span class="co"># 12 months enrollment</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Define failure rates (with dispersion)</span></span>
 <span><span class="va">fail_rate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Control"</span>, <span class="st">"Experimental"</span><span class="op">)</span>,</span>
-<span>  rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">1.0</span><span class="op">)</span>,</span>
+<span>  rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span> <span class="op">/</span> <span class="fl">12</span>, <span class="fl">1.0</span> <span class="op">/</span> <span class="fl">12</span><span class="op">)</span>,</span>
 <span>  dispersion <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># No dropout for simplicity</span></span>
 <span><span class="va">dropout_rate</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
 <span></span>
-<span><span class="co"># Maximum follow-up (trial duration minus minimum enrollment time)</span></span>
-<span><span class="va">max_followup</span> <span class="op">&lt;-</span> <span class="fl">2</span>  <span class="co"># 2 years from enrollment start</span></span></code></pre></div>
+<span><span class="co"># Maximum follow-up (trial duration from enrollment start)</span></span>
+<span><span class="va">max_followup</span> <span class="op">&lt;-</span> <span class="fl">24</span>  <span class="co"># 24 months</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="run-simulations">Run Simulations<a class="anchor" aria-label="anchor" href="#run-simulations"></a>
@@ -921,7 +922,7 @@ of the group sequential design.</p>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Summary Statistics by Analysis"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/cols_label.html" class="external-link">cols_label</a></span><span class="op">(</span></span>
 <span>    analysis <span class="op">=</span> <span class="st">"Analysis"</span>,</span>
-<span>    analysis_time <span class="op">=</span> <span class="st">"Time (yrs)"</span>,</span>
+<span>    analysis_time <span class="op">=</span> <span class="st">"Time (months)"</span>,</span>
 <span>    mean_enrolled <span class="op">=</span> <span class="st">"N Enrolled"</span>,</span>
 <span>    mean_events_total <span class="op">=</span> <span class="st">"Total Events"</span>,</span>
 <span>    mean_events_ctrl <span class="op">=</span> <span class="st">"Ctrl Events"</span>,</span>
@@ -1388,7 +1389,7 @@ of the group sequential design.</p>
     </tr>
 <tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="analysis">Analysis</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="analysis_time">Time (yrs)</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="analysis_time">Time (months)</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="mean_enrolled">N Enrolled</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="mean_events_total">Total Events</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="mean_events_ctrl">Ctrl Events</th>
@@ -1402,39 +1403,39 @@ of the group sequential design.</p>
 <tbody class="gt_table_body">
 <tr>
 <td headers="analysis" class="gt_row gt_right">1.00</td>
-<td headers="analysis_time" class="gt_row gt_right">0.83</td>
+<td headers="analysis_time" class="gt_row gt_right">10.00</td>
 <td headers="mean_enrolled" class="gt_row gt_right">297.20</td>
-<td headers="mean_events_total" class="gt_row gt_right">153.54</td>
-<td headers="mean_events_ctrl" class="gt_row gt_right">91.52</td>
-<td headers="mean_events_exp" class="gt_row gt_right">62.02</td>
-<td headers="mean_exposure_ctrl" class="gt_row gt_right">60.21</td>
-<td headers="mean_exposure_exp" class="gt_row gt_right">60.61</td>
-<td headers="mean_z" class="gt_row gt_right">−2.10</td>
+<td headers="mean_events_total" class="gt_row gt_right">157.46</td>
+<td headers="mean_events_ctrl" class="gt_row gt_right">94.36</td>
+<td headers="mean_events_exp" class="gt_row gt_right">63.10</td>
+<td headers="mean_exposure_ctrl" class="gt_row gt_right">735.98</td>
+<td headers="mean_exposure_exp" class="gt_row gt_right">736.46</td>
+<td headers="mean_z" class="gt_row gt_right">−2.13</td>
 <td headers="sd_z" class="gt_row gt_right">0.87</td>
 </tr>
 <tr>
 <td headers="analysis" class="gt_row gt_right">2.00</td>
-<td headers="analysis_time" class="gt_row gt_right">1.50</td>
+<td headers="analysis_time" class="gt_row gt_right">18.00</td>
 <td headers="mean_enrolled" class="gt_row gt_right">356.00</td>
-<td headers="mean_events_total" class="gt_row gt_right">435.36</td>
-<td headers="mean_events_ctrl" class="gt_row gt_right">257.69</td>
-<td headers="mean_events_exp" class="gt_row gt_right">177.67</td>
-<td headers="mean_exposure_ctrl" class="gt_row gt_right">174.08</td>
-<td headers="mean_exposure_exp" class="gt_row gt_right">175.16</td>
-<td headers="mean_z" class="gt_row gt_right">−3.08</td>
-<td headers="sd_z" class="gt_row gt_right">0.83</td>
+<td headers="mean_events_total" class="gt_row gt_right">444.61</td>
+<td headers="mean_events_ctrl" class="gt_row gt_right">264.95</td>
+<td headers="mean_events_exp" class="gt_row gt_right">179.66</td>
+<td headers="mean_exposure_ctrl" class="gt_row gt_right">2,124.36</td>
+<td headers="mean_exposure_exp" class="gt_row gt_right">2,125.44</td>
+<td headers="mean_z" class="gt_row gt_right">−3.16</td>
+<td headers="sd_z" class="gt_row gt_right">0.87</td>
 </tr>
 <tr>
 <td headers="analysis" class="gt_row gt_right">3.00</td>
-<td headers="analysis_time" class="gt_row gt_right">2.00</td>
+<td headers="analysis_time" class="gt_row gt_right">24.00</td>
 <td headers="mean_enrolled" class="gt_row gt_right">356.00</td>
-<td headers="mean_events_total" class="gt_row gt_right">657.31</td>
-<td headers="mean_events_ctrl" class="gt_row gt_right">380.12</td>
-<td headers="mean_events_exp" class="gt_row gt_right">277.19</td>
-<td headers="mean_exposure_ctrl" class="gt_row gt_right">261.45</td>
-<td headers="mean_exposure_exp" class="gt_row gt_right">262.85</td>
-<td headers="mean_z" class="gt_row gt_right">−2.92</td>
-<td headers="sd_z" class="gt_row gt_right">0.47</td>
+<td headers="mean_events_total" class="gt_row gt_right">673.64</td>
+<td headers="mean_events_ctrl" class="gt_row gt_right">389.50</td>
+<td headers="mean_events_exp" class="gt_row gt_right">284.14</td>
+<td headers="mean_exposure_ctrl" class="gt_row gt_right">3,199.55</td>
+<td headers="mean_exposure_exp" class="gt_row gt_right">3,200.86</td>
+<td headers="mean_z" class="gt_row gt_right">−2.87</td>
+<td headers="sd_z" class="gt_row gt_right">0.48</td>
 </tr>
 </tbody>
 </table>
@@ -1935,19 +1936,19 @@ outcomes, this relates to the total exposure and event counts.</p>
 <tbody class="gt_table_body">
 <tr>
 <td headers="analysis" class="gt_row gt_right">1.000</td>
-<td headers="mean_info" class="gt_row gt_right">36.708</td>
-<td headers="planned_info_frac" class="gt_row gt_right">0.911</td>
+<td headers="mean_info" class="gt_row gt_right">37.541</td>
+<td headers="planned_info_frac" class="gt_row gt_right">0.352</td>
 <td headers="observed_info_frac" class="gt_row gt_right">0.229</td>
 </tr>
 <tr>
 <td headers="analysis" class="gt_row gt_right">2.000</td>
-<td headers="mean_info" class="gt_row gt_right">104.918</td>
-<td headers="planned_info_frac" class="gt_row gt_right">0.978</td>
-<td headers="observed_info_frac" class="gt_row gt_right">0.655</td>
+<td headers="mean_info" class="gt_row gt_right">106.772</td>
+<td headers="planned_info_frac" class="gt_row gt_right">0.792</td>
+<td headers="observed_info_frac" class="gt_row gt_right">0.650</td>
 </tr>
 <tr>
 <td headers="analysis" class="gt_row gt_right">3.000</td>
-<td headers="mean_info" class="gt_row gt_right">160.199</td>
+<td headers="mean_info" class="gt_row gt_right">164.189</td>
 <td headers="planned_info_frac" class="gt_row gt_right">1.000</td>
 <td headers="observed_info_frac" class="gt_row gt_right">1.000</td>
 </tr>
@@ -2449,22 +2450,22 @@ outcomes, this relates to the total exposure and event counts.</p>
 <tbody class="gt_table_body">
 <tr>
 <td headers="analysis" class="gt_row gt_right">1</td>
-<td headers="n_cross_upper" class="gt_row gt_right">11</td>
-<td headers="prob_cross_upper" class="gt_row gt_right">0.220</td>
+<td headers="n_cross_upper" class="gt_row gt_right">9</td>
+<td headers="prob_cross_upper" class="gt_row gt_right">0.180</td>
 <td headers="n_cross_lower" class="gt_row gt_right">0</td>
 <td headers="prob_cross_lower" class="gt_row gt_right">0.000</td>
 </tr>
 <tr>
 <td headers="analysis" class="gt_row gt_right">2</td>
-<td headers="n_cross_upper" class="gt_row gt_right">23</td>
-<td headers="prob_cross_upper" class="gt_row gt_right">0.460</td>
+<td headers="n_cross_upper" class="gt_row gt_right">27</td>
+<td headers="prob_cross_upper" class="gt_row gt_right">0.540</td>
 <td headers="n_cross_lower" class="gt_row gt_right">0</td>
 <td headers="prob_cross_lower" class="gt_row gt_right">0.000</td>
 </tr>
 <tr>
 <td headers="analysis" class="gt_row gt_right">3</td>
-<td headers="n_cross_upper" class="gt_row gt_right">16</td>
-<td headers="prob_cross_upper" class="gt_row gt_right">0.320</td>
+<td headers="n_cross_upper" class="gt_row gt_right">14</td>
+<td headers="prob_cross_upper" class="gt_row gt_right">0.280</td>
 <td headers="n_cross_lower" class="gt_row gt_right">0</td>
 <td headers="prob_cross_lower" class="gt_row gt_right">0.000</td>
 </tr>
@@ -2553,9 +2554,9 @@ the group sequential design:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">gs_nb</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Asymmetric two-sided with non-binding futility bound group sequential design</span></span>
 <span><span class="co">#&gt; for negative binomial outcomes, 3 analyses, total sample size 378.0, 90 percent</span></span>
-<span><span class="co">#&gt; power, 2.5 percent (1-sided) Type I error. Control rate 1.5000, treatment rate</span></span>
-<span><span class="co">#&gt; 1.0000, risk ratio 0.6667, dispersion 0.5000. Accrual duration 1.0, trial</span></span>
-<span><span class="co">#&gt; duration 2.0, average exposure 1.00. Randomization ratio 1:1.</span></span></code></pre></div>
+<span><span class="co">#&gt; power, 2.5 percent (1-sided) Type I error. Control rate 0.1250, treatment rate</span></span>
+<span><span class="co">#&gt; 0.0833, risk ratio 0.6667, dispersion 0.5000. Accrual duration 12.0, trial</span></span>
+<span><span class="co">#&gt; duration 24.0, average exposure 12.00. Randomization ratio 1:1.</span></span></code></pre></div>
 <p>For detailed boundary information, use <code>gsBoundSummary()</code>.
 We set <code>logdelta = TRUE</code> since the test statistic is based on
 the log rate ratio. The <code>~RR at bound</code> displays the rate
@@ -3042,13 +3043,13 @@ where values &lt; 1 indicate treatment benefit:</p>
 </thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="Analysis" class="gt_row gt_left">IA 1: 91%</td>
+<td headers="Analysis" class="gt_row gt_left">IA 1: 35%</td>
 <td headers="Value" class="gt_row gt_left">Z</td>
 <td headers="Efficacy" class="gt_row gt_right">2.8070</td>
 <td headers="Futility" class="gt_row gt_right">-0.4001</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Information: 160.79</td>
+<td headers="Analysis" class="gt_row gt_left">Information: 31.5</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
 <td headers="Efficacy" class="gt_row gt_right">0.0025</td>
 <td headers="Futility" class="gt_row gt_right">0.6554</td>
@@ -3056,8 +3057,8 @@ where values &lt; 1 indicate treatment benefit:</p>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.8011</td>
-<td headers="Futility" class="gt_row gt_right">1.0321</td>
+<td headers="Efficacy" class="gt_row gt_right">0.6060</td>
+<td headers="Futility" class="gt_row gt_right">1.0740</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
@@ -3072,13 +3073,13 @@ where values &lt; 1 indicate treatment benefit:</p>
 <td headers="Futility" class="gt_row gt_right">0.0100</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">IA 2: 98%</td>
+<td headers="Analysis" class="gt_row gt_left">IA 2: 79%</td>
 <td headers="Value" class="gt_row gt_left">Z</td>
 <td headers="Efficacy" class="gt_row gt_right">2.7403</td>
 <td headers="Futility" class="gt_row gt_right">0.9175</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Information: 172.57</td>
+<td headers="Analysis" class="gt_row gt_left">Information: 70.88</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
 <td headers="Efficacy" class="gt_row gt_right">0.0031</td>
 <td headers="Futility" class="gt_row gt_right">0.1794</td>
@@ -3086,8 +3087,8 @@ where values &lt; 1 indicate treatment benefit:</p>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.8114</td>
-<td headers="Futility" class="gt_row gt_right">0.9324</td>
+<td headers="Efficacy" class="gt_row gt_right">0.7218</td>
+<td headers="Futility" class="gt_row gt_right">0.8966</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
@@ -3108,7 +3109,7 @@ where values &lt; 1 indicate treatment benefit:</p>
 <td headers="Futility" class="gt_row gt_right">1.9964</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Information: 176.48</td>
+<td headers="Analysis" class="gt_row gt_left">Information: 89.53</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
 <td headers="Efficacy" class="gt_row gt_right">0.0229</td>
 <td headers="Futility" class="gt_row gt_right">0.0229</td>
@@ -3116,8 +3117,8 @@ where values &lt; 1 indicate treatment benefit:</p>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.8603</td>
-<td headers="Futility" class="gt_row gt_right">0.8603</td>
+<td headers="Efficacy" class="gt_row gt_right">0.8095</td>
+<td headers="Futility" class="gt_row gt_right">0.8095</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
@@ -3638,9 +3639,9 @@ design’s alternate hypothesis (treatment rate / control rate =
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">gs_nb_int</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Asymmetric two-sided with non-binding futility bound group sequential design</span></span>
 <span><span class="co">#&gt; for negative binomial outcomes, 3 analyses, total sample size 378.0, 90 percent</span></span>
-<span><span class="co">#&gt; power, 2.5 percent (1-sided) Type I error. Control rate 1.5000, treatment rate</span></span>
-<span><span class="co">#&gt; 1.0000, risk ratio 0.6667, dispersion 0.5000. Accrual duration 1.0, trial</span></span>
-<span><span class="co">#&gt; duration 2.0, average exposure 1.00. Randomization ratio 1:1.</span></span></code></pre></div>
+<span><span class="co">#&gt; power, 2.5 percent (1-sided) Type I error. Control rate 0.1250, treatment rate</span></span>
+<span><span class="co">#&gt; 0.0833, risk ratio 0.6667, dispersion 0.5000. Accrual duration 12.0, trial</span></span>
+<span><span class="co">#&gt; duration 24.0, average exposure 12.00. Randomization ratio 1:1.</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="notes">Notes<a class="anchor" aria-label="anchor" href="#notes"></a>

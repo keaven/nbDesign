@@ -134,6 +134,7 @@ sample_size_nbinom(
 #> Sample Size for Negative Binomial Outcome
 #> ==========================================
 #> 
+#> Method:          zhu
 #> Sample size:     n1 = 33, n2 = 33, total = 66
 #> Expected events: 158.4 (n1: 99.0, n2: 59.4)
 #> Power: 80%, Alpha: 0.025 (1-sided)
@@ -160,6 +161,7 @@ sample_size_nbinom(
 #> Sample Size for Negative Binomial Outcome
 #> ==========================================
 #> 
+#> Method:          friede
 #> Sample size:     n1 = 33, n2 = 33, total = 66
 #> Expected events: 158.4 (n1: 99.0, n2: 59.4)
 #> Power: 80%, Alpha: 0.025 (1-sided)
@@ -190,6 +192,7 @@ sample_size_nbinom(
 #> Sample Size for Negative Binomial Outcome
 #> ==========================================
 #> 
+#> Method:          zhu
 #> Sample size:     n1 = 25, n2 = 25, total = 50
 #> Expected events: 170.0 (n1: 106.2, n2: 63.7)
 #> Power: 80%, Alpha: 0.025 (1-sided)
@@ -218,6 +221,7 @@ sample_size_nbinom(
 #> Sample Size for Negative Binomial Outcome
 #> ==========================================
 #> 
+#> Method:          zhu
 #> Sample size:     n1 = 37, n2 = 37, total = 74
 #> Expected events: 153.4 (n1: 95.9, n2: 57.5)
 #> Power: 80%, Alpha: 0.025 (1-sided)
@@ -262,6 +266,7 @@ sample_size_nbinom(
 #> Sample Size for Negative Binomial Outcome
 #> ==========================================
 #> 
+#> Method:          zhu
 #> Sample size:     n1 = 37, n2 = 37, total = 74
 #> Expected events: 172.6 (n1: 95.9, n2: 76.7)
 #> Power: 26%, Alpha: 0.025 (1-sided)
@@ -287,6 +292,7 @@ sample_size_nbinom(
 #> Sample Size for Negative Binomial Outcome
 #> ==========================================
 #> 
+#> Method:          zhu
 #> Sample size:     n1 = 40, n2 = 80, total = 120
 #> Expected events: 264.0 (n1: 120.0, n2: 144.0)
 #> Power: 96%, Alpha: 0.025 (1-sided)
@@ -334,6 +340,7 @@ sample_size_nbinom(
 #> Sample Size for Negative Binomial Outcome
 #> ==========================================
 #> 
+#> Method:          zhu
 #> Sample size:     n1 = 33, n2 = 33, total = 66
 #> Expected events: 157.5 (n1: 98.3, n2: 59.2)
 #> Power: 80%, Alpha: 0.025 (1-sided)

@@ -17,16 +17,17 @@ and simulate the design to confirm design operating characteristicsusing
 
 We design a trial with the following characteristics:
 
-- **Enrollment:** 1 year (12 months) with a constant rate
-- **Trial Duration:** 2 years (24 months)
+- **Enrollment:** 12 months with a constant rate
+- **Trial Duration:** 24 months
 - **Analyses:**
   - Interim 1: 10 months
   - Interim 2: 18 months
   - Final: 24 months
 - **Event Rates:**
-  - Control: 1.5 events per year
+  - Control: 0.125 events per month (1.5 per year)
 
-  - Experimental: 1.0 events per year (rate ratio = 0.67)
+  - Experimental: 0.0833 events per month (1.0 per year; rate ratio =
+    0.67)
 - **Dispersion:** 0.5
 - **Power:** 90% (beta = 0.1)
 - **Alpha:** 0.025 (one-sided)
@@ -37,19 +38,19 @@ First, we calculate the required sample size for a fixed design:
 
 ``` r
 # Sample size calculation
-# Enrollment: constant rate over 1 year
-# Trial duration: 2 years
+# Enrollment: constant rate over 12 months
+# Trial duration: 24 months
 nb_ss <- sample_size_nbinom(
-  lambda1 = 1.5,           # Control event rate (per year)
-  lambda2 = 1.0,           # Experimental event rate (per year)
+  lambda1 = 1.5 / 12,      # Control event rate (per month)
+  lambda2 = 1.0 / 12,      # Experimental event rate (per month)
   dispersion = 0.5,        # Overdispersion parameter
   power = 0.9,             # 90% power
   alpha = 0.025,           # One-sided alpha
-  accrual_rate = 100,      # Patients per year (will determine total n)
-  accrual_duration = 1,    # 1 year enrollment
-  trial_duration = 2,      # 2 year trial
-  max_followup = 1,        # 1 year of follow-up per patient
-  event_gap = 20 / 365.25, # Minimum gap between events is 20 days
+  accrual_rate = 100 / 12, # Patients per month (will determine total n)
+  accrual_duration = 12,   # 12 months enrollment
+  trial_duration = 24,     # 24 months trial
+  max_followup = 12,       # 12 months of follow-up per patient
+  event_gap = 20 / 30.4375, # Minimum gap between events is 20 days
   method = "zhu"           # Zhu and Lakkis sample size method
 )
 
@@ -60,12 +61,13 @@ nb_ss
 #> Sample Size for Negative Binomial Outcome
 #> ==========================================
 #> 
+#> Method:          zhu
 #> Sample size:     n1 = 178, n2 = 178, total = 356
 #> Expected events: 415.5 (n1: 246.7, n2: 168.8)
 #> Power: 90%, Alpha: 0.025 (1-sided)
-#> Rates: control = 1.5000, treatment = 1.0000 (RR = 0.6667)
-#> Dispersion: 0.5000, Avg exposure: 1.00
-#> Accrual: 1.0, Trial duration: 2.0
+#> Rates: control = 0.1250, treatment = 0.0833 (RR = 0.6667)
+#> Dispersion: 0.5000, Avg exposure: 12.00
+#> Accrual: 12.0, Trial duration: 24.0
 ```
 
 ### Group Sequential Design
@@ -81,8 +83,8 @@ $\alpha$ at the 3 planned analyses regardless of the observed
 statistical information at each analysis.
 
 ``` r
-# Analysis times (in years, for simulation)
-analysis_times <- c(10, 18, 24) / 12  # Convert months to years
+# Analysis times (in months)
+analysis_times <- c(10, 18, 24)
 
 # Create group sequential design with integer sample sizes
 gs_nb <- gsNBCalendar(
@@ -95,7 +97,7 @@ gs_nb <- gsNBCalendar(
   sflpar = c(.5, .5),
   usTime = c(.1, .2, 1),   # Conservative efficacy spending: 10%, 20% at IAs
   lsTime = c(.1, .4, 1),   # Futility spending more aggressive at IA2
-  analysis_times = analysis_times * 12  # Calendar times in months
+  analysis_times = analysis_times  # Calendar times in months
 ) |> toInteger() # Round to integer sample size
 ```
 
@@ -105,9 +107,9 @@ Textual group sequential design summary:
 summary(gs_nb)
 #> Asymmetric two-sided with non-binding futility bound group sequential design
 #> for negative binomial outcomes, 3 analyses, total sample size 378.0, 90 percent
-#> power, 2.5 percent (1-sided) Type I error. Control rate 1.5000, treatment rate
-#> 1.0000, risk ratio 0.6667, dispersion 0.5000. Accrual duration 1.0, trial
-#> duration 2.0, average exposure 1.00. Randomization ratio 1:1.
+#> power, 2.5 percent (1-sided) Type I error. Control rate 0.1250, treatment rate
+#> 0.0833, risk ratio 0.6667, dispersion 0.5000. Accrual duration 12.0, trial
+#> duration 24.0, average exposure 12.00. Randomization ratio 1:1.
 ```
 
 Tabular summary:
@@ -118,7 +120,7 @@ gs_nb |>
     deltaname = "RR", 
     logdelta = TRUE,
     Nname = "Information",
-    timename = "Year",
+    timename = "Month",
     digits = 4,
     ddigits = 2
   ) |>
@@ -134,19 +136,19 @@ gs_nb |>
 |--------------------------------------------------------------|---------------------|----------|----------|
 | N = 378, Expected events = 415.5                             |                     |          |          |
 | Analysis                                                     | Value               | Efficacy | Futility |
-| IA 1: 91%                                                    | Z                   | 2.8070   | -0.4001  |
-| Information: 160.79                                          | p (1-sided)         | 0.0025   | 0.6554   |
-|                                                              | ~RR at bound        | 0.8011   | 1.0321   |
+| IA 1: 35%                                                    | Z                   | 2.8070   | -0.4001  |
+| Information: 31.5                                            | p (1-sided)         | 0.0025   | 0.6554   |
+|                                                              | ~RR at bound        | 0.6060   | 1.0740   |
 |                                                              | P(Cross) if RR=1    | 0.0025   | 0.3446   |
 |                                                              | P(Cross) if RR=0.67 | 0.1892   | 0.0100   |
-| IA 2: 98%                                                    | Z                   | 2.7403   | 0.9175   |
-| Information: 172.57                                          | p (1-sided)         | 0.0031   | 0.1794   |
-|                                                              | ~RR at bound        | 0.8114   | 0.9324   |
+| IA 2: 79%                                                    | Z                   | 2.7403   | 0.9175   |
+| Information: 70.88                                           | p (1-sided)         | 0.0031   | 0.1794   |
+|                                                              | ~RR at bound        | 0.7218   | 0.8966   |
 |                                                              | P(Cross) if RR=1    | 0.0050   | 0.8259   |
 |                                                              | P(Cross) if RR=0.67 | 0.5121   | 0.0400   |
 | Final                                                        | Z                   | 1.9964   | 1.9964   |
-| Information: 176.48                                          | p (1-sided)         | 0.0229   | 0.0229   |
-|                                                              | ~RR at bound        | 0.8603   | 0.8603   |
+| Information: 89.53                                           | p (1-sided)         | 0.0229   | 0.0229   |
+|                                                              | ~RR at bound        | 0.8095   | 0.8095   |
 |                                                              | P(Cross) if RR=1    | 0.0235   | 0.9765   |
 |                                                              | P(Cross) if RR=0.67 | 0.9000   | 0.1000   |
 
@@ -161,28 +163,28 @@ the group sequential design.
 set.seed(42)
 n_sims <- 50
 
-# Enrollment rate (patients per year) to achieve target sample size
+# Enrollment rate (patients per month) to achieve target sample size
 n_target <- ceiling(nb_ss$n_total)
-enroll_rate_val <- n_target / 1  # All enrolled in 1 year
+enroll_rate_val <- n_target / 12  # All enrolled in 12 months
 
 # Define enrollment
 enroll_rate <- data.frame(
   rate = enroll_rate_val,
-  duration = 1  # 1 year enrollment
+  duration = 12  # 12 months enrollment
 )
 
 # Define failure rates (with dispersion)
 fail_rate <- data.frame(
   treatment = c("Control", "Experimental"),
-  rate = c(1.5, 1.0),
+  rate = c(1.5 / 12, 1.0 / 12),
   dispersion = c(0.5, 0.5)
 )
 
 # No dropout for simplicity
 dropout_rate <- NULL
 
-# Maximum follow-up (trial duration minus minimum enrollment time)
-max_followup <- 2  # 2 years from enrollment start
+# Maximum follow-up (trial duration from enrollment start)
+max_followup <- 24  # 24 months
 ```
 
 ### Run Simulations
@@ -311,7 +313,7 @@ summary_by_analysis |>
   tab_header(title = "Summary Statistics by Analysis") |>
   cols_label(
     analysis = "Analysis",
-    analysis_time = "Time (yrs)",
+    analysis_time = "Time (months)",
     mean_enrolled = "N Enrolled",
     mean_events_total = "Total Events",
     mean_events_ctrl = "Ctrl Events",
@@ -324,12 +326,12 @@ summary_by_analysis |>
   fmt_number(decimals = 2)
 ```
 
-| Summary Statistics by Analysis |            |            |              |             |            |               |              |        |      |
-|--------------------------------|------------|------------|--------------|-------------|------------|---------------|--------------|--------|------|
-| Analysis                       | Time (yrs) | N Enrolled | Total Events | Ctrl Events | Exp Events | Ctrl Exposure | Exp Exposure | Mean Z | SD Z |
-| 1.00                           | 0.83       | 297.20     | 153.54       | 91.52       | 62.02      | 60.21         | 60.61        | −2.10  | 0.87 |
-| 2.00                           | 1.50       | 356.00     | 435.36       | 257.69      | 177.67     | 174.08        | 175.16       | −3.08  | 0.83 |
-| 3.00                           | 2.00       | 356.00     | 657.31       | 380.12      | 277.19     | 261.45        | 262.85       | −2.92  | 0.47 |
+| Summary Statistics by Analysis |               |            |              |             |            |               |              |        |      |
+|--------------------------------|---------------|------------|--------------|-------------|------------|---------------|--------------|--------|------|
+| Analysis                       | Time (months) | N Enrolled | Total Events | Ctrl Events | Exp Events | Ctrl Exposure | Exp Exposure | Mean Z | SD Z |
+| 1.00                           | 10.00         | 297.20     | 157.46       | 94.36       | 63.10      | 735.98        | 736.46       | −2.13  | 0.87 |
+| 2.00                           | 18.00         | 356.00     | 444.61       | 264.95      | 179.66     | 2,124.36      | 2,125.44     | −3.16  | 0.87 |
+| 3.00                           | 24.00         | 356.00     | 673.64       | 389.50      | 284.14     | 3,199.55      | 3,200.86     | −2.87  | 0.48 |
 
 ### Statistical Information
 
@@ -367,9 +369,9 @@ info_by_analysis |>
 | Information by Analysis |                  |                   |                    |
 |-------------------------|------------------|-------------------|--------------------|
 | Analysis                | Mean Information | Planned Info Frac | Observed Info Frac |
-| 1.000                   | 36.708           | 0.911             | 0.229              |
-| 2.000                   | 104.918          | 0.978             | 0.655              |
-| 3.000                   | 160.199          | 1.000             | 1.000              |
+| 1.000                   | 37.541           | 0.352             | 0.229              |
+| 2.000                   | 106.772          | 0.792             | 0.650              |
+| 3.000                   | 164.189          | 1.000             | 1.000              |
 
 ### Boundary Crossings and Power
 
@@ -404,9 +406,9 @@ crossing_summary[, .(analysis, n_cross_upper, prob_cross_upper, n_cross_lower, p
 | Boundary Crossing by Analysis |               |                |               |                |
 |-------------------------------|---------------|----------------|---------------|----------------|
 | Analysis                      | N Cross Upper | P(Cross Upper) | N Cross Lower | P(Cross Lower) |
-| 1                             | 11            | 0.220          | 0             | 0.000          |
-| 2                             | 23            | 0.460          | 0             | 0.000          |
-| 3                             | 16            | 0.320          | 0             | 0.000          |
+| 1                             | 9             | 0.180          | 0             | 0.000          |
+| 2                             | 27            | 0.540          | 0             | 0.000          |
+| 3                             | 14            | 0.280          | 0             | 0.000          |
 
 ### Overall Power
 
@@ -490,9 +492,9 @@ a textual overview of the group sequential design:
 summary(gs_nb)
 #> Asymmetric two-sided with non-binding futility bound group sequential design
 #> for negative binomial outcomes, 3 analyses, total sample size 378.0, 90 percent
-#> power, 2.5 percent (1-sided) Type I error. Control rate 1.5000, treatment rate
-#> 1.0000, risk ratio 0.6667, dispersion 0.5000. Accrual duration 1.0, trial
-#> duration 2.0, average exposure 1.00. Randomization ratio 1:1.
+#> power, 2.5 percent (1-sided) Type I error. Control rate 0.1250, treatment rate
+#> 0.0833, risk ratio 0.6667, dispersion 0.5000. Accrual duration 12.0, trial
+#> duration 24.0, average exposure 12.00. Randomization ratio 1:1.
 ```
 
 For detailed boundary information, use `gsBoundSummary()`. We set
@@ -521,19 +523,19 @@ gsDesign::gsBoundSummary(gs_nb,
 |--------------------------------------------------------------|---------------------|----------|----------|
 | N = 378, Expected events = 415.5                             |                     |          |          |
 | Analysis                                                     | Value               | Efficacy | Futility |
-| IA 1: 91%                                                    | Z                   | 2.8070   | -0.4001  |
-| Information: 160.79                                          | p (1-sided)         | 0.0025   | 0.6554   |
-|                                                              | ~RR at bound        | 0.8011   | 1.0321   |
+| IA 1: 35%                                                    | Z                   | 2.8070   | -0.4001  |
+| Information: 31.5                                            | p (1-sided)         | 0.0025   | 0.6554   |
+|                                                              | ~RR at bound        | 0.6060   | 1.0740   |
 |                                                              | P(Cross) if RR=1    | 0.0025   | 0.3446   |
 |                                                              | P(Cross) if RR=0.67 | 0.1892   | 0.0100   |
-| IA 2: 98%                                                    | Z                   | 2.7403   | 0.9175   |
-| Information: 172.57                                          | p (1-sided)         | 0.0031   | 0.1794   |
-|                                                              | ~RR at bound        | 0.8114   | 0.9324   |
+| IA 2: 79%                                                    | Z                   | 2.7403   | 0.9175   |
+| Information: 70.88                                           | p (1-sided)         | 0.0031   | 0.1794   |
+|                                                              | ~RR at bound        | 0.7218   | 0.8966   |
 |                                                              | P(Cross) if RR=1    | 0.0050   | 0.8259   |
 |                                                              | P(Cross) if RR=0.67 | 0.5121   | 0.0400   |
 | Final                                                        | Z                   | 1.9964   | 1.9964   |
-| Information: 176.48                                          | p (1-sided)         | 0.0229   | 0.0229   |
-|                                                              | ~RR at bound        | 0.8603   | 0.8603   |
+| Information: 89.53                                           | p (1-sided)         | 0.0229   | 0.0229   |
+|                                                              | ~RR at bound        | 0.8095   | 0.8095   |
 |                                                              | P(Cross) if RR=1    | 0.0235   | 0.9765   |
 |                                                              | P(Cross) if RR=0.67 | 0.9000   | 0.1000   |
 
@@ -569,9 +571,9 @@ gs_nb_int <- toInteger(gs_nb)
 summary(gs_nb_int)
 #> Asymmetric two-sided with non-binding futility bound group sequential design
 #> for negative binomial outcomes, 3 analyses, total sample size 378.0, 90 percent
-#> power, 2.5 percent (1-sided) Type I error. Control rate 1.5000, treatment rate
-#> 1.0000, risk ratio 0.6667, dispersion 0.5000. Accrual duration 1.0, trial
-#> duration 2.0, average exposure 1.00. Randomization ratio 1:1.
+#> power, 2.5 percent (1-sided) Type I error. Control rate 0.1250, treatment rate
+#> 0.0833, risk ratio 0.6667, dispersion 0.5000. Accrual duration 12.0, trial
+#> duration 24.0, average exposure 12.00. Randomization ratio 1:1.
 ```
 
 ## Notes

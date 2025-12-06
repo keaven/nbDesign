@@ -125,7 +125,9 @@ Default is NULL (no gap). If provided, the effective event rate is reduced.</p><
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
 <dd><p>Method for sample size calculation. "zhu" for Zhu and Lakkis (2014),
-"friede" for Friede and Schmidli (2010) / Mütze et al. (2018).</p></dd>
+"friede" for Friede and Schmidli (2010) / Mütze et al. (2018), or
+"AZG" for the Anderson-Zhang-Gemini method which adjusts exposure for event gaps
+rather than rates.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -143,7 +145,13 @@ Default is NULL (no gap). If provided, the effective event rate is reduced.</p><
 <dd><p>Total sample size</p></dd>
 
 <dt>exposure</dt>
-<dd><p>Average exposure time used in calculation</p></dd>
+<dd><p>Average exposure time used in calculation (calendar time)</p></dd>
+
+<dt>exposure1</dt>
+<dd><p>Average at-risk exposure time for group 1 (if AZG method)</p></dd>
+
+<dt>exposure2</dt>
+<dd><p>Average at-risk exposure time for group 2 (if AZG method)</p></dd>
 
 
 </dl></div>
@@ -171,11 +179,11 @@ for negative binomial outcomes. <em>Statistical Methods in Medical Research</em>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "sample_size_nbinom_result" "list"                     </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Fixed sample size design for negative binomial outcome, total sample size 36</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (n1=18, n2=18), 80 percent power, 2.5 percent (1-sided) Type I error. Control</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> rate 0.5000, treatment rate 0.3000, risk ratio 0.6000, dispersion 0.1000.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Accrual duration 20.0, trial duration 24.0, average exposure 14.00. Expected</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> events 201.6. Randomization ratio 1:1.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fixed sample size design for negative binomial outcome (zhu method), total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample size 36 (n1=18, n2=18), 80 percent power, 2.5 percent (1-sided) Type I</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> error. Control rate 0.5000, treatment rate 0.3000, risk ratio 0.6000,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dispersion 0.1000. Accrual duration 20.0, trial duration 24.0, average exposure</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14.00. Expected events 201.6. Randomization ratio 1:1.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># With piecewise accrual</span></span></span>
@@ -187,11 +195,11 @@ for negative binomial outcomes. <em>Statistical Methods in Medical Research</em>
 <span class="r-in"><span>  trial_duration <span class="op">=</span> <span class="fl">12</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">x2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Fixed sample size design for negative binomial outcome, total sample size 50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (n1=25, n2=25), 80 percent power, 2.5 percent (1-sided) Type I error. Control</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> rate 0.5000, treatment rate 0.3000, risk ratio 0.6000, dispersion 0.1000.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Accrual duration 6.0, trial duration 12.0, average exposure 8.50. Expected</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> events 170.0. Randomization ratio 1:1.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fixed sample size design for negative binomial outcome (zhu method), total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample size 50 (n1=25, n2=25), 80 percent power, 2.5 percent (1-sided) Type I</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> error. Control rate 0.5000, treatment rate 0.3000, risk ratio 0.6000,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> dispersion 0.1000. Accrual duration 6.0, trial duration 12.0, average exposure</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8.50. Expected events 170.0. Randomization ratio 1:1.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
