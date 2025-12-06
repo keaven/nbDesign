@@ -220,19 +220,20 @@ sample_size_nbinom(
 
 ## Accounting for Event Gaps
 
-In some recurrent event trials, there may be a mandatory "gap" period after each event during which no new events can be recorded (e.g., a recovery period or administrative window). This effectively reduces the time at risk. The package provides two methods to account for this:
+In some recurrent event trials, there may be a mandatory "gap" period after each event during which no new events can be recorded (e.g., a recovery period or administrative window). This effectively reduces the time at risk.
 
-1.  **Zhu and Lakkis (`method = "zhu"`)**: The event rates are adjusted to "effective rates" $\lambda^* = \lambda / (1 + \lambda g)$, while the exposure time remains the calendar duration. This is the standard method described in Zhu and Lakkis (2014).
-2.  **Anderson-Zhang-Gemini (`method = "AZG"`)**: The event rates remain the original planning rates $\lambda$, but the exposure is adjusted to "at-risk exposure" $E_{risk} = E_{cal} / (1 + \lambda g)$.
+If an `event_gap` ($g$) is specified, the function adjusts the calculation as follows:
 
-Both methods yield identical sample sizes and power because the expected number of events is the same ($\mu = \lambda^* E_{cal} = \lambda E_{risk}$). However, the **AZG** method provides a more intuitive summary by reporting the actual time-at-risk, which differs between treatment groups (since the gap reduction depends on the event rate). We recommend the **AZG** method for design planning as it preserves the interpretation of the input rates, while the **Zhu** method is useful for reproducing literature results.
+1.  **Effective Rates**: The event rates are adjusted to $\lambda^* = \lambda / (1 + \lambda g)$ for the sample size calculation (Zhu and Lakkis method).
+2.  **At-Risk Exposure**: The function reports the "average at-risk exposure" $E_{risk} = E_{cal} / (1 + \lambda g)$ alongside the standard calendar exposure. This provides transparency on the actual time subjects are at risk for events.
 
-### Example with Event Gap (AZG vs Zhu)
+Since the gap reduction depends on the event rate ($\lambda$), the at-risk exposure differs between treatment groups if their rates differ.
+
+### Example with Event Gap
 
 Calculate sample size assuming a 5-day gap after each event (approx 0.0137 years).
 
 ```{r}
-# Using AZG Method (Recommended)
 sample_size_nbinom(
   lambda1 = 0.5,
   lambda2 = 0.3,
@@ -241,29 +242,11 @@ sample_size_nbinom(
   accrual_rate = 10,
   accrual_duration = 12,
   trial_duration = 12,
-  event_gap = 5 / 365.25,
-  method = "AZG"
+  event_gap = 5 / 365.25
 )
 ```
 
-Note the output reports "Avg exposure (at-risk)" which differs for n1 and n2.
-
-```{r}
-# Using Zhu Method (Standard)
-sample_size_nbinom(
-  lambda1 = 0.5,
-  lambda2 = 0.3,
-  dispersion = 0.1,
-  power = 0.8,
-  accrual_rate = 10,
-  accrual_duration = 12,
-  trial_duration = 12,
-  event_gap = 5 / 365.25,
-  method = "zhu"
-)
-```
-
-Both methods result in the same total sample size, but the Zhu method reports the calendar exposure and adjusted rates.
+The output shows both the "Avg exposure (calendar)" and the "Avg exposure (at-risk)" for each group.
 
 ## References
 

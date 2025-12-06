@@ -125,40 +125,30 @@ test_that("sample_size_nbinom calculates correctly", {
   ))
 })
 
-# Test AZG method
-# Compare Zhu and AZG - should give same sample size but different exposure reporting
-test_that("AZG method produces consistent results", {
+# Test Exposure Reporting with Event Gap
+# When gap > 0, function should return exposure_at_risk_n1/n2
+test_that("Event gap results in correct exposure reporting", {
   lambda1 <- 0.5
   lambda2 <- 0.3
   gap <- 0.5
   
-  # Zhu method
-  res_zhu <- sample_size_nbinom(
+  res <- sample_size_nbinom(
     lambda1 = lambda1, lambda2 = lambda2, dispersion = 0.1, power = 0.8,
     accrual_rate = 10, accrual_duration = 20, trial_duration = 24,
     event_gap = gap, method = "zhu"
   )
   
-  # AZG method
-  res_azg <- sample_size_nbinom(
-    lambda1 = lambda1, lambda2 = lambda2, dispersion = 0.1, power = 0.8,
-    accrual_rate = 10, accrual_duration = 20, trial_duration = 24,
-    event_gap = gap, method = "AZG"
-  )
+  # Calendar exposure
+  exp_cal <- res$exposure
+  expect_true(exp_cal > 0)
   
-  # Sample sizes should be identical
-  expect_equal(res_zhu$n_total, res_azg$n_total)
-  
-  # Exposures
-  exp_cal <- res_zhu$exposure
-  expect_equal(res_azg$exposure, exp_cal)
-  
+  # Expected at-risk exposures
   exp1_expected <- exp_cal / (1 + lambda1 * gap)
   exp2_expected <- exp_cal / (1 + lambda2 * gap)
   
-  expect_equal(res_azg$exposure1, exp1_expected)
-  expect_equal(res_azg$exposure2, exp2_expected)
+  expect_equal(res$exposure_at_risk_n1, exp1_expected)
+  expect_equal(res$exposure_at_risk_n2, exp2_expected)
   
-  # Zhu has unadjusted exposure1/2 equal to calendar
-  expect_equal(res_zhu$exposure1, res_zhu$exposure)
+  # Check method name remains "zhu"
+  expect_equal(res$inputs$method, "zhu")
 })

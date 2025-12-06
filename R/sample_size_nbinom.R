@@ -20,9 +20,7 @@
 #' @param event_gap Gap duration after each event during which no new events are counted.
 #'   Default is NULL (no gap). If provided, the effective event rate is reduced.
 #' @param method Method for sample size calculation. "zhu" for Zhu and Lakkis (2014),
-#'   "friede" for Friede and Schmidli (2010) / Mütze et al. (2018), or
-#'   "AZG" for the Anderson-Zhang-Gemini method which adjusts exposure for event gaps
-#'   rather than rates.
+#'   or "friede" for Friede and Schmidli (2010) / Mütze et al. (2018).
 #'
 #' @return An object of class \code{sample_size_nbinom_result}, which is a list containing:
 #' \describe{
@@ -31,8 +29,8 @@
 #'   \item{n2}{Sample size for group 2}
 #'   \item{n_total}{Total sample size}
 #'   \item{exposure}{Average exposure time used in calculation (calendar time)}
-#'   \item{exposure1}{Average at-risk exposure time for group 1 (if AZG method)}
-#'   \item{exposure2}{Average at-risk exposure time for group 2 (if AZG method)}
+#'   \item{exposure_at_risk_n1}{Average at-risk exposure time for group 1 (accounts for event gap)}
+#'   \item{exposure_at_risk_n2}{Average at-risk exposure time for group 2 (accounts for event gap)}
 #' }
 #'
 #' @references
@@ -49,7 +47,7 @@
 #' 27(10), 2978-2993.
 #'
 #' @seealso
-#' \code{vignette("sample_size_nbinom", package = "gsDesignNB")} for a detailed explanation of the methodology and the difference between "zhu" and "AZG" methods.
+#' \code{vignette("sample_size_nbinom", package = "gsDesignNB")} for a detailed explanation of the methodology.
 #'
 #' @export
 #'
@@ -117,12 +115,6 @@ sample_size_nbinom <- function(lambda1, lambda2, dispersion, power = NULL,
   )
 
   # Determine mode: Calculate N or Calculate Power
-  # We don't have 'mode' logic based on missing accrual_rate anymore since it's required.
-  # If power is NULL, solve for N. If power is provided, solve for Power (implied).
-  # BUT: If accrual_rate is fixed (provided), we effectively have a fixed N.
-  # In typical 'solve_n' mode, we want to SCALE the accrual rate to achieve the target power.
-  # In 'solve_power' mode, we keep accrual rate fixed and compute power.
-
   mode <- "solve_n"
   if (!is.null(power)) {
     # We are solving for N (scaling accrual) to meet this power
@@ -130,7 +122,6 @@ sample_size_nbinom <- function(lambda1, lambda2, dispersion, power = NULL,
   } else {
     # Power is null, so we calculate power for the fixed accrual
     mode <- "solve_power"
-    # Default power? No, we are calculating it.
   }
 
   # Helper function for average exposure over [u_min, u_max] given dropout_rate
@@ -152,9 +143,6 @@ sample_size_nbinom <- function(lambda1, lambda2, dispersion, power = NULL,
   total_n_accrual <- 0
   total_exposure_mass <- 0
 
-  # Handle variable accrual to calculate average exposure
-  # Accrual arguments are now mandatory, so no checks for is.null needed (R will error if missing)
-  
   if (length(accrual_rate) != length(accrual_duration)) {
     stop("accrual_rate and accrual_duration must have the same length.")
   }
@@ -215,29 +203,25 @@ sample_size_nbinom <- function(lambda1, lambda2, dispersion, power = NULL,
 
   exposure_calendar <- total_exposure_mass / total_n_accrual
 
-  # Setup effective rates and exposures based on method and event_gap
-  exposure1 <- exposure_calendar
-  exposure2 <- exposure_calendar
-  lambda1_eff <- lambda1
-  lambda2_eff <- lambda2
-
-  if (method == "AZG") {
-    # Anderson-Zhang-Gemini method: adjust exposure, keep rates raw
-    if (!is.null(event_gap) && !is.na(event_gap) && event_gap > 0) {
-      exposure1 <- exposure_calendar / (1 + lambda1 * event_gap)
-      exposure2 <- exposure_calendar / (1 + lambda2 * event_gap)
-    }
-    # rates remain unadjusted
+  # Setup effective rates and exposures based on event_gap
+  if (!is.null(event_gap) && !is.na(event_gap) && event_gap > 0) {
+    # Adjusted rates for calculation
+    lambda1_eff <- lambda1 / (1 + lambda1 * event_gap)
+    lambda2_eff <- lambda2 / (1 + lambda2 * event_gap)
+    
+    # Adjusted exposures for reporting (at-risk)
+    exposure1_at_risk <- exposure_calendar / (1 + lambda1 * event_gap)
+    exposure2_at_risk <- exposure_calendar / (1 + lambda2 * event_gap)
   } else {
-    # zhu or friede: adjust rates, keep exposure calendar
-    if (!is.null(event_gap) && !is.na(event_gap) && event_gap > 0) {
-      lambda1_eff <- lambda1 / (1 + lambda1 * event_gap)
-      lambda2_eff <- lambda2 / (1 + lambda2 * event_gap)
-    }
+    lambda1_eff <- lambda1
+    lambda2_eff <- lambda2
+    
+    exposure1_at_risk <- exposure_calendar
+    exposure2_at_risk <- exposure_calendar
   }
 
-  mu1 <- lambda1_eff * exposure1
-  mu2 <- lambda2_eff * exposure2
+  mu1 <- lambda1_eff * exposure_calendar
+  mu2 <- lambda2_eff * exposure_calendar
   k <- dispersion
 
   z_alpha <- qnorm(1 - alpha / sided)
@@ -250,7 +234,7 @@ sample_size_nbinom <- function(lambda1, lambda2, dispersion, power = NULL,
   if (mode == "solve_n") {
     z_beta <- qnorm(power)
 
-    if (method == "zhu" || method == "AZG") {
+    if (method == "zhu") {
       num <- (z_alpha + z_beta)^2 * ((1 / mu1 + k) + (1 / ratio) * (1 / mu2 + k))
       den <- (log(lambda1 / lambda2))^2
       n1 <- num / den
@@ -266,7 +250,7 @@ sample_size_nbinom <- function(lambda1, lambda2, dispersion, power = NULL,
       n1 <- n_total * p1
       n2 <- n_total * p2
     } else {
-      stop("Unknown method. Choose 'zhu', 'friede', or 'AZG'.")
+      stop("Unknown method. Choose 'zhu' or 'friede'.")
     }
 
     n1_c <- ceiling(n1)
@@ -285,7 +269,7 @@ sample_size_nbinom <- function(lambda1, lambda2, dispersion, power = NULL,
     n1_c <- n_total_c / (1 + ratio)
     n2_c <- n_total_c * ratio / (1 + ratio)
 
-    if (method == "zhu" || method == "AZG") {
+    if (method == "zhu") {
       # z_beta = sqrt( n1 * (log(mu1/mu2))^2 / V ) - z_alpha
       V <- (1 / mu1 + k) + (1 / ratio) * (1 / mu2 + k)
       z_beta <- sqrt(n1_c * (log(lambda1 / lambda2))^2 / V) - z_alpha
@@ -296,23 +280,15 @@ sample_size_nbinom <- function(lambda1, lambda2, dispersion, power = NULL,
       V <- (1 / mu1 + k) / p1 + (1 / mu2 + k) / p2
       z_beta <- sqrt(n_total_c * (log(lambda1 / lambda2))^2 / V) - z_alpha
     } else {
-      stop("Unknown method. Choose 'zhu', 'friede', or 'AZG'.")
+      stop("Unknown method. Choose 'zhu' or 'friede'.")
     }
 
     power <- pnorm(z_beta)
   }
 
-  # Calculate variance of log rate ratio log(lambda1/lambda2) with calculated sample size
-  # Note: For solve_power, we use the non-rounded n1_c/n2_c derived from accrual if they are floats?
-  # Accrual rates imply sample size. If sample size is not integer, what is the variance?
-  # Usually variance depends on N.
-  # I'll use the n1_c and n2_c as calculated (which might be floats in solve_power mode).
-
   variance <- (1 / mu1 + k) / n1_c + (1 / mu2 + k) / n2_c
 
   # Calculate expected events
-  # Expected events = n * mu = n * lambda * exposure
-  # Note: mu1 and mu2 are already lambda * exposure
   events_n1 <- n1_c * mu1
   events_n2 <- n2_c * mu2
   total_events <- events_n1 + events_n2
@@ -327,8 +303,8 @@ sample_size_nbinom <- function(lambda1, lambda2, dispersion, power = NULL,
       sided = sided,
       power = power,
       exposure = exposure_calendar,
-      exposure1 = exposure1,
-      exposure2 = exposure2,
+      exposure_at_risk_n1 = exposure1_at_risk,
+      exposure_at_risk_n2 = exposure2_at_risk,
       events_n1 = events_n1,
       events_n2 = events_n2,
       total_events = total_events,
@@ -367,14 +343,12 @@ print.sample_size_nbinom_result <- function(x, ...) {
               x$inputs$lambda1, x$inputs$lambda2, 
               x$inputs$lambda2 / x$inputs$lambda1))
   
-  if (x$inputs$method == "AZG" && !is.null(x$inputs$event_gap) && x$inputs$event_gap > 0) {
-    cat(sprintf("Dispersion: %.4f, Avg exposure (calendar): %.2f\n",
-                x$inputs$dispersion, x$exposure))
+  cat(sprintf("Dispersion: %.4f, Avg exposure (calendar): %.2f\n",
+              x$inputs$dispersion, x$exposure))
+  
+  if (!is.null(x$inputs$event_gap) && x$inputs$event_gap > 0) {
     cat(sprintf("Avg exposure (at-risk): n1 = %.2f, n2 = %.2f\n",
-                x$exposure1, x$exposure2))
-  } else {
-    cat(sprintf("Dispersion: %.4f, Avg exposure: %.2f\n",
-                x$inputs$dispersion, x$exposure))
+                x$exposure_at_risk_n1, x$exposure_at_risk_n2))
   }
   
   cat(sprintf("Accrual: %.1f, Trial duration: %.1f\n",

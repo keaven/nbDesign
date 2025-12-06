@@ -279,7 +279,7 @@ summary.gsNB <- function(object, ...) {
   risk_ratio <- inputs$lambda2 / inputs$lambda1
 
   # Determine test type description
- test_type_desc <- switch(
+  test_type_desc <- switch(
     as.character(object$test.type),
     "1" = "One-sided",
     "2" = "Two-sided symmetric",
@@ -289,6 +289,13 @@ summary.gsNB <- function(object, ...) {
     "6" = "Asymmetric two-sided with non-binding futility bound (lower spending)",
     "Unknown test type"
   )
+
+  # Format exposure text
+  exposure_text <- sprintf("average exposure %.2f", nb$exposure)
+  if (!is.null(inputs$event_gap) && inputs$event_gap > 0 && !is.null(nb$exposure_at_risk_n1)) {
+    exposure_text <- sprintf("average exposure (calendar) %.2f, (at-risk n1=%.2f, n2=%.2f)", 
+                             nb$exposure, nb$exposure_at_risk_n1, nb$exposure_at_risk_n2)
+  }
 
   # Build the summary text
   summary_text <- sprintf(
@@ -301,7 +308,7 @@ summary.gsNB <- function(object, ...) {
       "Control rate %.4f, treatment rate %.4f, ",
       "risk ratio %.4f, dispersion %.4f. ",
       "Accrual duration %.1f, trial duration %.1f, ",
-      "average exposure %.2f. ",
+      "%s. ",
       "Randomization ratio %.0f:1."
     ),
     test_type_desc,
@@ -315,7 +322,7 @@ summary.gsNB <- function(object, ...) {
     inputs$dispersion,
     sum(inputs$accrual_duration),
     inputs$trial_duration,
-    nb$exposure,
+    exposure_text,
     inputs$ratio
   )
 
