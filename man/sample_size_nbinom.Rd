@@ -52,9 +52,7 @@ as \code{accrual_rate}.}
 Default is NULL (no gap). If provided, the effective event rate is reduced.}
 
 \item{method}{Method for sample size calculation. "zhu" for Zhu and Lakkis (2014),
-"friede" for Friede and Schmidli (2010) / Mütze et al. (2018), or
-"AZG" for the Anderson-Zhang-Gemini method which adjusts exposure for event gaps
-rather than rates.}
+or "friede" for Friede and Schmidli (2010) / Mütze et al. (2018).}
 }
 \value{
 An object of class \code{sample_size_nbinom_result}, which is a list containing:
@@ -64,8 +62,8 @@ An object of class \code{sample_size_nbinom_result}, which is a list containing:
 \item{n2}{Sample size for group 2}
 \item{n_total}{Total sample size}
 \item{exposure}{Average exposure time used in calculation (calendar time)}
-\item{exposure1}{Average at-risk exposure time for group 1 (if AZG method)}
-\item{exposure2}{Average at-risk exposure time for group 2 (if AZG method)}
+\item{exposure_at_risk_n1}{Average at-risk exposure time for group 1 (accounts for event gap)}
+\item{exposure_at_risk_n2}{Average at-risk exposure time for group 2 (accounts for event gap)}
 }
 }
 \description{
@@ -107,5 +105,5 @@ for negative binomial outcomes. \emph{Statistical Methods in Medical Research},
 27(10), 2978-2993.
 }
 \seealso{
-\code{vignette("sample_size_nbinom", package = "gsDesignNB")} for a detailed explanation of the methodology and the difference between "zhu" and "AZG" methods.
+\code{vignette("sample_size_nbinom", package = "gsDesignNB")} for a detailed explanation of the methodology.
 }
