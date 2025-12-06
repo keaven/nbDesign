@@ -139,7 +139,7 @@ sample_size_nbinom(
 #> Expected events: 158.4 (n1: 99.0, n2: 59.4)
 #> Power: 80%, Alpha: 0.025 (1-sided)
 #> Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)
-#> Dispersion: 0.1000, Avg exposure: 6.00
+#> Dispersion: 0.1000, Avg exposure (calendar): 6.00
 #> Accrual: 12.0, Trial duration: 12.0
 ```
 
@@ -166,7 +166,7 @@ sample_size_nbinom(
 #> Expected events: 158.4 (n1: 99.0, n2: 59.4)
 #> Power: 80%, Alpha: 0.025 (1-sided)
 #> Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)
-#> Dispersion: 0.1000, Avg exposure: 6.00
+#> Dispersion: 0.1000, Avg exposure (calendar): 6.00
 #> Accrual: 12.0, Trial duration: 12.0
 ```
 
@@ -197,7 +197,7 @@ sample_size_nbinom(
 #> Expected events: 170.0 (n1: 106.2, n2: 63.7)
 #> Power: 80%, Alpha: 0.025 (1-sided)
 #> Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)
-#> Dispersion: 0.1000, Avg exposure: 8.50
+#> Dispersion: 0.1000, Avg exposure (calendar): 8.50
 #> Accrual: 6.0, Trial duration: 12.0
 ```
 
@@ -226,7 +226,7 @@ sample_size_nbinom(
 #> Expected events: 153.4 (n1: 95.9, n2: 57.5)
 #> Power: 80%, Alpha: 0.025 (1-sided)
 #> Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)
-#> Dispersion: 0.1000, Avg exposure: 5.18
+#> Dispersion: 0.1000, Avg exposure (calendar): 5.18
 #> Accrual: 6.0, Trial duration: 12.0
 ```
 
@@ -271,7 +271,7 @@ sample_size_nbinom(
 #> Expected events: 172.6 (n1: 95.9, n2: 76.7)
 #> Power: 26%, Alpha: 0.025 (1-sided)
 #> Rates: control = 0.5000, treatment = 0.4000 (RR = 0.8000)
-#> Dispersion: 0.1000, Avg exposure: 5.18
+#> Dispersion: 0.1000, Avg exposure (calendar): 5.18
 #> Accrual: 6.0, Trial duration: 12.0
 ```
 
@@ -297,7 +297,7 @@ sample_size_nbinom(
 #> Expected events: 264.0 (n1: 120.0, n2: 144.0)
 #> Power: 96%, Alpha: 0.025 (1-sided)
 #> Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)
-#> Dispersion: 0.1000, Avg exposure: 6.00
+#> Dispersion: 0.1000, Avg exposure (calendar): 6.00
 #> Accrual: 12.0, Trial duration: 12.0
 ```
 
@@ -306,33 +306,28 @@ sample_size_nbinom(
 In some recurrent event trials, there may be a mandatory “gap” period
 after each event during which no new events can be recorded (e.g., a
 recovery period or administrative window). This effectively reduces the
-time at risk. The package provides two methods to account for this:
+time at risk.
 
-1.  **Zhu and Lakkis (`method = "zhu"`)**: The event rates are adjusted
-    to “effective rates” $\lambda^{*} = \lambda/(1 + \lambda g)$, while
-    the exposure time remains the calendar duration. This is the
-    standard method described in Zhu and Lakkis (2014).
-2.  **Anderson-Zhang-Gemini (`method = "AZG"`)**: The event rates remain
-    the original planning rates $\lambda$, but the exposure is adjusted
-    to “at-risk exposure” $E_{risk} = E_{cal}/(1 + \lambda g)$.
+If an `event_gap` ($g$) is specified, the function adjusts the
+calculation as follows:
 
-Both methods yield identical sample sizes and power because the expected
-number of events is the same
-($\mu = \lambda^{*}E_{cal} = \lambda E_{risk}$). However, the **AZG**
-method provides a more intuitive summary by reporting the actual
-time-at-risk, which differs between treatment groups (since the gap
-reduction depends on the event rate). We recommend the **AZG** method
-for design planning as it preserves the interpretation of the input
-rates, while the **Zhu** method is useful for reproducing literature
-results.
+1.  **Effective Rates**: The event rates are adjusted to
+    $\lambda^{*} = \lambda/(1 + \lambda g)$ for the sample size
+    calculation (Zhu and Lakkis method).
+2.  **At-Risk Exposure**: The function reports the “average at-risk
+    exposure” $E_{risk} = E_{cal}/(1 + \lambda g)$ alongside the
+    standard calendar exposure. This provides transparency on the actual
+    time subjects are at risk for events.
 
-### Example with Event Gap (AZG vs Zhu)
+Since the gap reduction depends on the event rate ($\lambda$), the
+at-risk exposure differs between treatment groups if their rates differ.
+
+### Example with Event Gap
 
 Calculate sample size assuming a 5-day gap after each event (approx
 0.0137 years).
 
 ``` r
-# Using AZG Method (Recommended)
 sample_size_nbinom(
   lambda1 = 0.5,
   lambda2 = 0.3,
@@ -341,37 +336,7 @@ sample_size_nbinom(
   accrual_rate = 10,
   accrual_duration = 12,
   trial_duration = 12,
-  event_gap = 5 / 365.25,
-  method = "AZG"
-)
-#> Sample Size for Negative Binomial Outcome
-#> ==========================================
-#> 
-#> Method:          AZG
-#> Sample size:     n1 = 33, n2 = 33, total = 66
-#> Expected events: 157.5 (n1: 98.3, n2: 59.2)
-#> Power: 80%, Alpha: 0.025 (1-sided)
-#> Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)
-#> Dispersion: 0.1000, Avg exposure (calendar): 6.00
-#> Avg exposure (at-risk): n1 = 5.96, n2 = 5.98
-#> Accrual: 12.0, Trial duration: 12.0
-```
-
-Note the output reports “Avg exposure (at-risk)” which differs for n1
-and n2.
-
-``` r
-# Using Zhu Method (Standard)
-sample_size_nbinom(
-  lambda1 = 0.5,
-  lambda2 = 0.3,
-  dispersion = 0.1,
-  power = 0.8,
-  accrual_rate = 10,
-  accrual_duration = 12,
-  trial_duration = 12,
-  event_gap = 5 / 365.25,
-  method = "zhu"
+  event_gap = 5 / 365.25
 )
 #> Sample Size for Negative Binomial Outcome
 #> ==========================================
@@ -381,12 +346,13 @@ sample_size_nbinom(
 #> Expected events: 157.5 (n1: 98.3, n2: 59.2)
 #> Power: 80%, Alpha: 0.025 (1-sided)
 #> Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)
-#> Dispersion: 0.1000, Avg exposure: 6.00
+#> Dispersion: 0.1000, Avg exposure (calendar): 6.00
+#> Avg exposure (at-risk): n1 = 5.96, n2 = 5.98
 #> Accrual: 12.0, Trial duration: 12.0
 ```
 
-Both methods result in the same total sample size, but the Zhu method
-reports the calendar exposure and adjusted rates.
+The output shows both the “Avg exposure (calendar)” and the “Avg
+exposure (at-risk)” for each group.
 
 ## References
 

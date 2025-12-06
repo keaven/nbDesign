@@ -40,6 +40,8 @@ First, we calculate the required sample size for a fixed design:
 # Sample size calculation
 # Enrollment: constant rate over 12 months
 # Trial duration: 24 months
+event_gap_val <- 20 / 30.4375 # Minimum gap between events is 20 days (approx)
+
 nb_ss <- sample_size_nbinom(
   lambda1 = 1.5 / 12,      # Control event rate (per month)
   lambda2 = 1.0 / 12,      # Experimental event rate (per month)
@@ -50,7 +52,7 @@ nb_ss <- sample_size_nbinom(
   accrual_duration = 12,   # 12 months enrollment
   trial_duration = 24,     # 24 months trial
   max_followup = 12,       # 12 months of follow-up per patient
-  event_gap = 20 / 30.4375, # Minimum gap between events is 20 days
+  event_gap = event_gap_val,
   method = "zhu"           # Zhu and Lakkis sample size method
 )
 
@@ -66,7 +68,8 @@ nb_ss
 #> Expected events: 415.5 (n1: 246.7, n2: 168.8)
 #> Power: 90%, Alpha: 0.025 (1-sided)
 #> Rates: control = 0.1250, treatment = 0.0833 (RR = 0.6667)
-#> Dispersion: 0.5000, Avg exposure: 12.00
+#> Dispersion: 0.5000, Avg exposure (calendar): 12.00
+#> Avg exposure (at-risk): n1 = 11.09, n2 = 11.38
 #> Accrual: 12.0, Trial duration: 24.0
 ```
 
@@ -109,7 +112,8 @@ summary(gs_nb)
 #> for negative binomial outcomes, 3 analyses, total sample size 378.0, 90 percent
 #> power, 2.5 percent (1-sided) Type I error. Control rate 0.1250, treatment rate
 #> 0.0833, risk ratio 0.6667, dispersion 0.5000. Accrual duration 12.0, trial
-#> duration 24.0, average exposure 12.00. Randomization ratio 1:1.
+#> duration 24.0, average exposure (calendar) 12.00, (at-risk n1=11.09, n2=11.38).
+#> Randomization ratio 1:1.
 ```
 
 Tabular summary:
@@ -232,7 +236,7 @@ for (sim in 1:n_sims) {
     
     # Cut data at analysis time
     cut_time <- analysis_times[k]
-    cut_data <- cut_data_by_date(sim_data, cut_date = cut_time)
+    cut_data <- cut_data_by_date(sim_data, cut_date = cut_time, event_gap = event_gap_val)
     
     # Count enrolled subjects (those with enroll_time <= cut_time)
     enrolled <- unique(sim_data$id[sim_data$enroll_time <= cut_time])
@@ -329,9 +333,9 @@ summary_by_analysis |>
 | Summary Statistics by Analysis |               |            |              |             |            |               |              |        |      |
 |--------------------------------|---------------|------------|--------------|-------------|------------|---------------|--------------|--------|------|
 | Analysis                       | Time (months) | N Enrolled | Total Events | Ctrl Events | Exp Events | Ctrl Exposure | Exp Exposure | Mean Z | SD Z |
-| 1.00                           | 10.00         | 297.20     | 157.46       | 94.36       | 63.10      | 735.98        | 736.46       | −2.13  | 0.87 |
-| 2.00                           | 18.00         | 356.00     | 444.61       | 264.95      | 179.66     | 2,124.36      | 2,125.44     | −3.16  | 0.87 |
-| 3.00                           | 24.00         | 356.00     | 673.64       | 389.50      | 284.14     | 3,199.55      | 3,200.86     | −2.87  | 0.48 |
+| 1.00                           | 10.00         | 297.20     | 142.52       | 83.90       | 58.62      | 685.75        | 701.06       | −1.94  | 0.90 |
+| 2.00                           | 18.00         | 356.00     | 405.56       | 239.02      | 166.54     | 1,976.21      | 2,022.33     | −3.14  | 0.90 |
+| 3.00                           | 24.00         | 356.00     | 611.25       | 350.62      | 260.62     | 2,973.48      | 3,031.30     | −2.87  | 0.50 |
 
 ### Statistical Information
 
@@ -369,9 +373,9 @@ info_by_analysis |>
 | Information by Analysis |                  |                   |                    |
 |-------------------------|------------------|-------------------|--------------------|
 | Analysis                | Mean Information | Planned Info Frac | Observed Info Frac |
-| 1.000                   | 37.541           | 0.352             | 0.229              |
-| 2.000                   | 106.772          | 0.792             | 0.650              |
-| 3.000                   | 164.189          | 1.000             | 1.000              |
+| 1.000                   | 34.267           | 0.352             | 0.229              |
+| 2.000                   | 97.910           | 0.792             | 0.655              |
+| 3.000                   | 149.406          | 1.000             | 1.000              |
 
 ### Boundary Crossings and Power
 
@@ -407,8 +411,8 @@ crossing_summary[, .(analysis, n_cross_upper, prob_cross_upper, n_cross_lower, p
 |-------------------------------|---------------|----------------|---------------|----------------|
 | Analysis                      | N Cross Upper | P(Cross Upper) | N Cross Lower | P(Cross Lower) |
 | 1                             | 9             | 0.180          | 0             | 0.000          |
-| 2                             | 27            | 0.540          | 0             | 0.000          |
-| 3                             | 14            | 0.280          | 0             | 0.000          |
+| 2                             | 25            | 0.500          | 0             | 0.000          |
+| 3                             | 16            | 0.320          | 0             | 0.000          |
 
 ### Overall Power
 
@@ -474,9 +478,9 @@ ggplot(plot_data, aes(x = factor(analysis), y = z_flipped)) +
   ) +
   theme_minimal() +
   ylim(c(-4, 6))
-#> Warning: Removed 45 rows containing non-finite outside the scale range
+#> Warning: Removed 43 rows containing non-finite outside the scale range
 #> (`stat_ydensity()`).
-#> Warning: Removed 45 rows containing non-finite outside the scale range
+#> Warning: Removed 43 rows containing non-finite outside the scale range
 #> (`stat_boxplot()`).
 ```
 
@@ -494,7 +498,8 @@ summary(gs_nb)
 #> for negative binomial outcomes, 3 analyses, total sample size 378.0, 90 percent
 #> power, 2.5 percent (1-sided) Type I error. Control rate 0.1250, treatment rate
 #> 0.0833, risk ratio 0.6667, dispersion 0.5000. Accrual duration 12.0, trial
-#> duration 24.0, average exposure 12.00. Randomization ratio 1:1.
+#> duration 24.0, average exposure (calendar) 12.00, (at-risk n1=11.09, n2=11.38).
+#> Randomization ratio 1:1.
 ```
 
 For detailed boundary information, use `gsBoundSummary()`. We set
@@ -573,7 +578,8 @@ summary(gs_nb_int)
 #> for negative binomial outcomes, 3 analyses, total sample size 378.0, 90 percent
 #> power, 2.5 percent (1-sided) Type I error. Control rate 0.1250, treatment rate
 #> 0.0833, risk ratio 0.6667, dispersion 0.5000. Accrual duration 12.0, trial
-#> duration 24.0, average exposure 12.00. Randomization ratio 1:1.
+#> duration 24.0, average exposure (calendar) 12.00, (at-risk n1=11.09, n2=11.38).
+#> Randomization ratio 1:1.
 ```
 
 ## Notes

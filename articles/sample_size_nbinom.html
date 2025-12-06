@@ -264,7 +264,7 @@ Trial duration 12 months (implying exposure approx 6 months)</p>
 <span><span class="co">#&gt; Expected events: 158.4 (n1: 99.0, n2: 59.4)</span></span>
 <span><span class="co">#&gt; Power: 80%, Alpha: 0.025 (1-sided)</span></span>
 <span><span class="co">#&gt; Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)</span></span>
-<span><span class="co">#&gt; Dispersion: 0.1000, Avg exposure: 6.00</span></span>
+<span><span class="co">#&gt; Dispersion: 0.1000, Avg exposure (calendar): 6.00</span></span>
 <span><span class="co">#&gt; Accrual: 12.0, Trial duration: 12.0</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -291,7 +291,7 @@ Trial duration 12 months (implying exposure approx 6 months)</p>
 <span><span class="co">#&gt; Expected events: 158.4 (n1: 99.0, n2: 59.4)</span></span>
 <span><span class="co">#&gt; Power: 80%, Alpha: 0.025 (1-sided)</span></span>
 <span><span class="co">#&gt; Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)</span></span>
-<span><span class="co">#&gt; Dispersion: 0.1000, Avg exposure: 6.00</span></span>
+<span><span class="co">#&gt; Dispersion: 0.1000, Avg exposure (calendar): 6.00</span></span>
 <span><span class="co">#&gt; Accrual: 12.0, Trial duration: 12.0</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -320,7 +320,7 @@ this accrual pattern.</p>
 <span><span class="co">#&gt; Expected events: 170.0 (n1: 106.2, n2: 63.7)</span></span>
 <span><span class="co">#&gt; Power: 80%, Alpha: 0.025 (1-sided)</span></span>
 <span><span class="co">#&gt; Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)</span></span>
-<span><span class="co">#&gt; Dispersion: 0.1000, Avg exposure: 8.50</span></span>
+<span><span class="co">#&gt; Dispersion: 0.1000, Avg exposure (calendar): 8.50</span></span>
 <span><span class="co">#&gt; Accrual: 6.0, Trial duration: 12.0</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -348,7 +348,7 @@ maximum follow-up of 6 months.</p>
 <span><span class="co">#&gt; Expected events: 153.4 (n1: 95.9, n2: 57.5)</span></span>
 <span><span class="co">#&gt; Power: 80%, Alpha: 0.025 (1-sided)</span></span>
 <span><span class="co">#&gt; Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)</span></span>
-<span><span class="co">#&gt; Dispersion: 0.1000, Avg exposure: 5.18</span></span>
+<span><span class="co">#&gt; Dispersion: 0.1000, Avg exposure (calendar): 5.18</span></span>
 <span><span class="co">#&gt; Accrual: 6.0, Trial duration: 12.0</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -394,7 +394,7 @@ We use the <code>accrual_rate</code> computed in the previous step.</p>
 <span><span class="co">#&gt; Expected events: 172.6 (n1: 95.9, n2: 76.7)</span></span>
 <span><span class="co">#&gt; Power: 26%, Alpha: 0.025 (1-sided)</span></span>
 <span><span class="co">#&gt; Rates: control = 0.5000, treatment = 0.4000 (RR = 0.8000)</span></span>
-<span><span class="co">#&gt; Dispersion: 0.1000, Avg exposure: 5.18</span></span>
+<span><span class="co">#&gt; Dispersion: 0.1000, Avg exposure (calendar): 5.18</span></span>
 <span><span class="co">#&gt; Accrual: 6.0, Trial duration: 12.0</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -420,7 +420,7 @@ We use the <code>accrual_rate</code> computed in the previous step.</p>
 <span><span class="co">#&gt; Expected events: 264.0 (n1: 120.0, n2: 144.0)</span></span>
 <span><span class="co">#&gt; Power: 96%, Alpha: 0.025 (1-sided)</span></span>
 <span><span class="co">#&gt; Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)</span></span>
-<span><span class="co">#&gt; Dispersion: 0.1000, Avg exposure: 6.00</span></span>
+<span><span class="co">#&gt; Dispersion: 0.1000, Avg exposure (calendar): 6.00</span></span>
 <span><span class="co">#&gt; Accrual: 12.0, Trial duration: 12.0</span></span></code></pre></div>
 </div>
 </div>
@@ -430,40 +430,33 @@ We use the <code>accrual_rate</code> computed in the previous step.</p>
 <p>In some recurrent event trials, there may be a mandatory “gap” period
 after each event during which no new events can be recorded (e.g., a
 recovery period or administrative window). This effectively reduces the
-time at risk. The package provides two methods to account for this:</p>
+time at risk.</p>
+<p>If an <code>event_gap</code>
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>g</mi><annotation encoding="application/x-tex">g</annotation></semantics></math>)
+is specified, the function adjusts the calculation as follows:</p>
 <ol style="list-style-type: decimal">
 <li>
-<strong>Zhu and Lakkis (<code>method = "zhu"</code>)</strong>: The
-event rates are adjusted to “effective rates”
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>λ</mi><mo>*</mo></msup><mo>=</mo><mi>λ</mi><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><mi>λ</mi><mi>g</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\lambda^* = \lambda / (1 + \lambda g)</annotation></semantics></math>,
-while the exposure time remains the calendar duration. This is the
-standard method described in Zhu and Lakkis (2014).</li>
+<strong>Effective Rates</strong>: The event rates are adjusted to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>λ</mi><mo>*</mo></msup><mo>=</mo><mi>λ</mi><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><mi>λ</mi><mi>g</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\lambda^* = \lambda / (1 + \lambda g)</annotation></semantics></math>
+for the sample size calculation (Zhu and Lakkis method).</li>
 <li>
-<strong>Anderson-Zhang-Gemini
-(<code>method = "AZG"</code>)</strong>: The event rates remain the
-original planning rates
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>,
-but the exposure is adjusted to “at-risk exposure”
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>E</mi><mrow><mi>r</mi><mi>i</mi><mi>s</mi><mi>k</mi></mrow></msub><mo>=</mo><msub><mi>E</mi><mrow><mi>c</mi><mi>a</mi><mi>l</mi></mrow></msub><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><mi>λ</mi><mi>g</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">E_{risk} = E_{cal} / (1 + \lambda g)</annotation></semantics></math>.</li>
+<strong>At-Risk Exposure</strong>: The function reports the “average
+at-risk exposure”
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>E</mi><mrow><mi>r</mi><mi>i</mi><mi>s</mi><mi>k</mi></mrow></msub><mo>=</mo><msub><mi>E</mi><mrow><mi>c</mi><mi>a</mi><mi>l</mi></mrow></msub><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><mi>λ</mi><mi>g</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">E_{risk} = E_{cal} / (1 + \lambda g)</annotation></semantics></math>
+alongside the standard calendar exposure. This provides transparency on
+the actual time subjects are at risk for events.</li>
 </ol>
-<p>Both methods yield identical sample sizes and power because the
-expected number of events is the same
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mo>=</mo><msup><mi>λ</mi><mo>*</mo></msup><msub><mi>E</mi><mrow><mi>c</mi><mi>a</mi><mi>l</mi></mrow></msub><mo>=</mo><mi>λ</mi><msub><mi>E</mi><mrow><mi>r</mi><mi>i</mi><mi>s</mi><mi>k</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\mu = \lambda^* E_{cal} = \lambda E_{risk}</annotation></semantics></math>).
-However, the <strong>AZG</strong> method provides a more intuitive
-summary by reporting the actual time-at-risk, which differs between
-treatment groups (since the gap reduction depends on the event rate). We
-recommend the <strong>AZG</strong> method for design planning as it
-preserves the interpretation of the input rates, while the
-<strong>Zhu</strong> method is useful for reproducing literature
-results.</p>
+<p>Since the gap reduction depends on the event rate
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>),
+the at-risk exposure differs between treatment groups if their rates
+differ.</p>
 <div class="section level3">
-<h3 id="example-with-event-gap-azg-vs-zhu">Example with Event Gap (AZG vs Zhu)<a class="anchor" aria-label="anchor" href="#example-with-event-gap-azg-vs-zhu"></a>
+<h3 id="example-with-event-gap">Example with Event Gap<a class="anchor" aria-label="anchor" href="#example-with-event-gap"></a>
 </h3>
 <p>Calculate sample size assuming a 5-day gap after each event (approx
 0.0137 years).</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Using AZG Method (Recommended)</span></span>
-<span><span class="fu"><a href="../reference/sample_size_nbinom.html">sample_size_nbinom</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/sample_size_nbinom.html">sample_size_nbinom</a></span><span class="op">(</span></span>
 <span>  lambda1 <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  lambda2 <span class="op">=</span> <span class="fl">0.3</span>,</span>
 <span>  dispersion <span class="op">=</span> <span class="fl">0.1</span>,</span>
@@ -471,34 +464,7 @@ results.</p>
 <span>  accrual_rate <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  accrual_duration <span class="op">=</span> <span class="fl">12</span>,</span>
 <span>  trial_duration <span class="op">=</span> <span class="fl">12</span>,</span>
-<span>  event_gap <span class="op">=</span> <span class="fl">5</span> <span class="op">/</span> <span class="fl">365.25</span>,</span>
-<span>  method <span class="op">=</span> <span class="st">"AZG"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; Sample Size for Negative Binomial Outcome</span></span>
-<span><span class="co">#&gt; ==========================================</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Method:          AZG</span></span>
-<span><span class="co">#&gt; Sample size:     n1 = 33, n2 = 33, total = 66</span></span>
-<span><span class="co">#&gt; Expected events: 157.5 (n1: 98.3, n2: 59.2)</span></span>
-<span><span class="co">#&gt; Power: 80%, Alpha: 0.025 (1-sided)</span></span>
-<span><span class="co">#&gt; Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)</span></span>
-<span><span class="co">#&gt; Dispersion: 0.1000, Avg exposure (calendar): 6.00</span></span>
-<span><span class="co">#&gt; Avg exposure (at-risk): n1 = 5.96, n2 = 5.98</span></span>
-<span><span class="co">#&gt; Accrual: 12.0, Trial duration: 12.0</span></span></code></pre></div>
-<p>Note the output reports “Avg exposure (at-risk)” which differs for n1
-and n2.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Using Zhu Method (Standard)</span></span>
-<span><span class="fu"><a href="../reference/sample_size_nbinom.html">sample_size_nbinom</a></span><span class="op">(</span></span>
-<span>  lambda1 <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span>  lambda2 <span class="op">=</span> <span class="fl">0.3</span>,</span>
-<span>  dispersion <span class="op">=</span> <span class="fl">0.1</span>,</span>
-<span>  power <span class="op">=</span> <span class="fl">0.8</span>,</span>
-<span>  accrual_rate <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  accrual_duration <span class="op">=</span> <span class="fl">12</span>,</span>
-<span>  trial_duration <span class="op">=</span> <span class="fl">12</span>,</span>
-<span>  event_gap <span class="op">=</span> <span class="fl">5</span> <span class="op">/</span> <span class="fl">365.25</span>,</span>
-<span>  method <span class="op">=</span> <span class="st">"zhu"</span></span>
+<span>  event_gap <span class="op">=</span> <span class="fl">5</span> <span class="op">/</span> <span class="fl">365.25</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Sample Size for Negative Binomial Outcome</span></span>
 <span><span class="co">#&gt; ==========================================</span></span>
@@ -508,10 +474,11 @@ and n2.</p>
 <span><span class="co">#&gt; Expected events: 157.5 (n1: 98.3, n2: 59.2)</span></span>
 <span><span class="co">#&gt; Power: 80%, Alpha: 0.025 (1-sided)</span></span>
 <span><span class="co">#&gt; Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)</span></span>
-<span><span class="co">#&gt; Dispersion: 0.1000, Avg exposure: 6.00</span></span>
+<span><span class="co">#&gt; Dispersion: 0.1000, Avg exposure (calendar): 6.00</span></span>
+<span><span class="co">#&gt; Avg exposure (at-risk): n1 = 5.96, n2 = 5.98</span></span>
 <span><span class="co">#&gt; Accrual: 12.0, Trial duration: 12.0</span></span></code></pre></div>
-<p>Both methods result in the same total sample size, but the Zhu method
-reports the calendar exposure and adjusted rates.</p>
+<p>The output shows both the “Avg exposure (calendar)” and the “Avg
+exposure (at-risk)” for each group.</p>
 </div>
 </div>
 <div class="section level2">

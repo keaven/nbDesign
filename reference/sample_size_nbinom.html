@@ -125,9 +125,7 @@ Default is NULL (no gap). If provided, the effective event rate is reduced.</p><
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
 <dd><p>Method for sample size calculation. "zhu" for Zhu and Lakkis (2014),
-"friede" for Friede and Schmidli (2010) / Mütze et al. (2018), or
-"AZG" for the Anderson-Zhang-Gemini method which adjusts exposure for event gaps
-rather than rates.</p></dd>
+or "friede" for Friede and Schmidli (2010) / Mütze et al. (2018).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -147,11 +145,11 @@ rather than rates.</p></dd>
 <dt>exposure</dt>
 <dd><p>Average exposure time used in calculation (calendar time)</p></dd>
 
-<dt>exposure1</dt>
-<dd><p>Average at-risk exposure time for group 1 (if AZG method)</p></dd>
+<dt>exposure_at_risk_n1</dt>
+<dd><p>Average at-risk exposure time for group 1 (accounts for event gap)</p></dd>
 
-<dt>exposure2</dt>
-<dd><p>Average at-risk exposure time for group 2 (if AZG method)</p></dd>
+<dt>exposure_at_risk_n2</dt>
+<dd><p>Average at-risk exposure time for group 2 (accounts for event gap)</p></dd>
 
 
 </dl></div>
@@ -166,6 +164,10 @@ with negative binomial rates. <em>Methods of Information in Medicine</em>,
 <p>Mütze, T., Glimm, E., Schmidli, H., &amp; Friede, T. (2018). Group sequential designs
 for negative binomial outcomes. <em>Statistical Methods in Medical Research</em>,
 27(10), 2978-2993.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code><a href="../articles/sample_size_nbinom.html">vignette("sample_size_nbinom", package = "gsDesignNB")</a></code> for a detailed explanation of the methodology.</p></div>
     </div>
 
     <div class="section level2">

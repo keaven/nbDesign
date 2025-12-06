@@ -86,9 +86,7 @@ sample_size_nbinom(
 - method:
 
   Method for sample size calculation. "zhu" for Zhu and Lakkis (2014),
-  "friede" for Friede and Schmidli (2010) / Mütze et al. (2018), or
-  "AZG" for the Anderson-Zhang-Gemini method which adjusts exposure for
-  event gaps rather than rates.
+  or "friede" for Friede and Schmidli (2010) / Mütze et al. (2018).
 
 ## Value
 
@@ -115,13 +113,13 @@ containing:
 
   Average exposure time used in calculation (calendar time)
 
-- exposure1:
+- exposure_at_risk_n1:
 
-  Average at-risk exposure time for group 1 (if AZG method)
+  Average at-risk exposure time for group 1 (accounts for event gap)
 
-- exposure2:
+- exposure_at_risk_n2:
 
-  Average at-risk exposure time for group 2 (if AZG method)
+  Average at-risk exposure time for group 2 (accounts for event gap)
 
 ## References
 
@@ -136,6 +134,11 @@ Medicine*, 49(6), 623-631.
 Mütze, T., Glimm, E., Schmidli, H., & Friede, T. (2018). Group
 sequential designs for negative binomial outcomes. *Statistical Methods
 in Medical Research*, 27(10), 2978-2993.
+
+## See also
+
+[`vignette("sample_size_nbinom", package = "gsDesignNB")`](https://keaven.github.io/gsDesignNB/articles/sample_size_nbinom.md)
+for a detailed explanation of the methodology.
 
 ## Examples
 
