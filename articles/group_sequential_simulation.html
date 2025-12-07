@@ -672,13 +672,13 @@ information at each analysis.</p>
 </thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="Analysis" class="gt_row gt_left">IA 1: 35%</td>
+<td headers="Analysis" class="gt_row gt_left">IA 1: 39%</td>
 <td headers="Value" class="gt_row gt_left">Z</td>
 <td headers="Efficacy" class="gt_row gt_right">2.8070</td>
 <td headers="Futility" class="gt_row gt_right">-1.4339</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Information: 36.67</td>
+<td headers="Analysis" class="gt_row gt_left">Information: 30.45</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
 <td headers="Efficacy" class="gt_row gt_right">0.0025</td>
 <td headers="Futility" class="gt_row gt_right">0.9242</td>
@@ -686,8 +686,8 @@ information at each analysis.</p>
 <tr>
 <td headers="Analysis" class="gt_row gt_left">Month: 10</td>
 <td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.6290</td>
-<td headers="Futility" class="gt_row gt_right">1.2672</td>
+<td headers="Efficacy" class="gt_row gt_right">0.6012</td>
+<td headers="Futility" class="gt_row gt_right">1.2968</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
@@ -702,13 +702,13 @@ information at each analysis.</p>
 <td headers="Futility" class="gt_row gt_right">0.0004</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">IA 2: 79%</td>
+<td headers="Analysis" class="gt_row gt_left">IA 2: 83%</td>
 <td headers="Value" class="gt_row gt_left">Z</td>
 <td headers="Efficacy" class="gt_row gt_right">2.8065</td>
 <td headers="Futility" class="gt_row gt_right">0.1954</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Information: 82.5</td>
+<td headers="Analysis" class="gt_row gt_left">Information: 64.26</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
 <td headers="Efficacy" class="gt_row gt_right">0.0025</td>
 <td headers="Futility" class="gt_row gt_right">0.4226</td>
@@ -716,8 +716,8 @@ information at each analysis.</p>
 <tr>
 <td headers="Analysis" class="gt_row gt_left">Month: 18</td>
 <td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.7342</td>
-<td headers="Futility" class="gt_row gt_right">0.9787</td>
+<td headers="Efficacy" class="gt_row gt_right">0.7046</td>
+<td headers="Futility" class="gt_row gt_right">0.9759</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
@@ -738,7 +738,7 @@ information at each analysis.</p>
 <td headers="Futility" class="gt_row gt_right">1.9934</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Information: 104.21</td>
+<td headers="Analysis" class="gt_row gt_left">Information: 77.66</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
 <td headers="Efficacy" class="gt_row gt_right">0.0231</td>
 <td headers="Futility" class="gt_row gt_right">0.0231</td>
@@ -746,8 +746,8 @@ information at each analysis.</p>
 <tr>
 <td headers="Analysis" class="gt_row gt_left">Month: 24</td>
 <td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.8226</td>
-<td headers="Futility" class="gt_row gt_right">0.8226</td>
+<td headers="Efficacy" class="gt_row gt_right">0.7975</td>
+<td headers="Futility" class="gt_row gt_right">0.7975</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
@@ -896,7 +896,8 @@ sequential design assuming design parameters above are correct.</p>
 <span>          <span class="va">cut_data</span>,</span>
 <span>          ratio <span class="op">=</span> <span class="va">nb_ss</span><span class="op">$</span><span class="va">inputs</span><span class="op">$</span><span class="va">ratio</span>,</span>
 <span>          lambda1_planning <span class="op">=</span> <span class="va">nb_ss</span><span class="op">$</span><span class="va">inputs</span><span class="op">$</span><span class="va">lambda1</span>,</span>
-<span>          lambda2_planning <span class="op">=</span> <span class="va">nb_ss</span><span class="op">$</span><span class="va">inputs</span><span class="op">$</span><span class="va">lambda2</span></span>
+<span>          lambda2_planning <span class="op">=</span> <span class="va">nb_ss</span><span class="op">$</span><span class="va">inputs</span><span class="op">$</span><span class="va">lambda2</span>,</span>
+<span>          event_gap <span class="op">=</span> <span class="va">event_gap_val</span></span>
 <span>        <span class="op">)</span></span>
 <span>        <span class="va">sim_results</span><span class="op">$</span><span class="va">blinded_info</span><span class="op">[</span><span class="va">k</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">blinded_est</span><span class="op">$</span><span class="va">blinded_info</span></span>
 <span>        </span>
@@ -2045,29 +2046,29 @@ outcomes, this relates to the total exposure and event counts.</p>
 <tbody class="gt_table_body">
 <tr>
 <td headers="analysis" class="gt_row gt_right">1.000</td>
-<td headers="mean_blinded" class="gt_row gt_right">28.254</td>
+<td headers="mean_blinded" class="gt_row gt_right">28.371</td>
 <td headers="mean_unblinded" class="gt_row gt_right">27.731</td>
-<td headers="planned_info" class="gt_row gt_right">36.667</td>
-<td headers="observed_frac_blinded" class="gt_row gt_right">0.271</td>
-<td headers="observed_frac_unblinded" class="gt_row gt_right">0.266</td>
-<td headers="planned_info_frac" class="gt_row gt_right">0.352</td>
+<td headers="planned_info" class="gt_row gt_right">30.445</td>
+<td headers="observed_frac_blinded" class="gt_row gt_right">0.365</td>
+<td headers="observed_frac_unblinded" class="gt_row gt_right">0.357</td>
+<td headers="planned_info_frac" class="gt_row gt_right">0.392</td>
 </tr>
 <tr>
 <td headers="analysis" class="gt_row gt_right">2.000</td>
-<td headers="mean_blinded" class="gt_row gt_right">58.038</td>
+<td headers="mean_blinded" class="gt_row gt_right">58.247</td>
 <td headers="mean_unblinded" class="gt_row gt_right">56.951</td>
-<td headers="planned_info" class="gt_row gt_right">82.500</td>
-<td headers="observed_frac_blinded" class="gt_row gt_right">0.557</td>
-<td headers="observed_frac_unblinded" class="gt_row gt_right">0.547</td>
-<td headers="planned_info_frac" class="gt_row gt_right">0.792</td>
+<td headers="planned_info" class="gt_row gt_right">64.257</td>
+<td headers="observed_frac_blinded" class="gt_row gt_right">0.750</td>
+<td headers="observed_frac_unblinded" class="gt_row gt_right">0.733</td>
+<td headers="planned_info_frac" class="gt_row gt_right">0.827</td>
 </tr>
 <tr>
 <td headers="analysis" class="gt_row gt_right">3.000</td>
-<td headers="mean_blinded" class="gt_row gt_right">64.077</td>
+<td headers="mean_blinded" class="gt_row gt_right">64.308</td>
 <td headers="mean_unblinded" class="gt_row gt_right">62.873</td>
-<td headers="planned_info" class="gt_row gt_right">104.211</td>
-<td headers="observed_frac_blinded" class="gt_row gt_right">0.615</td>
-<td headers="observed_frac_unblinded" class="gt_row gt_right">0.603</td>
+<td headers="planned_info" class="gt_row gt_right">77.660</td>
+<td headers="observed_frac_blinded" class="gt_row gt_right">0.828</td>
+<td headers="observed_frac_unblinded" class="gt_row gt_right">0.810</td>
 <td headers="planned_info_frac" class="gt_row gt_right">1.000</td>
 </tr>
 </tbody>
@@ -2589,8 +2590,8 @@ outcomes, this relates to the total exposure and event counts.</p>
 </tr>
 <tr>
 <td headers="analysis" class="gt_row gt_right">3</td>
-<td headers="n_cross_upper" class="gt_row gt_right">11</td>
-<td headers="cum_prob_cross_upper" class="gt_row gt_right">0.86</td>
+<td headers="n_cross_upper" class="gt_row gt_right">12</td>
+<td headers="cum_prob_cross_upper" class="gt_row gt_right">0.88</td>
 <td headers="design_cum_power" class="gt_row gt_right">1.000</td>
 </tr>
 </tbody>
@@ -2625,9 +2626,9 @@ outcomes, this relates to the total exposure and event counts.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Number of simulations: %d\n"</span>, <span class="va">n_sims</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Number of simulations: 50</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Overall Power (P[reject H0]): %.1f%%\n"</span>, <span class="va">overall_power</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Overall Power (P[reject H0]): 86.0%</span></span>
+<span><span class="co">#&gt; Overall Power (P[reject H0]): 88.0%</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Futility Stopping Rate: %.1f%%\n"</span>, <span class="va">overall_futility</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Futility Stopping Rate: 14.0%</span></span>
+<span><span class="co">#&gt; Futility Stopping Rate: 12.0%</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Design Power (target): %.1f%%\n"</span>, <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">gs_nb</span><span class="op">$</span><span class="va">beta</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Design Power (target): 90.0%</span></span></code></pre></div>
 </div>
@@ -3172,13 +3173,13 @@ where values &lt; 1 indicate treatment benefit:</p>
 </thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="Analysis" class="gt_row gt_left">IA 1: 35%</td>
+<td headers="Analysis" class="gt_row gt_left">IA 1: 39%</td>
 <td headers="Value" class="gt_row gt_left">Z</td>
 <td headers="Efficacy" class="gt_row gt_right">2.8070</td>
 <td headers="Futility" class="gt_row gt_right">-1.4339</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Information: 36.67</td>
+<td headers="Analysis" class="gt_row gt_left">Information: 30.45</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
 <td headers="Efficacy" class="gt_row gt_right">0.0025</td>
 <td headers="Futility" class="gt_row gt_right">0.9242</td>
@@ -3186,8 +3187,8 @@ where values &lt; 1 indicate treatment benefit:</p>
 <tr>
 <td headers="Analysis" class="gt_row gt_left">Month: 10</td>
 <td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.6290</td>
-<td headers="Futility" class="gt_row gt_right">1.2672</td>
+<td headers="Efficacy" class="gt_row gt_right">0.6012</td>
+<td headers="Futility" class="gt_row gt_right">1.2968</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
@@ -3202,13 +3203,13 @@ where values &lt; 1 indicate treatment benefit:</p>
 <td headers="Futility" class="gt_row gt_right">0.0004</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">IA 2: 79%</td>
+<td headers="Analysis" class="gt_row gt_left">IA 2: 83%</td>
 <td headers="Value" class="gt_row gt_left">Z</td>
 <td headers="Efficacy" class="gt_row gt_right">2.8065</td>
 <td headers="Futility" class="gt_row gt_right">0.1954</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Information: 82.5</td>
+<td headers="Analysis" class="gt_row gt_left">Information: 64.26</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
 <td headers="Efficacy" class="gt_row gt_right">0.0025</td>
 <td headers="Futility" class="gt_row gt_right">0.4226</td>
@@ -3216,8 +3217,8 @@ where values &lt; 1 indicate treatment benefit:</p>
 <tr>
 <td headers="Analysis" class="gt_row gt_left">Month: 18</td>
 <td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.7342</td>
-<td headers="Futility" class="gt_row gt_right">0.9787</td>
+<td headers="Efficacy" class="gt_row gt_right">0.7046</td>
+<td headers="Futility" class="gt_row gt_right">0.9759</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
@@ -3238,7 +3239,7 @@ where values &lt; 1 indicate treatment benefit:</p>
 <td headers="Futility" class="gt_row gt_right">1.9934</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Information: 104.21</td>
+<td headers="Analysis" class="gt_row gt_left">Information: 77.66</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
 <td headers="Efficacy" class="gt_row gt_right">0.0231</td>
 <td headers="Futility" class="gt_row gt_right">0.0231</td>
@@ -3246,8 +3247,8 @@ where values &lt; 1 indicate treatment benefit:</p>
 <tr>
 <td headers="Analysis" class="gt_row gt_left">Month: 24</td>
 <td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.8226</td>
-<td headers="Futility" class="gt_row gt_right">0.8226</td>
+<td headers="Efficacy" class="gt_row gt_right">0.7975</td>
+<td headers="Futility" class="gt_row gt_right">0.7975</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>

@@ -144,19 +144,19 @@ gs_nb |>
 |--------------------------------------------------------------|---------------------|----------|----------|
 | N = 440, Expected events = 376.5                             |                     |          |          |
 | Analysis                                                     | Value               | Efficacy | Futility |
-| IA 1: 35%                                                    | Z                   | 2.8070   | -1.4339  |
-| Information: 36.67                                           | p (1-sided)         | 0.0025   | 0.9242   |
-| Month: 10                                                    | ~RR at bound        | 0.6290   | 1.2672   |
+| IA 1: 39%                                                    | Z                   | 2.8070   | -1.4339  |
+| Information: 30.45                                           | p (1-sided)         | 0.0025   | 0.9242   |
+| Month: 10                                                    | ~RR at bound        | 0.6012   | 1.2968   |
 |                                                              | P(Cross) if RR=1    | 0.0025   | 0.0758   |
 |                                                              | P(Cross) if RR=0.67 | 0.1787   | 0.0004   |
-| IA 2: 79%                                                    | Z                   | 2.8065   | 0.1954   |
-| Information: 82.5                                            | p (1-sided)         | 0.0025   | 0.4226   |
-| Month: 18                                                    | ~RR at bound        | 0.7342   | 0.9787   |
+| IA 2: 83%                                                    | Z                   | 2.8065   | 0.1954   |
+| Information: 64.26                                           | p (1-sided)         | 0.0025   | 0.4226   |
+| Month: 18                                                    | ~RR at bound        | 0.7046   | 0.9759   |
 |                                                              | P(Cross) if RR=1    | 0.0045   | 0.5790   |
 |                                                              | P(Cross) if RR=0.67 | 0.4669   | 0.0069   |
 | Final                                                        | Z                   | 1.9934   | 1.9934   |
-| Information: 104.21                                          | p (1-sided)         | 0.0231   | 0.0231   |
-| Month: 24                                                    | ~RR at bound        | 0.8226   | 0.8226   |
+| Information: 77.66                                           | p (1-sided)         | 0.0231   | 0.0231   |
+| Month: 24                                                    | ~RR at bound        | 0.7975   | 0.7975   |
 |                                                              | P(Cross) if RR=1    | 0.0249   | 0.9751   |
 |                                                              | P(Cross) if RR=0.67 | 0.9000   | 0.1000   |
 
@@ -289,7 +289,8 @@ for (sim in 1:n_sims) {
           cut_data,
           ratio = nb_ss$inputs$ratio,
           lambda1_planning = nb_ss$inputs$lambda1,
-          lambda2_planning = nb_ss$inputs$lambda2
+          lambda2_planning = nb_ss$inputs$lambda2,
+          event_gap = event_gap_val
         )
         sim_results$blinded_info[k] <- blinded_est$blinded_info
         
@@ -475,9 +476,9 @@ info_by_analysis |>
 | Information by Analysis |                     |                       |              |                  |                    |              |
 |-------------------------|---------------------|-----------------------|--------------|------------------|--------------------|--------------|
 | Analysis                | Mean Info (Blinded) | Mean Info (Unblinded) | Planned Info | Obs Frac (Blind) | Obs Frac (Unblind) | Planned Frac |
-| 1.000                   | 28.254              | 27.731                | 36.667       | 0.271            | 0.266              | 0.352        |
-| 2.000                   | 58.038              | 56.951                | 82.500       | 0.557            | 0.547              | 0.792        |
-| 3.000                   | 64.077              | 62.873                | 104.211      | 0.615            | 0.603              | 1.000        |
+| 1.000                   | 28.371              | 27.731                | 30.445       | 0.365            | 0.357              | 0.392        |
+| 2.000                   | 58.247              | 56.951                | 64.257       | 0.750            | 0.733              | 0.827        |
+| 3.000                   | 64.308              | 62.873                | 77.660       | 0.828            | 0.810              | 1.000        |
 
 ### Boundary Crossings and Power
 
@@ -524,7 +525,7 @@ crossing_summary[, .(analysis, n_cross_upper, cum_prob_cross_upper, design_cum_p
 | Analysis                    | N Cross Upper | Cum Power (Sim) | Cum Power (Design) |
 | 1                           | 15            | 0.30            | 1.000              |
 | 2                           | 17            | 0.64            | 1.000              |
-| 3                           | 11            | 0.86            | 1.000              |
+| 3                           | 12            | 0.88            | 1.000              |
 
 ### Overall Power
 
@@ -553,9 +554,9 @@ cat("\n=== Overall Operating Characteristics ===\n")
 cat(sprintf("Number of simulations: %d\n", n_sims))
 #> Number of simulations: 50
 cat(sprintf("Overall Power (P[reject H0]): %.1f%%\n", overall_power * 100))
-#> Overall Power (P[reject H0]): 86.0%
+#> Overall Power (P[reject H0]): 88.0%
 cat(sprintf("Futility Stopping Rate: %.1f%%\n", overall_futility * 100))
-#> Futility Stopping Rate: 14.0%
+#> Futility Stopping Rate: 12.0%
 cat(sprintf("Design Power (target): %.1f%%\n", (1 - gs_nb$beta) * 100))
 #> Design Power (target): 90.0%
 ```
@@ -645,19 +646,19 @@ gsDesign::gsBoundSummary(gs_nb,
 |--------------------------------------------------------------|---------------------|----------|----------|
 | N = 440, Expected events = 376.5                             |                     |          |          |
 | Analysis                                                     | Value               | Efficacy | Futility |
-| IA 1: 35%                                                    | Z                   | 2.8070   | -1.4339  |
-| Information: 36.67                                           | p (1-sided)         | 0.0025   | 0.9242   |
-| Month: 10                                                    | ~RR at bound        | 0.6290   | 1.2672   |
+| IA 1: 39%                                                    | Z                   | 2.8070   | -1.4339  |
+| Information: 30.45                                           | p (1-sided)         | 0.0025   | 0.9242   |
+| Month: 10                                                    | ~RR at bound        | 0.6012   | 1.2968   |
 |                                                              | P(Cross) if RR=1    | 0.0025   | 0.0758   |
 |                                                              | P(Cross) if RR=0.67 | 0.1787   | 0.0004   |
-| IA 2: 79%                                                    | Z                   | 2.8065   | 0.1954   |
-| Information: 82.5                                            | p (1-sided)         | 0.0025   | 0.4226   |
-| Month: 18                                                    | ~RR at bound        | 0.7342   | 0.9787   |
+| IA 2: 83%                                                    | Z                   | 2.8065   | 0.1954   |
+| Information: 64.26                                           | p (1-sided)         | 0.0025   | 0.4226   |
+| Month: 18                                                    | ~RR at bound        | 0.7046   | 0.9759   |
 |                                                              | P(Cross) if RR=1    | 0.0045   | 0.5790   |
 |                                                              | P(Cross) if RR=0.67 | 0.4669   | 0.0069   |
 | Final                                                        | Z                   | 1.9934   | 1.9934   |
-| Information: 104.21                                          | p (1-sided)         | 0.0231   | 0.0231   |
-| Month: 24                                                    | ~RR at bound        | 0.8226   | 0.8226   |
+| Information: 77.66                                           | p (1-sided)         | 0.0231   | 0.0231   |
+| Month: 24                                                    | ~RR at bound        | 0.7975   | 0.7975   |
 |                                                              | P(Cross) if RR=1    | 0.0249   | 0.9751   |
 |                                                              | P(Cross) if RR=0.67 | 0.9000   | 0.1000   |
 
