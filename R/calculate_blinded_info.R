@@ -21,7 +21,7 @@
 #' @export
 #' @importFrom MASS glm.nb
 #' @importFrom stats coef
-calculate_blinded_info <- function(data, ratio = 1, lambda1_planning, lambda2_planning) {
+calculate_blinded_info <- function(data, ratio = 1, lambda1_planning, lambda2_planning, event_gap = NULL) {
   df <- as.data.frame(data)
   if (!all(c("events", "tte") %in% names(df))) {
     stop("Data must contain 'events' and 'tte' columns.")
@@ -49,6 +49,23 @@ calculate_blinded_info <- function(data, ratio = 1, lambda1_planning, lambda2_pl
 
   # Rename hr_planning to rate_ratio_planning
   rate_ratio_planning <- lambda2_planning / lambda1_planning
+
+  # If event_gap is present, it reduces the effective rates used in variance calculation
+  # But lambda_est is already the effective rate (events / exposure), where exposure accounts for gaps if cut_data_by_date used it.
+  # However, the planning parameters lambda1_planning and lambda2_planning are likely "calendar" rates (without gap adjustment)
+  # UNLESS the user passed effective rates.
+  
+  # Assuming lambda1_planning are raw rates:
+  if (!is.null(event_gap) && event_gap > 0) {
+     # Adjust planning ratio? 
+     # The ratio lambda2/lambda1 is roughly preserved even with gaps if rates are small, 
+     # but strictly: lambda_eff = lambda / (1 + lambda * gap)
+     # So RR_eff = (lambda2 / (1 + lambda2*gap)) / (lambda1 / (1 + lambda1*gap))
+     
+     lambda1_eff_plan <- lambda1_planning / (1 + lambda1_planning * event_gap)
+     lambda2_eff_plan <- lambda2_planning / (1 + lambda2_planning * event_gap)
+     rate_ratio_planning <- lambda2_eff_plan / lambda1_eff_plan
+  }
 
   lambda1_new <- lambda_est / (p1 + p2 * rate_ratio_planning)
   lambda2_new <- lambda1_new * rate_ratio_planning

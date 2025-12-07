@@ -175,62 +175,71 @@ gsNBCalendar <- function(x,
 #' @param lambda2 Event rate for group 2 (treatment).
 #' @param dispersion The negative binomial dispersion parameter.
 #' @param ratio Allocation ratio (n2/n1). Default is 1.
+#' @param dropout_rate Dropout rate (hazard rate). Default is 0.
+#' @param event_gap Gap duration after each event during which no new events are counted.
+#'   Default is 0.
 #'
 #' @return The statistical information (inverse of variance) at the analysis time.
 #'
-#' @details
-#' For subjects enrolled at time \code{t}, their exposure at analysis time \code{T}
-#' is \code{T - t}. The function integrates over all enrolled subjects to compute
-#' the total expected events and variance of the log rate ratio.
-#'
-#' The variance formula for the log rate ratio is:
-#' \deqn{Var = \sum_i \frac{1/\mu_{1i} + k}{n_{1i}} + \frac{1/\mu_{2i} + k}{n_{2i}}}
-#'
-#' where \eqn{\mu_{ji} = \lambda_j \times exposure_i} and \eqn{k} is the dispersion.
-#'
 #' @export
-#'
-#' @examples
-#' # Compute information at month 12 for a trial with:
-#' # - 10 subjects/month enrollment rate
-#' # - 20 month enrollment period
-#' # - Control event rate 0.5, treatment rate 0.3
-#' # - Dispersion 0.1
-#' compute_info_at_time(
-#'   analysis_time = 12,
-#'   accrual_rate = 10,
-#'   accrual_duration = 20,
-#'   lambda1 = 0.5,
-#'   lambda2 = 0.3,
-#'   dispersion = 0.1
-#' )
 compute_info_at_time <- function(analysis_time, accrual_rate, accrual_duration,
-                                  lambda1, lambda2, dispersion, ratio = 1) {
+                                  lambda1, lambda2, dispersion, ratio = 1,
+                                  dropout_rate = 0, event_gap = 0) {
   # Number of subjects enrolled by analysis_time
   enrollment_time <- min(analysis_time, accrual_duration)
   n_total <- accrual_rate * enrollment_time
   n1 <- n_total / (1 + ratio)
   n2 <- n_total * ratio / (1 + ratio)
 
-
-  # For uniform enrollment, the average exposure is:
-
-  # If analysis_time <= accrual_duration: avg_exposure = analysis_time / 2
-  # If analysis_time > accrual_duration: 
-  #   Subjects enrolled at time t have exposure = analysis_time - t
-  #   For t in [0, accrual_duration], avg_exposure = analysis_time - accrual_duration/2
-
-  if (analysis_time <= accrual_duration) {
-    # Still enrolling - average exposure is half the analysis time
-    avg_exposure <- analysis_time / 2
+  # Average exposure calculation must account for dropout
+  # We integrate dropout probability over the enrollment period and follow-up
+  
+  # Helper for expected exposure for a subject enrolled at time t
+  # Exposure is min(analysis_time - t, dropout_time)
+  # If analysis_time - t > 0
+  
+  # Simplified average exposure calculation with dropout
+  # 1. Without dropout:
+  #    If analysis_time <= accrual_duration: avg = analysis_time / 2
+  #    If analysis_time > accrual_duration: avg = analysis_time - accrual_duration/2
+  
+  # 2. With dropout, we need to integrate:
+  #    E[min(T-t, E)] where E ~ Exp(dropout_rate)
+  #    This is (1 - exp(-lambda * (T-t))) / lambda
+  
+  # We need the average of this over t in [0, enrollment_time]
+  # Let tau = T - t. As t goes 0 -> enrollment_time, tau goes T -> T-enrollment_time
+  # Range of follow-up times: [min_f, max_f]
+  max_f <- analysis_time
+  min_f <- analysis_time - enrollment_time
+  
+  if (dropout_rate <= 0) {
+    avg_exposure <- (max_f + min_f) / 2
   } else {
-    # Enrollment complete - average exposure is analysis_time minus midpoint of enrollment
-    avg_exposure <- analysis_time - accrual_duration / 2
+    # Average of (1 - exp(-rate * tau)) / rate
+    # = 1/rate - (1/rate) * mean(exp(-rate * tau))
+    # mean(exp(-rate * tau)) over [min_f, max_f]
+    # = (integral_{min_f}^{max_f} exp(-rate * x) dx) / (max_f - min_f)
+    # = ([-1/rate * exp(-rate * x)]) / (max_f - min_f)
+    # = (exp(-rate * min_f) - exp(-rate * max_f)) / (rate * (max_f - min_f))
+    
+    term2 <- (exp(-dropout_rate * min_f) - exp(-dropout_rate * max_f)) / 
+             (dropout_rate * (max_f - min_f))
+    avg_exposure <- (1 - term2) / dropout_rate
+  }
+  
+  # Adjust rates for event gap
+  if (!is.null(event_gap) && event_gap > 0) {
+    lambda1_eff <- lambda1 / (1 + lambda1 * event_gap)
+    lambda2_eff <- lambda2 / (1 + lambda2 * event_gap)
+  } else {
+    lambda1_eff <- lambda1
+    lambda2_eff <- lambda2
   }
 
   # Expected events per subject
-  mu1 <- lambda1 * avg_exposure
-  mu2 <- lambda2 * avg_exposure
+  mu1 <- lambda1_eff * avg_exposure
+  mu2 <- lambda2_eff * avg_exposure
 
   # Variance of log rate ratio
   # Var(log(lambda2/lambda1)) = (1/mu1 + k)/n1 + (1/mu2 + k)/n2
@@ -476,7 +485,9 @@ toInteger.gsNB <- function(x, ratio = x$nb_design$inputs$ratio, roundUpFinal = T
         lambda1 = lambda1,
         lambda2 = lambda2,
         dispersion = dispersion,
-        ratio = ratio
+        ratio = ratio,
+        dropout_rate = nb$inputs$dropout_rate,
+        event_gap = nb$inputs$event_gap
       )
     }
     result$n.I <- info_at_analyses

@@ -260,7 +260,8 @@ for (sim in 1:n_sims) {
           cut_data,
           ratio = nb_ss$inputs$ratio,
           lambda1_planning = nb_ss$inputs$lambda1,
-          lambda2_planning = nb_ss$inputs$lambda2
+          lambda2_planning = nb_ss$inputs$lambda2,
+          event_gap = event_gap_val
         )
         sim_results$blinded_info[k] <- blinded_est$blinded_info
         
