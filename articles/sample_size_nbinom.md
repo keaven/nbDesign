@@ -227,6 +227,7 @@ sample_size_nbinom(
 #> Power: 80%, Alpha: 0.025 (1-sided)
 #> Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)
 #> Dispersion: 0.1000, Avg exposure (calendar): 5.18
+#> Dropout rate: 0.0500
 #> Accrual: 6.0, Trial duration: 12.0
 #> Max follow-up: 6.0
 ```
@@ -273,6 +274,7 @@ sample_size_nbinom(
 #> Power: 26%, Alpha: 0.025 (1-sided)
 #> Rates: control = 0.5000, treatment = 0.4000 (RR = 0.8000)
 #> Dispersion: 0.1000, Avg exposure (calendar): 5.18
+#> Dropout rate: 0.0500
 #> Accrual: 6.0, Trial duration: 12.0
 #> Max follow-up: 6.0
 ```
@@ -350,6 +352,7 @@ sample_size_nbinom(
 #> Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)
 #> Dispersion: 0.1000, Avg exposure (calendar): 6.00
 #> Avg exposure (at-risk): n1 = 5.96, n2 = 5.98
+#> Event gap: 0.01
 #> Accrual: 12.0, Trial duration: 12.0
 ```
 
