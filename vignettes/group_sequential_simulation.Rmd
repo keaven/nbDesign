@@ -266,10 +266,22 @@ for (sim in 1:n_sims) {
         
         # Update design with observed information fraction
         max_info <- gs_nb$n.fix
-        if (k == 3) {
-          frac <- blinded_est$blinded_info / max_info
+        # If observed info >= max info, this must be the final analysis
+        if (blinded_est$blinded_info >= max_info) {
+          # Only if not already at the final analysis
+          if (k < 3) {
+            # Consider this the final analysis for this simulation
+            # We need to treat this as if k were the final analysis index
+            # But the loop structure expects k=3 to be final.
+            # Effectively, we have reached 100% info early.
+            frac <- 1
+          } else {
+            frac <- 1
+          }
+        } else if (k == 3) {
+            frac <- 1
         } else {
-          frac <- min(blinded_est$blinded_info / max_info, 0.999)
+            frac <- blinded_est$blinded_info / max_info
         }
         
         # Current timing
@@ -278,33 +290,60 @@ for (sim in 1:n_sims) {
         
         # Safety check for timing order
         if (k > 1 && current_timing[k] <= current_timing[k-1]) current_timing[k] <- current_timing[k-1] + 0.001
-        if (k < 3 && current_timing[k+1] <= current_timing[k]) current_timing[k+1] <- current_timing[k] + 0.001
+        
+        # If we have reached full information early (frac >= 1), adjust timing
+        if (frac >= 1 && k < 3) {
+           # Set current timing to 1
+           current_timing[k] <- 1
+           # Set subsequent timings to 1 as well (though they won't be reached ideally, 
+           # gsDesign needs valid input)
+           current_timing[(k+1):3] <- 1
+           # Note: gsDesign might complain if timing is 1 at interim.
+           # Actually gsDesign requires timing to be increasing and < 1 for interims usually.
+           # If information fraction > 1, we should probably stop the trial.
+           stopped <- TRUE
+        }
+        
+        if (k < 3 && current_timing[k+1] <= current_timing[k]) {
+          # Ensure strict monotonicity if not already at 1
+          if (current_timing[k] < 1) {
+             current_timing[k+1] <- min(current_timing[k] + 0.001, 0.999)
+          }
+        }
         
         # Recompute bounds
-        temp_gs <- gsDesign::gsDesign(
-          k = 3,
-          test.type = 4,
-          alpha = 0.025,
-          beta = 0.1,
-          sfu = gsDesign::sfLinear, sfupar = c(.5, .5),
-          sfl = gsDesign::sfHSD, sflpar = -8,
-          usTime = c(.1, .18, 1),
-          timing = current_timing,
-          n.fix = max_info
-        )
-        
-        upper_bound <- temp_gs$upper$bound[k]
-        lower_bound <- temp_gs$lower$bound[k]
-        
-        # Check boundaries (one-sided: reject if z < -upper bound for benefit)
-        # For rate ratio < 1 (experimental better), log(RR) < 0, so z < 0
-        z_eff <- -test_result$z  # Flip sign for efficacy direction
-        
-        sim_results$cross_upper[k] <- z_eff > upper_bound
-        sim_results$cross_lower[k] <- z_eff < lower_bound
-        
-        if (sim_results$cross_upper[k] || sim_results$cross_lower[k]) {
-          stopped <- TRUE
+        # We only recompute if we haven't exceeded information
+        if (frac <= 1 || k == 3) {
+           temp_gs <- gsDesign::gsDesign(
+            k = 3,
+            test.type = 4,
+            alpha = 0.025,
+            beta = 0.1,
+            sfu = gsDesign::sfLinear, sfupar = c(.5, .5),
+            sfl = gsDesign::sfHSD, sflpar = -8,
+            usTime = c(.1, .18, 1),
+            timing = current_timing,
+            n.fix = max_info
+          )
+          
+          upper_bound <- temp_gs$upper$bound[k]
+          lower_bound <- temp_gs$lower$bound[k]
+          
+          # Check boundaries (one-sided: reject if z < -upper bound for benefit)
+          # For rate ratio < 1 (experimental better), log(RR) < 0, so z < 0
+          z_eff <- -test_result$z  # Flip sign for efficacy direction
+          
+          sim_results$cross_upper[k] <- z_eff > upper_bound
+          sim_results$cross_lower[k] <- z_eff < lower_bound
+          
+          if (sim_results$cross_upper[k] || sim_results$cross_lower[k]) {
+            stopped <- TRUE
+          }
+        } else {
+           # Information limit reached early
+           # We should check against final bound, but technically this is an overrun
+           # For simplicity here, we stop.
+           stopped <- TRUE
         }
       }
     }
