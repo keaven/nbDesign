@@ -177,3 +177,86 @@ analysis_data %>%
 #> 7 Winter Control             5         0.395           0 0    
 #> 8 Winter Experimental        5         0.408           0 0
 ```
+
+## Seasonal and Treatment Effect Estimation
+
+We can estimate the seasonal effects and the treatment effect using a
+Negative Binomial generalized linear model. We use the logarithm of the
+exposure time as an offset.
+
+``` r
+# Fit Negative Binomial GLM
+# We include season and treatment in the model
+fit <- MASS::glm.nb(
+  events ~ treatment + season + offset(log(tte)), 
+  data = analysis_data[analysis_data$tte > 0, ]
+)
+
+# Summary of the model
+summary(fit)
+#> 
+#> Call:
+#> MASS::glm.nb(formula = events ~ treatment + season + offset(log(tte)), 
+#>     data = analysis_data[analysis_data$tte > 0, ], init.theta = 0.7046293947, 
+#>     link = log)
+#> 
+#> Coefficients:
+#>                         Estimate Std. Error z value Pr(>|z|)
+#> (Intercept)           -9.344e-01  1.230e+00  -0.760    0.447
+#> treatmentExperimental  1.712e+00  1.172e+00   1.460    0.144
+#> seasonSpring          -1.881e-01  9.655e-01  -0.195    0.845
+#> seasonSummer          -3.559e+01  1.501e+07   0.000    1.000
+#> seasonWinter          -3.409e+01  1.850e+07   0.000    1.000
+#> 
+#> (Dispersion parameter for Negative Binomial(0.7046) family taken to be 1)
+#> 
+#>     Null deviance: 28.268  on 69  degrees of freedom
+#> Residual deviance: 17.594  on 65  degrees of freedom
+#> AIC: 45.764
+#> 
+#> Number of Fisher Scoring iterations: 1
+#> 
+#> 
+#>               Theta:  0.70 
+#>           Std. Err.:  1.24 
+#> 
+#>  2 x log-likelihood:  -33.764
+
+# Extract estimates
+coef_summary <- summary(fit)$coefficients
+
+# Seasonal effects (relative to reference season, likely Fall based on alphabetical order)
+# Treatment effect (Experimental vs Control)
+print(coef_summary)
+#>                          Estimate   Std. Error       z value  Pr(>|z|)
+#> (Intercept)            -0.9344423 1.229766e+00 -7.598537e-01 0.4473421
+#> treatmentExperimental   1.7117150 1.172198e+00  1.460261e+00 0.1442185
+#> seasonSpring           -0.1881428 9.654901e-01 -1.948676e-01 0.8454966
+#> seasonSummer          -35.5862751 1.500600e+07 -2.371470e-06 0.9999981
+#> seasonWinter          -34.0933221 1.850416e+07 -1.842468e-06 0.9999985
+
+# Estimated Rate Ratio (Experimental / Control)
+rr <- exp(coef(fit)["treatmentExperimental"])
+cat("Estimated Rate Ratio (Experimental / Control):", round(rr, 3), "\n")
+#> Estimated Rate Ratio (Experimental / Control): 5.538
+cat("True Design Rate Ratio:", 0.7, "\n")
+#> True Design Rate Ratio: 0.7
+```
+
+### Variance and Information
+
+The variance of the treatment effect estimate can be extracted from the
+covariance matrix of the model. The statistical information is the
+inverse of this variance.
+
+``` r
+# Variance of the treatment effect coefficient
+var_beta <- vcov(fit)["treatmentExperimental", "treatmentExperimental"]
+cat("Variance of Treatment Effect (log-scale):", var_beta, "\n")
+#> Variance of Treatment Effect (log-scale): 1.374049
+
+# Statistical Information
+info <- 1 / var_beta
+cat("Statistical Information:", info, "\n")
+#> Statistical Information: 0.7277761
+```
