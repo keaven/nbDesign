@@ -26,6 +26,7 @@ reference:
       Tools for simulating trial data.
     contents:
       - nb_sim
+      - nb_sim_seasonal
 
   - title: "Analysis"
     desc: >
