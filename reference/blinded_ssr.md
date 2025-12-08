@@ -93,6 +93,12 @@ blinded_ssr(
 
 A list containing:
 
+- lambda1:
+
+  Estimated event rate for control group
+
+A list containing:
+
 - n_total_unadjusted:
 
   Original planned total sample size (based on planning parameters).
@@ -121,3 +127,14 @@ A list containing:
 - target_info:
 
   Target statistical information required for the planned power.
+
+## References
+
+Friede, T., & Schmidli, H. (2010). Blinded sample size reestimation with
+count data: methods and applications. *Statistics in Medicine*, 29(10),
+1145-1156. [doi:10.1002/sim.3891](https://doi.org/10.1002/sim.3891)
+
+Schneider, S., Schmidli, H., & Friede, T. (2013). Blinded sample size
+reestimation for recurrent event data with time trends. *Statistics in
+Medicine*, 32(30), 5448-5457.
+[doi:10.1002/sim.5920](https://doi.org/10.1002/sim.5920)

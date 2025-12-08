@@ -2,9 +2,20 @@
 
 ``` r
 library(gsDesignNB)
+library(gsDesign)
+#> 
+#> Attaching package: 'gsDesign'
+#> The following object is masked from 'package:gsDesignNB':
+#> 
+#>     toInteger
 library(data.table)
 library(ggplot2)
 library(gt)
+#> 
+#> Attaching package: 'gt'
+#> The following object is masked from 'package:gsDesign':
+#> 
+#>     as_rtf
 ```
 
 This vignette demonstrates how to simulate a group sequential design
