@@ -54,7 +54,9 @@ analysis time, accounting for staggered enrollment and varying exposure times.</
 <span>  <span class="va">lambda1</span>,</span>
 <span>  <span class="va">lambda2</span>,</span>
 <span>  <span class="va">dispersion</span>,</span>
-<span>  ratio <span class="op">=</span> <span class="fl">1</span></span>
+<span>  ratio <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  dropout_rate <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  event_gap <span class="op">=</span> <span class="fl">0</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -89,39 +91,21 @@ analysis time, accounting for staggered enrollment and varying exposure times.</
 <dt id="arg-ratio">ratio<a class="anchor" aria-label="anchor" href="#arg-ratio"></a></dt>
 <dd><p>Allocation ratio (n2/n1). Default is 1.</p></dd>
 
+
+<dt id="arg-dropout-rate">dropout_rate<a class="anchor" aria-label="anchor" href="#arg-dropout-rate"></a></dt>
+<dd><p>Dropout rate (hazard rate). Default is 0.</p></dd>
+
+
+<dt id="arg-event-gap">event_gap<a class="anchor" aria-label="anchor" href="#arg-event-gap"></a></dt>
+<dd><p>Gap duration after each event during which no new events are counted.
+Default is 0.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>The statistical information (inverse of variance) at the analysis time.</p>
     </div>
-    <div class="section level2">
-    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>For subjects enrolled at time <code>t</code>, their exposure at analysis time <code>T</code>
-is <code>T - t</code>. The function integrates over all enrolled subjects to compute
-the total expected events and variance of the log rate ratio.</p>
-<p>The variance formula for the log rate ratio is:
-$$Var = \sum_i \frac{1/\mu_{1i} + k}{n_{1i}} + \frac{1/\mu_{2i} + k}{n_{2i}}$$</p>
-<p>where \(\mu_{ji} = \lambda_j \times exposure_i\) and \(k\) is the dispersion.</p>
-    </div>
 
-    <div class="section level2">
-    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Compute information at month 12 for a trial with:</span></span></span>
-<span class="r-in"><span><span class="co"># - 10 subjects/month enrollment rate</span></span></span>
-<span class="r-in"><span><span class="co"># - 20 month enrollment period</span></span></span>
-<span class="r-in"><span><span class="co"># - Control event rate 0.5, treatment rate 0.3</span></span></span>
-<span class="r-in"><span><span class="co"># - Dispersion 0.1</span></span></span>
-<span class="r-in"><span><span class="fu">compute_info_at_time</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  analysis_time <span class="op">=</span> <span class="fl">12</span>,</span></span>
-<span class="r-in"><span>  accrual_rate <span class="op">=</span> <span class="fl">10</span>,</span></span>
-<span class="r-in"><span>  accrual_duration <span class="op">=</span> <span class="fl">20</span>,</span></span>
-<span class="r-in"><span>  lambda1 <span class="op">=</span> <span class="fl">0.5</span>,</span></span>
-<span class="r-in"><span>  lambda2 <span class="op">=</span> <span class="fl">0.3</span>,</span></span>
-<span class="r-in"><span>  dispersion <span class="op">=</span> <span class="fl">0.1</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 55.10204</span>
-</code></pre></div>
-    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
