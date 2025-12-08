@@ -137,3 +137,45 @@ analysis_data %>%
   )
 ```
 
+## Seasonal and Treatment Effect Estimation
+
+We can estimate the seasonal effects and the treatment effect using a Negative Binomial generalized linear model. We use the logarithm of the exposure time as an offset.
+
+```{r analysis}
+# Fit Negative Binomial GLM
+# We include season and treatment in the model
+fit <- MASS::glm.nb(
+  events ~ treatment + season + offset(log(tte)), 
+  data = analysis_data[analysis_data$tte > 0, ]
+)
+
+# Summary of the model
+summary(fit)
+
+# Extract estimates
+coef_summary <- summary(fit)$coefficients
+
+# Seasonal effects (relative to reference season, likely Fall based on alphabetical order)
+# Treatment effect (Experimental vs Control)
+print(coef_summary)
+
+# Estimated Rate Ratio (Experimental / Control)
+rr <- exp(coef(fit)["treatmentExperimental"])
+cat("Estimated Rate Ratio (Experimental / Control):", round(rr, 3), "\n")
+cat("True Design Rate Ratio:", 0.7, "\n")
+```
+
+### Variance and Information
+
+The variance of the treatment effect estimate can be extracted from the covariance matrix of the model. The statistical information is the inverse of this variance.
+
+```{r information}
+# Variance of the treatment effect coefficient
+var_beta <- vcov(fit)["treatmentExperimental", "treatmentExperimental"]
+cat("Variance of Treatment Effect (log-scale):", var_beta, "\n")
+
+# Statistical Information
+info <- 1 / var_beta
+cat("Statistical Information:", info, "\n")
+```
+
