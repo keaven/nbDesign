@@ -102,7 +102,7 @@ Friede, T., & Schmidli, H. (2010). Blinded sample size reestimation with
 count data: methods and applications. *Statistics in Medicine*, 29(10),
 1145-1156. [doi:10.1002/sim.3891](https://doi.org/10.1002/sim.3891)
 
-Mutze, T., Glimm, E., Schmidli, H., & Friede, T. (2018). Blind sample
-size reestimation in clinical trials with recurrent event data.
-*Pharmaceutical Statistics*, 17(4), 369-383.
-[doi:10.1002/pst.1865](https://doi.org/10.1002/pst.1865)
+Mütze, T., Glimm, E., Schmidli, H., & Friede, T. (2018). Group
+sequential designs for negative binomial outcomes. *Statistical Methods
+in Medical Research*, 27(10), 2978-2993.
+[doi:10.1177/0962280218773115](https://doi.org/10.1177/0962280218773115)

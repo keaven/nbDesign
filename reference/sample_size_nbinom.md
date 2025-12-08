@@ -136,7 +136,7 @@ Medicine*, 49(6), 623-631.
 Mütze, T., Glimm, E., Schmidli, H., & Friede, T. (2018). Group
 sequential designs for negative binomial outcomes. *Statistical Methods
 in Medical Research*, 27(10), 2978-2993.
-[doi:10.1177/0962280217698174](https://doi.org/10.1177/0962280217698174)
+[doi:10.1177/0962280218773115](https://doi.org/10.1177/0962280218773115)
 
 ## See also
 
