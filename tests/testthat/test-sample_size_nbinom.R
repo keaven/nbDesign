@@ -152,3 +152,43 @@ test_that("Event gap results in correct exposure reporting", {
   # Check method name remains "zhu"
   expect_equal(res$inputs$method, "zhu")
 })
+
+test_that("sample_size_nbinom matches published results", {
+  # Helper to simulate fixed exposure of 1.0
+  # We use a very short accrual duration and trial duration = 1 + accrual duration
+  # This ensures everyone is followed for approximately 1.0 unit of time.
+  calc_fixed_exp <- function(lambda1, lambda2, dispersion, power, alpha, method) {
+    sample_size_nbinom(
+      lambda1 = lambda1, lambda2 = lambda2, dispersion = dispersion, power = power,
+      alpha = alpha, sided = 1,
+      accrual_rate = 1000, accrual_duration = 0.001, trial_duration = 1.001,
+      method = method
+    )
+  }
+
+  # Zhu and Lakkis (2014)
+  # Example 1: Moderate Rates
+  # L1=0.5, L2=0.3, k=0.1, Power=0.8, Alpha=0.025 -> n=167
+  res_zhu_1 <- calc_fixed_exp(0.5, 0.3, 0.1, 0.8, 0.025, "zhu")
+  expect_equal(res_zhu_1$n1, 167)
+  expect_equal(res_zhu_1$n2, 167)
+
+  # Example 2: High Rates
+  # L1=1.0, L2=0.5, k=0.5, Power=0.9, Alpha=0.025 -> n=88
+  res_zhu_2 <- calc_fixed_exp(1.0, 0.5, 0.5, 0.9, 0.025, "zhu")
+  expect_equal(res_zhu_2$n1, 88)
+  expect_equal(res_zhu_2$n2, 88)
+
+  # Friede and Schmidli (2010)
+  # Example 1: Standard Scenario
+  # L1=0.6, L2=0.3, k=0.4, Power=0.8, Alpha=0.025 -> n=95
+  res_friede_1 <- calc_fixed_exp(0.6, 0.3, 0.4, 0.8, 0.025, "friede")
+  expect_equal(res_friede_1$n1, 95)
+  expect_equal(res_friede_1$n2, 95)
+
+  # Example 2: High Dispersion
+  # L1=1.0, L2=0.5, k=0.5, Power=0.8, Alpha=0.025 -> n=66
+  res_friede_2 <- calc_fixed_exp(1.0, 0.5, 0.5, 0.8, 0.025, "friede")
+  expect_equal(res_friede_2$n1, 66)
+  expect_equal(res_friede_2$n2, 66)
+})
