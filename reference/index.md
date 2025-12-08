@@ -65,6 +65,7 @@ Spending functions and utilities re-exported from the gsDesign package
 for convenience.
 
 - [`reexports`](https://keaven.github.io/gsDesignNB/reference/reexports.md)
+  [`gsDesign`](https://keaven.github.io/gsDesignNB/reference/reexports.md)
   [`sfBetaDist`](https://keaven.github.io/gsDesignNB/reference/reexports.md)
   [`sfCauchy`](https://keaven.github.io/gsDesignNB/reference/reexports.md)
   [`sfExponential`](https://keaven.github.io/gsDesignNB/reference/reexports.md)

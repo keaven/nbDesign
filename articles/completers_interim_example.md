@@ -44,7 +44,8 @@ enroll_rate <- data.frame(
 
 fail_rate <- data.frame(
   treatment = c("Control", "Experimental"),
-  rate = c(0.5, 0.35) # Events per year
+  rate = c(0.5, 0.35), # Events per year
+  dispersion = c(0.5, 0.5) # Negative Binomial dispersion
 )
 
 dropout_rate <- data.frame(
@@ -128,6 +129,40 @@ for (i in 1:n_sims) {
   results$final_info[i] <- info_final
   results$info_frac[i] <- info_interim / info_final
 }
+
+# Compute asymptotic information
+# Interim
+info_asymp_interim <- compute_info_at_time(
+  analysis_time = mean(results$interim_date),
+  accrual_rate = n_total / enroll_duration,
+  accrual_duration = enroll_duration,
+  lambda1 = fail_rate$rate[1],
+  lambda2 = fail_rate$rate[2],
+  dispersion = fail_rate$dispersion[1],
+  ratio = 1,
+  dropout_rate = dropout_rate$rate[1] # Assuming equal dropout
+)
+
+# Final
+info_asymp_final <- compute_info_at_time(
+  analysis_time = mean(results$final_date),
+  accrual_rate = n_total / enroll_duration,
+  accrual_duration = enroll_duration,
+  lambda1 = fail_rate$rate[1],
+  lambda2 = fail_rate$rate[2],
+  dispersion = fail_rate$dispersion[1],
+  ratio = 1,
+  dropout_rate = dropout_rate$rate[1]
+)
+
+cat("Asymptotic Information (Interim):", round(info_asymp_interim, 2), "\n")
+#> Asymptotic Information (Interim): 15.54
+cat("Mean Simulated Information (Interim):", round(mean(results$interim_info), 2), "\n")
+#> Mean Simulated Information (Interim): 14.45
+cat("Asymptotic Information (Final):", round(info_asymp_final, 2), "\n")
+#> Asymptotic Information (Final): 22.81
+cat("Mean Simulated Information (Final):", round(mean(results$final_info), 2), "\n")
+#> Mean Simulated Information (Final): 17.29
 ```
 
 ## Results Summary
@@ -138,19 +173,19 @@ interim and final analyses.
 ``` r
 summary(results[, c("interim_date", "interim_z", "interim_info", "final_date", "final_z", "final_info", "info_frac")])
 #>   interim_date     interim_z        interim_info     final_date   
-#>  Min.   :1.329   Min.   :-4.0441   Min.   :10.67   Min.   :1.883  
-#>  1st Qu.:1.390   1st Qu.:-2.3709   1st Qu.:13.73   1st Qu.:1.970  
-#>  Median :1.411   Median :-1.5500   Median :15.42   Median :2.015  
-#>  Mean   :1.420   Mean   :-1.5144   Mean   :15.59   Mean   :2.014  
-#>  3rd Qu.:1.455   3rd Qu.:-0.7135   3rd Qu.:17.59   3rd Qu.:2.061  
-#>  Max.   :1.536   Max.   : 1.1014   Max.   :20.24   Max.   :2.220  
+#>  Min.   :1.310   Min.   :-3.3950   Min.   : 9.10   Min.   :1.877  
+#>  1st Qu.:1.387   1st Qu.:-2.2002   1st Qu.:13.10   1st Qu.:1.950  
+#>  Median :1.406   Median :-1.3360   Median :14.05   Median :1.983  
+#>  Mean   :1.416   Mean   :-1.3850   Mean   :14.45   Mean   :1.992  
+#>  3rd Qu.:1.445   3rd Qu.:-0.8207   3rd Qu.:15.57   3rd Qu.:2.029  
+#>  Max.   :1.544   Max.   : 1.3095   Max.   :21.56   Max.   :2.173  
 #>     final_z          final_info      info_frac     
-#>  Min.   :-4.0901   Min.   :14.58   Min.   :0.6962  
-#>  1st Qu.:-2.2880   1st Qu.:17.78   1st Qu.:0.7631  
-#>  Median :-1.3878   Median :18.75   Median :0.8239  
-#>  Mean   :-1.5391   Mean   :19.11   Mean   :0.8145  
-#>  3rd Qu.:-0.9025   3rd Qu.:20.99   3rd Qu.:0.8474  
-#>  Max.   : 1.0082   Max.   :23.67   Max.   :0.9303
+#>  Min.   :-3.8041   Min.   :10.57   Min.   :0.7213  
+#>  1st Qu.:-2.1767   1st Qu.:15.76   1st Qu.:0.7930  
+#>  Median :-1.5857   Median :17.01   Median :0.8301  
+#>  Mean   :-1.5420   Mean   :17.29   Mean   :0.8361  
+#>  3rd Qu.:-0.8692   3rd Qu.:19.04   3rd Qu.:0.8703  
+#>  Max.   : 1.3956   Max.   :24.31   Max.   :0.9479
 ```
 
 ### Visualization
@@ -162,7 +197,7 @@ Comparison of Z-scores at Interim vs Final Analysis.
 # Correlation between interim and final Z-scores
 cor_z <- cor(results$interim_z, results$final_z)
 cat("Correlation between interim and final Z-scores:", round(cor_z, 3), "\n")
-#> Correlation between interim and final Z-scores: 0.905
+#> Correlation between interim and final Z-scores: 0.929
 
 ggplot(results, aes(x = interim_z, y = final_z)) +
   geom_point(alpha = 0.7) +
@@ -179,3 +214,63 @@ ggplot(results, aes(x = interim_z, y = final_z)) +
 
 The plot shows the correlation between the interim statistic (based on
 40% completers) and the final statistic.
+
+### Group Sequential Design Evaluation
+
+We can evaluate the operating characteristics of this design using the
+simulated Z-scores and information fractions. We assume an
+O’Brien-Fleming spending function for the upper bound.
+
+``` r
+# Define design parameters
+alpha <- 0.025
+k <- 2
+sfu <- sfLDOF # Lan-DeMets O'Brien-Fleming approximation
+
+# Calculate bounds for each simulation based on observed information fraction
+# Note: In practice, bounds are often fixed or recalculated. Here we check rejection rates.
+# We'll use the mean information fraction to set a single boundary for simplicity in this summary,
+# or we could check each trial individually. Let's check individually.
+
+reject <- logical(n_sims)
+for (i in 1:n_sims) {
+  # Compute boundary for interim
+  # We need to spend alpha based on info_frac[i]
+  # Using gsDesign to get the boundary
+  # We want to spend alpha(t) = alpha * sf(t)
+  # But standard group sequential design defines boundaries.
+  
+  # Let's use a simple error spending approach:
+  # Spend alpha_1 at interim based on info_frac[i]
+  # Spend remaining alpha at final (total alpha = 0.025)
+  
+  # Interim spending
+  spend_interim <- sfu(alpha, t = results$info_frac[i])$spend
+  # Interim bound (Z-scale)
+  # P(Z > b1) = spend_interim
+  b1 <- qnorm(1 - spend_interim)
+  
+  # Check interim rejection
+  if (results$interim_z[i] > b1) {
+    reject[i] <- TRUE
+  } else {
+    # Final analysis
+    # We need to find b2 such that P(Z1 < b1, Z2 > b2) = alpha - spend_interim
+    # This requires integration over the joint distribution.
+    # For simplicity in this vignette, we can use the asymptotic correlation
+    # Cor(Z1, Z2) = sqrt(info_frac)
+    
+    # Using gsDesign to compute the exact boundary given the fraction
+    # We create a design with this fraction
+    gs_des <- gsDesign(k = 2, test.type = 1, alpha = alpha, sfu = sfu, timing = results$info_frac[i])
+    b2 <- gs_des$upper$bound[2]
+    
+    if (results$final_z[i] > b2) {
+      reject[i] <- TRUE
+    }
+  }
+}
+
+cat("Power (Empirical Rejection Rate):", mean(reject), "\n")
+#> Power (Empirical Rejection Rate): 0
+```
