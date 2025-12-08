@@ -64,45 +64,45 @@ mutze_test(cut)
 #> [1] "Negative Binomial Wald"
 #> 
 #> $estimate
-#> [1] -0.4561103
+#> [1] -0.5528142
 #> 
 #> $se
-#> [1] 0.4564729
+#> [1] 0.4756374
 #> 
 #> $z
-#> [1] -0.9992057
+#> [1] -1.16226
 #> 
 #> $p_value
-#> [1] 0.3176951
+#> [1] 0.2451299
 #> 
 #> $rate_ratio
-#> [1] 0.6337439
+#> [1] 0.5753284
 #> 
 #> $conf_int
-#> [1] 0.2590379 1.5504731
+#> [1] 0.2264918 1.4614336
 #> 
 #> $conf_level
 #> [1] 0.95
 #> 
 #> $dispersion
-#> [1] 3256.233
+#> [1] 2549.585
 #> 
 #> $model
 #> 
 #> Call:  MASS::glm.nb(formula = events ~ treatment + offset(log(tte)), 
-#>     data = df, init.theta = 3256.232807, link = log)
+#>     data = df, init.theta = 2549.585263, link = log)
 #> 
 #> Coefficients:
 #>           (Intercept)  treatmentExperimental  
-#>               -0.4897                -0.4561  
+#>               -0.6263                -0.5528  
 #> 
 #> Degrees of Freedom: 39 Total (i.e. Null);  38 Residual
-#> Null Deviance:       39.87 
-#> Residual Deviance: 38.85     AIC: 79.08
+#> Null Deviance:       42.12 
+#> Residual Deviance: 40.71     AIC: 79.18
 #> 
 #> $group_summary
 #>      treatment subjects events exposure
-#> 1 Experimental       20      8 20.59853
-#> 2      Control       20     12 19.58128
+#> 1      Control       20     12 22.44970
+#> 2 Experimental       20      7 22.76174
 #> 
 ```

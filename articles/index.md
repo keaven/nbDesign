@@ -2,6 +2,8 @@
 
 ### All vignettes
 
+- [Group Sequential Simulation with Completers
+  Analysis](https://keaven.github.io/gsDesignNB/articles/completers_interim_example.md):
 - [Group Sequential Design and
   Simulation](https://keaven.github.io/gsDesignNB/articles/group_sequential_simulation.md):
 - [Sample Size Calculation for Negative Binomial

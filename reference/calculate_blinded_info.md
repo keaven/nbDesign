@@ -7,7 +7,13 @@ rate ratio, assuming the planned allocation ratio and treatment effect.
 ## Usage
 
 ``` r
-calculate_blinded_info(data, ratio = 1, lambda1_planning, lambda2_planning)
+calculate_blinded_info(
+  data,
+  ratio = 1,
+  lambda1_planning,
+  lambda2_planning,
+  event_gap = NULL
+)
 ```
 
 ## Arguments
@@ -28,6 +34,12 @@ calculate_blinded_info(data, ratio = 1, lambda1_planning, lambda2_planning)
 - lambda2_planning:
 
   Planned event rate for the experimental group.
+
+- event_gap:
+
+  Optional. Gap duration (numeric) to adjust planning rates if provided.
+  If provided, planning rates are adjusted as lambda / (1 + lambda \*
+  gap).
 
 ## Value
 

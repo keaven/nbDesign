@@ -24,7 +24,8 @@ recurrent event outcomes."></head><body>
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/group_sequential_simulation.html">Group Sequential Design and Simulation</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/completers_interim_example.html">Group Sequential Simulation with Completers Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/group_sequential_simulation.html">Group Sequential Design and Simulation</a></li>
     <li><a class="dropdown-item" href="../articles/sample_size_nbinom.html">Sample Size Calculation for Negative Binomial Outcomes</a></li>
     <li><a class="dropdown-item" href="../articles/simulation_example.html">Simulation of Recurrent Events</a></li>
   </ul></li>
@@ -99,46 +100,46 @@ GLM via <code><a href="https://rdrr.io/pkg/MASS/man/glm.nb.html" class="external
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Negative Binomial Wald"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $estimate</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.4561103</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.5528142</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $se</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4564729</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4756374</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $z</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.9992057</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1.16226</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $p_value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.3176951</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2451299</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $rate_ratio</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.6337439</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5753284</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $conf_int</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2590379 1.5504731</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2264918 1.4614336</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $conf_level</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.95</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $dispersion</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3256.233</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2549.585</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $model</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:  MASS::glm.nb(formula = events ~ treatment + offset(log(tte)), </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     data = df, init.theta = 3256.232807, link = log)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     data = df, init.theta = 2549.585263, link = log)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           (Intercept)  treatmentExperimental  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               -0.4897                -0.4561  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               -0.6263                -0.5528  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Degrees of Freedom: 39 Total (i.e. Null);  38 Residual</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Null Deviance:	    39.87 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Residual Deviance: 38.85 	AIC: 79.08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Null Deviance:	    42.12 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Residual Deviance: 40.71 	AIC: 79.18</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $group_summary</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      treatment subjects events exposure</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Experimental       20      8 20.59853</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2      Control       20     12 19.58128</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      Control       20     12 22.44970</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Experimental       20      7 22.76174</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

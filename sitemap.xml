@@ -1,5 +1,6 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://keaven.github.io/gsDesignNB/404.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesignNB/articles/completers_interim_example.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesignNB/articles/group_sequential_simulation.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesignNB/articles/index.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesignNB/articles/sample_size_nbinom.html</loc></url>
@@ -9,7 +10,9 @@
 <url><loc>https://keaven.github.io/gsDesignNB/reference/blinded_ssr.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesignNB/reference/calculate_blinded_info.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesignNB/reference/compute_info_at_time.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesignNB/reference/cut_completers.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesignNB/reference/cut_data_by_date.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesignNB/reference/cut_date_for_completers.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesignNB/reference/get_analysis_date.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesignNB/reference/gsNBCalendar.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesignNB/reference/index.html</loc></url>

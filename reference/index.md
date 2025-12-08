@@ -48,6 +48,10 @@ re-estimation and interim analysis.
   et al.)
 - [`cut_data_by_date()`](https://keaven.github.io/gsDesignNB/reference/cut_data_by_date.md)
   : Cut nb_sim data by calendar date
+- [`cut_completers()`](https://keaven.github.io/gsDesignNB/reference/cut_completers.md)
+  : Cut data for completers analysis
+- [`cut_date_for_completers()`](https://keaven.github.io/gsDesignNB/reference/cut_date_for_completers.md)
+  : Find calendar date for target completer count
 - [`compute_info_at_time()`](https://keaven.github.io/gsDesignNB/reference/compute_info_at_time.md)
   : Compute Statistical Information at Analysis Time
 - [`get_analysis_date()`](https://keaven.github.io/gsDesignNB/reference/get_analysis_date.md)
