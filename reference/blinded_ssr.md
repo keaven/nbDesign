@@ -93,12 +93,6 @@ blinded_ssr(
 
 A list containing:
 
-- lambda1:
-
-  Estimated event rate for control group
-
-A list containing:
-
 - n_total_unadjusted:
 
   Original planned total sample size (based on planning parameters).

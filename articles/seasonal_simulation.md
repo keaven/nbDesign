@@ -3,6 +3,18 @@
 ``` r
 library(gsDesignNB)
 library(data.table)
+library(dplyr)
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:data.table':
+#> 
+#>     between, first, last
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
 ```
 
 This vignette demonstrates how to simulate recurrent events when event
@@ -145,17 +157,6 @@ seasonal adjustments in the analysis if desired.
 ``` r
 # Summarize events by season
 library(dplyr)
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:data.table':
-#> 
-#>     between, first, last
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
 analysis_data %>%
   group_by(season, treatment) %>%
   summarize(

@@ -55,13 +55,3 @@ A data frame of class `nb_sim_seasonal` with columns: `id`, `treatment`,
 `calendar_end`. Rows represent intervals of risk or events. `event=1`
 indicates an event at `end`. `event=0` indicates censoring or end of a
 seasonal interval at `end`.
-
-Simulate Recurrent Events with Seasonal Rates
-
-Simulates recurrent events where event rates depend on the season.
-
-A data frame of class `nb_sim_seasonal` with columns: `id`, `treatment`,
-`season`, `enroll_time`, `start`, `end`, `event`, `calendar_start`,
-`calendar_end`. Rows represent intervals of risk or events. `event=1`
-indicates an event at `end`. `event=0` indicates censoring or end of a
-seasonal interval at `end`.
