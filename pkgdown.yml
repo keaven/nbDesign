@@ -5,8 +5,9 @@ articles:
   completers_interim_example: completers_interim_example.html
   group_sequential_simulation: group_sequential_simulation.html
   sample_size_nbinom: sample_size_nbinom.html
+  seasonal_simulation: seasonal_simulation.html
   simulation_example: simulation_example.html
-last_built: 2025-12-08T10:48Z
+last_built: 2025-12-08T11:00Z
 urls:
   reference: https://keaven.github.io/gsDesignNB/reference
   article: https://keaven.github.io/gsDesignNB/articles
