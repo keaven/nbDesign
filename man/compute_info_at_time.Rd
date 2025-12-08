@@ -11,7 +11,9 @@ compute_info_at_time(
   lambda1,
   lambda2,
   dispersion,
-  ratio = 1
+  ratio = 1,
+  dropout_rate = 0,
+  event_gap = 0
 )
 }
 \arguments{
@@ -28,6 +30,11 @@ compute_info_at_time(
 \item{dispersion}{The negative binomial dispersion parameter.}
 
 \item{ratio}{Allocation ratio (n2/n1). Default is 1.}
+
+\item{dropout_rate}{Dropout rate (hazard rate). Default is 0.}
+
+\item{event_gap}{Gap duration after each event during which no new events are counted.
+Default is 0.}
 }
 \value{
 The statistical information (inverse of variance) at the analysis time.
@@ -35,29 +42,4 @@ The statistical information (inverse of variance) at the analysis time.
 \description{
 Computes the statistical information for the log rate ratio at a given
 analysis time, accounting for staggered enrollment and varying exposure times.
-}
-\details{
-For subjects enrolled at time \code{t}, their exposure at analysis time \code{T}
-is \code{T - t}. The function integrates over all enrolled subjects to compute
-the total expected events and variance of the log rate ratio.
-
-The variance formula for the log rate ratio is:
-\deqn{Var = \sum_i \frac{1/\mu_{1i} + k}{n_{1i}} + \frac{1/\mu_{2i} + k}{n_{2i}}}
-
-where \eqn{\mu_{ji} = \lambda_j \times exposure_i} and \eqn{k} is the dispersion.
-}
-\examples{
-# Compute information at month 12 for a trial with:
-# - 10 subjects/month enrollment rate
-# - 20 month enrollment period
-# - Control event rate 0.5, treatment rate 0.3
-# - Dispersion 0.1
-compute_info_at_time(
-  analysis_time = 12,
-  accrual_rate = 10,
-  accrual_duration = 20,
-  lambda1 = 0.5,
-  lambda2 = 0.3,
-  dispersion = 0.1
-)
 }
