@@ -37,14 +37,14 @@ We define a trial with the following parameters:
 # Parameters
 n_total <- 200
 enroll_duration <- 12 # months
-max_followup <- 24 # months (using months as time unit for clarity)
+max_followup <- 12 # months (using months as time unit for clarity)
 
 # Convert to years if rates are annual, but let's stick to consistent units.
 # Let's say rates are per YEAR, so we convert time to years.
 # Time unit: Year
 n_total <- 200
 enroll_duration <- 1 # 1 year
-max_followup <- 2 # 2 years
+max_followup <- 1 # 1 year
 
 enroll_rate <- data.frame(
   rate = n_total / enroll_duration, 
@@ -75,9 +75,12 @@ results <- data.frame(
   interim_date = numeric(n_sims),
   interim_z = numeric(n_sims),
   interim_n = integer(n_sims),
+  interim_info = numeric(n_sims),
   final_date = numeric(n_sims),
   final_z = numeric(n_sims),
-  final_n = integer(n_sims)
+  final_n = integer(n_sims),
+  final_info = numeric(n_sims),
+  info_frac = numeric(n_sims)
 )
 
 # Target completers for interim (40%)
@@ -104,6 +107,8 @@ for (i in 1:n_sims) {
   res_interim <- mutze_test(data_interim)
   # Extract Z-statistic
   z_interim <- res_interim$z
+  # Extract Information
+  info_interim <- 1 / res_interim$se^2
   
   # 3. Final Analysis (All Data)
   # Date is when last patient completes (or max follow-up reached)
@@ -116,15 +121,20 @@ for (i in 1:n_sims) {
   
   res_final <- mutze_test(data_final)
   z_final <- res_final$z
+  # Extract Information
+  info_final <- 1 / res_final$se^2
   
   # Store results
   results$sim_id[i] <- i
   results$interim_date[i] <- date_interim
   results$interim_z[i] <- z_interim
   results$interim_n[i] <- nrow(data_interim)
+  results$interim_info[i] <- info_interim
   results$final_date[i] <- date_final
   results$final_z[i] <- z_final
   results$final_n[i] <- nrow(data_final)
+  results$final_info[i] <- info_final
+  results$info_frac[i] <- info_interim / info_final
 }
 ```
 
@@ -133,7 +143,7 @@ for (i in 1:n_sims) {
 We summarize the distribution of the test statistics (Z-scores) at the interim and final analyses.
 
 ```{r summary}
-summary(results[, c("interim_date", "interim_z", "final_date", "final_z")])
+summary(results[, c("interim_date", "interim_z", "interim_info", "final_date", "final_z", "final_info", "info_frac")])
 ```
 
 ### Visualization
