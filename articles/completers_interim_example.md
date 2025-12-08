@@ -159,11 +159,17 @@ summary(results[, c("interim_date", "interim_z", "interim_info", "final_date", "
 Comparison of Z-scores at Interim vs Final Analysis.
 
 ``` r
+
+# Correlation between interim and final Z-scores
+cor_z <- cor(results$interim_z, results$final_z)
+cat("Correlation between interim and final Z-scores:", round(cor_z, 3), "\n")
+#> Correlation between interim and final Z-scores: 0.585
+
 ggplot(results, aes(x = interim_z, y = final_z)) +
   geom_point(alpha = 0.7) +
   geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "gray") +
   labs(
-    title = "Z-Scores: Interim vs Final Analysis",
+    title = paste0("Z-Scores: Interim vs Final Analysis (Cor = ", round(cor_z, 3), ")"),
     x = "Interim Z-Score (Completers Only)",
     y = "Final Z-Score (Full Data)"
   ) +
