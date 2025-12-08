@@ -99,14 +99,14 @@ completed follow-up (or dropped out). Includes all available data
 <code class="sourceCode R"><span><span class="co"># Parameters</span></span>
 <span><span class="va">n_total</span> <span class="op">&lt;-</span> <span class="fl">200</span></span>
 <span><span class="va">enroll_duration</span> <span class="op">&lt;-</span> <span class="fl">12</span> <span class="co"># months</span></span>
-<span><span class="va">max_followup</span> <span class="op">&lt;-</span> <span class="fl">24</span> <span class="co"># months (using months as time unit for clarity)</span></span>
+<span><span class="va">max_followup</span> <span class="op">&lt;-</span> <span class="fl">12</span> <span class="co"># months (using months as time unit for clarity)</span></span>
 <span></span>
 <span><span class="co"># Convert to years if rates are annual, but let's stick to consistent units.</span></span>
 <span><span class="co"># Let's say rates are per YEAR, so we convert time to years.</span></span>
 <span><span class="co"># Time unit: Year</span></span>
 <span><span class="va">n_total</span> <span class="op">&lt;-</span> <span class="fl">200</span></span>
 <span><span class="va">enroll_duration</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="co"># 1 year</span></span>
-<span><span class="va">max_followup</span> <span class="op">&lt;-</span> <span class="fl">2</span> <span class="co"># 2 years</span></span>
+<span><span class="va">max_followup</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="co"># 1 year</span></span>
 <span></span>
 <span><span class="va">enroll_rate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  rate <span class="op">=</span> <span class="va">n_total</span> <span class="op">/</span> <span class="va">enroll_duration</span>, </span>
@@ -137,9 +137,12 @@ and final analyses.</p>
 <span>  interim_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="va">n_sims</span><span class="op">)</span>,</span>
 <span>  interim_z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="va">n_sims</span><span class="op">)</span>,</span>
 <span>  interim_n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="va">n_sims</span><span class="op">)</span>,</span>
+<span>  interim_info <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="va">n_sims</span><span class="op">)</span>,</span>
 <span>  final_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="va">n_sims</span><span class="op">)</span>,</span>
 <span>  final_z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="va">n_sims</span><span class="op">)</span>,</span>
-<span>  final_n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="va">n_sims</span><span class="op">)</span></span>
+<span>  final_n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="va">n_sims</span><span class="op">)</span>,</span>
+<span>  final_info <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="va">n_sims</span><span class="op">)</span>,</span>
+<span>  info_frac <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="va">n_sims</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Target completers for interim (40%)</span></span>
@@ -166,6 +169,8 @@ and final analyses.</p>
 <span>  <span class="va">res_interim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutze_test.html">mutze_test</a></span><span class="op">(</span><span class="va">data_interim</span><span class="op">)</span></span>
 <span>  <span class="co"># Extract Z-statistic</span></span>
 <span>  <span class="va">z_interim</span> <span class="op">&lt;-</span> <span class="va">res_interim</span><span class="op">$</span><span class="va">z</span></span>
+<span>  <span class="co"># Extract Information</span></span>
+<span>  <span class="va">info_interim</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="va">res_interim</span><span class="op">$</span><span class="va">se</span><span class="op">^</span><span class="fl">2</span></span>
 <span>  </span>
 <span>  <span class="co"># 3. Final Analysis (All Data)</span></span>
 <span>  <span class="co"># Date is when last patient completes (or max follow-up reached)</span></span>
@@ -178,15 +183,20 @@ and final analyses.</p>
 <span>  </span>
 <span>  <span class="va">res_final</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutze_test.html">mutze_test</a></span><span class="op">(</span><span class="va">data_final</span><span class="op">)</span></span>
 <span>  <span class="va">z_final</span> <span class="op">&lt;-</span> <span class="va">res_final</span><span class="op">$</span><span class="va">z</span></span>
+<span>  <span class="co"># Extract Information</span></span>
+<span>  <span class="va">info_final</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="va">res_final</span><span class="op">$</span><span class="va">se</span><span class="op">^</span><span class="fl">2</span></span>
 <span>  </span>
 <span>  <span class="co"># Store results</span></span>
 <span>  <span class="va">results</span><span class="op">$</span><span class="va">sim_id</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">i</span></span>
 <span>  <span class="va">results</span><span class="op">$</span><span class="va">interim_date</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">date_interim</span></span>
 <span>  <span class="va">results</span><span class="op">$</span><span class="va">interim_z</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">z_interim</span></span>
 <span>  <span class="va">results</span><span class="op">$</span><span class="va">interim_n</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data_interim</span><span class="op">)</span></span>
+<span>  <span class="va">results</span><span class="op">$</span><span class="va">interim_info</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">info_interim</span></span>
 <span>  <span class="va">results</span><span class="op">$</span><span class="va">final_date</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">date_final</span></span>
 <span>  <span class="va">results</span><span class="op">$</span><span class="va">final_z</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">z_final</span></span>
 <span>  <span class="va">results</span><span class="op">$</span><span class="va">final_n</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data_final</span><span class="op">)</span></span>
+<span>  <span class="va">results</span><span class="op">$</span><span class="va">final_info</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">info_final</span></span>
+<span>  <span class="va">results</span><span class="op">$</span><span class="va">info_frac</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">info_interim</span> <span class="op">/</span> <span class="va">info_final</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -195,14 +205,21 @@ and final analyses.</p>
 <p>We summarize the distribution of the test statistics (Z-scores) at
 the interim and final analyses.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">results</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"interim_date"</span>, <span class="st">"interim_z"</span>, <span class="st">"final_date"</span>, <span class="st">"final_z"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   interim_date     interim_z         final_date       final_z       </span></span>
-<span><span class="co">#&gt;  Min.   :2.335   Min.   :-3.5535   Min.   :2.826   Min.   :-4.2149  </span></span>
-<span><span class="co">#&gt;  1st Qu.:2.410   1st Qu.:-1.6347   1st Qu.:2.924   1st Qu.:-2.7246  </span></span>
-<span><span class="co">#&gt;  Median :2.440   Median :-1.2086   Median :2.986   Median :-2.0284  </span></span>
-<span><span class="co">#&gt;  Mean   :2.443   Mean   :-1.2446   Mean   :2.988   Mean   :-2.1068  </span></span>
-<span><span class="co">#&gt;  3rd Qu.:2.467   3rd Qu.:-0.7949   3rd Qu.:3.044   3rd Qu.:-1.3613  </span></span>
-<span><span class="co">#&gt;  Max.   :2.578   Max.   : 0.9434   Max.   :3.166   Max.   :-0.5409</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">results</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"interim_date"</span>, <span class="st">"interim_z"</span>, <span class="st">"interim_info"</span>, <span class="st">"final_date"</span>, <span class="st">"final_z"</span>, <span class="st">"final_info"</span>, <span class="st">"info_frac"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   interim_date     interim_z        interim_info      final_date   </span></span>
+<span><span class="co">#&gt;  Min.   :1.329   Min.   :-3.1089   Min.   : 3.863   Min.   :1.883  </span></span>
+<span><span class="co">#&gt;  1st Qu.:1.390   1st Qu.:-2.1047   1st Qu.: 6.001   1st Qu.:1.970  </span></span>
+<span><span class="co">#&gt;  Median :1.411   Median :-1.4332   Median : 7.144   Median :2.015  </span></span>
+<span><span class="co">#&gt;  Mean   :1.420   Mean   :-1.2836   Mean   : 7.409   Mean   :2.014  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:1.455   3rd Qu.:-0.6467   3rd Qu.: 8.571   3rd Qu.:2.061  </span></span>
+<span><span class="co">#&gt;  Max.   :1.536   Max.   : 1.4275   Max.   :11.666   Max.   :2.220  </span></span>
+<span><span class="co">#&gt;     final_z          final_info      info_frac     </span></span>
+<span><span class="co">#&gt;  Min.   :-4.0901   Min.   :14.58   Min.   :0.2162  </span></span>
+<span><span class="co">#&gt;  1st Qu.:-2.2880   1st Qu.:17.78   1st Qu.:0.3452  </span></span>
+<span><span class="co">#&gt;  Median :-1.3878   Median :18.75   Median :0.3818  </span></span>
+<span><span class="co">#&gt;  Mean   :-1.5391   Mean   :19.11   Mean   :0.3882  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:-0.9025   3rd Qu.:20.99   3rd Qu.:0.4365  </span></span>
+<span><span class="co">#&gt;  Max.   : 1.0082   Max.   :23.67   Max.   :0.5737</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="visualization">Visualization<a class="anchor" aria-label="anchor" href="#visualization"></a>
 </h3>

@@ -29,14 +29,14 @@ We define a trial with the following parameters:
 # Parameters
 n_total <- 200
 enroll_duration <- 12 # months
-max_followup <- 24 # months (using months as time unit for clarity)
+max_followup <- 12 # months (using months as time unit for clarity)
 
 # Convert to years if rates are annual, but let's stick to consistent units.
 # Let's say rates are per YEAR, so we convert time to years.
 # Time unit: Year
 n_total <- 200
 enroll_duration <- 1 # 1 year
-max_followup <- 2 # 2 years
+max_followup <- 1 # 1 year
 
 enroll_rate <- data.frame(
   rate = n_total / enroll_duration, 
@@ -68,9 +68,12 @@ results <- data.frame(
   interim_date = numeric(n_sims),
   interim_z = numeric(n_sims),
   interim_n = integer(n_sims),
+  interim_info = numeric(n_sims),
   final_date = numeric(n_sims),
   final_z = numeric(n_sims),
-  final_n = integer(n_sims)
+  final_n = integer(n_sims),
+  final_info = numeric(n_sims),
+  info_frac = numeric(n_sims)
 )
 
 # Target completers for interim (40%)
@@ -97,6 +100,8 @@ for (i in 1:n_sims) {
   res_interim <- mutze_test(data_interim)
   # Extract Z-statistic
   z_interim <- res_interim$z
+  # Extract Information
+  info_interim <- 1 / res_interim$se^2
   
   # 3. Final Analysis (All Data)
   # Date is when last patient completes (or max follow-up reached)
@@ -109,15 +114,20 @@ for (i in 1:n_sims) {
   
   res_final <- mutze_test(data_final)
   z_final <- res_final$z
+  # Extract Information
+  info_final <- 1 / res_final$se^2
   
   # Store results
   results$sim_id[i] <- i
   results$interim_date[i] <- date_interim
   results$interim_z[i] <- z_interim
   results$interim_n[i] <- nrow(data_interim)
+  results$interim_info[i] <- info_interim
   results$final_date[i] <- date_final
   results$final_z[i] <- z_final
   results$final_n[i] <- nrow(data_final)
+  results$final_info[i] <- info_final
+  results$info_frac[i] <- info_interim / info_final
 }
 ```
 
@@ -127,14 +137,21 @@ We summarize the distribution of the test statistics (Z-scores) at the
 interim and final analyses.
 
 ``` r
-summary(results[, c("interim_date", "interim_z", "final_date", "final_z")])
-#>   interim_date     interim_z         final_date       final_z       
-#>  Min.   :2.335   Min.   :-3.5535   Min.   :2.826   Min.   :-4.2149  
-#>  1st Qu.:2.410   1st Qu.:-1.6347   1st Qu.:2.924   1st Qu.:-2.7246  
-#>  Median :2.440   Median :-1.2086   Median :2.986   Median :-2.0284  
-#>  Mean   :2.443   Mean   :-1.2446   Mean   :2.988   Mean   :-2.1068  
-#>  3rd Qu.:2.467   3rd Qu.:-0.7949   3rd Qu.:3.044   3rd Qu.:-1.3613  
-#>  Max.   :2.578   Max.   : 0.9434   Max.   :3.166   Max.   :-0.5409
+summary(results[, c("interim_date", "interim_z", "interim_info", "final_date", "final_z", "final_info", "info_frac")])
+#>   interim_date     interim_z        interim_info      final_date   
+#>  Min.   :1.329   Min.   :-3.1089   Min.   : 3.863   Min.   :1.883  
+#>  1st Qu.:1.390   1st Qu.:-2.1047   1st Qu.: 6.001   1st Qu.:1.970  
+#>  Median :1.411   Median :-1.4332   Median : 7.144   Median :2.015  
+#>  Mean   :1.420   Mean   :-1.2836   Mean   : 7.409   Mean   :2.014  
+#>  3rd Qu.:1.455   3rd Qu.:-0.6467   3rd Qu.: 8.571   3rd Qu.:2.061  
+#>  Max.   :1.536   Max.   : 1.4275   Max.   :11.666   Max.   :2.220  
+#>     final_z          final_info      info_frac     
+#>  Min.   :-4.0901   Min.   :14.58   Min.   :0.2162  
+#>  1st Qu.:-2.2880   1st Qu.:17.78   1st Qu.:0.3452  
+#>  Median :-1.3878   Median :18.75   Median :0.3818  
+#>  Mean   :-1.5391   Mean   :19.11   Mean   :0.3882  
+#>  3rd Qu.:-0.9025   3rd Qu.:20.99   3rd Qu.:0.4365  
+#>  Max.   : 1.0082   Max.   :23.67   Max.   :0.5737
 ```
 
 ### Visualization
