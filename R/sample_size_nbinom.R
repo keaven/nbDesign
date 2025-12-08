@@ -36,15 +36,15 @@
 #' @references
 #' Zhu, H., & Lakkis, H. (2014). Sample size calculation for comparing two negative
 #' binomial rates in clinical trials. \emph{Statistics in Biopharmaceutical Research},
-#' 6(1), 107-115.
+#' 6(1), 107-115. \doi{10.1080/19466315.2013.870533}
 #'
 #' Friede, T., & Schmidli, H. (2010). Sample size estimation for clinical trials
 #' with negative binomial rates. \emph{Methods of Information in Medicine},
-#' 49(6), 623-631.
+#' 49(6), 623-631. \doi{10.3414/ME09-01-0058}
 #'
 #' Mütze, T., Glimm, E., Schmidli, H., & Friede, T. (2018). Group sequential designs
 #' for negative binomial outcomes. \emph{Statistical Methods in Medical Research},
-#' 27(10), 2978-2993.
+#' 27(10), 2978-2993. \doi{10.1177/0962280217698174}
 #'
 #' @seealso
 #' \code{vignette("sample_size_nbinom", package = "gsDesignNB")} for a detailed explanation of the methodology.

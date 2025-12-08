@@ -54,6 +54,9 @@ Default is NULL (no gap).}
 }
 \value{
 A list containing:
+\item{lambda1}{Estimated event rate for control group}
+
+A list containing:
 \describe{
 \item{n_total_unadjusted}{Original planned total sample size (based on planning parameters).}
 \item{n_total_blinded}{Re-estimated total sample size using blinded estimates.}
@@ -70,4 +73,11 @@ and calculates the required sample size to maintain power, assuming the
 planned treatment effect holds. This function supports constant rates (Friede &
 Schmidli 2010) and accommodates future extensions for time-varying rates
 (Schneider et al. 2013) by using the exposure-adjusted rate.
+}
+\references{
+Friede, T., & Schmidli, H. (2010). Blinded sample size reestimation with count data: methods and applications.
+\emph{Statistics in Medicine}, 29(10), 1145-1156. \doi{10.1002/sim.3891}
+
+Schneider, S., Schmidli, H., & Friede, T. (2013). Blinded sample size reestimation for recurrent event data with time trends.
+\emph{Statistics in Medicine}, 32(30), 5448-5457. \doi{10.1002/sim.5920}
 }

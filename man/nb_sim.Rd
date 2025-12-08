@@ -62,8 +62,8 @@ generated according to a Poisson process with this subject-specific rate.
 }
 \references{
 Friede, T., & Schmidli, H. (2010). Blinded sample size reestimation with count data: methods and applications.
-\emph{Statistics in Medicine}, 29(10), 1145-1156.
+\emph{Statistics in Medicine}, 29(10), 1145-1156. \doi{10.1002/sim.3891}
 
 Mutze, T., Glimm, E., Schmidli, H., & Friede, T. (2018). Blind sample size reestimation in clinical trials with recurrent event data.
-\emph{Pharmaceutical Statistics}, 17(4), 369-383.
+\emph{Pharmaceutical Statistics}, 17(4), 369-383. \doi{10.1002/pst.1865}
 }

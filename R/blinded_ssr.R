@@ -18,7 +18,17 @@
 #'   is implemented, which uses the blinded nuisance parameter estimates.
 #' @param accrual_rate Vector of accrual rates (patients per unit time).
 #' @param accrual_duration Vector of durations for each accrual rate. Must be same length
-#'   as \code{accrual_rate}.
+#'   as `accrual_rate`.
+#'
+#' @references
+#' Friede, T., & Schmidli, H. (2010). Blinded sample size reestimation with count data: methods and applications.
+#' \emph{Statistics in Medicine}, 29(10), 1145-1156. \doi{10.1002/sim.3891}
+#'
+#' Schneider, S., Schmidli, H., & Friede, T. (2013). Blinded sample size reestimation for recurrent event data with time trends.
+#' \emph{Statistics in Medicine}, 32(30), 5448-5457. \doi{10.1002/sim.5920}
+#'
+#' @return A list containing:
+#'   \item{lambda1}{Estimated event rate for control group}
 #' @param trial_duration Total planned duration of the trial.
 #' @param dropout_rate Dropout rate (hazard rate). Default is 0.
 #' @param max_followup Maximum follow-up time for any patient. Default is NULL (infinite).
