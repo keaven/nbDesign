@@ -7,7 +7,7 @@ articles:
   sample_size_nbinom: sample_size_nbinom.html
   seasonal_simulation: seasonal_simulation.html
   simulation_example: simulation_example.html
-last_built: 2025-12-08T15:49Z
+last_built: 2025-12-08T17:55Z
 urls:
   reference: https://keaven.github.io/gsDesignNB/reference
   article: https://keaven.github.io/gsDesignNB/articles

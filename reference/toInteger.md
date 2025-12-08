@@ -57,10 +57,10 @@ based on the new sample size and expected exposures.
 
 ## Methods (by class)
 
-- `toInteger(gsDesign)`: Method for gsDesign objects (calls
-  gsDesign::toInteger)
+- `toInteger(gsDesign)`: Method for `gsDesign` objects (calls
+  [`gsDesign::toInteger`](https://keaven.github.io/gsDesign/reference/toInteger.html)).
 
-- `toInteger(gsNB)`: Method for gsNB objects
+- `toInteger(gsNB)`: Method for `gsNB` objects.
 
   Rounds sample sizes in a group sequential negative binomial design to
   integers, respecting the randomization ratio.

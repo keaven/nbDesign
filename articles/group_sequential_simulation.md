@@ -1,10 +1,21 @@
 # Group Sequential Design and Simulation
 
 ``` r
+library(gsDesign)
 library(gsDesignNB)
+#> 
+#> Attaching package: 'gsDesignNB'
+#> The following object is masked from 'package:gsDesign':
+#> 
+#>     toInteger
 library(data.table)
 library(ggplot2)
 library(gt)
+#> 
+#> Attaching package: 'gt'
+#> The following object is masked from 'package:gsDesign':
+#> 
+#>     as_rtf
 ```
 
 This vignette demonstrates how to create a group sequential design for
@@ -105,7 +116,7 @@ gs_nb <- gsNBCalendar(
   usTime = c(.1, .18, 1),  # Upper spending timing
   lsTime = NULL,           # Spending based on information
   analysis_times = analysis_times  # Calendar times in months
-) |> toInteger() # Round to integer sample size
+) |> gsDesignNB::toInteger() # Round to integer sample size
 ```
 
 Textual group sequential design summary:
@@ -144,21 +155,21 @@ gs_nb |>
 |--------------------------------------------------------------|---------------------|----------|----------|
 | N = 440, Expected events = 376.5                             |                     |          |          |
 | Analysis                                                     | Value               | Efficacy | Futility |
-| IA 1: 39%                                                    | Z                   | 2.8070   | -1.4339  |
-| Information: 30.45                                           | p (1-sided)         | 0.0025   | 0.9242   |
-| Month: 10                                                    | ~RR at bound        | 0.6012   | 1.2968   |
-|                                                              | P(Cross) if RR=1    | 0.0025   | 0.0758   |
-|                                                              | P(Cross) if RR=0.67 | 0.1787   | 0.0004   |
-| IA 2: 83%                                                    | Z                   | 2.8065   | 0.1954   |
-| Information: 64.26                                           | p (1-sided)         | 0.0025   | 0.4226   |
-| Month: 18                                                    | ~RR at bound        | 0.7046   | 0.9759   |
-|                                                              | P(Cross) if RR=1    | 0.0045   | 0.5790   |
-|                                                              | P(Cross) if RR=0.67 | 0.4669   | 0.0069   |
-| Final                                                        | Z                   | 1.9934   | 1.9934   |
-| Information: 77.66                                           | p (1-sided)         | 0.0231   | 0.0231   |
-| Month: 24                                                    | ~RR at bound        | 0.7975   | 0.7975   |
+| IA 1: 39%                                                    | Z                   | 2.3339   | -0.9421  |
+| Information: 30.45                                           | p (1-sided)         | 0.0098   | 0.8269   |
+| Month: 10                                                    | ~RR at bound        | 0.6550   | 1.1862   |
+|                                                              | P(Cross) if RR=1    | 0.0098   | 0.1731   |
+|                                                              | P(Cross) if RR=0.67 | 0.4614   | 0.0007   |
+| IA 2: 83%                                                    | Z                   | 2.1979   | 1.2932   |
+| Information: 64.26                                           | p (1-sided)         | 0.0140   | 0.0980   |
+| Month: 18                                                    | ~RR at bound        | 0.7602   | 0.8510   |
+|                                                              | P(Cross) if RR=1    | 0.0207   | 0.9000   |
+|                                                              | P(Cross) if RR=0.67 | 0.8631   | 0.0251   |
+| Final                                                        | Z                   | 2.2508   | 2.2508   |
+| Information: 77.66                                           | p (1-sided)         | 0.0122   | 0.0122   |
+| Month: 24                                                    | ~RR at bound        | 0.7746   | 0.7746   |
 |                                                              | P(Cross) if RR=1    | 0.0249   | 0.9751   |
-|                                                              | P(Cross) if RR=0.67 | 0.9000   | 0.1000   |
+|                                                              | P(Cross) if RR=0.67 | 0.9226   | 0.0774   |
 
 ## Simulation Study
 
@@ -646,21 +657,21 @@ gsDesign::gsBoundSummary(gs_nb,
 |--------------------------------------------------------------|---------------------|----------|----------|
 | N = 440, Expected events = 376.5                             |                     |          |          |
 | Analysis                                                     | Value               | Efficacy | Futility |
-| IA 1: 39%                                                    | Z                   | 2.8070   | -1.4339  |
-| Information: 30.45                                           | p (1-sided)         | 0.0025   | 0.9242   |
-| Month: 10                                                    | ~RR at bound        | 0.6012   | 1.2968   |
-|                                                              | P(Cross) if RR=1    | 0.0025   | 0.0758   |
-|                                                              | P(Cross) if RR=0.67 | 0.1787   | 0.0004   |
-| IA 2: 83%                                                    | Z                   | 2.8065   | 0.1954   |
-| Information: 64.26                                           | p (1-sided)         | 0.0025   | 0.4226   |
-| Month: 18                                                    | ~RR at bound        | 0.7046   | 0.9759   |
-|                                                              | P(Cross) if RR=1    | 0.0045   | 0.5790   |
-|                                                              | P(Cross) if RR=0.67 | 0.4669   | 0.0069   |
-| Final                                                        | Z                   | 1.9934   | 1.9934   |
-| Information: 77.66                                           | p (1-sided)         | 0.0231   | 0.0231   |
-| Month: 24                                                    | ~RR at bound        | 0.7975   | 0.7975   |
+| IA 1: 39%                                                    | Z                   | 2.3339   | -0.9421  |
+| Information: 30.45                                           | p (1-sided)         | 0.0098   | 0.8269   |
+| Month: 10                                                    | ~RR at bound        | 0.6550   | 1.1862   |
+|                                                              | P(Cross) if RR=1    | 0.0098   | 0.1731   |
+|                                                              | P(Cross) if RR=0.67 | 0.4614   | 0.0007   |
+| IA 2: 83%                                                    | Z                   | 2.1979   | 1.2932   |
+| Information: 64.26                                           | p (1-sided)         | 0.0140   | 0.0980   |
+| Month: 18                                                    | ~RR at bound        | 0.7602   | 0.8510   |
+|                                                              | P(Cross) if RR=1    | 0.0207   | 0.9000   |
+|                                                              | P(Cross) if RR=0.67 | 0.8631   | 0.0251   |
+| Final                                                        | Z                   | 2.2508   | 2.2508   |
+| Information: 77.66                                           | p (1-sided)         | 0.0122   | 0.0122   |
+| Month: 24                                                    | ~RR at bound        | 0.7746   | 0.7746   |
 |                                                              | P(Cross) if RR=1    | 0.0249   | 0.9751   |
-|                                                              | P(Cross) if RR=0.67 | 0.9000   | 0.1000   |
+|                                                              | P(Cross) if RR=0.67 | 0.9226   | 0.0774   |
 
 Note that `P(Cross) if RR=0.67` corresponds to the design’s alternate
 hypothesis (treatment rate / control rate = 0.67).
