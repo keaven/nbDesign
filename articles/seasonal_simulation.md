@@ -75,7 +75,9 @@ dropout_rate <- data.frame(
 
 ## Run Simulation
 
-We use `nb_sim_seasonal()` to simulate the trial.
+We use
+[`nb_sim_seasonal()`](https://keaven.github.io/gsDesignNB/reference/nb_sim_seasonal.md)
+to simulate the trial.
 
 ``` r
 set.seed(123)

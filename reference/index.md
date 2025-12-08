@@ -33,6 +33,8 @@ Tools for simulating trial data.
 
 - [`nb_sim()`](https://keaven.github.io/gsDesignNB/reference/nb_sim.md)
   : Simulate Recurrent Events with Fixed Follow-up
+- [`nb_sim_seasonal()`](https://keaven.github.io/gsDesignNB/reference/nb_sim_seasonal.md)
+  : Simulate Recurrent Events with Seasonal Rates
 
 ## Analysis
 

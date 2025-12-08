@@ -1,7 +1,10 @@
 # Cut data for completers analysis
 
-Subsets the data to subjects who have completed follow-up by the
-specified date, and prepares the data for analysis.
+Subsets the data to all subjects randomized by the specified date, and
+prepares the data for analysis. This is a wrapper for
+[`cut_data_by_date()`](https://keaven.github.io/gsDesignNB/reference/cut_data_by_date.md)
+typically used with a date determined by
+[`cut_date_for_completers()`](https://keaven.github.io/gsDesignNB/reference/cut_date_for_completers.md).
 
 ## Usage
 
@@ -29,9 +32,9 @@ cut_completers(data, cut_date, event_gap = 5/365.25)
 
 ## Value
 
-A data frame with one row per subject who has completed follow-up by
-`cut_date`. Contains the truncated follow-up time (`tte`) and total
-number of observed events (`events`).
+A data frame with one row per subject randomized prior to `cut_date`.
+Contains the truncated follow-up time (`tte`) and total number of
+observed events (`events`).
 
 ## Examples
 
@@ -45,12 +48,27 @@ dropout_rate <- data.frame(
 sim <- nb_sim(enroll_rate, fail_rate, dropout_rate, max_followup = 2, n = 20)
 # Find date when 5 subjects have completed
 date_5 <- cut_date_for_completers(sim, 5)
-# Get analysis dataset for these completers
+# Get analysis dataset for this cut date (includes partial follow-up)
 cut_completers(sim, date_5)
-#>   id    treatment enroll_time      tte events
-#> 1  1      Control  0.00419837 2.000000      0
-#> 2  2 Experimental  0.03844758 2.000000      0
-#> 3  3      Control  0.14626653 1.986311      1
-#> 4  4 Experimental  0.16402103 2.000000      0
-#> 5  5      Control  0.17372445 1.986311      1
+#>    id    treatment enroll_time       tte events
+#> 1   1      Control  0.00419837 2.0000000      0
+#> 2   2 Experimental  0.03844758 2.0000000      0
+#> 3   3      Control  0.14626653 1.9863107      1
+#> 4   4 Experimental  0.16402103 2.0000000      0
+#> 5   5      Control  0.17372445 1.9863107      1
+#> 6   6      Control  0.18507951 1.9886449      0
+#> 7   7 Experimental  0.18557397 1.9607720      2
+#> 8   8 Experimental  0.20588002 1.9678444      0
+#> 9   9 Experimental  0.23301460 1.9270206      1
+#> 10 10      Control  0.27367404 1.8863612      1
+#> 11 11 Experimental  0.30090945 1.8317472      3
+#> 12 12      Control  0.34461830 1.7606599      5
+#> 13 13      Control  0.37061731 1.8031071      0
+#> 14 14      Control  0.37480352 1.7715424      2
+#> 15 15 Experimental  0.41551077 0.5191834      0
+#> 16 16 Experimental  0.41625369 1.7437815      1
+#> 17 17      Control  0.42441302 1.7356222      1
+#> 18 18 Experimental  0.43226952 1.7277657      1
+#> 19 19      Control  0.50772960 1.6659948      0
+#> 20 20 Experimental  0.51633101 1.6437042      1
 ```

@@ -20,10 +20,9 @@ We define a trial with the following parameters:
 - **Follow-up:** 2 years maximum follow-up per patient.
 - **Interim Analysis:** Conducted when 40% of patients (80 subjects)
   have completed their 2-year follow-up. The interim analysis includes
-  **only** these completers.
+  all data available at that time (completers and partial follow-up).
 - **Final Analysis:** Conducted when all patients have completed
-  follow-up (or dropped out). Includes all available data (completers
-  and partial follow-up).
+  follow-up (or dropped out). Includes all available data.
 
 ``` r
 # Parameters
@@ -89,12 +88,12 @@ for (i in 1:n_sims) {
     n = n_total
   )
   
-  # 2. Interim Analysis (Completers Only)
+  # 2. Interim Analysis
   # Find date when target_completers is reached
-  date_interim <- cut_date_for_completers(sim_data, target_completers)
+  interim_date <- cut_date_for_completers(sim_data, target_completers)
   
   # Cut data for completers at this date
-  data_interim <- cut_completers(sim_data, date_interim)
+  data_interim <- cut_completers(sim_data, interim_date)
   
   # Analyze (Mütze Test)
   res_interim <- mutze_test(data_interim)
@@ -119,7 +118,7 @@ for (i in 1:n_sims) {
   
   # Store results
   results$sim_id[i] <- i
-  results$interim_date[i] <- date_interim
+  results$interim_date[i] <- interim_date
   results$interim_z[i] <- z_interim
   results$interim_n[i] <- nrow(data_interim)
   results$interim_info[i] <- info_interim
@@ -138,20 +137,20 @@ interim and final analyses.
 
 ``` r
 summary(results[, c("interim_date", "interim_z", "interim_info", "final_date", "final_z", "final_info", "info_frac")])
-#>   interim_date     interim_z        interim_info      final_date   
-#>  Min.   :1.329   Min.   :-3.1089   Min.   : 3.863   Min.   :1.883  
-#>  1st Qu.:1.390   1st Qu.:-2.1047   1st Qu.: 6.001   1st Qu.:1.970  
-#>  Median :1.411   Median :-1.4332   Median : 7.144   Median :2.015  
-#>  Mean   :1.420   Mean   :-1.2836   Mean   : 7.409   Mean   :2.014  
-#>  3rd Qu.:1.455   3rd Qu.:-0.6467   3rd Qu.: 8.571   3rd Qu.:2.061  
-#>  Max.   :1.536   Max.   : 1.4275   Max.   :11.666   Max.   :2.220  
+#>   interim_date     interim_z        interim_info     final_date   
+#>  Min.   :1.329   Min.   :-4.0441   Min.   :10.67   Min.   :1.883  
+#>  1st Qu.:1.390   1st Qu.:-2.3709   1st Qu.:13.73   1st Qu.:1.970  
+#>  Median :1.411   Median :-1.5500   Median :15.42   Median :2.015  
+#>  Mean   :1.420   Mean   :-1.5144   Mean   :15.59   Mean   :2.014  
+#>  3rd Qu.:1.455   3rd Qu.:-0.7135   3rd Qu.:17.59   3rd Qu.:2.061  
+#>  Max.   :1.536   Max.   : 1.1014   Max.   :20.24   Max.   :2.220  
 #>     final_z          final_info      info_frac     
-#>  Min.   :-4.0901   Min.   :14.58   Min.   :0.2162  
-#>  1st Qu.:-2.2880   1st Qu.:17.78   1st Qu.:0.3452  
-#>  Median :-1.3878   Median :18.75   Median :0.3818  
-#>  Mean   :-1.5391   Mean   :19.11   Mean   :0.3882  
-#>  3rd Qu.:-0.9025   3rd Qu.:20.99   3rd Qu.:0.4365  
-#>  Max.   : 1.0082   Max.   :23.67   Max.   :0.5737
+#>  Min.   :-4.0901   Min.   :14.58   Min.   :0.6962  
+#>  1st Qu.:-2.2880   1st Qu.:17.78   1st Qu.:0.7631  
+#>  Median :-1.3878   Median :18.75   Median :0.8239  
+#>  Mean   :-1.5391   Mean   :19.11   Mean   :0.8145  
+#>  3rd Qu.:-0.9025   3rd Qu.:20.99   3rd Qu.:0.8474  
+#>  Max.   : 1.0082   Max.   :23.67   Max.   :0.9303
 ```
 
 ### Visualization
@@ -163,7 +162,7 @@ Comparison of Z-scores at Interim vs Final Analysis.
 # Correlation between interim and final Z-scores
 cor_z <- cor(results$interim_z, results$final_z)
 cat("Correlation between interim and final Z-scores:", round(cor_z, 3), "\n")
-#> Correlation between interim and final Z-scores: 0.585
+#> Correlation between interim and final Z-scores: 0.905
 
 ggplot(results, aes(x = interim_z, y = final_z)) +
   geom_point(alpha = 0.7) +
