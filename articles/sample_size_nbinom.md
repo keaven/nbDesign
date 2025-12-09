@@ -71,7 +71,7 @@ $D_{j}$.
 
 If `dropout_rate` is 0:
 
-1.  The number of patients recruited in segment $j$ is
+1.  The expected number of patients recruited in segment $j$ is
     $N_{j} = R_{j} \cdot D_{j}$.
 2.  The start time of segment $j$ is
     $S_{j - 1} = \sum_{i = 1}^{j - 1}D_{i}$ (with $S_{0} = 0$).
@@ -83,10 +83,13 @@ If `dropout_rate` is 0:
 If `dropout_rate` ($\delta$) \> 0, the average exposure is calculated by
 integrating the exposure function over the recruitment interval:
 
-$$E_{j} = \frac{1}{\delta} - \frac{1}{\delta^{2}D_{j}}\left( e^{- \delta u_{min}} - e^{- \delta u_{max}} \right)$$
-where $u_{max}$ and $u_{min}$ are the maximum and minimum potential
-follow-up times for patients in that segment ($T - S_{j - 1}$ and
-$T - \left( S_{j - 1} + D_{j} \right)$ respectively).
+$$\begin{aligned}
+E_{j} & {= \frac{1}{D_{j}}\int_{u_{min}}^{u_{max}}\frac{1 - e^{- \delta u}}{\delta}du} \\
+ & {= \frac{1}{\delta} - \frac{1}{\delta^{2}D_{j}}\left( e^{- \delta u_{min}} - e^{- \delta u_{max}} \right)}
+\end{aligned}$$ where $u_{max}$ and $u_{min}$ are the maximum and
+minimum potential follow-up times for patients in that segment
+($T - S_{j - 1}$ and $T - \left( S_{j - 1} + D_{j} \right)$
+respectively).
 
 ### Maximum Follow-up
 
@@ -113,10 +116,15 @@ $$\bar{t} = \frac{\sum\limits_{j = 1}^{J}N_{j}E_{j}}{\sum\limits_{j = 1}^{J}N_{j
 
 ### Basic Calculation (Zhu and Lakkis)
 
-Calculate sample size for: \* Control rate $\lambda_{1} = 0.5$ \*
-Treatment rate $\lambda_{2} = 0.3$ \* Dispersion $k = 0.1$ \* Power =
-80% \* Alpha = 0.025 (one-sided) \* Accrual over 12 months \* Trial
-duration 12 months (implying exposure approx 6 months)
+Calculate sample size for:
+
+- Control rate $\lambda_{1} = 0.5$
+- Treatment rate $\lambda_{2} = 0.3$
+- Dispersion $k = 0.1$
+- Power = 80%
+- Alpha = 0.025 (one-sided)
+- Accrual over 12 months
+- Trial duration 12 months (implying exposure approx 6 months)
 
 ``` r
 sample_size_nbinom(
@@ -172,9 +180,11 @@ sample_size_nbinom(
 
 ### Piecewise Constant Accrual
 
-Consider a trial where recruitment ramps up: \* 5 patients/month for the
-first 3 months \* 10 patients/month for the next 3 months \* Total trial
-duration is 12 months
+Consider a trial where recruitment ramps up:
+
+- 5 patients/month for the first 3 months
+- 10 patients/month for the next 3 months
+- Total trial duration is 12 months
 
 The function automatically calculates the average exposure based on this
 accrual pattern.

@@ -38,6 +38,7 @@
     <li><a class="dropdown-item" href="../articles/sample_size_nbinom.html">Sample Size Calculation for Negative Binomial Outcomes</a></li>
     <li><a class="dropdown-item" href="../articles/seasonal_simulation.html">Seasonal Event Simulation</a></li>
     <li><a class="dropdown-item" href="../articles/simulation_example.html">Simulation of Recurrent Events</a></li>
+    <li><a class="dropdown-item" href="../articles/verification_simulation.html">Verification of Sample Size Calculation via Simulation</a></li>
   </ul>
 </li>
       </ul>
@@ -160,7 +161,7 @@ and duration
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>D</mi><mi>j</mi></msub><annotation encoding="application/x-tex">D_j</annotation></semantics></math>.</p>
 <p>If <code>dropout_rate</code> is 0:</p>
 <ol style="list-style-type: decimal">
-<li>The number of patients recruited in segment
+<li>The expected number of patients recruited in segment
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>
 is
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>N</mi><mi>j</mi></msub><mo>=</mo><msub><mi>R</mi><mi>j</mi></msub><mo>⋅</mo><msub><mi>D</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">N_j = R_j \cdot D_j</annotation></semantics></math>.</li>
@@ -184,8 +185,12 @@ is approximately
 (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math>)
 &gt; 0, the average exposure is calculated by integrating the exposure
 function over the recruitment interval:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>E</mi><mi>j</mi></msub><mo>=</mo><mfrac><mn>1</mn><mi>δ</mi></mfrac><mo>−</mo><mfrac><mn>1</mn><mrow><msup><mi>δ</mi><mn>2</mn></msup><msub><mi>D</mi><mi>j</mi></msub></mrow></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>e</mi><mrow><mo>−</mo><mi>δ</mi><msub><mi>u</mi><mrow><mi>m</mi><mi>i</mi><mi>n</mi></mrow></msub></mrow></msup><mo>−</mo><msup><mi>e</mi><mrow><mo>−</mo><mi>δ</mi><msub><mi>u</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub></mrow></msup><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex"> E_j = \frac{1}{\delta} - \frac{1}{\delta^2 D_j} \left( e^{-\delta u_{min}} - e^{-\delta u_{max}} \right) </annotation></semantics></math>
-where
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><msub><mi>E</mi><mi>j</mi></msub></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mfrac><mn>1</mn><msub><mi>D</mi><mi>j</mi></msub></mfrac><msubsup><mo>∫</mo><msub><mi>u</mi><mrow><mi>m</mi><mi>i</mi><mi>n</mi></mrow></msub><msub><mi>u</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub></msubsup><mfrac><mrow><mn>1</mn><mo>−</mo><msup><mi>e</mi><mrow><mo>−</mo><mi>δ</mi><mi>u</mi></mrow></msup></mrow><mi>δ</mi></mfrac><mi>d</mi><mi>u</mi></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mfrac><mn>1</mn><mi>δ</mi></mfrac><mo>−</mo><mfrac><mn>1</mn><mrow><msup><mi>δ</mi><mn>2</mn></msup><msub><mi>D</mi><mi>j</mi></msub></mrow></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>e</mi><mrow><mo>−</mo><mi>δ</mi><msub><mi>u</mi><mrow><mi>m</mi><mi>i</mi><mi>n</mi></mrow></msub></mrow></msup><mo>−</mo><msup><mi>e</mi><mrow><mo>−</mo><mi>δ</mi><msub><mi>u</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub></mrow></msup><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr></mtable><annotation encoding="application/x-tex"> 
+\begin{aligned}
+E_j &amp;= \frac{1}{D_j}\int_{u_{min}}^{u_{max}} \frac{1 - e^{-\delta u}}{\delta} du \\
+&amp;= \frac{1}{\delta} - \frac{1}{\delta^2 D_j} \left( e^{-\delta u_{min}} - e^{-\delta u_{max}} \right)
+\end{aligned}
+</annotation></semantics></math> where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>u</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><annotation encoding="application/x-tex">u_{max}</annotation></semantics></math>
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>u</mi><mrow><mi>m</mi><mi>i</mi><mi>n</mi></mrow></msub><annotation encoding="application/x-tex">u_{min}</annotation></semantics></math>
@@ -237,14 +242,22 @@ average:</p>
 <div class="section level3">
 <h3 id="basic-calculation-zhu-and-lakkis">Basic Calculation (Zhu and Lakkis)<a class="anchor" aria-label="anchor" href="#basic-calculation-zhu-and-lakkis"></a>
 </h3>
-<p>Calculate sample size for: * Control rate
+<p>Calculate sample size for:</p>
+<ul>
+<li>Control rate
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mn>1</mn></msub><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">\lambda_1 = 0.5</annotation></semantics></math>
-* Treatment rate
+</li>
+<li>Treatment rate
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mn>2</mn></msub><mo>=</mo><mn>0.3</mn></mrow><annotation encoding="application/x-tex">\lambda_2 = 0.3</annotation></semantics></math>
-* Dispersion
+</li>
+<li>Dispersion
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">k = 0.1</annotation></semantics></math>
-* Power = 80% * Alpha = 0.025 (one-sided) * Accrual over 12 months *
-Trial duration 12 months (implying exposure approx 6 months)</p>
+</li>
+<li>Power = 80%</li>
+<li>Alpha = 0.025 (one-sided)</li>
+<li>Accrual over 12 months</li>
+<li>Trial duration 12 months (implying exposure approx 6 months)</li>
+</ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sample_size_nbinom.html">sample_size_nbinom</a></span><span class="op">(</span></span>
 <span>  lambda1 <span class="op">=</span> <span class="fl">0.5</span>,</span>
@@ -299,9 +312,12 @@ Trial duration 12 months (implying exposure approx 6 months)</p>
 <div class="section level3">
 <h3 id="piecewise-constant-accrual">Piecewise Constant Accrual<a class="anchor" aria-label="anchor" href="#piecewise-constant-accrual"></a>
 </h3>
-<p>Consider a trial where recruitment ramps up: * 5 patients/month for
-the first 3 months * 10 patients/month for the next 3 months * Total
-trial duration is 12 months</p>
+<p>Consider a trial where recruitment ramps up:</p>
+<ul>
+<li>5 patients/month for the first 3 months</li>
+<li>10 patients/month for the next 3 months</li>
+<li>Total trial duration is 12 months</li>
+</ul>
 <p>The function automatically calculates the average exposure based on
 this accrual pattern.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">

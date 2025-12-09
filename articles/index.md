@@ -12,3 +12,5 @@
   Simulation](https://keaven.github.io/gsDesignNB/articles/seasonal_simulation.md):
 - [Simulation of Recurrent
   Events](https://keaven.github.io/gsDesignNB/articles/simulation_example.md):
+- [Verification of Sample Size Calculation via
+  Simulation](https://keaven.github.io/gsDesignNB/articles/verification_simulation.md):
