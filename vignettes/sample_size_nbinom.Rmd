@@ -64,14 +64,19 @@ Let $T$ be the total trial duration. Suppose recruitment occurs in $J$ segments,
 
 If `dropout_rate` is 0:
 
-1.  The number of patients recruited in segment $j$ is $N_j = R_j \cdot D_j$.
+1.  The expected number of patients recruited in segment $j$ is $N_j = R_j \cdot D_j$.
 2.  The start time of segment $j$ is $S_{j-1} = \sum_{i=1}^{j-1} D_i$ (with $S_0 = 0$).
 3.  The midpoint of recruitment for segment $j$ is $M_j = S_{j-1} + D_j/2$.
 4.  The average follow-up (exposure) time for patients recruited in segment $j$ is approximately $E_j = T - M_j$.
 
 If `dropout_rate` ($\delta$) > 0, the average exposure is calculated by integrating the exposure function over the recruitment interval:
 
-$$ E_j = \frac{1}{\delta} - \frac{1}{\delta^2 D_j} \left( e^{-\delta u_{min}} - e^{-\delta u_{max}} \right) $$
+$$ 
+\begin{aligned}
+E_j &= \frac{1}{D_j}\int_{u_{min}}^{u_{max}} \frac{1 - e^{-\delta u}}{\delta} du \\
+&= \frac{1}{\delta} - \frac{1}{\delta^2 D_j} \left( e^{-\delta u_{min}} - e^{-\delta u_{max}} \right)
+\end{aligned}
+$$
 where $u_{max}$ and $u_{min}$ are the maximum and minimum potential follow-up times for patients in that segment ($T - S_{j-1}$ and $T - (S_{j-1} + D_j)$ respectively).
 
 ### Maximum Follow-up
@@ -91,6 +96,7 @@ $$ \bar{t} = \frac{\sum_{j=1}^J N_j E_j}{\sum_{j=1}^J N_j} $$
 ### Basic Calculation (Zhu and Lakkis)
 
 Calculate sample size for:
+
 *   Control rate $\lambda_1 = 0.5$
 *   Treatment rate $\lambda_2 = 0.3$
 *   Dispersion $k = 0.1$
@@ -134,6 +140,7 @@ sample_size_nbinom(
 ### Piecewise Constant Accrual
 
 Consider a trial where recruitment ramps up:
+
 *   5 patients/month for the first 3 months
 *   10 patients/month for the next 3 months
 *   Total trial duration is 12 months

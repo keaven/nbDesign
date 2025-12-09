@@ -3,7 +3,9 @@
 .RData
 .Ruserdata
 .DS_Store
-nbDesign_*.tar.gz
+gsDesignNB_*.tar.gz
+gsDesignNB.Rcheck/
+nbsample.Rproj
 docs/
 inst/doc
 .DS_Store
