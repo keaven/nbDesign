@@ -55,7 +55,8 @@ exponential failure rates (Poisson process), and piecewise exponential dropout.<
 <span>  dropout_rate <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  max_followup <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  n <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  block <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Control"</span>, <span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Experimental"</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span>  block <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Control"</span>, <span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Experimental"</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  event_gap <span class="op">=</span> <span class="fl">0</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -96,6 +97,11 @@ If provided, enrollment stops when <code>n</code> subjects are recruited.</p></d
 If NULL, simple randomization is used (treatments are assigned with equal probability).
 If provided, it specifies the block structure, e.g., <code>c(rep("A", 2), rep("B", 2))</code>
 assigns 2 to group A and 2 to group B in each block.</p></dd>
+
+
+<dt id="arg-event-gap">event_gap<a class="anchor" aria-label="anchor" href="#arg-event-gap"></a></dt>
+<dd><p>Numeric. Gap duration after each event during which no new events are counted.
+Default is 0.</p></dd>
 
 </dl></div>
     <div class="section level2">

@@ -32,6 +32,7 @@ approximately 200 subjects.
 - **Dropout**: 10% per unit time ($\delta = 0.1$).
 - **Trial Duration**: 24 months.
 - **Max Follow-up**: 12 months.
+- **Event Gap**: 30 days (approx 0.082 years).
 - **Accrual**: Piecewise linear ramp-up over 12 months (Rate $R$ for
   0-6mo, $2R$ for 6-12mo).
 
@@ -50,6 +51,7 @@ alpha <- 0.025
 dropout_rate <- 0.1
 max_followup <- 12
 trial_duration <- 24
+event_gap <- 30 / 365.25
 
 # Accrual targeting N ~ 200
 # (Pre-calculated rates)
@@ -65,6 +67,7 @@ design <- sample_size_nbinom(
   trial_duration = trial_duration,
   dropout_rate = dropout_rate,
   max_followup = max_followup,
+  event_gap = event_gap,
   method = "friede"
 )
 
@@ -74,10 +77,12 @@ print(design)
 #> 
 #> Method:          friede
 #> Sample size:     n1 = 99, n2 = 99, total = 198
-#> Expected events: 484.3 (n1: 276.7, n2: 207.5)
-#> Power: 56%, Alpha: 0.025 (1-sided)
+#> Expected events: 470.5 (n1: 267.9, n2: 202.6)
+#> Power: 48%, Alpha: 0.025 (1-sided)
 #> Rates: control = 0.4000, treatment = 0.3000 (RR = 0.7500)
 #> Dispersion: 0.5000, Avg exposure (calendar): 6.99
+#> Avg exposure (at-risk): n1 = 6.77, n2 = 6.82
+#> Event gap: 0.08
 #> Dropout rate: 0.1000
 #> Accrual: 12.0, Trial duration: 24.0
 #> Max follow-up: 12.0
@@ -136,7 +141,7 @@ knitr::kable(comparison_exp, digits = 4, caption = "Comparison of Average Exposu
 
 | Metric           | Theoretical | Simulated | Difference | Rel_Diff_Pct |
 |:-----------------|------------:|----------:|-----------:|-------------:|
-| Average Exposure |      6.9881 |    6.9547 |    -0.0333 |       -0.477 |
+| Average Exposure |      6.9881 |    6.9532 |    -0.0349 |      -0.4991 |
 
 Comparison of Average Exposure
 
@@ -148,9 +153,18 @@ exposure.
 The theoretical variance of the log rate ratio estimator (Wald test) is
 given by:
 
-$$V_{theo} = \frac{1/\mu_{1} + k}{n_{1}} + \frac{1/\mu_{2} + k}{n_{2}}$$
+$$V_{theo} = \frac{1/\mu_{1} + k_{adj}}{n_{1}} + \frac{1/\mu_{2} + k_{adj}}{n_{2}}$$
 
-where $\mu_{i} = \lambda_{i}\bar{t}$.
+where $\mu_{i} = \lambda_{i,eff}\bar{t}$ is the expected number of
+events per subject in group $i$ (using effective rates adjusted for
+event gaps), and $k_{adj} = k \cdot Q$ is the dispersion parameter
+inflated for variable follow-up.
+
+The dispersion parameter $k$ directly increases the variance of the
+estimator. In a standard Poisson model, $k = 0$, and the variance
+depends only on the expected number of events. With negative binomial
+dispersion ($k > 0$), the variance is inflated, reflecting the extra
+variability (overdispersion) in the data.
 
 We compare this with the variance of the estimates from the simulation.
 
@@ -176,7 +190,7 @@ knitr::kable(comparison_var, digits = 5, caption = "Comparison of Variance")
 
 | Metric                | Theoretical | Empirical_Var | Avg_Estimated_Var |
 |:----------------------|------------:|--------------:|------------------:|
-| Variance of Estimator |     0.00787 |       0.00904 |           0.00895 |
+| Variance of Estimator |     0.00786 |       0.01068 |           0.07629 |
 
 Comparison of Variance
 
@@ -212,7 +226,7 @@ knitr::kable(comparison_pwr, digits = 4, caption = "Comparison of Power")
 
 | Metric | Theoretical | Simulated | Difference |
 |:-------|------------:|----------:|-----------:|
-| Power  |      0.9001 |    0.7879 |    -0.1122 |
+| Power  |      0.9006 |    0.8712 |    -0.0294 |
 
 Comparison of Power
 
@@ -221,7 +235,7 @@ check if the theoretical power falls within the simulation error bounds.
 
 ``` r
 binom.test(sum(results$p_value < design_ref$inputs$alpha, na.rm=TRUE), nrow(results))$conf.int
-#> [1] 0.7797545 0.7958775
+#> [1] 0.8644763 0.8777067
 #> attr(,"conf.level")
 #> [1] 0.95
 ```

@@ -235,6 +235,44 @@ segment is split into two parts for calculation.</li>
 average:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>t</mi><mo accent="true">‾</mo></mover><mo>=</mo><mfrac><mrow><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>J</mi></munderover><msub><mi>N</mi><mi>j</mi></msub><msub><mi>E</mi><mi>j</mi></msub></mrow><mrow><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>J</mi></munderover><msub><mi>N</mi><mi>j</mi></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex"> \bar{t} = \frac{\sum_{j=1}^J N_j E_j}{\sum_{j=1}^J N_j} </annotation></semantics></math></p>
 </div>
+<div class="section level3">
+<h3 id="variance-inflation-for-variable-follow-up">Variance Inflation for Variable Follow-up<a class="anchor" aria-label="anchor" href="#variance-inflation-for-variable-follow-up"></a>
+</h3>
+<p>When follow-up times are variable (due to accrual, dropout, or
+administrative censoring), simply using the average follow-up time
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>t</mi><mo accent="true">‾</mo></mover><annotation encoding="application/x-tex">\bar{t}</annotation></semantics></math>
+in the variance formula underestimates the true variance of the rate
+estimator. This is because the variance of the negative binomial
+distribution depends on the exposure time in a non-linear way
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mi>a</mi><mi>r</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>Y</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>μ</mi><mo>+</mo><mi>k</mi><msup><mi>μ</mi><mn>2</mn></msup><mo>=</mo><mi>λ</mi><mi>t</mi><mo>+</mo><mi>k</mi><msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>λ</mi><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">Var(Y) = \mu + k\mu^2 = \lambda t + k (\lambda t)^2</annotation></semantics></math>).</p>
+<p>To account for this, we apply a variance inflation factor
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Q</mi><annotation encoding="application/x-tex">Q</annotation></semantics></math>
+to the dispersion parameter
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>,
+as derived by Zhu and Lakkis (2014):</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo>=</mo><mfrac><mrow><mi>E</mi><mrow><mo stretchy="true" form="prefix">[</mo><msup><mi>t</mi><mn>2</mn></msup><mo stretchy="true" form="postfix">]</mo></mrow></mrow><msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>E</mi><mrow><mo stretchy="true" form="prefix">[</mo><mi>t</mi><mo stretchy="true" form="postfix">]</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup></mfrac></mrow><annotation encoding="application/x-tex"> Q = \frac{E[t^2]}{(E[t])^2} </annotation></semantics></math></p>
+<p>The adjusted dispersion parameter used in the sample size calculation
+is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>k</mi><mrow><mi>a</mi><mi>d</mi><mi>j</mi></mrow></msub><mo>=</mo><mi>k</mi><mo>⋅</mo><mi>Q</mi></mrow><annotation encoding="application/x-tex">k_{adj} = k \cdot Q</annotation></semantics></math>.
+The function automatically calculates
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mrow><mo stretchy="true" form="prefix">[</mo><mi>t</mi><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">E[t]</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mrow><mo stretchy="true" form="prefix">[</mo><msup><mi>t</mi><mn>2</mn></msup><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">E[t^2]</annotation></semantics></math>
+based on the accrual, dropout, and trial duration parameters.</p>
+</div>
+<div class="section level3">
+<h3 id="event-gaps">Event Gaps<a class="anchor" aria-label="anchor" href="#event-gaps"></a>
+</h3>
+<p>In some clinical trials, there is a mandatory “dead time” or gap
+after an event during which no new events can occur (e.g., a recovery
+period). If an <code>event_gap</code> is specified, the effective
+exposure time for a subject is reduced by the time spent in these
+gaps.</p>
+<p>The function approximates the effective event rate as:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mrow><mi>e</mi><mi>f</mi><mi>f</mi></mrow></msub><mo>≈</mo><mfrac><mi>λ</mi><mrow><mn>1</mn><mo>+</mo><mi>λ</mi><mo>⋅</mo><mtext mathvariant="normal">gap</mtext></mrow></mfrac></mrow><annotation encoding="application/x-tex"> \lambda_{eff} \approx \frac{\lambda}{1 + \lambda \cdot \text{gap}} </annotation></semantics></math>
+This adjusted rate is then used in the sample size calculations. The
+effective exposure time reported is also adjusted similarly.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
@@ -275,8 +313,8 @@ average:</p>
 <span><span class="co">#&gt; ==========================================</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Method:          zhu</span></span>
-<span><span class="co">#&gt; Sample size:     n1 = 33, n2 = 33, total = 66</span></span>
-<span><span class="co">#&gt; Expected events: 158.4 (n1: 99.0, n2: 59.4)</span></span>
+<span><span class="co">#&gt; Sample size:     n1 = 35, n2 = 35, total = 70</span></span>
+<span><span class="co">#&gt; Expected events: 168.0 (n1: 105.0, n2: 63.0)</span></span>
 <span><span class="co">#&gt; Power: 80%, Alpha: 0.025 (1-sided)</span></span>
 <span><span class="co">#&gt; Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)</span></span>
 <span><span class="co">#&gt; Dispersion: 0.1000, Avg exposure (calendar): 6.00</span></span>
@@ -302,8 +340,8 @@ average:</p>
 <span><span class="co">#&gt; ==========================================</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Method:          friede</span></span>
-<span><span class="co">#&gt; Sample size:     n1 = 33, n2 = 33, total = 66</span></span>
-<span><span class="co">#&gt; Expected events: 158.4 (n1: 99.0, n2: 59.4)</span></span>
+<span><span class="co">#&gt; Sample size:     n1 = 35, n2 = 35, total = 70</span></span>
+<span><span class="co">#&gt; Expected events: 168.0 (n1: 105.0, n2: 63.0)</span></span>
 <span><span class="co">#&gt; Power: 80%, Alpha: 0.025 (1-sided)</span></span>
 <span><span class="co">#&gt; Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)</span></span>
 <span><span class="co">#&gt; Dispersion: 0.1000, Avg exposure (calendar): 6.00</span></span>
@@ -334,8 +372,8 @@ this accrual pattern.</p>
 <span><span class="co">#&gt; ==========================================</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Method:          zhu</span></span>
-<span><span class="co">#&gt; Sample size:     n1 = 25, n2 = 25, total = 50</span></span>
-<span><span class="co">#&gt; Expected events: 170.0 (n1: 106.2, n2: 63.7)</span></span>
+<span><span class="co">#&gt; Sample size:     n1 = 26, n2 = 26, total = 52</span></span>
+<span><span class="co">#&gt; Expected events: 176.8 (n1: 110.5, n2: 66.3)</span></span>
 <span><span class="co">#&gt; Power: 80%, Alpha: 0.025 (1-sided)</span></span>
 <span><span class="co">#&gt; Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)</span></span>
 <span><span class="co">#&gt; Dispersion: 0.1000, Avg exposure (calendar): 8.50</span></span>
@@ -362,8 +400,8 @@ maximum follow-up of 6 months.</p>
 <span><span class="co">#&gt; ==========================================</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Method:          zhu</span></span>
-<span><span class="co">#&gt; Sample size:     n1 = 37, n2 = 37, total = 74</span></span>
-<span><span class="co">#&gt; Expected events: 153.4 (n1: 95.9, n2: 57.5)</span></span>
+<span><span class="co">#&gt; Sample size:     n1 = 38, n2 = 38, total = 76</span></span>
+<span><span class="co">#&gt; Expected events: 157.6 (n1: 98.5, n2: 59.1)</span></span>
 <span><span class="co">#&gt; Power: 80%, Alpha: 0.025 (1-sided)</span></span>
 <span><span class="co">#&gt; Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)</span></span>
 <span><span class="co">#&gt; Dispersion: 0.1000, Avg exposure (calendar): 5.18</span></span>
@@ -410,8 +448,8 @@ We use the <code>accrual_rate</code> computed in the previous step.</p>
 <span><span class="co">#&gt; ==========================================</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Method:          zhu</span></span>
-<span><span class="co">#&gt; Sample size:     n1 = 37, n2 = 37, total = 74</span></span>
-<span><span class="co">#&gt; Expected events: 172.6 (n1: 95.9, n2: 76.7)</span></span>
+<span><span class="co">#&gt; Sample size:     n1 = 38, n2 = 38, total = 76</span></span>
+<span><span class="co">#&gt; Expected events: 177.3 (n1: 98.5, n2: 78.8)</span></span>
 <span><span class="co">#&gt; Power: 26%, Alpha: 0.025 (1-sided)</span></span>
 <span><span class="co">#&gt; Rates: control = 0.5000, treatment = 0.4000 (RR = 0.8000)</span></span>
 <span><span class="co">#&gt; Dispersion: 0.1000, Avg exposure (calendar): 5.18</span></span>
@@ -440,7 +478,7 @@ We use the <code>accrual_rate</code> computed in the previous step.</p>
 <span><span class="co">#&gt; Method:          zhu</span></span>
 <span><span class="co">#&gt; Sample size:     n1 = 40, n2 = 80, total = 120</span></span>
 <span><span class="co">#&gt; Expected events: 264.0 (n1: 120.0, n2: 144.0)</span></span>
-<span><span class="co">#&gt; Power: 96%, Alpha: 0.025 (1-sided)</span></span>
+<span><span class="co">#&gt; Power: 95%, Alpha: 0.025 (1-sided)</span></span>
 <span><span class="co">#&gt; Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)</span></span>
 <span><span class="co">#&gt; Dispersion: 0.1000, Avg exposure (calendar): 6.00</span></span>
 <span><span class="co">#&gt; Accrual: 12.0, Trial duration: 12.0</span></span></code></pre></div>
@@ -492,8 +530,8 @@ differ.</p>
 <span><span class="co">#&gt; ==========================================</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Method:          zhu</span></span>
-<span><span class="co">#&gt; Sample size:     n1 = 33, n2 = 33, total = 66</span></span>
-<span><span class="co">#&gt; Expected events: 157.5 (n1: 98.3, n2: 59.2)</span></span>
+<span><span class="co">#&gt; Sample size:     n1 = 35, n2 = 35, total = 70</span></span>
+<span><span class="co">#&gt; Expected events: 167.0 (n1: 104.3, n2: 62.7)</span></span>
 <span><span class="co">#&gt; Power: 80%, Alpha: 0.025 (1-sided)</span></span>
 <span><span class="co">#&gt; Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)</span></span>
 <span><span class="co">#&gt; Dispersion: 0.1000, Avg exposure (calendar): 6.00</span></span>

@@ -39,7 +39,7 @@ nb_ss <- sample_size_nbinom(
 gs_design <- gsNBCalendar(nb_ss, k = 3)
 summary(gs_design)
 #> Asymmetric two-sided with non-binding futility bound group sequential design
-#> for negative binomial outcomes, 3 analyses, total sample size 51.4, 90 percent
+#> for negative binomial outcomes, 3 analyses, total sample size 53.5, 90 percent
 #> power, 2.5 percent (1-sided) Type I error. Control rate 0.5000, treatment rate
 #> 0.3000, risk ratio 0.6000, dispersion 0.1000. Accrual duration 20.0, trial
 #> duration 24.0, average exposure 14.00. Randomization ratio 1:1.

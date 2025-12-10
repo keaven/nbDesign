@@ -112,6 +112,37 @@ average:
 
 $$\bar{t} = \frac{\sum\limits_{j = 1}^{J}N_{j}E_{j}}{\sum\limits_{j = 1}^{J}N_{j}}$$
 
+### Variance Inflation for Variable Follow-up
+
+When follow-up times are variable (due to accrual, dropout, or
+administrative censoring), simply using the average follow-up time
+$\bar{t}$ in the variance formula underestimates the true variance of
+the rate estimator. This is because the variance of the negative
+binomial distribution depends on the exposure time in a non-linear way
+($Var(Y) = \mu + k\mu^{2} = \lambda t + k(\lambda t)^{2}$).
+
+To account for this, we apply a variance inflation factor $Q$ to the
+dispersion parameter $k$, as derived by Zhu and Lakkis (2014):
+
+$$Q = \frac{E\left\lbrack t^{2} \right\rbrack}{\left( E\lbrack t\rbrack \right)^{2}}$$
+
+The adjusted dispersion parameter used in the sample size calculation is
+$k_{adj} = k \cdot Q$. The function automatically calculates
+$E\lbrack t\rbrack$ and $E\left\lbrack t^{2} \right\rbrack$ based on the
+accrual, dropout, and trial duration parameters.
+
+### Event Gaps
+
+In some clinical trials, there is a mandatory “dead time” or gap after
+an event during which no new events can occur (e.g., a recovery period).
+If an `event_gap` is specified, the effective exposure time for a
+subject is reduced by the time spent in these gaps.
+
+The function approximates the effective event rate as:
+$$\lambda_{eff} \approx \frac{\lambda}{1 + \lambda \cdot \text{gap}}$$
+This adjusted rate is then used in the sample size calculations. The
+effective exposure time reported is also adjusted similarly.
+
 ## Examples
 
 ### Basic Calculation (Zhu and Lakkis)
@@ -143,8 +174,8 @@ sample_size_nbinom(
 #> ==========================================
 #> 
 #> Method:          zhu
-#> Sample size:     n1 = 33, n2 = 33, total = 66
-#> Expected events: 158.4 (n1: 99.0, n2: 59.4)
+#> Sample size:     n1 = 35, n2 = 35, total = 70
+#> Expected events: 168.0 (n1: 105.0, n2: 63.0)
 #> Power: 80%, Alpha: 0.025 (1-sided)
 #> Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)
 #> Dispersion: 0.1000, Avg exposure (calendar): 6.00
@@ -170,8 +201,8 @@ sample_size_nbinom(
 #> ==========================================
 #> 
 #> Method:          friede
-#> Sample size:     n1 = 33, n2 = 33, total = 66
-#> Expected events: 158.4 (n1: 99.0, n2: 59.4)
+#> Sample size:     n1 = 35, n2 = 35, total = 70
+#> Expected events: 168.0 (n1: 105.0, n2: 63.0)
 #> Power: 80%, Alpha: 0.025 (1-sided)
 #> Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)
 #> Dispersion: 0.1000, Avg exposure (calendar): 6.00
@@ -203,8 +234,8 @@ sample_size_nbinom(
 #> ==========================================
 #> 
 #> Method:          zhu
-#> Sample size:     n1 = 25, n2 = 25, total = 50
-#> Expected events: 170.0 (n1: 106.2, n2: 63.7)
+#> Sample size:     n1 = 26, n2 = 26, total = 52
+#> Expected events: 176.8 (n1: 110.5, n2: 66.3)
 #> Power: 80%, Alpha: 0.025 (1-sided)
 #> Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)
 #> Dispersion: 0.1000, Avg exposure (calendar): 8.50
@@ -232,8 +263,8 @@ sample_size_nbinom(
 #> ==========================================
 #> 
 #> Method:          zhu
-#> Sample size:     n1 = 37, n2 = 37, total = 74
-#> Expected events: 153.4 (n1: 95.9, n2: 57.5)
+#> Sample size:     n1 = 38, n2 = 38, total = 76
+#> Expected events: 157.6 (n1: 98.5, n2: 59.1)
 #> Power: 80%, Alpha: 0.025 (1-sided)
 #> Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)
 #> Dispersion: 0.1000, Avg exposure (calendar): 5.18
@@ -279,8 +310,8 @@ sample_size_nbinom(
 #> ==========================================
 #> 
 #> Method:          zhu
-#> Sample size:     n1 = 37, n2 = 37, total = 74
-#> Expected events: 172.6 (n1: 95.9, n2: 76.7)
+#> Sample size:     n1 = 38, n2 = 38, total = 76
+#> Expected events: 177.3 (n1: 98.5, n2: 78.8)
 #> Power: 26%, Alpha: 0.025 (1-sided)
 #> Rates: control = 0.5000, treatment = 0.4000 (RR = 0.8000)
 #> Dispersion: 0.1000, Avg exposure (calendar): 5.18
@@ -309,7 +340,7 @@ sample_size_nbinom(
 #> Method:          zhu
 #> Sample size:     n1 = 40, n2 = 80, total = 120
 #> Expected events: 264.0 (n1: 120.0, n2: 144.0)
-#> Power: 96%, Alpha: 0.025 (1-sided)
+#> Power: 95%, Alpha: 0.025 (1-sided)
 #> Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)
 #> Dispersion: 0.1000, Avg exposure (calendar): 6.00
 #> Accrual: 12.0, Trial duration: 12.0
@@ -356,8 +387,8 @@ sample_size_nbinom(
 #> ==========================================
 #> 
 #> Method:          zhu
-#> Sample size:     n1 = 33, n2 = 33, total = 66
-#> Expected events: 157.5 (n1: 98.3, n2: 59.2)
+#> Sample size:     n1 = 35, n2 = 35, total = 70
+#> Expected events: 167.0 (n1: 104.3, n2: 62.7)
 #> Power: 80%, Alpha: 0.025 (1-sided)
 #> Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)
 #> Dispersion: 0.1000, Avg exposure (calendar): 6.00

@@ -113,6 +113,8 @@ approximately 200 subjects.</p>
 <li>
 <strong>Max Follow-up</strong>: 12 months.</li>
 <li>
+<strong>Event Gap</strong>: 30 days (approx 0.082 years).</li>
+<li>
 <strong>Accrual</strong>: Piecewise linear ramp-up over 12 months
 (Rate
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>R</mi><annotation encoding="application/x-tex">R</annotation></semantics></math>
@@ -136,6 +138,7 @@ using <code>sample_size_nbinom</code>.</p>
 <span><span class="va">dropout_rate</span> <span class="op">&lt;-</span> <span class="fl">0.1</span></span>
 <span><span class="va">max_followup</span> <span class="op">&lt;-</span> <span class="fl">12</span></span>
 <span><span class="va">trial_duration</span> <span class="op">&lt;-</span> <span class="fl">24</span></span>
+<span><span class="va">event_gap</span> <span class="op">&lt;-</span> <span class="fl">30</span> <span class="op">/</span> <span class="fl">365.25</span></span>
 <span></span>
 <span><span class="co"># Accrual targeting N ~ 200</span></span>
 <span><span class="co"># (Pre-calculated rates)</span></span>
@@ -151,6 +154,7 @@ using <code>sample_size_nbinom</code>.</p>
 <span>  trial_duration <span class="op">=</span> <span class="va">trial_duration</span>,</span>
 <span>  dropout_rate <span class="op">=</span> <span class="va">dropout_rate</span>,</span>
 <span>  max_followup <span class="op">=</span> <span class="va">max_followup</span>,</span>
+<span>  event_gap <span class="op">=</span> <span class="va">event_gap</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"friede"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -160,10 +164,12 @@ using <code>sample_size_nbinom</code>.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Method:          friede</span></span>
 <span><span class="co">#&gt; Sample size:     n1 = 99, n2 = 99, total = 198</span></span>
-<span><span class="co">#&gt; Expected events: 484.3 (n1: 276.7, n2: 207.5)</span></span>
-<span><span class="co">#&gt; Power: 56%, Alpha: 0.025 (1-sided)</span></span>
+<span><span class="co">#&gt; Expected events: 470.5 (n1: 267.9, n2: 202.6)</span></span>
+<span><span class="co">#&gt; Power: 48%, Alpha: 0.025 (1-sided)</span></span>
 <span><span class="co">#&gt; Rates: control = 0.4000, treatment = 0.3000 (RR = 0.7500)</span></span>
 <span><span class="co">#&gt; Dispersion: 0.5000, Avg exposure (calendar): 6.99</span></span>
+<span><span class="co">#&gt; Avg exposure (at-risk): n1 = 6.77, n2 = 6.82</span></span>
+<span><span class="co">#&gt; Event gap: 0.08</span></span>
 <span><span class="co">#&gt; Dropout rate: 0.1000</span></span>
 <span><span class="co">#&gt; Accrual: 12.0, Trial duration: 24.0</span></span>
 <span><span class="co">#&gt; Max follow-up: 12.0</span></span></code></pre></div>
@@ -229,9 +235,9 @@ the simulation.</p>
 <tbody><tr class="odd">
 <td align="left">Average Exposure</td>
 <td align="right">6.9881</td>
-<td align="right">6.9547</td>
-<td align="right">-0.0333</td>
-<td align="right">-0.477</td>
+<td align="right">6.9532</td>
+<td align="right">-0.0349</td>
+<td align="right">-0.4991</td>
 </tr></tbody>
 </table>
 <p>The theoretical exposure should closely match the simulated average
@@ -242,9 +248,24 @@ exposure.</p>
 </h3>
 <p>The theoretical variance of the log rate ratio estimator (Wald test)
 is given by:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>V</mi><mrow><mi>t</mi><mi>h</mi><mi>e</mi><mi>o</mi></mrow></msub><mo>=</mo><mfrac><mrow><mn>1</mn><mi>/</mi><msub><mi>μ</mi><mn>1</mn></msub><mo>+</mo><mi>k</mi></mrow><msub><mi>n</mi><mn>1</mn></msub></mfrac><mo>+</mo><mfrac><mrow><mn>1</mn><mi>/</mi><msub><mi>μ</mi><mn>2</mn></msub><mo>+</mo><mi>k</mi></mrow><msub><mi>n</mi><mn>2</mn></msub></mfrac></mrow><annotation encoding="application/x-tex"> V_{theo} = \frac{1/\mu_1 + k}{n_1} + \frac{1/\mu_2 + k}{n_2} </annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>V</mi><mrow><mi>t</mi><mi>h</mi><mi>e</mi><mi>o</mi></mrow></msub><mo>=</mo><mfrac><mrow><mn>1</mn><mi>/</mi><msub><mi>μ</mi><mn>1</mn></msub><mo>+</mo><msub><mi>k</mi><mrow><mi>a</mi><mi>d</mi><mi>j</mi></mrow></msub></mrow><msub><mi>n</mi><mn>1</mn></msub></mfrac><mo>+</mo><mfrac><mrow><mn>1</mn><mi>/</mi><msub><mi>μ</mi><mn>2</mn></msub><mo>+</mo><msub><mi>k</mi><mrow><mi>a</mi><mi>d</mi><mi>j</mi></mrow></msub></mrow><msub><mi>n</mi><mn>2</mn></msub></mfrac></mrow><annotation encoding="application/x-tex"> V_{theo} = \frac{1/\mu_1 + k_{adj}}{n_1} + \frac{1/\mu_2 + k_{adj}}{n_2} </annotation></semantics></math></p>
 <p>where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>μ</mi><mi>i</mi></msub><mo>=</mo><msub><mi>λ</mi><mi>i</mi></msub><mover><mi>t</mi><mo accent="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">\mu_i = \lambda_i \bar{t}</annotation></semantics></math>.</p>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>μ</mi><mi>i</mi></msub><mo>=</mo><msub><mi>λ</mi><mrow><mi>i</mi><mo>,</mo><mi>e</mi><mi>f</mi><mi>f</mi></mrow></msub><mover><mi>t</mi><mo accent="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">\mu_i = \lambda_{i,eff} \bar{t}</annotation></semantics></math>
+is the expected number of events per subject in group
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
+(using effective rates adjusted for event gaps), and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>k</mi><mrow><mi>a</mi><mi>d</mi><mi>j</mi></mrow></msub><mo>=</mo><mi>k</mi><mo>⋅</mo><mi>Q</mi></mrow><annotation encoding="application/x-tex">k_{adj} = k \cdot Q</annotation></semantics></math>
+is the dispersion parameter inflated for variable follow-up.</p>
+<p>The dispersion parameter
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
+directly increases the variance of the estimator. In a standard Poisson
+model,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">k=0</annotation></semantics></math>,
+and the variance depends only on the expected number of events. With
+negative binomial dispersion
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">k &gt; 0</annotation></semantics></math>),
+the variance is inflated, reflecting the extra variability
+(overdispersion) in the data.</p>
 <p>We compare this with the variance of the estimates from the
 simulation.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -275,9 +296,9 @@ simulation.</p>
 </tr></thead>
 <tbody><tr class="odd">
 <td align="left">Variance of Estimator</td>
-<td align="right">0.00787</td>
-<td align="right">0.00904</td>
-<td align="right">0.00895</td>
+<td align="right">0.00786</td>
+<td align="right">0.01068</td>
+<td align="right">0.07629</td>
 </tr></tbody>
 </table>
 <ul>
@@ -323,9 +344,9 @@ anticipates the variability of the test statistic.</p>
 </tr></thead>
 <tbody><tr class="odd">
 <td align="left">Power</td>
-<td align="right">0.9001</td>
-<td align="right">0.7879</td>
-<td align="right">-0.1122</td>
+<td align="right">0.9006</td>
+<td align="right">0.8712</td>
+<td align="right">-0.0294</td>
 </tr></tbody>
 </table>
 <p>A 95% confidence interval for the empirical power can be calculated
@@ -333,7 +354,7 @@ to check if the theoretical power falls within the simulation error
 bounds.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/binom.test.html" class="external-link">binom.test</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">results</span><span class="op">$</span><span class="va">p_value</span> <span class="op">&lt;</span> <span class="va">design_ref</span><span class="op">$</span><span class="va">inputs</span><span class="op">$</span><span class="va">alpha</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">conf.int</span></span>
-<span><span class="co">#&gt; [1] 0.7797545 0.7958775</span></span>
+<span><span class="co">#&gt; [1] 0.8644763 0.8777067</span></span>
 <span><span class="co">#&gt; attr(,"conf.level")</span></span>
 <span><span class="co">#&gt; [1] 0.95</span></span></code></pre></div>
 </div>
