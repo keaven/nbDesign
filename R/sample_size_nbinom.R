@@ -138,10 +138,38 @@ sample_size_nbinom <- function(lambda1, lambda2, dispersion, power = NULL,
     }
   }
 
+  # Helper function for average squared exposure over [u_min, u_max] given dropout_rate
+  avg_exp_sq_func <- function(u_min, u_max, dropout_rate) {
+    if (u_min >= u_max) return(0)
+    if (dropout_rate == 0) {
+      return((u_max^3 - u_min^3) / (3 * (u_max - u_min)))
+    } else {
+      # Indefinite integral G(u) of M2(u)
+      # M2(u) = 2/d^2 * (1 - exp(-du)(1+du))
+      # G(u) = 2u/d^2 + 2/d^2 * exp(-du) * (2/d + u)
+      d <- dropout_rate
+      G <- function(u) {
+        (2 * u) / d^2 + (2 / d^2) * exp(-d * u) * (2 / d + u)
+      }
+      return((G(u_max) - G(u_min)) / (u_max - u_min))
+    }
+  }
+
+  # Helper for M2(u) at a single point (for truncated case)
+  m2_func <- function(u, dropout_rate) {
+    if (dropout_rate == 0) {
+      return(u^2)
+    } else {
+      d <- dropout_rate
+      return((2 / d^2) * (1 - exp(-d * u) * (1 + d * u)))
+    }
+  }
+
   # Calculate average exposure
   current_time <- 0
   total_n_accrual <- 0
   total_exposure_mass <- 0
+  total_exposure_sq_mass <- 0
 
   if (length(accrual_rate) != length(accrual_duration)) {
     stop("accrual_rate and accrual_duration must have the same length.")
@@ -163,36 +191,65 @@ sample_size_nbinom <- function(lambda1, lambda2, dispersion, power = NULL,
       u_min <- trial_duration - (current_time + d)
 
       avg_followup <- 0
+      avg_followup_sq <- 0
 
       if (is.null(max_followup) || is.infinite(max_followup) || u_max <= max_followup) {
         # Case 1: No truncation by max_followup (or negligible)
         avg_followup <- avg_exp_func(u_min, u_max, dropout_rate)
+        avg_followup_sq <- avg_exp_sq_func(u_min, u_max, dropout_rate)
       } else if (u_min >= max_followup) {
         # Case 2: All truncated by max_followup
         # Effectively fixed exposure of max_followup
         if (dropout_rate == 0) {
           avg_followup <- max_followup
+          avg_followup_sq <- max_followup^2
         } else {
           avg_followup <- (1 - exp(-dropout_rate * max_followup)) / dropout_rate
+          avg_followup_sq <- m2_func(max_followup, dropout_rate)
         }
       } else {
         # Case 3: Split
-        tau_star <- trial_duration - max_followup
-        d1 <- tau_star - current_time
-        d2 <- (current_time + d) - tau_star
-
+        # The segment part [current_time, tau_star] has potential follow-up >= max_followup
+        # This corresponds to u in [max_followup, u_max] in terms of potential follow-up?
+        # Wait, u = trial_duration - enrollment_time.
+        # Enrollment time t_e in [current, current+d].
+        # u in [u_min, u_max].
+        # u_min = T - (c+d), u_max = T - c.
+        # Truncation happens if u > max_followup.
+        # So u in [max_followup, u_max] are truncated to max_followup.
+        # u in [u_min, max_followup] are not truncated.
+        
+        # Split point in u is max_followup.
+        # Range 1 (Truncated): [max_followup, u_max] -> Follow-up is min(max_followup, dropout)
+        # Range 2 (Not Truncated): [u_min, max_followup] -> Follow-up is min(u, dropout)
+        
+        len_truncated <- u_max - max_followup
+        len_not_truncated <- max_followup - u_min
+        
+        # Check weights
+        # Total length = u_max - u_min = d.
+        # len_truncated + len_not_truncated = u_max - u_min = d. Correct.
+        
+        # Avg for truncated part
         if (dropout_rate == 0) {
           avg_1 <- max_followup
+          avg_sq_1 <- max_followup^2
         } else {
           avg_1 <- (1 - exp(-dropout_rate * max_followup)) / dropout_rate
+          avg_sq_1 <- m2_func(max_followup, dropout_rate)
         }
-
+        
+        # Avg for not truncated part
         avg_2 <- avg_exp_func(u_min, max_followup, dropout_rate)
-        avg_followup <- (d1 * avg_1 + d2 * avg_2) / d
+        avg_sq_2 <- avg_exp_sq_func(u_min, max_followup, dropout_rate)
+        
+        avg_followup <- (len_truncated * avg_1 + len_not_truncated * avg_2) / d
+        avg_followup_sq <- (len_truncated * avg_sq_1 + len_not_truncated * avg_sq_2) / d
       }
 
       total_n_accrual <- total_n_accrual + n_seg
       total_exposure_mass <- total_exposure_mass + n_seg * avg_followup
+      total_exposure_sq_mass <- total_exposure_sq_mass + n_seg * avg_followup_sq
     }
     current_time <- current_time + d
   }
@@ -202,6 +259,16 @@ sample_size_nbinom <- function(lambda1, lambda2, dispersion, power = NULL,
   }
 
   exposure_calendar <- total_exposure_mass / total_n_accrual
+  exposure_sq_avg <- total_exposure_sq_mass / total_n_accrual
+  
+  # Calculate inflation factor Q for variance due to variable follow-up
+  # Q = E[t^2] / (E[t])^2
+  # If exposure is constant, Q = 1.
+  if (exposure_calendar > 0) {
+    Q_inflation <- exposure_sq_avg / (exposure_calendar^2)
+  } else {
+    Q_inflation <- 1
+  }
 
   # Setup effective rates and exposures based on event_gap
   if (!is.null(event_gap) && !is.na(event_gap) && event_gap > 0) {
@@ -222,7 +289,9 @@ sample_size_nbinom <- function(lambda1, lambda2, dispersion, power = NULL,
 
   mu1 <- lambda1_eff * exposure_calendar
   mu2 <- lambda2_eff * exposure_calendar
-  k <- dispersion
+  
+  # Apply inflation factor to dispersion
+  k <- dispersion * Q_inflation
 
   z_alpha <- qnorm(1 - alpha / sided)
 

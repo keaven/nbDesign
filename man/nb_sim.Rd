@@ -10,7 +10,8 @@ nb_sim(
   dropout_rate = NULL,
   max_followup = NULL,
   n = NULL,
-  block = c(rep("Control", 2), rep("Experimental", 2))
+  block = c(rep("Control", 2), rep("Experimental", 2)),
+  event_gap = 0
 )
 }
 \arguments{
@@ -36,6 +37,9 @@ If provided, enrollment stops when \code{n} subjects are recruited.}
 If NULL, simple randomization is used (treatments are assigned with equal probability).
 If provided, it specifies the block structure, e.g., \code{c(rep("A", 2), rep("B", 2))}
 assigns 2 to group A and 2 to group B in each block.}
+
+\item{event_gap}{Numeric. Gap duration after each event during which no new events are counted.
+Default is 0.}
 }
 \value{
 A data frame (tibble) with columns:

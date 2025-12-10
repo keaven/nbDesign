@@ -34,6 +34,8 @@
 #'   If NULL, simple randomization is used (treatments are assigned with equal probability).
 #'   If provided, it specifies the block structure, e.g., \code{c(rep("A", 2), rep("B", 2))}
 #'   assigns 2 to group A and 2 to group B in each block.
+#' @param event_gap Numeric. Gap duration after each event during which no new events are counted.
+#'   Default is 0.
 #'
 #' @return A data frame (tibble) with columns:
 #'   \describe{
@@ -52,7 +54,8 @@
 #' @importFrom stats rexp rgamma
 #' @importFrom utils tail
 #' @importFrom simtrial rpwexp_enroll
-nb_sim <- function(enroll_rate, fail_rate, dropout_rate = NULL, max_followup = NULL, n = NULL, block = c(rep("Control", 2), rep("Experimental", 2))) {
+nb_sim <- function(enroll_rate, fail_rate, dropout_rate = NULL, max_followup = NULL, n = NULL, 
+                   block = c(rep("Control", 2), rep("Experimental", 2)), event_gap = 0) {
   # 1. Generate Enrollment
   # Simplified implementation of piecewise constant enrollment
   # If n is provided, we simulate until n. If not, we assume enroll_rate defines the full period.
@@ -206,8 +209,21 @@ nb_sim <- function(enroll_rate, fail_rate, dropout_rate = NULL, max_followup = N
     if (!is.na(lambda) && lambda > 0 && end_time > 0) {
       cum_t <- 0
       repeat {
-        gap <- rexp(1, lambda)
-        cum_t <- cum_t + gap
+        # Generate time to next event
+        # If event_gap > 0, we add the gap AFTER the previous event.
+        # For the first event, there is no gap.
+        # Wait, usually gap is "dead time" after event.
+        # So T_1 ~ Exp(lambda). Event at T_1.
+        # T_2 ~ Exp(lambda). Event at T_1 + gap + T_2.
+        
+        inter_arrival <- rexp(1, lambda)
+        
+        if (length(event_times) == 0) {
+          cum_t <- cum_t + inter_arrival
+        } else {
+          cum_t <- cum_t + event_gap + inter_arrival
+        }
+        
         if (cum_t <= end_time) {
           event_times <- c(event_times, cum_t)
         } else {

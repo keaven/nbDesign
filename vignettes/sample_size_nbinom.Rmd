@@ -91,6 +91,24 @@ The overall average exposure used for the calculation is the weighted average:
 
 $$ \bar{t} = \frac{\sum_{j=1}^J N_j E_j}{\sum_{j=1}^J N_j} $$
 
+### Variance Inflation for Variable Follow-up
+
+When follow-up times are variable (due to accrual, dropout, or administrative censoring), simply using the average follow-up time $\bar{t}$ in the variance formula underestimates the true variance of the rate estimator. This is because the variance of the negative binomial distribution depends on the exposure time in a non-linear way ($Var(Y) = \mu + k\mu^2 = \lambda t + k (\lambda t)^2$).
+
+To account for this, we apply a variance inflation factor $Q$ to the dispersion parameter $k$, as derived by Zhu and Lakkis (2014):
+
+$$ Q = \frac{E[t^2]}{(E[t])^2} $$
+
+The adjusted dispersion parameter used in the sample size calculation is $k_{adj} = k \cdot Q$. The function automatically calculates $E[t]$ and $E[t^2]$ based on the accrual, dropout, and trial duration parameters.
+
+### Event Gaps
+
+In some clinical trials, there is a mandatory "dead time" or gap after an event during which no new events can occur (e.g., a recovery period). If an `event_gap` is specified, the effective exposure time for a subject is reduced by the time spent in these gaps.
+
+The function approximates the effective event rate as:
+$$ \lambda_{eff} \approx \frac{\lambda}{1 + \lambda \cdot \text{gap}} $$
+This adjusted rate is then used in the sample size calculations. The effective exposure time reported is also adjusted similarly.
+
 ## Examples
 
 ### Basic Calculation (Zhu and Lakkis)
