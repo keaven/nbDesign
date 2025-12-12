@@ -1,8 +1,8 @@
 ---
-title: "Group Sequential Simulation with Completers Analysis"
+title: "Group sequential simulation with completers analysis"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Group Sequential Simulation with Completers Analysis}
+  %\VignetteIndexEntry{Group sequential simulation with completers analysis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -24,7 +24,7 @@ library(gt)
 
 This vignette demonstrates how to simulate a group sequential design where an interim analysis is conducted based on a specific number of "completers" (subjects who have finished their follow-up).
 
-## Simulation Setup
+## Simulation setup
 
 We define a trial with the following parameters:
 
@@ -55,7 +55,7 @@ enroll_rate <- data.frame(
 fail_rate <- data.frame(
   treatment = c("Control", "Experimental"),
   rate = c(0.5, 0.35), # Events per year
-  dispersion = c(0.5, 0.5) # Negative Binomial dispersion
+  dispersion = c(0.5, 0.5) # Negative binomial dispersion
 )
 
 dropout_rate <- data.frame(
@@ -65,7 +65,7 @@ dropout_rate <- data.frame(
 )
 ```
 
-## Simulation Loop
+## Simulation loop
 
 We will simulate 50 trials. For each trial, we perform the interim and final analyses.
 
@@ -170,7 +170,7 @@ cat("Asymptotic Information (Final):", round(info_asymp_final, 2), "\n")
 cat("Mean Simulated Information (Final):", round(mean(results$final_info), 2), "\n")
 ```
 
-## Results Summary
+## Results summary
 
 We summarize the distribution of the test statistics (Z-scores) at the interim and final analyses.
 
@@ -200,7 +200,7 @@ ggplot(results, aes(x = interim_z, y = final_z)) +
 
 The plot shows the correlation between the interim statistic (based on 40% completers) and the final statistic.
 
-### Group Sequential Design Evaluation
+### Group sequential design evaluation
 
 We can evaluate the operating characteristics of this design using the simulated Z-scores and information fractions. We assume an O'Brien-Fleming spending function for the upper bound.
 
@@ -256,4 +256,3 @@ for (i in 1:n_sims) {
 
 cat("Power (Empirical Rejection Rate):", mean(reject), "\n")
 ```
-

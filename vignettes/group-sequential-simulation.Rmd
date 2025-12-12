@@ -1,8 +1,8 @@
 ---
-title: "Group Sequential Design and Simulation"
+title: "Group sequential design and simulation"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Group Sequential Design and Simulation}
+  %\VignetteIndexEntry{Group sequential design and simulation}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -22,10 +22,10 @@ library(ggplot2)
 library(gt)
 ```
 
-This vignette demonstrates how to create a group sequential design for 
+This vignette demonstrates how to create a group sequential design for
 negative binomial outcomes using `gsNBCalendar()` and simulate the design to confirm design operating characteristicsusing `nb_sim()`.
 
-## Trial Design Parameters
+## Trial design parameters
 
 We design a trial with the following characteristics:
 
@@ -43,7 +43,7 @@ We design a trial with the following characteristics:
 * **Power:** 90% (beta = 0.1)
 * **Alpha:** 0.025 (one-sided)
 
-### Sample Size Calculation
+### Sample size calculation
 
 First, we calculate the required sample size for a fixed design:
 
@@ -73,17 +73,17 @@ cat("Fixed design\n")
 nb_ss
 ```
 
-### Group Sequential Design
+### Group sequential design
 
-Now we convert this a group sequential design with 3 analyses after 
-10, 18 and 24 months. 
+Now we convert this a group sequential design with 3 analyses after
+10, 18 and 24 months.
 Note that the final analysis time must be the same as for the fixed design.
 The relative enrollment rates will be increased to increase the sample size
 as with standard group sequential design theory.
 We specify `usTime = c(0.1, 0.18, 1)` which along with the `sfLinear()` spending
 function will spend 10%, 18% and 100% of the cumulative $\alpha$ at the 3
 planned analyses regardless of the observed statistical information at each
-analysis. 
+analysis.
 
 ```{r gs-design}
 # Analysis times (in months)
@@ -134,12 +134,12 @@ gs_nb |>
 
 
 
-## Simulation Study
+## Simulation study
 
 We now simulate `r 50` trials to evaluate the power
 of the group sequential design assuming design parameters above are correct.
 
-### Simulation Setup
+### Simulation setup
 
 ```{r simulation-setup}
 set.seed(42)
@@ -174,7 +174,7 @@ dropout_rate <- data.frame(
 max_followup <- 12 # 12 months to match design
 ```
 
-### Run Simulations
+### Run simulations
 
 ```{r run-simulations}
 # Storage for results
@@ -360,9 +360,9 @@ for (sim in 1:n_sims) {
 all_results <- do.call(rbind, results)
 ```
 
-## Simulation Results Summary
+## Simulation results summary
 
-### Events and Exposure by Analysis
+### Events and exposure by analysis
 
 ```{r summary-events}
 # Summarize by analysis
@@ -399,10 +399,10 @@ summary_by_analysis |>
   fmt_number(decimals = 2)
 ```
 
-### Statistical Information
+### Statistical information
 
-The statistical information at each analysis is proportional to the precision 
-of the treatment effect estimate. For negative binomial outcomes, this relates 
+The statistical information at each analysis is proportional to the precision
+of the treatment effect estimate. For negative binomial outcomes, this relates
 to the total exposure and event counts.
 
 ```{r info-summary}
@@ -440,7 +440,7 @@ info_by_analysis |>
   fmt_number(decimals = 3)
 ```
 
-### Boundary Crossings and Power
+### Boundary crossings and power
 
 ```{r power-summary}
 # Calculate crossing probabilities
@@ -480,7 +480,7 @@ crossing_summary[, .(analysis, n_cross_upper, cum_prob_cross_upper, design_cum_p
   fmt_number(columns = contains("power"), decimals = 3)
 ```
 
-### Overall Power
+### Overall power
 
 ```{r overall-power}
 # Determine if each simulation crossed the efficacy boundary at any analysis
@@ -508,7 +508,7 @@ cat(sprintf("Futility Stopping Rate: %.1f%%\n", overall_futility * 100))
 cat(sprintf("Design Power (target): %.1f%%\n", (1 - gs_nb$beta) * 100))
 ```
 
-### Visualization of Z-Statistics
+### Visualization of Z-statistics
 
 ```{r plot-z-stats, fig.width=7, fig.height=5, fig.alt="Z-statistics across analyses with group sequential boundaries"}
 # Prepare data for plotting
@@ -548,7 +548,7 @@ ggplot(plot_data, aes(x = factor(analysis), y = z_flipped)) +
   ylim(c(-4, 6))
 ```
 
-## Design Summary
+## Design summary
 
 The `summary()` function provides a textual overview of the group sequential design:
 
@@ -556,8 +556,8 @@ The `summary()` function provides a textual overview of the group sequential des
 summary(gs_nb)
 ```
 
-For detailed boundary information, use `gsBoundSummary()`. We set `logdelta = TRUE` 
-since the test statistic is based on the log rate ratio. The `~RR at bound` displays the 
+For detailed boundary information, use `gsBoundSummary()`. We set `logdelta = TRUE`
+since the test statistic is based on the log rate ratio. The `~RR at bound` displays the
 rate ratio ($\lambda_2/\lambda_1$), where values < 1 indicate treatment benefit:
 
 ```{r bounds-table}
@@ -579,7 +579,7 @@ gsDesign::gsBoundSummary(gs_nb,
   )
 ```
 
-Note that `P(Cross) if RR=0.67` corresponds to the design's alternate hypothesis 
+Note that `P(Cross) if RR=0.67` corresponds to the design's alternate hypothesis
 (treatment rate / control rate = `r round(nb_ss$inputs$lambda2 / nb_ss$inputs$lambda1, 2)`).
 
 Sample sizes at each analysis:
@@ -606,7 +606,7 @@ summary(gs_nb_int)
 
 ## Notes
 
-This simulation demonstrates the basic workflow for group sequential designs with 
+This simulation demonstrates the basic workflow for group sequential designs with
 negative binomial outcomes:
 
 1. **Sample size calculation** using `sample_size_nbinom()` for a fixed design
@@ -615,10 +615,9 @@ negative binomial outcomes:
 4. **Analysis** using `cut_data_by_date()` and `mutze_test()` at each interim
 5. **Boundary checking** against the group sequential bounds
 
-The `usTime = c(0.1, 0.2, 1)` specification provides conservative alpha spending 
-at early analyses, preserving most of the Type I error for later analyses when 
+The `usTime = c(0.1, 0.2, 1)` specification provides conservative alpha spending
+at early analyses, preserving most of the Type I error for later analyses when
 more information is available.
 
-With only `r n_sims` simulations, the estimated power has substantial Monte Carlo 
+With only `r n_sims` simulations, the estimated power has substantial Monte Carlo
 error. For more precise estimates, increase `n_sims` to 1000 or more.
-
