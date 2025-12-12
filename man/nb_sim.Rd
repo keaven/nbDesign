@@ -2,7 +2,7 @@
 % Please edit documentation in R/nb_sim.R
 \name{nb_sim}
 \alias{nb_sim}
-\title{Simulate Recurrent Events with Fixed Follow-up}
+\title{Simulate recurrent events with fixed follow-up}
 \usage{
 nb_sim(
   enroll_rate,
@@ -20,7 +20,7 @@ the piecewise constant enrollment rates.}
 
 \item{fail_rate}{A data frame with columns \code{treatment} and \code{rate} defining
 the exponential failure rate for each treatment group. Optionally, a \code{dispersion}
-column can be provided to generate data from a Negative Binomial distribution.
+column can be provided to generate data from a negative binomial distribution.
 The dispersion parameter \code{k} is such that \eqn{Var(Y) = \mu + k \mu^2}.}
 
 \item{dropout_rate}{A data frame with columns \code{treatment}, \code{rate}, and \code{duration}
@@ -58,7 +58,7 @@ Simulates recurrent events for a clinical trial with piecewise constant enrollme
 exponential failure rates (Poisson process), and piecewise exponential dropout.
 }
 \details{
-The simulation generates data consistent with the Negative Binomial models described
+The simulation generates data consistent with the negative binomial models described
 by Friede and Schmidli (2010) and Mutze et al. (2018). Specifically, it simulates
 a Gamma-distributed frailty variable for each individual (if dispersion > 0),
 which acts as a multiplier for that individual's event rate. Events are then

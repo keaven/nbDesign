@@ -1,4 +1,4 @@
-#' Sample Size Calculation for Negative Binomial Distribution
+#' Sample size calculation for negative binomial distribution
 #'
 #' Computes the sample size for comparing two treatment groups assuming a negative
 #' binomial distribution for the outcome.
@@ -398,7 +398,7 @@ sample_size_nbinom <- function(lambda1, lambda2, dispersion, power = NULL,
 #'
 #' @export
 print.sample_size_nbinom_result <- function(x, ...) {
-  cat("Sample Size for Negative Binomial Outcome\n")
+  cat("Sample size for negative binomial outcome\n")
   cat("==========================================\n\n")
   
   cat(sprintf("Method:          %s\n", x$inputs$method))

@@ -1,4 +1,4 @@
-#' Group Sequential Design for Negative Binomial Outcomes
+#' Group sequential design for negative binomial outcomes
 #'
 #' Creates a group sequential design for negative binomial outcomes based on
 #' sample size calculations from \code{\link{sample_size_nbinom}}.

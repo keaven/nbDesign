@@ -2,7 +2,7 @@
 % Please edit documentation in R/sample_size_nbinom.R
 \name{sample_size_nbinom}
 \alias{sample_size_nbinom}
-\title{Sample Size Calculation for Negative Binomial Distribution}
+\title{Sample size calculation for negative binomial distribution}
 \usage{
 sample_size_nbinom(
   lambda1,

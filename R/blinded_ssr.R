@@ -1,4 +1,4 @@
-#' Blinded Sample Size Re-estimation for Recurrent Events
+#' Blinded sample size re-estimation for recurrent events
 #'
 #' Estimates the blinded dispersion and event rate from aggregated interim data
 #' and calculates the required sample size to maintain power, assuming the

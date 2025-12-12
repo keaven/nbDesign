@@ -1,4 +1,4 @@
-#' Simulate Recurrent Events with Seasonal Rates
+#' Simulate recurrent events with seasonal rates
 #'
 #' Simulates recurrent events where event rates depend on the season.
 #'

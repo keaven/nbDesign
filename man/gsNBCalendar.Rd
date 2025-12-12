@@ -2,7 +2,7 @@
 % Please edit documentation in R/gsNBCalendar.R
 \name{gsNBCalendar}
 \alias{gsNBCalendar}
-\title{Group Sequential Design for Negative Binomial Outcomes}
+\title{Group sequential design for negative binomial outcomes}
 \usage{
 gsNBCalendar(
   x,

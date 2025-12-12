@@ -1,9 +1,9 @@
-#' Simulate Recurrent Events with Fixed Follow-up
+#' Simulate recurrent events with fixed follow-up
 #'
 #' Simulates recurrent events for a clinical trial with piecewise constant enrollment,
 #' exponential failure rates (Poisson process), and piecewise exponential dropout.
 #'
-#' The simulation generates data consistent with the Negative Binomial models described
+#' The simulation generates data consistent with the negative binomial models described
 #' by Friede and Schmidli (2010) and Mutze et al. (2018). Specifically, it simulates
 #' a Gamma-distributed frailty variable for each individual (if dispersion > 0),
 #' which acts as a multiplier for that individual's event rate. Events are then
@@ -21,7 +21,7 @@
 #'   the piecewise constant enrollment rates.
 #' @param fail_rate A data frame with columns \code{treatment} and \code{rate} defining
 #'   the exponential failure rate for each treatment group. Optionally, a \code{dispersion}
-#'   column can be provided to generate data from a Negative Binomial distribution.
+#'   column can be provided to generate data from a negative binomial distribution.
 #'   The dispersion parameter \code{k} is such that \eqn{Var(Y) = \mu + k \mu^2}.
 #' @param dropout_rate A data frame with columns \code{treatment}, \code{rate}, and \code{duration}
 #'   defining the piecewise constant dropout rates.
@@ -143,7 +143,7 @@ nb_sim <- function(enroll_rate, fail_rate, dropout_rate = NULL, max_followup = N
     stop("Each treatment must have an associated failure rate.")
   }
 
-  # Handle dispersion for Negative Binomial simulation
+  # Handle dispersion for negative binomial simulation
   if ("dispersion" %in% names(dt_subjects)) {
     # For rows with valid positive dispersion, sample lambda from Gamma.
     # We want the count Y ~ NegBin(mean = lambda*t, dispersion = k).

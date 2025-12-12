@@ -2,7 +2,7 @@
 % Please edit documentation in R/blinded_ssr.R
 \name{blinded_ssr}
 \alias{blinded_ssr}
-\title{Blinded Sample Size Re-estimation for Recurrent Events}
+\title{Blinded sample size re-estimation for recurrent events}
 \usage{
 blinded_ssr(
   data,

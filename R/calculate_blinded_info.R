@@ -1,4 +1,4 @@
-#' Calculate Blinded Statistical Information
+#' Calculate blinded statistical information
 #'
 #' Estimates the blinded dispersion and event rate from aggregated interim data
 #' and calculates the observed statistical information for the log rate ratio,
@@ -30,14 +30,14 @@ calculate_blinded_info <- function(data, ratio = 1, lambda1_planning, lambda2_pl
   }
 
   # 1. Blinded Parameter Estimation
-  # Fit Negative Binomial model to pooled data (intercept only)
+  # Fit negative binomial model to pooled data (intercept only)
   fit_blind <- tryCatch(
     suppressWarnings(MASS::glm.nb(events ~ 1 + offset(log(tte)), data = df)),
     error = function(e) NULL
   )
 
   if (is.null(fit_blind) || is.na(fit_blind$theta)) {
-    warning("Negative Binomial fit failed on blinded data. Falling back to Poisson (dispersion = 0).")
+    warning("Negative binomial fit failed on blinded data. Falling back to Poisson (dispersion = 0).")
     dispersion_est <- 0
     lambda_est <- sum(df$events) / sum(df$tte)
   } else {
