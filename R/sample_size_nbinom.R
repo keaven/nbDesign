@@ -47,7 +47,7 @@
 #' 27(10), 2978--2993. \doi{10.1177/0962280218773115}
 #'
 #' @seealso
-#' `vignette("sample_size_nbinom", package = "gsDesignNB")`
+#' `vignette("sample-size-nbinom", package = "gsDesignNB")`
 #' for a detailed explanation of the methodology.
 #'
 #' @export

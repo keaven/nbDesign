@@ -105,6 +105,6 @@ for negative binomial outcomes. \emph{Statistical Methods in Medical Research},
 27(10), 2978--2993. \doi{10.1177/0962280218773115}
 }
 \seealso{
-\code{vignette("sample_size_nbinom", package = "gsDesignNB")}
+\code{vignette("sample-size-nbinom", package = "gsDesignNB")}
 for a detailed explanation of the methodology.
 }
