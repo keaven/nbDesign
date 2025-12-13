@@ -1,4 +1,4 @@
-# Sample Size Calculation for Negative Binomial Distribution
+# Sample size calculation for negative binomial distribution
 
 Computes the sample size for comparing two treatment groups assuming a
 negative binomial distribution for the outcome.
@@ -37,7 +37,9 @@ sample_size_nbinom(
 - dispersion:
 
   Dispersion parameter `k` such that \\Var(Y) = \mu + k \mu^2\\. Note
-  that this is equivalent to `1/size` in R's `rnbinom` parameterization.
+  that this is equivalent to `1/size` in R's
+  [`stats::rnbinom()`](https://rdrr.io/r/stats/NegBinomial.html)
+  parameterization.
 
 - power:
 
@@ -125,22 +127,22 @@ containing:
 
 Zhu, H., & Lakkis, H. (2014). Sample size calculation for comparing two
 negative binomial rates in clinical trials. *Statistics in
-Biopharmaceutical Research*, 6(1), 107-115.
+Biopharmaceutical Research*, 6(1), 107–115.
 [doi:10.1080/19466315.2013.870533](https://doi.org/10.1080/19466315.2013.870533)
 
 Friede, T., & Schmidli, H. (2010). Sample size estimation for clinical
 trials with negative binomial rates. *Methods of Information in
-Medicine*, 49(6), 623-631.
+Medicine*, 49(6), 623–631.
 [doi:10.3414/ME09-01-0058](https://doi.org/10.3414/ME09-01-0058)
 
 Mütze, T., Glimm, E., Schmidli, H., & Friede, T. (2018). Group
 sequential designs for negative binomial outcomes. *Statistical Methods
-in Medical Research*, 27(10), 2978-2993.
+in Medical Research*, 27(10), 2978–2993.
 [doi:10.1177/0962280218773115](https://doi.org/10.1177/0962280218773115)
 
 ## See also
 
-[`vignette("sample_size_nbinom", package = "gsDesignNB")`](https://keaven.github.io/gsDesignNB/articles/sample_size_nbinom.md)
+[`vignette("sample-size-nbinom", package = "gsDesignNB")`](https://keaven.github.io/gsDesignNB/articles/sample-size-nbinom.md)
 for a detailed explanation of the methodology.
 
 ## Examples

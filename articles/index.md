@@ -2,15 +2,15 @@
 
 ### All vignettes
 
-- [Group Sequential Simulation with Completers
-  Analysis](https://keaven.github.io/gsDesignNB/articles/completers_interim_example.md):
-- [Group Sequential Design and
-  Simulation](https://keaven.github.io/gsDesignNB/articles/group_sequential_simulation.md):
-- [Sample Size Calculation for Negative Binomial
-  Outcomes](https://keaven.github.io/gsDesignNB/articles/sample_size_nbinom.md):
-- [Seasonal Event
-  Simulation](https://keaven.github.io/gsDesignNB/articles/seasonal_simulation.md):
-- [Simulation of Recurrent
-  Events](https://keaven.github.io/gsDesignNB/articles/simulation_example.md):
-- [Verification of Sample Size Calculation via
-  Simulation](https://keaven.github.io/gsDesignNB/articles/verification_simulation.md):
+- [Group sequential simulation with completers
+  analysis](https://keaven.github.io/gsDesignNB/articles/completers-interim-example.md):
+- [Group sequential design and
+  simulation](https://keaven.github.io/gsDesignNB/articles/group-sequential-simulation.md):
+- [Sample size calculation for negative binomial
+  outcomes](https://keaven.github.io/gsDesignNB/articles/sample-size-nbinom.md):
+- [Seasonal event
+  simulation](https://keaven.github.io/gsDesignNB/articles/seasonal-simulation.md):
+- [Simulation of recurrent
+  events](https://keaven.github.io/gsDesignNB/articles/simulation-example.md):
+- [Verification of sample size calculation via
+  simulation](https://keaven.github.io/gsDesignNB/articles/verification-simulation.md):

@@ -1,4 +1,4 @@
-# Cut Simulated Trial Data at a Calendar Date
+# Cut simulated trial data at a calendar date
 
 Censors follow-up at a specified calendar time and aggregates events per
 subject. Returns one row per subject randomized before the cut date,

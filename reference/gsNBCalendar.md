@@ -1,8 +1,8 @@
-# Group Sequential Design for Negative Binomial Outcomes
+# Group sequential design for negative binomial outcomes
 
 Creates a group sequential design for negative binomial outcomes based
 on sample size calculations from
-[`sample_size_nbinom`](https://keaven.github.io/gsDesignNB/reference/sample_size_nbinom.md).
+[`sample_size_nbinom()`](https://keaven.github.io/gsDesignNB/reference/sample_size_nbinom.md).
 
 ## Usage
 
@@ -33,7 +33,7 @@ gsNBCalendar(
 - x:
 
   An object of class `sample_size_nbinom_result` from
-  [`sample_size_nbinom`](https://keaven.github.io/gsDesignNB/reference/sample_size_nbinom.md).
+  [`sample_size_nbinom()`](https://keaven.github.io/gsDesignNB/reference/sample_size_nbinom.md).
 
 - k:
 
@@ -42,7 +42,7 @@ gsNBCalendar(
 - test.type:
 
   Test type as in
-  [`gsDesign`](https://keaven.github.io/gsDesign/reference/gsDesign.html):
+  [`gsDesign::gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.html):
 
   1
 
@@ -133,7 +133,7 @@ gsNBCalendar(
   Optional vector of calendar times for each analysis. If provided, must
   have length k. These times are stored in the `T` element and displayed
   by
-  [`gsBoundSummary`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.html).
+  [`gsDesign::gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.html).
 
 ## Value
 
@@ -173,6 +173,8 @@ nb_ss <- sample_size_nbinom(
 )
 
 # Then create a group sequential design with analysis times
-gs_design <- gsNBCalendar(nb_ss, k = 3, test.type = 4,
-                         analysis_times = c(10, 18, 24))
+gs_design <- gsNBCalendar(nb_ss,
+  k = 3, test.type = 4,
+  analysis_times = c(10, 18, 24)
+)
 ```

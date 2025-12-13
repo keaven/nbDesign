@@ -1,12 +1,12 @@
 # Package index
 
-## Sample Size Calculation
+## Sample size calculation
 
 Functions for calculating fixed sample sizes for negative binomial
 outcomes.
 
 - [`sample_size_nbinom()`](https://keaven.github.io/gsDesignNB/reference/sample_size_nbinom.md)
-  : Sample Size Calculation for Negative Binomial Distribution
+  : Sample size calculation for negative binomial distribution
 - [`print(`*`<sample_size_nbinom_result>`*`)`](https://keaven.github.io/gsDesignNB/reference/print.sample_size_nbinom_result.md)
   : Print Method for sample_size_nbinom_result Objects
 - [`summary(`*`<sample_size_nbinom_result>`*`)`](https://keaven.github.io/gsDesignNB/reference/summary.sample_size_nbinom_result.md)
@@ -14,12 +14,12 @@ outcomes.
 - [`print(`*`<sample_size_nbinom_summary>`*`)`](https://keaven.github.io/gsDesignNB/reference/print.sample_size_nbinom_summary.md)
   : Print Method for sample_size_nbinom_summary Objects
 
-## Group Sequential Design
+## Group sequential design
 
 Functions for extending fixed designs to group sequential designs.
 
 - [`gsNBCalendar()`](https://keaven.github.io/gsDesignNB/reference/gsNBCalendar.md)
-  : Group Sequential Design for Negative Binomial Outcomes
+  : Group sequential design for negative binomial outcomes
 - [`toInteger()`](https://keaven.github.io/gsDesignNB/reference/toInteger.md)
   : Convert Group Sequential Design to Integer Sample Sizes
 - [`summary(`*`<gsNB>`*`)`](https://keaven.github.io/gsDesignNB/reference/summary.gsNB.md)
@@ -32,9 +32,9 @@ Functions for extending fixed designs to group sequential designs.
 Tools for simulating trial data.
 
 - [`nb_sim()`](https://keaven.github.io/gsDesignNB/reference/nb_sim.md)
-  : Simulate Recurrent Events with Fixed Follow-up
+  : Simulate recurrent events with fixed follow-up
 - [`nb_sim_seasonal()`](https://keaven.github.io/gsDesignNB/reference/nb_sim_seasonal.md)
-  : Simulate Recurrent Events with Seasonal Rates
+  : Simulate recurrent events with seasonal rates
 
 ## Analysis
 
@@ -42,14 +42,14 @@ Functions for analyzing trial data, including blinded sample size
 re-estimation and interim analysis.
 
 - [`blinded_ssr()`](https://keaven.github.io/gsDesignNB/reference/blinded_ssr.md)
-  : Blinded Sample Size Re-estimation for Recurrent Events
+  : Blinded sample size re-estimation for recurrent events
 - [`calculate_blinded_info()`](https://keaven.github.io/gsDesignNB/reference/calculate_blinded_info.md)
-  : Calculate Blinded Statistical Information
+  : Calculate blinded statistical information
 - [`mutze_test()`](https://keaven.github.io/gsDesignNB/reference/mutze_test.md)
-  : Wald test for treatment effect using Negative Binomial model (Mütze
+  : Wald test for treatment effect using negative binomial model (Mütze
   et al.)
 - [`cut_data_by_date()`](https://keaven.github.io/gsDesignNB/reference/cut_data_by_date.md)
-  : Cut Simulated Trial Data at a Calendar Date
+  : Cut simulated trial data at a calendar date
 - [`cut_completers()`](https://keaven.github.io/gsDesignNB/reference/cut_completers.md)
   : Cut data for completers analysis
 - [`cut_date_for_completers()`](https://keaven.github.io/gsDesignNB/reference/cut_date_for_completers.md)
@@ -59,7 +59,7 @@ re-estimation and interim analysis.
 - [`get_analysis_date()`](https://keaven.github.io/gsDesignNB/reference/get_analysis_date.md)
   : Find calendar date for target event count
 
-## gsDesign Re-exports
+## gsDesign re-exports
 
 Spending functions and utilities re-exported from the gsDesign package
 for convenience.

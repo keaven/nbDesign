@@ -1,4 +1,4 @@
-# Calculate Blinded Statistical Information
+# Calculate blinded statistical information
 
 Estimates the blinded dispersion and event rate from aggregated interim
 data and calculates the observed statistical information for the log
