@@ -103,51 +103,15 @@ run_one_sim <- function(i) {
       cut_dt_dt <- data.table::as.data.table(cut_dt)
 
       # Analyze
-      # We need to analyze using the gap-adjusted method if possible, or just standard NB?
       # The sample size formula assumes we analyze the counts.
-      # If we use standard NB analysis on counts, does it account for gap?
-      # Usually, gap reduces exposure.
-      # We should calculate exposure at risk.
+      # cut_data_by_date now returns aggregated data (one row per subject)
+      # with 'tte' already adjusted for event gaps (exposure at risk).
 
-      # Calculate exposure at risk for each subject
-      # Total follow-up time minus gap time for events
-      # But cut_data_by_date might handle this?
-      # cut_data_by_date returns the cut data.
-      # We need to aggregate.
-
-      # Aggregate by subject
-      # For each subject, count events and calculate exposure.
-      # Exposure = (End - Start) - (Events * Gap)?
-      # Or does cut_data_by_date return intervals?
-      # nb_sim returns rows per event.
-
-      # Let's look at cut_data_by_date output structure.
-      # It returns same structure as nb_sim.
-
-      # We need to calculate total exposure at risk.
-      # For a subject with k events:
-      # T_total = min(T_cens, T_death, T_admin)
-      # T_risk = T_total - k * gap (approx, or exact depending on when gap falls)
-      # Actually, if gap is dead time, we just subtract it.
-
-      # Let's assume simple approximation: T_risk = T_total - (N_events * gap)
-      # But we must ensure T_risk >= 0.
-
-      # Better: Sum of inter-arrival times?
-      # No, we have TTE.
-
-      # Let's use the simple aggregation:
-      # Max tte per subject is the follow-up time.
-      # Number of events is sum(event).
-
-      analysis_dt <- cut_dt_dt[, .(
-        events = sum(event),
-        followup = max(tte),
-        treatment = unique(treatment)
-      ), by = id]
-
-      # Adjust exposure for gap
-      analysis_dt[, exposure := followup - events * event_gap]
+      analysis_dt <- cut_dt_dt
+      
+      # Rename tte to exposure for clarity in model formula
+      analysis_dt[, exposure := tte]
+      
       # Ensure non-negative (should be if simulation is correct)
       analysis_dt[exposure < 0, exposure := 0]
 
