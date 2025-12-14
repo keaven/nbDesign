@@ -29,7 +29,8 @@ approximately 200 subjects.
 - **Dispersion**: $k = 0.5$.
 - **Power**: 90%.
 - **Alpha**: 0.025 (one-sided).
-- **Dropout**: 10% per unit time ($\delta = 0.1$).
+- **Dropout**: 10% per year adjusted to monthly rate
+  ($\delta = 0.1/12$).
 - **Trial Duration**: 24 months.
 - **Max Follow-up**: 12 months.
 - **Event Gap**: 30 days (approx 0.082 years).
@@ -48,10 +49,10 @@ lambda2 <- 0.3
 dispersion <- 0.5
 power <- 0.9
 alpha <- 0.025
-dropout_rate <- 0.1
+dropout_rate <- 0.1 / 12
 max_followup <- 12
 trial_duration <- 24
-event_gap <- 30 / 365.25
+event_gap <- 20 / 30.42 # 20 days
 
 # Accrual targeting N ~ 200
 # (Pre-calculated rates)
@@ -77,21 +78,24 @@ print(design)
 #> 
 #> Method:          friede
 #> Sample size:     n1 = 99, n2 = 99, total = 198
-#> Expected events: 470.5 (n1: 267.9, n2: 202.6)
-#> Power: 48%, Alpha: 0.025 (1-sided)
+#> Expected events: 641.3 (n1: 358.1, n2: 283.3)
+#> Power: 60%, Alpha: 0.025 (1-sided)
 #> Rates: control = 0.4000, treatment = 0.3000 (RR = 0.7500)
-#> Dispersion: 0.5000, Avg exposure (calendar): 6.99
-#> Avg exposure (at-risk): n1 = 6.77, n2 = 6.82
-#> Event gap: 0.08
-#> Dropout rate: 0.1000
+#> Dispersion: 0.5000, Avg exposure (calendar): 11.42
+#> Avg exposure (at-risk): n1 = 9.04, n2 = 9.54
+#> Event gap: 0.66
+#> Dropout rate: 0.0083
 #> Accrual: 12.0, Trial duration: 24.0
 #> Max follow-up: 12.0
 ```
 
 ## Simulation results
 
-We simulated 10,000 trials using the parameters defined above. The
-simulation script is located in `data-raw/generate_simulation_data.R`.
+We simulated 3,600 trials using the parameters defined above. This
+number of simulations was chosen to achieve a standard error for the
+power estimate of approximately 0.005 when the true power is 90%
+($\sqrt{0.9 \times 0.1/3600} = 0.005$). The simulation script is located
+in `data-raw/generate_simulation_data.R`.
 
 ``` r
 # Load pre-computed simulation results
@@ -141,7 +145,7 @@ knitr::kable(comparison_exp, digits = 4, caption = "Comparison of Average Exposu
 
 | Metric           | Theoretical | Simulated | Difference | Rel_Diff_Pct |
 |:-----------------|------------:|----------:|-----------:|-------------:|
-| Average Exposure |      6.9881 |    6.9532 |    -0.0349 |      -0.4991 |
+| Average Exposure |     11.4195 |   11.3526 |     -0.067 |      -0.5863 |
 
 Comparison of Average Exposure
 
@@ -190,7 +194,7 @@ knitr::kable(comparison_var, digits = 5, caption = "Comparison of Variance")
 
 | Metric                | Theoretical | Empirical_Var | Avg_Estimated_Var |
 |:----------------------|------------:|--------------:|------------------:|
-| Variance of Estimator |     0.00786 |       0.01068 |           0.07629 |
+| Variance of Estimator |     0.01676 |       0.01569 |           0.01543 |
 
 Comparison of Variance
 
@@ -226,7 +230,7 @@ knitr::kable(comparison_pwr, digits = 4, caption = "Comparison of Power")
 
 | Metric | Theoretical | Simulated | Difference |
 |:-------|------------:|----------:|-----------:|
-| Power  |      0.9006 |    0.8712 |    -0.0294 |
+| Power  |      0.6034 |    0.5372 |    -0.0662 |
 
 Comparison of Power
 
@@ -235,7 +239,7 @@ check if the theoretical power falls within the simulation error bounds.
 
 ``` r
 binom.test(sum(results$p_value < design_ref$inputs$alpha, na.rm = TRUE), nrow(results))$conf.int
-#> [1] 0.8644763 0.8777067
+#> [1] 0.5207709 0.5536130
 #> attr(,"conf.level")
 #> [1] 0.95
 ```

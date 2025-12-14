@@ -106,8 +106,8 @@ approximately 200 subjects.</p>
 <li>
 <strong>Alpha</strong>: 0.025 (one-sided).</li>
 <li>
-<strong>Dropout</strong>: 10% per unit time
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">\delta = 0.1</annotation></semantics></math>).</li>
+<strong>Dropout</strong>: 10% per year adjusted to monthly rate
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>=</mo><mn>0.1</mn><mi>/</mi><mn>12</mn></mrow><annotation encoding="application/x-tex">\delta = 0.1 / 12</annotation></semantics></math>).</li>
 <li>
 <strong>Trial Duration</strong>: 24 months.</li>
 <li>
@@ -135,10 +135,10 @@ using <code>sample_size_nbinom</code>.</p>
 <span><span class="va">dispersion</span> <span class="op">&lt;-</span> <span class="fl">0.5</span></span>
 <span><span class="va">power</span> <span class="op">&lt;-</span> <span class="fl">0.9</span></span>
 <span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fl">0.025</span></span>
-<span><span class="va">dropout_rate</span> <span class="op">&lt;-</span> <span class="fl">0.1</span></span>
+<span><span class="va">dropout_rate</span> <span class="op">&lt;-</span> <span class="fl">0.1</span> <span class="op">/</span> <span class="fl">12</span></span>
 <span><span class="va">max_followup</span> <span class="op">&lt;-</span> <span class="fl">12</span></span>
 <span><span class="va">trial_duration</span> <span class="op">&lt;-</span> <span class="fl">24</span></span>
-<span><span class="va">event_gap</span> <span class="op">&lt;-</span> <span class="fl">30</span> <span class="op">/</span> <span class="fl">365.25</span></span>
+<span><span class="va">event_gap</span> <span class="op">&lt;-</span> <span class="fl">20</span> <span class="op">/</span> <span class="fl">30.42</span> <span class="co"># 20 days</span></span>
 <span></span>
 <span><span class="co"># Accrual targeting N ~ 200</span></span>
 <span><span class="co"># (Pre-calculated rates)</span></span>
@@ -164,13 +164,13 @@ using <code>sample_size_nbinom</code>.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Method:          friede</span></span>
 <span><span class="co">#&gt; Sample size:     n1 = 99, n2 = 99, total = 198</span></span>
-<span><span class="co">#&gt; Expected events: 470.5 (n1: 267.9, n2: 202.6)</span></span>
-<span><span class="co">#&gt; Power: 48%, Alpha: 0.025 (1-sided)</span></span>
+<span><span class="co">#&gt; Expected events: 641.3 (n1: 358.1, n2: 283.3)</span></span>
+<span><span class="co">#&gt; Power: 60%, Alpha: 0.025 (1-sided)</span></span>
 <span><span class="co">#&gt; Rates: control = 0.4000, treatment = 0.3000 (RR = 0.7500)</span></span>
-<span><span class="co">#&gt; Dispersion: 0.5000, Avg exposure (calendar): 6.99</span></span>
-<span><span class="co">#&gt; Avg exposure (at-risk): n1 = 6.77, n2 = 6.82</span></span>
-<span><span class="co">#&gt; Event gap: 0.08</span></span>
-<span><span class="co">#&gt; Dropout rate: 0.1000</span></span>
+<span><span class="co">#&gt; Dispersion: 0.5000, Avg exposure (calendar): 11.42</span></span>
+<span><span class="co">#&gt; Avg exposure (at-risk): n1 = 9.04, n2 = 9.54</span></span>
+<span><span class="co">#&gt; Event gap: 0.66</span></span>
+<span><span class="co">#&gt; Dropout rate: 0.0083</span></span>
 <span><span class="co">#&gt; Accrual: 12.0, Trial duration: 24.0</span></span>
 <span><span class="co">#&gt; Max follow-up: 12.0</span></span></code></pre></div>
 </div>
@@ -178,8 +178,11 @@ using <code>sample_size_nbinom</code>.</p>
 <div class="section level2">
 <h2 id="simulation-results">Simulation results<a class="anchor" aria-label="anchor" href="#simulation-results"></a>
 </h2>
-<p>We simulated 10,000 trials using the parameters defined above. The
-simulation script is located in
+<p>We simulated 3,600 trials using the parameters defined above. This
+number of simulations was chosen to achieve a standard error for the
+power estimate of approximately 0.005 when the true power is 90%
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msqrt><mrow><mn>0.9</mn><mo>×</mo><mn>0.1</mn><mi>/</mi><mn>3600</mn></mrow></msqrt><mo>=</mo><mn>0.005</mn></mrow><annotation encoding="application/x-tex">\sqrt{0.9 \times 0.1 / 3600} = 0.005</annotation></semantics></math>).
+The simulation script is located in
 <code>data-raw/generate_simulation_data.R</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load pre-computed simulation results</span></span>
@@ -234,10 +237,10 @@ the simulation.</p>
 </tr></thead>
 <tbody><tr class="odd">
 <td align="left">Average Exposure</td>
-<td align="right">6.9881</td>
-<td align="right">6.9532</td>
-<td align="right">-0.0349</td>
-<td align="right">-0.4991</td>
+<td align="right">11.4195</td>
+<td align="right">11.3526</td>
+<td align="right">-0.067</td>
+<td align="right">-0.5863</td>
 </tr></tbody>
 </table>
 <p>The theoretical exposure should closely match the simulated average
@@ -296,9 +299,9 @@ simulation.</p>
 </tr></thead>
 <tbody><tr class="odd">
 <td align="left">Variance of Estimator</td>
-<td align="right">0.00786</td>
-<td align="right">0.01068</td>
-<td align="right">0.07629</td>
+<td align="right">0.01676</td>
+<td align="right">0.01569</td>
+<td align="right">0.01543</td>
 </tr></tbody>
 </table>
 <ul>
@@ -344,9 +347,9 @@ anticipates the variability of the test statistic.</p>
 </tr></thead>
 <tbody><tr class="odd">
 <td align="left">Power</td>
-<td align="right">0.9006</td>
-<td align="right">0.8712</td>
-<td align="right">-0.0294</td>
+<td align="right">0.6034</td>
+<td align="right">0.5372</td>
+<td align="right">-0.0662</td>
 </tr></tbody>
 </table>
 <p>A 95% confidence interval for the empirical power can be calculated
@@ -354,7 +357,7 @@ to check if the theoretical power falls within the simulation error
 bounds.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/binom.test.html" class="external-link">binom.test</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">results</span><span class="op">$</span><span class="va">p_value</span> <span class="op">&lt;</span> <span class="va">design_ref</span><span class="op">$</span><span class="va">inputs</span><span class="op">$</span><span class="va">alpha</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">conf.int</span></span>
-<span><span class="co">#&gt; [1] 0.8644763 0.8777067</span></span>
+<span><span class="co">#&gt; [1] 0.5207709 0.5536130</span></span>
 <span><span class="co">#&gt; attr(,"conf.level")</span></span>
 <span><span class="co">#&gt; [1] 0.95</span></span></code></pre></div>
 </div>

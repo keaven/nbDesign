@@ -118,7 +118,9 @@ simulate the design to confirm design operating characteristicsusing
 <li>
 <strong>Power:</strong> 90% (beta = 0.1)</li>
 <li>
-<strong>Alpha:</strong> 0.025 (one-sided)</li>
+<strong>Alpha:</strong> 0.025 (one-sided) # <strong>event
+gap:</strong> 20 days # <strong>dropout rate:</strong> 5% at 1 year #
+<strong>max followup:</strong> 12 months</li>
 </ul>
 <div class="section level3">
 <h3 id="sample-size-calculation">Sample size calculation<a class="anchor" aria-label="anchor" href="#sample-size-calculation"></a>
@@ -140,7 +142,7 @@ simulate the design to confirm design operating characteristicsusing
 <span>  accrual_duration <span class="op">=</span> <span class="fl">12</span>, <span class="co"># 12 months enrollment</span></span>
 <span>  trial_duration <span class="op">=</span> <span class="fl">24</span>, <span class="co"># 24 months trial</span></span>
 <span>  max_followup <span class="op">=</span> <span class="fl">12</span>, <span class="co"># 12 months of follow-up per patient</span></span>
-<span>  dropout_rate <span class="op">=</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">0.95</span><span class="op">)</span>, <span class="co"># 5% dropout rate at 1 year</span></span>
+<span>  dropout_rate <span class="op">=</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">0.95</span><span class="op">)</span> <span class="op">/</span> <span class="fl">12</span>, <span class="co"># 5% dropout rate at 1 year</span></span>
 <span>  event_gap <span class="op">=</span> <span class="va">event_gap_val</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"zhu"</span> <span class="co"># Zhu and Lakkis sample size method</span></span>
 <span><span class="op">)</span></span>
@@ -153,14 +155,14 @@ simulate the design to confirm design operating characteristicsusing
 <span><span class="co">#&gt; ==========================================</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Method:          zhu</span></span>
-<span><span class="co">#&gt; Sample size:     n1 = 229, n2 = 229, total = 458</span></span>
-<span><span class="co">#&gt; Expected events: 399.2 (n1: 237.0, n2: 162.1)</span></span>
+<span><span class="co">#&gt; Sample size:     n1 = 182, n2 = 182, total = 364</span></span>
+<span><span class="co">#&gt; Expected events: 414.1 (n1: 245.9, n2: 168.2)</span></span>
 <span><span class="co">#&gt; Power: 90%, Alpha: 0.025 (1-sided)</span></span>
 <span><span class="co">#&gt; Rates: control = 0.1250, treatment = 0.0833 (RR = 0.6667)</span></span>
-<span><span class="co">#&gt; Dispersion: 0.5000, Avg exposure (calendar): 8.96</span></span>
-<span><span class="co">#&gt; Avg exposure (at-risk): n1 = 8.28, n2 = 8.50</span></span>
+<span><span class="co">#&gt; Dispersion: 0.5000, Avg exposure (calendar): 11.70</span></span>
+<span><span class="co">#&gt; Avg exposure (at-risk): n1 = 10.81, n2 = 11.09</span></span>
 <span><span class="co">#&gt; Event gap: 0.66</span></span>
-<span><span class="co">#&gt; Dropout rate: 0.0513</span></span>
+<span><span class="co">#&gt; Dropout rate: 0.0043</span></span>
 <span><span class="co">#&gt; Accrual: 12.0, Trial duration: 24.0</span></span>
 <span><span class="co">#&gt; Max follow-up: 12.0</span></span></code></pre></div>
 </div>
@@ -171,8 +173,8 @@ simulate the design to confirm design operating characteristicsusing
 10, 18 and 24 months. Note that the final analysis time must be the same
 as for the fixed design. The relative enrollment rates will be increased
 to increase the sample size as with standard group sequential design
-theory. We specify <code>usTime = c(0.1, 0.18, 1)</code> which along
-with the <code><a href="https://keaven.github.io/gsDesign/reference/sfLinear.html" class="external-link">sfLinear()</a></code> spending function will spend 10%, 18%
+theory. We specify <code>usTime = c(0.1, 0.14, 1)</code> which along
+with the <code><a href="https://keaven.github.io/gsDesign/reference/sfLinear.html" class="external-link">sfLinear()</a></code> spending function will spend 10%, 14%
 and 100% of the cumulative
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
 at the 3 planned analyses regardless of the observed statistical
@@ -190,7 +192,7 @@ information at each analysis.</p>
 <span>  sfupar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">.5</span><span class="op">)</span>, <span class="co"># Identity function</span></span>
 <span>  sfl <span class="op">=</span> <span class="va">sfHSD</span>, <span class="co"># HSD spending for lower bound</span></span>
 <span>  sflpar <span class="op">=</span> <span class="op">-</span><span class="fl">8</span>, <span class="co"># Conservative futility bound</span></span>
-<span>  usTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">.18</span>, <span class="fl">1</span><span class="op">)</span>, <span class="co"># Upper spending timing</span></span>
+<span>  usTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">.14</span>, <span class="fl">1</span><span class="op">)</span>, <span class="co"># Upper spending timing</span></span>
 <span>  lsTime <span class="op">=</span> <span class="cn">NULL</span>, <span class="co"># Spending based on information</span></span>
 <span>  analysis_times <span class="op">=</span> <span class="va">analysis_times</span> <span class="co"># Calendar times in months</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">gsDesignNB</span><span class="fu">::</span><span class="fu"><a href="../reference/toInteger.html">toInteger</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># Round to integer sample size</span></span></code></pre></div>
@@ -198,11 +200,12 @@ information at each analysis.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">gs_nb</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Asymmetric two-sided with non-binding futility bound group sequential design</span></span>
-<span><span class="co">#&gt; for negative binomial outcomes, 3 analyses, total sample size 466.0, 90 percent</span></span>
+<span><span class="co">#&gt; for negative binomial outcomes, 3 analyses, total sample size 370.0, 90 percent</span></span>
 <span><span class="co">#&gt; power, 2.5 percent (1-sided) Type I error. Control rate 0.1250, treatment rate</span></span>
 <span><span class="co">#&gt; 0.0833, risk ratio 0.6667, dispersion 0.5000. Accrual duration 12.0, trial</span></span>
-<span><span class="co">#&gt; duration 24.0, max follow-up 12.0, event gap 0.66, dropout rate 0.0513, average</span></span>
-<span><span class="co">#&gt; exposure (calendar) 8.96, (at-risk n1=8.28, n2=8.50). Randomization ratio 1:1.</span></span></code></pre></div>
+<span><span class="co">#&gt; duration 24.0, max follow-up 12.0, event gap 0.66, dropout rate 0.0043, average</span></span>
+<span><span class="co">#&gt; exposure (calendar) 11.70, (at-risk n1=10.81, n2=11.09). Randomization ratio</span></span>
+<span><span class="co">#&gt; 1:1.</span></span></code></pre></div>
 <p>Tabular summary:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gs_nb</span> <span class="op">|&gt;</span></span>
@@ -677,7 +680,7 @@ information at each analysis.</p>
 <td colspan="4" class="gt_heading gt_title gt_font_normal" style>Group Sequential Design Bounds for Negative Binomial Outcome</td>
     </tr>
 <tr class="gt_heading">
-<td colspan="4" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>N = 466, Expected events = 399.2</td>
+<td colspan="4" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>N = 370, Expected events = 414.1</td>
     </tr>
 <tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Analysis">Analysis</th>
@@ -688,82 +691,82 @@ information at each analysis.</p>
 </thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="Analysis" class="gt_row gt_left">IA 1: 39%</td>
+<td headers="Analysis" class="gt_row gt_left">IA 1: 35%</td>
 <td headers="Value" class="gt_row gt_left">Z</td>
-<td headers="Efficacy" class="gt_row gt_right">2.3339</td>
-<td headers="Futility" class="gt_row gt_right">-0.8772</td>
+<td headers="Efficacy" class="gt_row gt_right">2.3767</td>
+<td headers="Futility" class="gt_row gt_right">-1.1032</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Information: 32.24</td>
+<td headers="Analysis" class="gt_row gt_left">Information: 28.96</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0098</td>
-<td headers="Futility" class="gt_row gt_right">0.8098</td>
+<td headers="Efficacy" class="gt_row gt_right">0.0087</td>
+<td headers="Futility" class="gt_row gt_right">0.8650</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left">Month: 10</td>
 <td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.6629</td>
-<td headers="Futility" class="gt_row gt_right">1.1671</td>
+<td headers="Efficacy" class="gt_row gt_right">0.6425</td>
+<td headers="Futility" class="gt_row gt_right">1.2279</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">P(Cross) if RR=1</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0098</td>
-<td headers="Futility" class="gt_row gt_right">0.1902</td>
+<td headers="Efficacy" class="gt_row gt_right">0.0087</td>
+<td headers="Futility" class="gt_row gt_right">0.1350</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">P(Cross) if RR=0.67</td>
-<td headers="Efficacy" class="gt_row gt_right">0.4872</td>
-<td headers="Futility" class="gt_row gt_right">0.0007</td>
+<td headers="Efficacy" class="gt_row gt_right">0.4215</td>
+<td headers="Futility" class="gt_row gt_right">0.0005</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">IA 2: 83%</td>
+<td headers="Analysis" class="gt_row gt_left">IA 2: 79%</td>
 <td headers="Value" class="gt_row gt_left">Z</td>
-<td headers="Efficacy" class="gt_row gt_right">2.1979</td>
-<td headers="Futility" class="gt_row gt_right">1.3888</td>
+<td headers="Efficacy" class="gt_row gt_right">2.2080</td>
+<td headers="Futility" class="gt_row gt_right">1.1914</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Information: 68.05</td>
+<td headers="Analysis" class="gt_row gt_left">Information: 65.47</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0140</td>
-<td headers="Futility" class="gt_row gt_right">0.0824</td>
+<td headers="Efficacy" class="gt_row gt_right">0.0136</td>
+<td headers="Futility" class="gt_row gt_right">0.1167</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left">Month: 18</td>
 <td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.7661</td>
-<td headers="Futility" class="gt_row gt_right">0.8450</td>
+<td headers="Efficacy" class="gt_row gt_right">0.7609</td>
+<td headers="Futility" class="gt_row gt_right">0.8629</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">P(Cross) if RR=1</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0207</td>
-<td headers="Futility" class="gt_row gt_right">0.9150</td>
+<td headers="Efficacy" class="gt_row gt_right">0.0197</td>
+<td headers="Futility" class="gt_row gt_right">0.8816</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">P(Cross) if RR=0.67</td>
-<td headers="Efficacy" class="gt_row gt_right">0.8825</td>
-<td headers="Futility" class="gt_row gt_right">0.0251</td>
+<td headers="Efficacy" class="gt_row gt_right">0.8654</td>
+<td headers="Futility" class="gt_row gt_right">0.0186</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left">Final</td>
 <td headers="Value" class="gt_row gt_left">Z</td>
-<td headers="Efficacy" class="gt_row gt_right">2.2508</td>
-<td headers="Futility" class="gt_row gt_right">2.2508</td>
+<td headers="Efficacy" class="gt_row gt_right">2.2379</td>
+<td headers="Futility" class="gt_row gt_right">2.2379</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Information: 82.25</td>
+<td headers="Analysis" class="gt_row gt_left">Information: 82.89</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0122</td>
-<td headers="Futility" class="gt_row gt_right">0.0122</td>
+<td headers="Efficacy" class="gt_row gt_right">0.0126</td>
+<td headers="Futility" class="gt_row gt_right">0.0126</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left">Month: 24</td>
 <td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.7802</td>
-<td headers="Futility" class="gt_row gt_right">0.7802</td>
+<td headers="Efficacy" class="gt_row gt_right">0.7818</td>
+<td headers="Futility" class="gt_row gt_right">0.7818</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
@@ -774,8 +777,8 @@ information at each analysis.</p>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">P(Cross) if RR=0.67</td>
-<td headers="Efficacy" class="gt_row gt_right">0.9354</td>
-<td headers="Futility" class="gt_row gt_right">0.0646</td>
+<td headers="Efficacy" class="gt_row gt_right">0.9372</td>
+<td headers="Futility" class="gt_row gt_right">0.0628</td>
 </tr>
 </tbody>
 </table>
@@ -1048,23 +1051,23 @@ sequential design assuming design parameters above are correct.</p>
 <span>    sd_z <span class="op">=</span> <span class="st">"SD Z"</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span>decimals <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<div id="lwhsqnwoky" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#lwhsqnwoky table {
+<div id="havvzvxvem" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#havvzvxvem table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#lwhsqnwoky thead, #lwhsqnwoky tbody, #lwhsqnwoky tfoot, #lwhsqnwoky tr, #lwhsqnwoky td, #lwhsqnwoky th {
+#havvzvxvem thead, #havvzvxvem tbody, #havvzvxvem tfoot, #havvzvxvem tr, #havvzvxvem td, #havvzvxvem th {
   border-style: none;
 }
 
-#lwhsqnwoky p {
+#havvzvxvem p {
   margin: 0;
   padding: 0;
 }
 
-#lwhsqnwoky .gt_table {
+#havvzvxvem .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1090,12 +1093,12 @@ sequential design assuming design parameters above are correct.</p>
   border-left-color: #D3D3D3;
 }
 
-#lwhsqnwoky .gt_caption {
+#havvzvxvem .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#lwhsqnwoky .gt_title {
+#havvzvxvem .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1107,7 +1110,7 @@ sequential design assuming design parameters above are correct.</p>
   border-bottom-width: 0;
 }
 
-#lwhsqnwoky .gt_subtitle {
+#havvzvxvem .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1119,7 +1122,7 @@ sequential design assuming design parameters above are correct.</p>
   border-top-width: 0;
 }
 
-#lwhsqnwoky .gt_heading {
+#havvzvxvem .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1131,13 +1134,13 @@ sequential design assuming design parameters above are correct.</p>
   border-right-color: #D3D3D3;
 }
 
-#lwhsqnwoky .gt_bottom_border {
+#havvzvxvem .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#lwhsqnwoky .gt_col_headings {
+#havvzvxvem .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1152,7 +1155,7 @@ sequential design assuming design parameters above are correct.</p>
   border-right-color: #D3D3D3;
 }
 
-#lwhsqnwoky .gt_col_heading {
+#havvzvxvem .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1172,7 +1175,7 @@ sequential design assuming design parameters above are correct.</p>
   overflow-x: hidden;
 }
 
-#lwhsqnwoky .gt_column_spanner_outer {
+#havvzvxvem .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1184,15 +1187,15 @@ sequential design assuming design parameters above are correct.</p>
   padding-right: 4px;
 }
 
-#lwhsqnwoky .gt_column_spanner_outer:first-child {
+#havvzvxvem .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#lwhsqnwoky .gt_column_spanner_outer:last-child {
+#havvzvxvem .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#lwhsqnwoky .gt_column_spanner {
+#havvzvxvem .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1204,11 +1207,11 @@ sequential design assuming design parameters above are correct.</p>
   width: 100%;
 }
 
-#lwhsqnwoky .gt_spanner_row {
+#havvzvxvem .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#lwhsqnwoky .gt_group_heading {
+#havvzvxvem .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1234,7 +1237,7 @@ sequential design assuming design parameters above are correct.</p>
   text-align: left;
 }
 
-#lwhsqnwoky .gt_empty_group_heading {
+#havvzvxvem .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1249,15 +1252,15 @@ sequential design assuming design parameters above are correct.</p>
   vertical-align: middle;
 }
 
-#lwhsqnwoky .gt_from_md > :first-child {
+#havvzvxvem .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#lwhsqnwoky .gt_from_md > :last-child {
+#havvzvxvem .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#lwhsqnwoky .gt_row {
+#havvzvxvem .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1276,7 +1279,7 @@ sequential design assuming design parameters above are correct.</p>
   overflow-x: hidden;
 }
 
-#lwhsqnwoky .gt_stub {
+#havvzvxvem .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1289,7 +1292,7 @@ sequential design assuming design parameters above are correct.</p>
   padding-right: 5px;
 }
 
-#lwhsqnwoky .gt_stub_row_group {
+#havvzvxvem .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1303,15 +1306,15 @@ sequential design assuming design parameters above are correct.</p>
   vertical-align: top;
 }
 
-#lwhsqnwoky .gt_row_group_first td {
+#havvzvxvem .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#lwhsqnwoky .gt_row_group_first th {
+#havvzvxvem .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#lwhsqnwoky .gt_summary_row {
+#havvzvxvem .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1321,16 +1324,16 @@ sequential design assuming design parameters above are correct.</p>
   padding-right: 5px;
 }
 
-#lwhsqnwoky .gt_first_summary_row {
+#havvzvxvem .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#lwhsqnwoky .gt_first_summary_row.thick {
+#havvzvxvem .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#lwhsqnwoky .gt_last_summary_row {
+#havvzvxvem .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1340,7 +1343,7 @@ sequential design assuming design parameters above are correct.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#lwhsqnwoky .gt_grand_summary_row {
+#havvzvxvem .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1350,7 +1353,7 @@ sequential design assuming design parameters above are correct.</p>
   padding-right: 5px;
 }
 
-#lwhsqnwoky .gt_first_grand_summary_row {
+#havvzvxvem .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1360,7 +1363,7 @@ sequential design assuming design parameters above are correct.</p>
   border-top-color: #D3D3D3;
 }
 
-#lwhsqnwoky .gt_last_grand_summary_row_top {
+#havvzvxvem .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1370,11 +1373,11 @@ sequential design assuming design parameters above are correct.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#lwhsqnwoky .gt_striped {
+#havvzvxvem .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#lwhsqnwoky .gt_table_body {
+#havvzvxvem .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1383,7 +1386,7 @@ sequential design assuming design parameters above are correct.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#lwhsqnwoky .gt_footnotes {
+#havvzvxvem .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1397,7 +1400,7 @@ sequential design assuming design parameters above are correct.</p>
   border-right-color: #D3D3D3;
 }
 
-#lwhsqnwoky .gt_footnote {
+#havvzvxvem .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1406,7 +1409,7 @@ sequential design assuming design parameters above are correct.</p>
   padding-right: 5px;
 }
 
-#lwhsqnwoky .gt_sourcenotes {
+#havvzvxvem .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1420,7 +1423,7 @@ sequential design assuming design parameters above are correct.</p>
   border-right-color: #D3D3D3;
 }
 
-#lwhsqnwoky .gt_sourcenote {
+#havvzvxvem .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1428,72 +1431,72 @@ sequential design assuming design parameters above are correct.</p>
   padding-right: 5px;
 }
 
-#lwhsqnwoky .gt_left {
+#havvzvxvem .gt_left {
   text-align: left;
 }
 
-#lwhsqnwoky .gt_center {
+#havvzvxvem .gt_center {
   text-align: center;
 }
 
-#lwhsqnwoky .gt_right {
+#havvzvxvem .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#lwhsqnwoky .gt_font_normal {
+#havvzvxvem .gt_font_normal {
   font-weight: normal;
 }
 
-#lwhsqnwoky .gt_font_bold {
+#havvzvxvem .gt_font_bold {
   font-weight: bold;
 }
 
-#lwhsqnwoky .gt_font_italic {
+#havvzvxvem .gt_font_italic {
   font-style: italic;
 }
 
-#lwhsqnwoky .gt_super {
+#havvzvxvem .gt_super {
   font-size: 65%;
 }
 
-#lwhsqnwoky .gt_footnote_marks {
+#havvzvxvem .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#lwhsqnwoky .gt_asterisk {
+#havvzvxvem .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#lwhsqnwoky .gt_indent_1 {
+#havvzvxvem .gt_indent_1 {
   text-indent: 5px;
 }
 
-#lwhsqnwoky .gt_indent_2 {
+#havvzvxvem .gt_indent_2 {
   text-indent: 10px;
 }
 
-#lwhsqnwoky .gt_indent_3 {
+#havvzvxvem .gt_indent_3 {
   text-indent: 15px;
 }
 
-#lwhsqnwoky .gt_indent_4 {
+#havvzvxvem .gt_indent_4 {
   text-indent: 20px;
 }
 
-#lwhsqnwoky .gt_indent_5 {
+#havvzvxvem .gt_indent_5 {
   text-indent: 25px;
 }
 
-#lwhsqnwoky .katex-display {
+#havvzvxvem .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#lwhsqnwoky div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#havvzvxvem div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1519,38 +1522,38 @@ sequential design assuming design parameters above are correct.</p>
 <tr>
 <td headers="analysis" class="gt_row gt_right">1.00</td>
 <td headers="analysis_time" class="gt_row gt_right">10.00</td>
-<td headers="mean_enrolled" class="gt_row gt_right">382.34</td>
-<td headers="mean_events_total" class="gt_row gt_right">154.04</td>
-<td headers="mean_events_ctrl" class="gt_row gt_right">93.06</td>
-<td headers="mean_events_exp" class="gt_row gt_right">60.98</td>
-<td headers="mean_exposure_ctrl" class="gt_row gt_right">749.50</td>
-<td headers="mean_exposure_exp" class="gt_row gt_right">763.70</td>
-<td headers="mean_z" class="gt_row gt_right">−2.44</td>
-<td headers="sd_z" class="gt_row gt_right">0.99</td>
+<td headers="mean_enrolled" class="gt_row gt_right">303.06</td>
+<td headers="mean_events_total" class="gt_row gt_right">124.36</td>
+<td headers="mean_events_ctrl" class="gt_row gt_right">74.52</td>
+<td headers="mean_events_exp" class="gt_row gt_right">49.84</td>
+<td headers="mean_exposure_ctrl" class="gt_row gt_right">594.85</td>
+<td headers="mean_exposure_exp" class="gt_row gt_right">612.27</td>
+<td headers="mean_z" class="gt_row gt_right">−2.09</td>
+<td headers="sd_z" class="gt_row gt_right">1.08</td>
 </tr>
 <tr>
 <td headers="analysis" class="gt_row gt_right">2.00</td>
 <td headers="analysis_time" class="gt_row gt_right">18.00</td>
-<td headers="mean_enrolled" class="gt_row gt_right">458.00</td>
-<td headers="mean_events_total" class="gt_row gt_right">345.81</td>
-<td headers="mean_events_ctrl" class="gt_row gt_right">202.69</td>
-<td headers="mean_events_exp" class="gt_row gt_right">143.11</td>
-<td headers="mean_exposure_ctrl" class="gt_row gt_right">1,700.85</td>
-<td headers="mean_exposure_exp" class="gt_row gt_right">1,739.42</td>
-<td headers="mean_z" class="gt_row gt_right">−2.90</td>
-<td headers="sd_z" class="gt_row gt_right">0.74</td>
+<td headers="mean_enrolled" class="gt_row gt_right">364.00</td>
+<td headers="mean_events_total" class="gt_row gt_right">284.73</td>
+<td headers="mean_events_ctrl" class="gt_row gt_right">167.00</td>
+<td headers="mean_events_exp" class="gt_row gt_right">117.73</td>
+<td headers="mean_exposure_ctrl" class="gt_row gt_right">1,358.08</td>
+<td headers="mean_exposure_exp" class="gt_row gt_right">1,389.36</td>
+<td headers="mean_z" class="gt_row gt_right">−2.68</td>
+<td headers="sd_z" class="gt_row gt_right">1.01</td>
 </tr>
 <tr>
 <td headers="analysis" class="gt_row gt_right">3.00</td>
 <td headers="analysis_time" class="gt_row gt_right">24.00</td>
-<td headers="mean_enrolled" class="gt_row gt_right">458.00</td>
-<td headers="mean_events_total" class="gt_row gt_right">382.31</td>
-<td headers="mean_events_ctrl" class="gt_row gt_right">216.56</td>
-<td headers="mean_events_exp" class="gt_row gt_right">165.75</td>
-<td headers="mean_exposure_ctrl" class="gt_row gt_right">1,909.02</td>
-<td headers="mean_exposure_exp" class="gt_row gt_right">1,928.08</td>
-<td headers="mean_z" class="gt_row gt_right">−2.26</td>
-<td headers="sd_z" class="gt_row gt_right">0.38</td>
+<td headers="mean_enrolled" class="gt_row gt_right">364.00</td>
+<td headers="mean_events_total" class="gt_row gt_right">315.37</td>
+<td headers="mean_events_ctrl" class="gt_row gt_right">178.53</td>
+<td headers="mean_events_exp" class="gt_row gt_right">136.84</td>
+<td headers="mean_exposure_ctrl" class="gt_row gt_right">1,515.64</td>
+<td headers="mean_exposure_exp" class="gt_row gt_right">1,555.03</td>
+<td headers="mean_z" class="gt_row gt_right">−2.16</td>
+<td headers="sd_z" class="gt_row gt_right">0.60</td>
 </tr>
 </tbody>
 </table>
@@ -1561,7 +1564,11 @@ sequential design assuming design parameters above are correct.</p>
 </h3>
 <p>The statistical information at each analysis is proportional to the
 precision of the treatment effect estimate. For negative binomial
-outcomes, this relates to the total exposure and event counts.</p>
+outcomes, this relates to the total exposure and event counts. We note
+that the asymptotic information approximation overstates the information
+at the each analysis. However, the power approximation still worked
+reasonably well. This evaluated in a larger simulation study in the
+vignette <code>verification-simulation.Rmd</code>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Summarize information (using blinded estimate from simulation)</span></span>
 <span><span class="va">info_by_analysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">all_results</span><span class="op">)</span><span class="op">[</span></span>
@@ -1595,23 +1602,23 @@ outcomes, this relates to the total exposure and event counts.</p>
 <span>    observed_frac_unblinded <span class="op">=</span> <span class="st">"Obs Frac (Unblind)"</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span>decimals <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<div id="zpfjjsqbom" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#zpfjjsqbom table {
+<div id="pnkzascipb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#pnkzascipb table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#zpfjjsqbom thead, #zpfjjsqbom tbody, #zpfjjsqbom tfoot, #zpfjjsqbom tr, #zpfjjsqbom td, #zpfjjsqbom th {
+#pnkzascipb thead, #pnkzascipb tbody, #pnkzascipb tfoot, #pnkzascipb tr, #pnkzascipb td, #pnkzascipb th {
   border-style: none;
 }
 
-#zpfjjsqbom p {
+#pnkzascipb p {
   margin: 0;
   padding: 0;
 }
 
-#zpfjjsqbom .gt_table {
+#pnkzascipb .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1637,12 +1644,12 @@ outcomes, this relates to the total exposure and event counts.</p>
   border-left-color: #D3D3D3;
 }
 
-#zpfjjsqbom .gt_caption {
+#pnkzascipb .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#zpfjjsqbom .gt_title {
+#pnkzascipb .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1654,7 +1661,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   border-bottom-width: 0;
 }
 
-#zpfjjsqbom .gt_subtitle {
+#pnkzascipb .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1666,7 +1673,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   border-top-width: 0;
 }
 
-#zpfjjsqbom .gt_heading {
+#pnkzascipb .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1678,13 +1685,13 @@ outcomes, this relates to the total exposure and event counts.</p>
   border-right-color: #D3D3D3;
 }
 
-#zpfjjsqbom .gt_bottom_border {
+#pnkzascipb .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#zpfjjsqbom .gt_col_headings {
+#pnkzascipb .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1699,7 +1706,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   border-right-color: #D3D3D3;
 }
 
-#zpfjjsqbom .gt_col_heading {
+#pnkzascipb .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1719,7 +1726,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   overflow-x: hidden;
 }
 
-#zpfjjsqbom .gt_column_spanner_outer {
+#pnkzascipb .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1731,15 +1738,15 @@ outcomes, this relates to the total exposure and event counts.</p>
   padding-right: 4px;
 }
 
-#zpfjjsqbom .gt_column_spanner_outer:first-child {
+#pnkzascipb .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#zpfjjsqbom .gt_column_spanner_outer:last-child {
+#pnkzascipb .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#zpfjjsqbom .gt_column_spanner {
+#pnkzascipb .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1751,11 +1758,11 @@ outcomes, this relates to the total exposure and event counts.</p>
   width: 100%;
 }
 
-#zpfjjsqbom .gt_spanner_row {
+#pnkzascipb .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#zpfjjsqbom .gt_group_heading {
+#pnkzascipb .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1781,7 +1788,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   text-align: left;
 }
 
-#zpfjjsqbom .gt_empty_group_heading {
+#pnkzascipb .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1796,15 +1803,15 @@ outcomes, this relates to the total exposure and event counts.</p>
   vertical-align: middle;
 }
 
-#zpfjjsqbom .gt_from_md > :first-child {
+#pnkzascipb .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#zpfjjsqbom .gt_from_md > :last-child {
+#pnkzascipb .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#zpfjjsqbom .gt_row {
+#pnkzascipb .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1823,7 +1830,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   overflow-x: hidden;
 }
 
-#zpfjjsqbom .gt_stub {
+#pnkzascipb .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1836,7 +1843,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   padding-right: 5px;
 }
 
-#zpfjjsqbom .gt_stub_row_group {
+#pnkzascipb .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1850,15 +1857,15 @@ outcomes, this relates to the total exposure and event counts.</p>
   vertical-align: top;
 }
 
-#zpfjjsqbom .gt_row_group_first td {
+#pnkzascipb .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#zpfjjsqbom .gt_row_group_first th {
+#pnkzascipb .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#zpfjjsqbom .gt_summary_row {
+#pnkzascipb .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1868,16 +1875,16 @@ outcomes, this relates to the total exposure and event counts.</p>
   padding-right: 5px;
 }
 
-#zpfjjsqbom .gt_first_summary_row {
+#pnkzascipb .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#zpfjjsqbom .gt_first_summary_row.thick {
+#pnkzascipb .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#zpfjjsqbom .gt_last_summary_row {
+#pnkzascipb .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1887,7 +1894,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#zpfjjsqbom .gt_grand_summary_row {
+#pnkzascipb .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1897,7 +1904,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   padding-right: 5px;
 }
 
-#zpfjjsqbom .gt_first_grand_summary_row {
+#pnkzascipb .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1907,7 +1914,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   border-top-color: #D3D3D3;
 }
 
-#zpfjjsqbom .gt_last_grand_summary_row_top {
+#pnkzascipb .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1917,11 +1924,11 @@ outcomes, this relates to the total exposure and event counts.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#zpfjjsqbom .gt_striped {
+#pnkzascipb .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#zpfjjsqbom .gt_table_body {
+#pnkzascipb .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1930,7 +1937,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#zpfjjsqbom .gt_footnotes {
+#pnkzascipb .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1944,7 +1951,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   border-right-color: #D3D3D3;
 }
 
-#zpfjjsqbom .gt_footnote {
+#pnkzascipb .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1953,7 +1960,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   padding-right: 5px;
 }
 
-#zpfjjsqbom .gt_sourcenotes {
+#pnkzascipb .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1967,7 +1974,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   border-right-color: #D3D3D3;
 }
 
-#zpfjjsqbom .gt_sourcenote {
+#pnkzascipb .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1975,72 +1982,72 @@ outcomes, this relates to the total exposure and event counts.</p>
   padding-right: 5px;
 }
 
-#zpfjjsqbom .gt_left {
+#pnkzascipb .gt_left {
   text-align: left;
 }
 
-#zpfjjsqbom .gt_center {
+#pnkzascipb .gt_center {
   text-align: center;
 }
 
-#zpfjjsqbom .gt_right {
+#pnkzascipb .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#zpfjjsqbom .gt_font_normal {
+#pnkzascipb .gt_font_normal {
   font-weight: normal;
 }
 
-#zpfjjsqbom .gt_font_bold {
+#pnkzascipb .gt_font_bold {
   font-weight: bold;
 }
 
-#zpfjjsqbom .gt_font_italic {
+#pnkzascipb .gt_font_italic {
   font-style: italic;
 }
 
-#zpfjjsqbom .gt_super {
+#pnkzascipb .gt_super {
   font-size: 65%;
 }
 
-#zpfjjsqbom .gt_footnote_marks {
+#pnkzascipb .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#zpfjjsqbom .gt_asterisk {
+#pnkzascipb .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#zpfjjsqbom .gt_indent_1 {
+#pnkzascipb .gt_indent_1 {
   text-indent: 5px;
 }
 
-#zpfjjsqbom .gt_indent_2 {
+#pnkzascipb .gt_indent_2 {
   text-indent: 10px;
 }
 
-#zpfjjsqbom .gt_indent_3 {
+#pnkzascipb .gt_indent_3 {
   text-indent: 15px;
 }
 
-#zpfjjsqbom .gt_indent_4 {
+#pnkzascipb .gt_indent_4 {
   text-indent: 20px;
 }
 
-#zpfjjsqbom .gt_indent_5 {
+#pnkzascipb .gt_indent_5 {
   text-indent: 25px;
 }
 
-#zpfjjsqbom .katex-display {
+#pnkzascipb .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#zpfjjsqbom div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#pnkzascipb div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -2062,29 +2069,29 @@ outcomes, this relates to the total exposure and event counts.</p>
 <tbody class="gt_table_body">
 <tr>
 <td headers="analysis" class="gt_row gt_right">1.000</td>
-<td headers="mean_blinded" class="gt_row gt_right">31.184</td>
-<td headers="mean_unblinded" class="gt_row gt_right">29.619</td>
-<td headers="planned_info" class="gt_row gt_right">32.244</td>
-<td headers="observed_frac_blinded" class="gt_row gt_right">0.379</td>
-<td headers="observed_frac_unblinded" class="gt_row gt_right">0.360</td>
-<td headers="planned_info_frac" class="gt_row gt_right">0.392</td>
+<td headers="mean_blinded" class="gt_row gt_right">24.218</td>
+<td headers="mean_unblinded" class="gt_row gt_right">23.007</td>
+<td headers="planned_info" class="gt_row gt_right">28.958</td>
+<td headers="observed_frac_blinded" class="gt_row gt_right">0.292</td>
+<td headers="observed_frac_unblinded" class="gt_row gt_right">0.278</td>
+<td headers="planned_info_frac" class="gt_row gt_right">0.349</td>
 </tr>
 <tr>
 <td headers="analysis" class="gt_row gt_right">2.000</td>
-<td headers="mean_blinded" class="gt_row gt_right">59.994</td>
-<td headers="mean_unblinded" class="gt_row gt_right">58.581</td>
-<td headers="planned_info" class="gt_row gt_right">68.054</td>
-<td headers="observed_frac_blinded" class="gt_row gt_right">0.729</td>
-<td headers="observed_frac_unblinded" class="gt_row gt_right">0.712</td>
-<td headers="planned_info_frac" class="gt_row gt_right">0.827</td>
+<td headers="mean_blinded" class="gt_row gt_right">50.715</td>
+<td headers="mean_unblinded" class="gt_row gt_right">49.732</td>
+<td headers="planned_info" class="gt_row gt_right">65.465</td>
+<td headers="observed_frac_blinded" class="gt_row gt_right">0.612</td>
+<td headers="observed_frac_unblinded" class="gt_row gt_right">0.600</td>
+<td headers="planned_info_frac" class="gt_row gt_right">0.790</td>
 </tr>
 <tr>
 <td headers="analysis" class="gt_row gt_right">3.000</td>
-<td headers="mean_blinded" class="gt_row gt_right">64.459</td>
-<td headers="mean_unblinded" class="gt_row gt_right">62.581</td>
-<td headers="planned_info" class="gt_row gt_right">82.249</td>
-<td headers="observed_frac_blinded" class="gt_row gt_right">0.784</td>
-<td headers="observed_frac_unblinded" class="gt_row gt_right">0.761</td>
+<td headers="mean_blinded" class="gt_row gt_right">55.238</td>
+<td headers="mean_unblinded" class="gt_row gt_right">54.205</td>
+<td headers="planned_info" class="gt_row gt_right">82.887</td>
+<td headers="observed_frac_blinded" class="gt_row gt_right">0.666</td>
+<td headers="observed_frac_unblinded" class="gt_row gt_right">0.654</td>
 <td headers="planned_info_frac" class="gt_row gt_right">1.000</td>
 </tr>
 </tbody>
@@ -2130,23 +2137,23 @@ outcomes, this relates to the total exposure and event counts.</p>
 <span>    design_cum_power <span class="op">=</span> <span class="st">"Cum Power (Design)"</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">"power"</span><span class="op">)</span>, decimals <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<div id="dsemrqbokq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#dsemrqbokq table {
+<div id="kguqzvojsv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#kguqzvojsv table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#dsemrqbokq thead, #dsemrqbokq tbody, #dsemrqbokq tfoot, #dsemrqbokq tr, #dsemrqbokq td, #dsemrqbokq th {
+#kguqzvojsv thead, #kguqzvojsv tbody, #kguqzvojsv tfoot, #kguqzvojsv tr, #kguqzvojsv td, #kguqzvojsv th {
   border-style: none;
 }
 
-#dsemrqbokq p {
+#kguqzvojsv p {
   margin: 0;
   padding: 0;
 }
 
-#dsemrqbokq .gt_table {
+#kguqzvojsv .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2172,12 +2179,12 @@ outcomes, this relates to the total exposure and event counts.</p>
   border-left-color: #D3D3D3;
 }
 
-#dsemrqbokq .gt_caption {
+#kguqzvojsv .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#dsemrqbokq .gt_title {
+#kguqzvojsv .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2189,7 +2196,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   border-bottom-width: 0;
 }
 
-#dsemrqbokq .gt_subtitle {
+#kguqzvojsv .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2201,7 +2208,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   border-top-width: 0;
 }
 
-#dsemrqbokq .gt_heading {
+#kguqzvojsv .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2213,13 +2220,13 @@ outcomes, this relates to the total exposure and event counts.</p>
   border-right-color: #D3D3D3;
 }
 
-#dsemrqbokq .gt_bottom_border {
+#kguqzvojsv .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#dsemrqbokq .gt_col_headings {
+#kguqzvojsv .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2234,7 +2241,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   border-right-color: #D3D3D3;
 }
 
-#dsemrqbokq .gt_col_heading {
+#kguqzvojsv .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2254,7 +2261,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   overflow-x: hidden;
 }
 
-#dsemrqbokq .gt_column_spanner_outer {
+#kguqzvojsv .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2266,15 +2273,15 @@ outcomes, this relates to the total exposure and event counts.</p>
   padding-right: 4px;
 }
 
-#dsemrqbokq .gt_column_spanner_outer:first-child {
+#kguqzvojsv .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#dsemrqbokq .gt_column_spanner_outer:last-child {
+#kguqzvojsv .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#dsemrqbokq .gt_column_spanner {
+#kguqzvojsv .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2286,11 +2293,11 @@ outcomes, this relates to the total exposure and event counts.</p>
   width: 100%;
 }
 
-#dsemrqbokq .gt_spanner_row {
+#kguqzvojsv .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#dsemrqbokq .gt_group_heading {
+#kguqzvojsv .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2316,7 +2323,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   text-align: left;
 }
 
-#dsemrqbokq .gt_empty_group_heading {
+#kguqzvojsv .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2331,15 +2338,15 @@ outcomes, this relates to the total exposure and event counts.</p>
   vertical-align: middle;
 }
 
-#dsemrqbokq .gt_from_md > :first-child {
+#kguqzvojsv .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#dsemrqbokq .gt_from_md > :last-child {
+#kguqzvojsv .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#dsemrqbokq .gt_row {
+#kguqzvojsv .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2358,7 +2365,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   overflow-x: hidden;
 }
 
-#dsemrqbokq .gt_stub {
+#kguqzvojsv .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2371,7 +2378,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   padding-right: 5px;
 }
 
-#dsemrqbokq .gt_stub_row_group {
+#kguqzvojsv .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2385,15 +2392,15 @@ outcomes, this relates to the total exposure and event counts.</p>
   vertical-align: top;
 }
 
-#dsemrqbokq .gt_row_group_first td {
+#kguqzvojsv .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#dsemrqbokq .gt_row_group_first th {
+#kguqzvojsv .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#dsemrqbokq .gt_summary_row {
+#kguqzvojsv .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2403,16 +2410,16 @@ outcomes, this relates to the total exposure and event counts.</p>
   padding-right: 5px;
 }
 
-#dsemrqbokq .gt_first_summary_row {
+#kguqzvojsv .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#dsemrqbokq .gt_first_summary_row.thick {
+#kguqzvojsv .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#dsemrqbokq .gt_last_summary_row {
+#kguqzvojsv .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2422,7 +2429,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#dsemrqbokq .gt_grand_summary_row {
+#kguqzvojsv .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2432,7 +2439,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   padding-right: 5px;
 }
 
-#dsemrqbokq .gt_first_grand_summary_row {
+#kguqzvojsv .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2442,7 +2449,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   border-top-color: #D3D3D3;
 }
 
-#dsemrqbokq .gt_last_grand_summary_row_top {
+#kguqzvojsv .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2452,11 +2459,11 @@ outcomes, this relates to the total exposure and event counts.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#dsemrqbokq .gt_striped {
+#kguqzvojsv .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#dsemrqbokq .gt_table_body {
+#kguqzvojsv .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2465,7 +2472,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#dsemrqbokq .gt_footnotes {
+#kguqzvojsv .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2479,7 +2486,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   border-right-color: #D3D3D3;
 }
 
-#dsemrqbokq .gt_footnote {
+#kguqzvojsv .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2488,7 +2495,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   padding-right: 5px;
 }
 
-#dsemrqbokq .gt_sourcenotes {
+#kguqzvojsv .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2502,7 +2509,7 @@ outcomes, this relates to the total exposure and event counts.</p>
   border-right-color: #D3D3D3;
 }
 
-#dsemrqbokq .gt_sourcenote {
+#kguqzvojsv .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2510,72 +2517,72 @@ outcomes, this relates to the total exposure and event counts.</p>
   padding-right: 5px;
 }
 
-#dsemrqbokq .gt_left {
+#kguqzvojsv .gt_left {
   text-align: left;
 }
 
-#dsemrqbokq .gt_center {
+#kguqzvojsv .gt_center {
   text-align: center;
 }
 
-#dsemrqbokq .gt_right {
+#kguqzvojsv .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#dsemrqbokq .gt_font_normal {
+#kguqzvojsv .gt_font_normal {
   font-weight: normal;
 }
 
-#dsemrqbokq .gt_font_bold {
+#kguqzvojsv .gt_font_bold {
   font-weight: bold;
 }
 
-#dsemrqbokq .gt_font_italic {
+#kguqzvojsv .gt_font_italic {
   font-style: italic;
 }
 
-#dsemrqbokq .gt_super {
+#kguqzvojsv .gt_super {
   font-size: 65%;
 }
 
-#dsemrqbokq .gt_footnote_marks {
+#kguqzvojsv .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#dsemrqbokq .gt_asterisk {
+#kguqzvojsv .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#dsemrqbokq .gt_indent_1 {
+#kguqzvojsv .gt_indent_1 {
   text-indent: 5px;
 }
 
-#dsemrqbokq .gt_indent_2 {
+#kguqzvojsv .gt_indent_2 {
   text-indent: 10px;
 }
 
-#dsemrqbokq .gt_indent_3 {
+#kguqzvojsv .gt_indent_3 {
   text-indent: 15px;
 }
 
-#dsemrqbokq .gt_indent_4 {
+#kguqzvojsv .gt_indent_4 {
   text-indent: 20px;
 }
 
-#dsemrqbokq .gt_indent_5 {
+#kguqzvojsv .gt_indent_5 {
   text-indent: 25px;
 }
 
-#dsemrqbokq .katex-display {
+#kguqzvojsv .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#dsemrqbokq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#kguqzvojsv div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -2594,20 +2601,20 @@ outcomes, this relates to the total exposure and event counts.</p>
 <tbody class="gt_table_body">
 <tr>
 <td headers="analysis" class="gt_row gt_right">1</td>
-<td headers="n_cross_upper" class="gt_row gt_right">14</td>
-<td headers="cum_prob_cross_upper" class="gt_row gt_right">0.28</td>
+<td headers="n_cross_upper" class="gt_row gt_right">13</td>
+<td headers="cum_prob_cross_upper" class="gt_row gt_right">0.26</td>
 <td headers="design_cum_power" class="gt_row gt_right">1.000</td>
 </tr>
 <tr>
 <td headers="analysis" class="gt_row gt_right">2</td>
-<td headers="n_cross_upper" class="gt_row gt_right">20</td>
-<td headers="cum_prob_cross_upper" class="gt_row gt_right">0.68</td>
+<td headers="n_cross_upper" class="gt_row gt_right">17</td>
+<td headers="cum_prob_cross_upper" class="gt_row gt_right">0.60</td>
 <td headers="design_cum_power" class="gt_row gt_right">1.000</td>
 </tr>
 <tr>
 <td headers="analysis" class="gt_row gt_right">3</td>
 <td headers="n_cross_upper" class="gt_row gt_right">13</td>
-<td headers="cum_prob_cross_upper" class="gt_row gt_right">0.94</td>
+<td headers="cum_prob_cross_upper" class="gt_row gt_right">0.86</td>
 <td headers="design_cum_power" class="gt_row gt_right">1.000</td>
 </tr>
 </tbody>
@@ -2642,9 +2649,9 @@ outcomes, this relates to the total exposure and event counts.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Number of simulations: %d\n"</span>, <span class="va">n_sims</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Number of simulations: 50</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Overall Power (P[reject H0]): %.1f%%\n"</span>, <span class="va">overall_power</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Overall Power (P[reject H0]): 94.0%</span></span>
+<span><span class="co">#&gt; Overall Power (P[reject H0]): 86.0%</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Futility Stopping Rate: %.1f%%\n"</span>, <span class="va">overall_futility</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Futility Stopping Rate: 6.0%</span></span>
+<span><span class="co">#&gt; Futility Stopping Rate: 14.0%</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Design Power (target): %.1f%%\n"</span>, <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">gs_nb</span><span class="op">$</span><span class="va">beta</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Design Power (target): 90.0%</span></span></code></pre></div>
 </div>
@@ -2687,1115 +2694,12 @@ outcomes, this relates to the total exposure and event counts.</p>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Removed 48 rows containing non-finite outside the scale range</span></span>
+<span><span class="co">#&gt; Warning: Removed 44 rows containing non-finite outside the scale range</span></span>
 <span><span class="co">#&gt; (`stat_ydensity()`).</span></span>
-<span><span class="co">#&gt; Warning: Removed 48 rows containing non-finite outside the scale range</span></span>
+<span><span class="co">#&gt; Warning: Removed 44 rows containing non-finite outside the scale range</span></span>
 <span><span class="co">#&gt; (`stat_boxplot()`).</span></span></code></pre></div>
 <p><img src="group-sequential-simulation_files/figure-html/plot-z-stats-1.png" class="r-plt" alt="Z-statistics across analyses with group sequential boundaries" width="672"></p>
 </div>
-</div>
-<div class="section level2">
-<h2 id="design-summary">Design summary<a class="anchor" aria-label="anchor" href="#design-summary"></a>
-</h2>
-<p>The <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> function provides a textual overview of
-the group sequential design:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">gs_nb</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Asymmetric two-sided with non-binding futility bound group sequential design</span></span>
-<span><span class="co">#&gt; for negative binomial outcomes, 3 analyses, total sample size 466.0, 90 percent</span></span>
-<span><span class="co">#&gt; power, 2.5 percent (1-sided) Type I error. Control rate 0.1250, treatment rate</span></span>
-<span><span class="co">#&gt; 0.0833, risk ratio 0.6667, dispersion 0.5000. Accrual duration 12.0, trial</span></span>
-<span><span class="co">#&gt; duration 24.0, max follow-up 12.0, event gap 0.66, dropout rate 0.0513, average</span></span>
-<span><span class="co">#&gt; exposure (calendar) 8.96, (at-risk n1=8.28, n2=8.50). Randomization ratio 1:1.</span></span></code></pre></div>
-<p>For detailed boundary information, use <code><a href="https://keaven.github.io/gsDesign/reference/gsBoundSummary.html" class="external-link">gsBoundSummary()</a></code>.
-We set <code>logdelta = TRUE</code> since the test statistic is based on
-the log rate ratio. The <code>~RR at bound</code> displays the rate
-ratio
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mn>2</mn></msub><mi>/</mi><msub><mi>λ</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\lambda_2/\lambda_1</annotation></semantics></math>),
-where values &lt; 1 indicate treatment benefit:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="https://keaven.github.io/gsDesign/reference/gsBoundSummary.html" class="external-link">gsBoundSummary</a></span><span class="op">(</span><span class="va">gs_nb</span>,</span>
-<span>  deltaname <span class="op">=</span> <span class="st">"RR"</span>,</span>
-<span>  logdelta <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  Nname <span class="op">=</span> <span class="st">"Information"</span>,</span>
-<span>  timename <span class="op">=</span> <span class="st">"Month"</span>,</span>
-<span>  digits <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>  ddigits <span class="op">=</span> <span class="fl">2</span></span>
-<span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span></span>
-<span>    title <span class="op">=</span> <span class="st">"Group Sequential Design Bounds for Negative Binomial Outcome"</span>,</span>
-<span>    subtitle <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span>
-<span>      <span class="st">"N = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">gs_nb</span><span class="op">$</span><span class="va">n_total</span><span class="op">[</span><span class="va">gs_nb</span><span class="op">$</span><span class="va">k</span><span class="op">]</span><span class="op">)</span>,</span>
-<span>      <span class="st">", Expected events = "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">gs_nb</span><span class="op">$</span><span class="va">nb_design</span><span class="op">$</span><span class="va">total_events</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span>    <span class="op">)</span></span>
-<span>  <span class="op">)</span></span></code></pre></div>
-<div id="hobempjpgj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#hobempjpgj table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-#hobempjpgj thead, #hobempjpgj tbody, #hobempjpgj tfoot, #hobempjpgj tr, #hobempjpgj td, #hobempjpgj th {
-  border-style: none;
-}
-
-#hobempjpgj p {
-  margin: 0;
-  padding: 0;
-}
-
-#hobempjpgj .gt_table {
-  display: table;
-  border-collapse: collapse;
-  line-height: normal;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#hobempjpgj .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#hobempjpgj .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#hobempjpgj .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#hobempjpgj .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#hobempjpgj .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#hobempjpgj .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#hobempjpgj .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#hobempjpgj .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#hobempjpgj .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#hobempjpgj .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#hobempjpgj .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#hobempjpgj .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#hobempjpgj .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-
-#hobempjpgj .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#hobempjpgj .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#hobempjpgj .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#hobempjpgj .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#hobempjpgj .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#hobempjpgj .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#hobempjpgj .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#hobempjpgj .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#hobempjpgj .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#hobempjpgj .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #D3D3D3;
-}
-
-#hobempjpgj .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#hobempjpgj .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#hobempjpgj .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#hobempjpgj .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#hobempjpgj .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-
-#hobempjpgj .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#hobempjpgj .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#hobempjpgj .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#hobempjpgj .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#hobempjpgj .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#hobempjpgj .gt_sourcenote {
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#hobempjpgj .gt_left {
-  text-align: left;
-}
-
-#hobempjpgj .gt_center {
-  text-align: center;
-}
-
-#hobempjpgj .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#hobempjpgj .gt_font_normal {
-  font-weight: normal;
-}
-
-#hobempjpgj .gt_font_bold {
-  font-weight: bold;
-}
-
-#hobempjpgj .gt_font_italic {
-  font-style: italic;
-}
-
-#hobempjpgj .gt_super {
-  font-size: 65%;
-}
-
-#hobempjpgj .gt_footnote_marks {
-  font-size: 75%;
-  vertical-align: 0.4em;
-  position: initial;
-}
-
-#hobempjpgj .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#hobempjpgj .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#hobempjpgj .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#hobempjpgj .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#hobempjpgj .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#hobempjpgj .gt_indent_5 {
-  text-indent: 25px;
-}
-
-#hobempjpgj .katex-display {
-  display: inline-flex !important;
-  margin-bottom: 0.75em !important;
-}
-
-#hobempjpgj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-  height: 0px !important;
-}
-</style>
-<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead>
-<tr class="gt_heading">
-<td colspan="4" class="gt_heading gt_title gt_font_normal" style>Group Sequential Design Bounds for Negative Binomial Outcome</td>
-    </tr>
-<tr class="gt_heading">
-<td colspan="4" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>N = 466, Expected events = 399.2</td>
-    </tr>
-<tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Analysis">Analysis</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Value">Value</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Efficacy">Efficacy</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Futility">Futility</th>
-    </tr>
-</thead>
-<tbody class="gt_table_body">
-<tr>
-<td headers="Analysis" class="gt_row gt_left">IA 1: 39%</td>
-<td headers="Value" class="gt_row gt_left">Z</td>
-<td headers="Efficacy" class="gt_row gt_right">2.3339</td>
-<td headers="Futility" class="gt_row gt_right">-0.8772</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left">Information: 32.24</td>
-<td headers="Value" class="gt_row gt_left">p (1-sided)</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0098</td>
-<td headers="Futility" class="gt_row gt_right">0.8098</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left">Month: 10</td>
-<td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.6629</td>
-<td headers="Futility" class="gt_row gt_right">1.1671</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left"></td>
-<td headers="Value" class="gt_row gt_left">P(Cross) if RR=1</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0098</td>
-<td headers="Futility" class="gt_row gt_right">0.1902</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left"></td>
-<td headers="Value" class="gt_row gt_left">P(Cross) if RR=0.67</td>
-<td headers="Efficacy" class="gt_row gt_right">0.4872</td>
-<td headers="Futility" class="gt_row gt_right">0.0007</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left">IA 2: 83%</td>
-<td headers="Value" class="gt_row gt_left">Z</td>
-<td headers="Efficacy" class="gt_row gt_right">2.1979</td>
-<td headers="Futility" class="gt_row gt_right">1.3888</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left">Information: 68.05</td>
-<td headers="Value" class="gt_row gt_left">p (1-sided)</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0140</td>
-<td headers="Futility" class="gt_row gt_right">0.0824</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left">Month: 18</td>
-<td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.7661</td>
-<td headers="Futility" class="gt_row gt_right">0.8450</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left"></td>
-<td headers="Value" class="gt_row gt_left">P(Cross) if RR=1</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0207</td>
-<td headers="Futility" class="gt_row gt_right">0.9150</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left"></td>
-<td headers="Value" class="gt_row gt_left">P(Cross) if RR=0.67</td>
-<td headers="Efficacy" class="gt_row gt_right">0.8825</td>
-<td headers="Futility" class="gt_row gt_right">0.0251</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left">Final</td>
-<td headers="Value" class="gt_row gt_left">Z</td>
-<td headers="Efficacy" class="gt_row gt_right">2.2508</td>
-<td headers="Futility" class="gt_row gt_right">2.2508</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left">Information: 82.25</td>
-<td headers="Value" class="gt_row gt_left">p (1-sided)</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0122</td>
-<td headers="Futility" class="gt_row gt_right">0.0122</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left">Month: 24</td>
-<td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.7802</td>
-<td headers="Futility" class="gt_row gt_right">0.7802</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left"></td>
-<td headers="Value" class="gt_row gt_left">P(Cross) if RR=1</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0248</td>
-<td headers="Futility" class="gt_row gt_right">0.9752</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left"></td>
-<td headers="Value" class="gt_row gt_left">P(Cross) if RR=0.67</td>
-<td headers="Efficacy" class="gt_row gt_right">0.9354</td>
-<td headers="Futility" class="gt_row gt_right">0.0646</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>Note that <code>P(Cross) if RR=0.67</code> corresponds to the
-design’s alternate hypothesis (treatment rate / control rate =
-0.67).</p>
-<p>Sample sizes at each analysis:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  Analysis <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">gs_nb</span><span class="op">$</span><span class="va">k</span>,</span>
-<span>  n1 <span class="op">=</span> <span class="va">gs_nb</span><span class="op">$</span><span class="va">n1</span>,</span>
-<span>  n2 <span class="op">=</span> <span class="va">gs_nb</span><span class="op">$</span><span class="va">n2</span>,</span>
-<span>  n_total <span class="op">=</span> <span class="va">gs_nb</span><span class="op">$</span><span class="va">n_total</span></span>
-<span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Sample Sizes at Each Analysis"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">n1</span>, <span class="va">n2</span>, <span class="va">n_total</span><span class="op">)</span>, decimals <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<div id="iradnmrkch" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#iradnmrkch table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-#iradnmrkch thead, #iradnmrkch tbody, #iradnmrkch tfoot, #iradnmrkch tr, #iradnmrkch td, #iradnmrkch th {
-  border-style: none;
-}
-
-#iradnmrkch p {
-  margin: 0;
-  padding: 0;
-}
-
-#iradnmrkch .gt_table {
-  display: table;
-  border-collapse: collapse;
-  line-height: normal;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#iradnmrkch .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#iradnmrkch .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#iradnmrkch .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#iradnmrkch .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#iradnmrkch .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#iradnmrkch .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#iradnmrkch .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#iradnmrkch .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#iradnmrkch .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#iradnmrkch .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#iradnmrkch .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#iradnmrkch .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#iradnmrkch .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-
-#iradnmrkch .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#iradnmrkch .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#iradnmrkch .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#iradnmrkch .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#iradnmrkch .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#iradnmrkch .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#iradnmrkch .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#iradnmrkch .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#iradnmrkch .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#iradnmrkch .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #D3D3D3;
-}
-
-#iradnmrkch .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#iradnmrkch .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#iradnmrkch .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#iradnmrkch .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#iradnmrkch .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-
-#iradnmrkch .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#iradnmrkch .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#iradnmrkch .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#iradnmrkch .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#iradnmrkch .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#iradnmrkch .gt_sourcenote {
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#iradnmrkch .gt_left {
-  text-align: left;
-}
-
-#iradnmrkch .gt_center {
-  text-align: center;
-}
-
-#iradnmrkch .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#iradnmrkch .gt_font_normal {
-  font-weight: normal;
-}
-
-#iradnmrkch .gt_font_bold {
-  font-weight: bold;
-}
-
-#iradnmrkch .gt_font_italic {
-  font-style: italic;
-}
-
-#iradnmrkch .gt_super {
-  font-size: 65%;
-}
-
-#iradnmrkch .gt_footnote_marks {
-  font-size: 75%;
-  vertical-align: 0.4em;
-  position: initial;
-}
-
-#iradnmrkch .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#iradnmrkch .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#iradnmrkch .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#iradnmrkch .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#iradnmrkch .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#iradnmrkch .gt_indent_5 {
-  text-indent: 25px;
-}
-
-#iradnmrkch .katex-display {
-  display: inline-flex !important;
-  margin-bottom: 0.75em !important;
-}
-
-#iradnmrkch div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-  height: 0px !important;
-}
-</style>
-<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead>
-<tr class="gt_heading">
-<td colspan="4" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>Sample Sizes at Each Analysis</td>
-    </tr>
-<tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Analysis">Analysis</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="n1">n1</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="n2">n2</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="n_total">n_total</th>
-    </tr>
-</thead>
-<tbody class="gt_table_body">
-<tr>
-<td headers="Analysis" class="gt_row gt_right">1</td>
-<td headers="n1" class="gt_row gt_right">77.7</td>
-<td headers="n2" class="gt_row gt_right">77.7</td>
-<td headers="n_total" class="gt_row gt_right">155.3</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_right">2</td>
-<td headers="n1" class="gt_row gt_right">155.3</td>
-<td headers="n2" class="gt_row gt_right">155.3</td>
-<td headers="n_total" class="gt_row gt_right">310.7</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_right">3</td>
-<td headers="n1" class="gt_row gt_right">233.0</td>
-<td headers="n2" class="gt_row gt_right">233.0</td>
-<td headers="n_total" class="gt_row gt_right">466.0</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>After rounding to integer sample sizes with
-<code><a href="../reference/toInteger.html">toInteger()</a></code>:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gs_nb_int</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/toInteger.html">toInteger</a></span><span class="op">(</span><span class="va">gs_nb</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">gs_nb_int</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Asymmetric two-sided with non-binding futility bound group sequential design</span></span>
-<span><span class="co">#&gt; for negative binomial outcomes, 3 analyses, total sample size 466.0, 90 percent</span></span>
-<span><span class="co">#&gt; power, 2.5 percent (1-sided) Type I error. Control rate 0.1250, treatment rate</span></span>
-<span><span class="co">#&gt; 0.0833, risk ratio 0.6667, dispersion 0.5000. Accrual duration 12.0, trial</span></span>
-<span><span class="co">#&gt; duration 24.0, max follow-up 12.0, event gap 0.66, dropout rate 0.0513, average</span></span>
-<span><span class="co">#&gt; exposure (calendar) 8.96, (at-risk n1=8.28, n2=8.50). Randomization ratio 1:1.</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="notes">Notes<a class="anchor" aria-label="anchor" href="#notes"></a>
