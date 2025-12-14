@@ -13,9 +13,12 @@ by comparing its theoretical predictions for average exposure,
 statistical information, and power against results from a large-scale
 simulation.
 
-We specifically test a scenario with: \* Piecewise constant accrual
-rates. \* Piecewise exponential dropout (constant in this example). \*
-Negative binomial outcomes. \* Fixed follow-up design.
+We specifically test a scenario with:
+
+- Piecewise constant accrual rates.
+- Piecewise exponential dropout (constant in this example).
+- Negative binomial outcomes.
+- Fixed follow-up design.
 
 ## Simulation design
 
@@ -54,16 +57,16 @@ max_followup <- 12
 trial_duration <- 24
 event_gap <- 20 / 30.42 # 20 days
 
-# Accrual targeting N ~ 200
-# (Pre-calculated rates)
-accrual_rate <- c(11, 22)
+# Accrual targeting 90% power
+# We provide relative rates (1:2) and the function scales them to achieve power
+accrual_rate_rel <- c(1, 2)
 accrual_duration <- c(6, 6)
 
 design <- sample_size_nbinom(
   lambda1 = lambda1, lambda2 = lambda2, dispersion = dispersion,
-  power = NULL, # Calculate power for this specific design
+  power = power,
   alpha = alpha, sided = 1,
-  accrual_rate = accrual_rate,
+  accrual_rate = accrual_rate_rel,
   accrual_duration = accrual_duration,
   trial_duration = trial_duration,
   dropout_rate = dropout_rate,
@@ -72,14 +75,17 @@ design <- sample_size_nbinom(
   method = "friede"
 )
 
+# Extract calculated absolute accrual rates
+accrual_rate <- design$accrual_rate
+
 print(design)
 #> Sample size for negative binomial outcome
 #> ==========================================
 #> 
 #> Method:          friede
-#> Sample size:     n1 = 99, n2 = 99, total = 198
-#> Expected events: 641.3 (n1: 358.1, n2: 283.3)
-#> Power: 60%, Alpha: 0.025 (1-sided)
+#> Sample size:     n1 = 211, n2 = 211, total = 422
+#> Expected events: 1366.9 (n1: 763.1, n2: 603.8)
+#> Power: 90%, Alpha: 0.025 (1-sided)
 #> Rates: control = 0.4000, treatment = 0.3000 (RR = 0.7500)
 #> Dispersion: 0.5000, Avg exposure (calendar): 11.42
 #> Avg exposure (at-risk): n1 = 9.04, n2 = 9.54
@@ -145,7 +151,7 @@ knitr::kable(comparison_exp, digits = 4, caption = "Comparison of Average Exposu
 
 | Metric           | Theoretical | Simulated | Difference | Rel_Diff_Pct |
 |:-----------------|------------:|----------:|-----------:|-------------:|
-| Average Exposure |     11.4195 |   11.3526 |     -0.067 |      -0.5863 |
+| Average Exposure |     11.4195 |   11.3598 |    -0.0597 |      -0.5232 |
 
 Comparison of Average Exposure
 
@@ -194,7 +200,7 @@ knitr::kable(comparison_var, digits = 5, caption = "Comparison of Variance")
 
 | Metric                | Theoretical | Empirical_Var | Avg_Estimated_Var |
 |:----------------------|------------:|--------------:|------------------:|
-| Variance of Estimator |     0.01676 |       0.01569 |           0.01543 |
+| Variance of Estimator |     0.00786 |       0.00755 |           0.00728 |
 
 Comparison of Variance
 
@@ -230,7 +236,7 @@ knitr::kable(comparison_pwr, digits = 4, caption = "Comparison of Power")
 
 | Metric | Theoretical | Simulated | Difference |
 |:-------|------------:|----------:|-----------:|
-| Power  |      0.6034 |    0.5372 |    -0.0662 |
+| Power  |         0.9 |    0.8739 |    -0.0261 |
 
 Comparison of Power
 
@@ -239,7 +245,7 @@ check if the theoretical power falls within the simulation error bounds.
 
 ``` r
 binom.test(sum(results$p_value < design_ref$inputs$alpha, na.rm = TRUE), nrow(results))$conf.int
-#> [1] 0.5207709 0.5536130
+#> [1] 0.8626014 0.8845653
 #> attr(,"conf.level")
 #> [1] 0.95
 ```

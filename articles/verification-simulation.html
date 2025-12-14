@@ -79,9 +79,13 @@
 <code>sample_size_nbinom</code> function by comparing its theoretical
 predictions for average exposure, statistical information, and power
 against results from a large-scale simulation.</p>
-<p>We specifically test a scenario with: * Piecewise constant accrual
-rates. * Piecewise exponential dropout (constant in this example). *
-Negative binomial outcomes. * Fixed follow-up design.</p>
+<p>We specifically test a scenario with:</p>
+<ul>
+<li>Piecewise constant accrual rates.</li>
+<li>Piecewise exponential dropout (constant in this example).</li>
+<li>Negative binomial outcomes.</li>
+<li>Fixed follow-up design.</li>
+</ul>
 </div>
 <div class="section level2">
 <h2 id="simulation-design">Simulation design<a class="anchor" aria-label="anchor" href="#simulation-design"></a>
@@ -140,16 +144,16 @@ using <code>sample_size_nbinom</code>.</p>
 <span><span class="va">trial_duration</span> <span class="op">&lt;-</span> <span class="fl">24</span></span>
 <span><span class="va">event_gap</span> <span class="op">&lt;-</span> <span class="fl">20</span> <span class="op">/</span> <span class="fl">30.42</span> <span class="co"># 20 days</span></span>
 <span></span>
-<span><span class="co"># Accrual targeting N ~ 200</span></span>
-<span><span class="co"># (Pre-calculated rates)</span></span>
-<span><span class="va">accrual_rate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>, <span class="fl">22</span><span class="op">)</span></span>
+<span><span class="co"># Accrual targeting 90% power</span></span>
+<span><span class="co"># We provide relative rates (1:2) and the function scales them to achieve power</span></span>
+<span><span class="va">accrual_rate_rel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">accrual_duration</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">6</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">design</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sample_size_nbinom.html">sample_size_nbinom</a></span><span class="op">(</span></span>
 <span>  lambda1 <span class="op">=</span> <span class="va">lambda1</span>, lambda2 <span class="op">=</span> <span class="va">lambda2</span>, dispersion <span class="op">=</span> <span class="va">dispersion</span>,</span>
-<span>  power <span class="op">=</span> <span class="cn">NULL</span>, <span class="co"># Calculate power for this specific design</span></span>
+<span>  power <span class="op">=</span> <span class="va">power</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="va">alpha</span>, sided <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  accrual_rate <span class="op">=</span> <span class="va">accrual_rate</span>,</span>
+<span>  accrual_rate <span class="op">=</span> <span class="va">accrual_rate_rel</span>,</span>
 <span>  accrual_duration <span class="op">=</span> <span class="va">accrual_duration</span>,</span>
 <span>  trial_duration <span class="op">=</span> <span class="va">trial_duration</span>,</span>
 <span>  dropout_rate <span class="op">=</span> <span class="va">dropout_rate</span>,</span>
@@ -158,14 +162,17 @@ using <code>sample_size_nbinom</code>.</p>
 <span>  method <span class="op">=</span> <span class="st">"friede"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># Extract calculated absolute accrual rates</span></span>
+<span><span class="va">accrual_rate</span> <span class="op">&lt;-</span> <span class="va">design</span><span class="op">$</span><span class="va">accrual_rate</span></span>
+<span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">design</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Sample size for negative binomial outcome</span></span>
 <span><span class="co">#&gt; ==========================================</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Method:          friede</span></span>
-<span><span class="co">#&gt; Sample size:     n1 = 99, n2 = 99, total = 198</span></span>
-<span><span class="co">#&gt; Expected events: 641.3 (n1: 358.1, n2: 283.3)</span></span>
-<span><span class="co">#&gt; Power: 60%, Alpha: 0.025 (1-sided)</span></span>
+<span><span class="co">#&gt; Sample size:     n1 = 211, n2 = 211, total = 422</span></span>
+<span><span class="co">#&gt; Expected events: 1366.9 (n1: 763.1, n2: 603.8)</span></span>
+<span><span class="co">#&gt; Power: 90%, Alpha: 0.025 (1-sided)</span></span>
 <span><span class="co">#&gt; Rates: control = 0.4000, treatment = 0.3000 (RR = 0.7500)</span></span>
 <span><span class="co">#&gt; Dispersion: 0.5000, Avg exposure (calendar): 11.42</span></span>
 <span><span class="co">#&gt; Avg exposure (at-risk): n1 = 9.04, n2 = 9.54</span></span>
@@ -238,9 +245,9 @@ the simulation.</p>
 <tbody><tr class="odd">
 <td align="left">Average Exposure</td>
 <td align="right">11.4195</td>
-<td align="right">11.3526</td>
-<td align="right">-0.067</td>
-<td align="right">-0.5863</td>
+<td align="right">11.3598</td>
+<td align="right">-0.0597</td>
+<td align="right">-0.5232</td>
 </tr></tbody>
 </table>
 <p>The theoretical exposure should closely match the simulated average
@@ -299,9 +306,9 @@ simulation.</p>
 </tr></thead>
 <tbody><tr class="odd">
 <td align="left">Variance of Estimator</td>
-<td align="right">0.01676</td>
-<td align="right">0.01569</td>
-<td align="right">0.01543</td>
+<td align="right">0.00786</td>
+<td align="right">0.00755</td>
+<td align="right">0.00728</td>
 </tr></tbody>
 </table>
 <ul>
@@ -347,9 +354,9 @@ anticipates the variability of the test statistic.</p>
 </tr></thead>
 <tbody><tr class="odd">
 <td align="left">Power</td>
-<td align="right">0.6034</td>
-<td align="right">0.5372</td>
-<td align="right">-0.0662</td>
+<td align="right">0.9</td>
+<td align="right">0.8739</td>
+<td align="right">-0.0261</td>
 </tr></tbody>
 </table>
 <p>A 95% confidence interval for the empirical power can be calculated
@@ -357,7 +364,7 @@ to check if the theoretical power falls within the simulation error
 bounds.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/binom.test.html" class="external-link">binom.test</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">results</span><span class="op">$</span><span class="va">p_value</span> <span class="op">&lt;</span> <span class="va">design_ref</span><span class="op">$</span><span class="va">inputs</span><span class="op">$</span><span class="va">alpha</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">conf.int</span></span>
-<span><span class="co">#&gt; [1] 0.5207709 0.5536130</span></span>
+<span><span class="co">#&gt; [1] 0.8626014 0.8845653</span></span>
 <span><span class="co">#&gt; attr(,"conf.level")</span></span>
 <span><span class="co">#&gt; [1] 0.95</span></span></code></pre></div>
 </div>
