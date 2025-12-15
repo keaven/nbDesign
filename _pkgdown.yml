@@ -27,6 +27,9 @@ reference:
     contents:
       - nb_sim
       - nb_sim_seasonal
+      - sim_gs_nbinom
+      - check_gs_bound
+      - summarize_gs_sim
 
   - title: "Analysis"
     desc: >
@@ -40,11 +43,14 @@ reference:
       - cut_date_for_completers
       - compute_info_at_time
       - get_analysis_date
+      - get_cut_date
 
   - title: "gsDesign re-exports"
     desc: >
       Spending functions and utilities re-exported from the gsDesign package for convenience.
     contents:
+      - gsDesign
+      - gsBoundSummary
       - sfBetaDist
       - sfCauchy
       - sfExponential
