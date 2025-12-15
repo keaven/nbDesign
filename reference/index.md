@@ -8,11 +8,11 @@ outcomes.
 - [`sample_size_nbinom()`](https://keaven.github.io/gsDesignNB/reference/sample_size_nbinom.md)
   : Sample size calculation for negative binomial distribution
 - [`print(`*`<sample_size_nbinom_result>`*`)`](https://keaven.github.io/gsDesignNB/reference/print.sample_size_nbinom_result.md)
-  : Print Method for sample_size_nbinom_result Objects
+  : Print method for sample_size_nbinom_result objects
 - [`summary(`*`<sample_size_nbinom_result>`*`)`](https://keaven.github.io/gsDesignNB/reference/summary.sample_size_nbinom_result.md)
-  : Summary for sample_size_nbinom_result Objects
+  : Summary for sample_size_nbinom_result objects
 - [`print(`*`<sample_size_nbinom_summary>`*`)`](https://keaven.github.io/gsDesignNB/reference/print.sample_size_nbinom_summary.md)
-  : Print Method for sample_size_nbinom_summary Objects
+  : Print method for sample_size_nbinom_summary objects
 
 ## Group sequential design
 
@@ -21,11 +21,11 @@ Functions for extending fixed designs to group sequential designs.
 - [`gsNBCalendar()`](https://keaven.github.io/gsDesignNB/reference/gsNBCalendar.md)
   : Group sequential design for negative binomial outcomes
 - [`toInteger()`](https://keaven.github.io/gsDesignNB/reference/toInteger.md)
-  : Convert Group Sequential Design to Integer Sample Sizes
+  : Convert group sequential design to integer sample sizes
 - [`summary(`*`<gsNB>`*`)`](https://keaven.github.io/gsDesignNB/reference/summary.gsNB.md)
-  : Summary for gsNB Objects
+  : Summary for gsNB objects
 - [`print(`*`<gsNBsummary>`*`)`](https://keaven.github.io/gsDesignNB/reference/print.gsNBsummary.md)
-  : Print Method for gsNBsummary Objects
+  : Print method for gsNBsummary objects
 
 ## Simulation
 
@@ -55,7 +55,7 @@ re-estimation and interim analysis.
 - [`cut_date_for_completers()`](https://keaven.github.io/gsDesignNB/reference/cut_date_for_completers.md)
   : Find calendar date for target completer count
 - [`compute_info_at_time()`](https://keaven.github.io/gsDesignNB/reference/compute_info_at_time.md)
-  : Compute Statistical Information at Analysis Time
+  : Compute statistical information at analysis time
 - [`get_analysis_date()`](https://keaven.github.io/gsDesignNB/reference/get_analysis_date.md)
   : Find calendar date for target event count
 

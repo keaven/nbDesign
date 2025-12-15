@@ -1,4 +1,4 @@
-# Print Method for sample_size_nbinom_result Objects
+# Print method for sample_size_nbinom_result objects
 
 Prints a concise summary of the sample size calculation results.
 

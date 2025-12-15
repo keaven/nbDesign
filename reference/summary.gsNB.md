@@ -1,4 +1,4 @@
-# Summary for gsNB Objects
+# Summary for gsNB objects
 
 Provides a textual summary of a group sequential design for negative
 binomial outcomes, similar to the summary provided by

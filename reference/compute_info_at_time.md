@@ -1,4 +1,4 @@
-# Compute Statistical Information at Analysis Time
+# Compute statistical information at analysis time
 
 Computes the statistical information for the log rate ratio at a given
 analysis time, accounting for staggered enrollment and varying exposure

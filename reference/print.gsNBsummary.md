@@ -1,6 +1,6 @@
-# Print Method for gsNBsummary Objects
+# Print method for gsNBsummary objects
 
-Print Method for gsNBsummary Objects
+Print method for gsNBsummary objects
 
 ## Usage
 

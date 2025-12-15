@@ -1,6 +1,6 @@
-# Print Method for sample_size_nbinom_summary Objects
+# Print method for sample_size_nbinom_summary objects
 
-Print Method for sample_size_nbinom_summary Objects
+Print method for sample_size_nbinom_summary objects
 
 ## Usage
 
