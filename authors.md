@@ -14,13 +14,13 @@ Source:
 [`DESCRIPTION`](https://github.com/keaven/gsDesignNB/blob/main/DESCRIPTION)
 
 Anderson K (2025). *gsDesignNB: Sample Size Calculation and Simulation
-for Negative Binomial Outcomes*. R package version 0.2.1,
+for Negative Binomial Outcomes*. R package version 0.2.2,
 <https://keaven.github.io/gsDesignNB/>.
 
     @Manual{,
       title = {gsDesignNB: Sample Size Calculation and Simulation for Negative Binomial Outcomes},
       author = {Keaven Anderson},
       year = {2025},
-      note = {R package version 0.2.1},
+      note = {R package version 0.2.2},
       url = {https://keaven.github.io/gsDesignNB/},
     }

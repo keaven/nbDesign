@@ -35,6 +35,13 @@ Tools for simulating trial data.
   : Simulate recurrent events with fixed follow-up
 - [`nb_sim_seasonal()`](https://keaven.github.io/gsDesignNB/reference/nb_sim_seasonal.md)
   : Simulate recurrent events with seasonal rates
+- [`sim_gs_nbinom()`](https://keaven.github.io/gsDesignNB/reference/sim_gs_nbinom.md)
+  : Simulate Group Sequential Clinical Trial for Negative Binomial
+  Outcomes
+- [`check_gs_bound()`](https://keaven.github.io/gsDesignNB/reference/check_gs_bound.md)
+  : Check Group Sequential Bounds
+- [`summarize_gs_sim()`](https://keaven.github.io/gsDesignNB/reference/summarize_gs_sim.md)
+  : Summarize Group Sequential Simulation Results
 
 ## Analysis
 
@@ -58,6 +65,8 @@ re-estimation and interim analysis.
   : Compute statistical information at analysis time
 - [`get_analysis_date()`](https://keaven.github.io/gsDesignNB/reference/get_analysis_date.md)
   : Find calendar date for target event count
+- [`get_cut_date()`](https://keaven.github.io/gsDesignNB/reference/get_cut_date.md)
+  : Determine Analysis Date based on Criteria
 
 ## gsDesign re-exports
 
