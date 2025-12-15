@@ -213,10 +213,10 @@ head(cut_summary)
 #> 6  6 Experimental  0.06569608 1.434304      0
 ```
 
-## Wald test (Mütze et al.)
+## Wald test (Mütze et al. 2019)
 
 Using the truncated data we can run a negative binomial Wald test as
-described by Mütze et al. (2018).
+described by Mütze et al. (2019).
 
 ``` r
 mutze_res <- mutze_test(cut_summary)
@@ -335,3 +335,9 @@ print(paste("Estimated Dispersion (MoM):", signif(k_mom, 4)))
 print(paste("Estimated Dispersion (GLM):", signif(k_glm, 4)))
 #> [1] "Estimated Dispersion (GLM): 0.512"
 ```
+
+## References
+
+Mütze, Tobias, Ekkehard Glimm, Heinz Schmidli, and Tim Friede. 2019.
+“Group Sequential Designs for Negative Binomial Outcomes.” *Statistical
+Methods in Medical Research* 28 (8): 2326–47.

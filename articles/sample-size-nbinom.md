@@ -40,7 +40,7 @@ where $r = n_{2}/n_{1}$ is the allocation ratio, and
 $\mu_{i} = \lambda_{i} \cdot t$ is the expected mean count over exposure
 duration $t$.
 
-### Method 2: Friede and Schmidli (2010) / Mütze et al. (2018)
+### Method 2: Friede and Schmidli (2010) / Mütze et al. (2019)
 
 This method uses a Wald test statistic and is commonly used in group
 sequential designs (as implemented in the `gscounts` package). The total
@@ -145,7 +145,7 @@ effective exposure time reported is also adjusted similarly.
 
 ## Examples
 
-### Basic calculation (Zhu and Lakkis)
+### Basic calculation (Zhu and Lakkis 2014)
 
 Calculate sample size for:
 
@@ -182,7 +182,7 @@ sample_size_nbinom(
 #> Accrual: 12.0, Trial duration: 12.0
 ```
 
-### Using Friede et al. method
+### Using Friede and Schmidli (2010) method
 
 ``` r
 sample_size_nbinom(
@@ -402,16 +402,14 @@ exposure (at-risk)” for each group.
 
 ## References
 
-Zhu, H., & Lakkis, H. (2014). Sample size calculation for comparing two
-negative binomial rates in clinical trials. *Statistics in
-Biopharmaceutical Research*, 6(1), 107-115.
-<https://doi.org/10.1080/19466315.2013.870533>
+Friede, T, and H Schmidli. 2010. “Blinded Sample Size Reestimation with
+Negative Binomial Counts in Superiority and Non-Inferiority Trials.”
+*Methods of Information in Medicine* 49 (06): 618–24.
 
-Friede, T., & Schmidli, H. (2010). Sample size estimation for clinical
-trials with negative binomial rates. *Methods of Information in
-Medicine*, 49(6), 623-631. <https://doi.org/10.3414/ME09-01-0058>
+Mütze, Tobias, Ekkehard Glimm, Heinz Schmidli, and Tim Friede. 2019.
+“Group Sequential Designs for Negative Binomial Outcomes.” *Statistical
+Methods in Medical Research* 28 (8): 2326–47.
 
-Mütze, T., Glimm, E., Schmidli, H., & Friede, T. (2018). Group
-sequential designs for negative binomial outcomes. *Statistical Methods
-in Medical Research*, 27(10), 2978-2993.
-<https://doi.org/10.1177/0962280218773115>
+Zhu, Haiyuan, and Hassan Lakkis. 2014. “Sample Size Calculation for
+Comparing Two Negative Binomial Rates.” *Statistics in Medicine* 33 (3):
+376–87.

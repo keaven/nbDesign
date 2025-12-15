@@ -3,7 +3,7 @@
 Fits a negative binomial (or Poisson) log-rate model to the aggregated
 subject-level data produced by
 [`cut_data_by_date()`](https://keaven.github.io/gsDesignNB/reference/cut_data_by_date.md).
-The method matches the Wald test described by Mütze et al. (2018) for
+The method matches the Wald test described by Mütze et al. (2019) for
 comparing treatment arms with recurrent event outcomes.
 
 ## Usage

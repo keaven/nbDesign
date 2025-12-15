@@ -46,6 +46,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/keaven/gsDesignNB/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -62,7 +63,7 @@
       <h1>Simulation of recurrent events</h1>
             
       
-
+      <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesignNB/blob/main/vignettes/simulation-example.Rmd" class="external-link"><code>vignettes/simulation-example.Rmd</code></a></small>
       <div class="d-none name"><code>simulation-example.Rmd</code></div>
     </div>
 
@@ -759,10 +760,10 @@ during which no new events are counted and time at risk is excluded.</p>
 <span><span class="co">#&gt; 6  6 Experimental  0.06569608 1.434304      0</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="wald-test-mütze-et-al-">Wald test (Mütze et al.)<a class="anchor" aria-label="anchor" href="#wald-test-m%C3%BCtze-et-al-"></a>
+<h2 id="wald-test-mutze2019group">Wald test <span class="citation">(Mütze et al. 2019)</span><a class="anchor" aria-label="anchor" href="#wald-test-mutze2019group"></a>
 </h2>
 <p>Using the truncated data we can run a negative binomial Wald test as
-described by Mütze et al. (2018).</p>
+described by <span class="citation">Mütze et al. (2019)</span>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mutze_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutze_test.html">mutze_test</a></span><span class="op">(</span><span class="va">cut_summary</span><span class="op">)</span></span>
 <span><span class="va">mutze_res</span><span class="op">$</span><span class="va">group_summary</span> <span class="op">|&gt;</span></span>
@@ -1344,6 +1345,17 @@ Moments (MoM) estimator:</p>
 <span><span class="co">#&gt; [1] "Estimated Dispersion (MoM): 0.5"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Estimated Dispersion (GLM):"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif</a></span><span class="op">(</span><span class="va">k_glm</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "Estimated Dispersion (GLM): 0.512"</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2 unnumbered">
+<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-mutze2019group" class="csl-entry">
+Mütze, Tobias, Ekkehard Glimm, Heinz Schmidli, and Tim Friede. 2019.
+<span>“Group Sequential Designs for Negative Binomial Outcomes.”</span>
+<em>Statistical Methods in Medical Research</em> 28 (8): 2326–47.
+</div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

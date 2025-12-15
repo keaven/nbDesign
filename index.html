@@ -11,8 +11,8 @@
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Sample Size Calculation and Simulation for Negative Binomial Outcomes">
-<meta name="description" content="Provides sample size calculation methods for negative binomial outcomes, including the methods by Zhu and Lakkis (2014) and Friede and Schmidli (2010). Supports piecewise constant accrual rates.">
-<meta property="og:description" content="Provides sample size calculation methods for negative binomial outcomes, including the methods by Zhu and Lakkis (2014) and Friede and Schmidli (2010). Supports piecewise constant accrual rates.">
+<meta name="description" content="Provides tools for planning and simulating recurrent event trials with overdispersed count endpoints analyzed using negative binomial (or Poisson) rate models. Implements sample size and power calculations for fixed designs with variable accrual, dropout, maximum follow-up, and event gaps, including methods of Zhu and Lakkis (2014) &lt;doi:10.1002/sim.5947&gt; and Friede and Schmidli (2010) &lt;doi:10.3414/ME09-02-0060&gt;. Supports group sequential designs by adding calendar-time analysis schedules compatible with the gsDesign package and by estimating blinded information at interim looks. Includes simulation utilities for recurrent events (including seasonal rates), interim data truncation, and Wald-based inference for treatment rate ratios.">
+<meta property="og:description" content="Provides tools for planning and simulating recurrent event trials with overdispersed count endpoints analyzed using negative binomial (or Poisson) rate models. Implements sample size and power calculations for fixed designs with variable accrual, dropout, maximum follow-up, and event gaps, including methods of Zhu and Lakkis (2014) &lt;doi:10.1002/sim.5947&gt; and Friede and Schmidli (2010) &lt;doi:10.3414/ME09-02-0060&gt;. Supports group sequential designs by adding calendar-time analysis schedules compatible with the gsDesign package and by estimating blinded information at interim looks. Includes simulation utilities for recurrent events (including seasonal rates), interim data truncation, and Wald-based inference for treatment rate ratios.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -48,6 +48,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
 </form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/keaven/gsDesignNB/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -77,7 +78,15 @@
 <p>This package follows the <a href="https://style.tidyverse.org/" class="external-link">tidyverse style guide</a>.</p>
 </div>
 </div>
-  </main><aside class="col-md-3"><div class="license">
+  </main><aside class="col-md-3"><div class="links">
+<h2 data-toc-skip>Links</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/keaven/gsDesignNB/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/keaven/gsDesignNB/issues" class="external-link">Report a bug</a></li>
+</ul>
+</div>
+
+<div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
@@ -97,6 +106,7 @@
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Keaven Anderson <br><small class="roles"> Author, maintainer </small>   </li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
 

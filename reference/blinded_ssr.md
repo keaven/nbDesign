@@ -125,10 +125,11 @@ A list containing:
 ## References
 
 Friede, T., & Schmidli, H. (2010). Blinded sample size reestimation with
-count data: methods and applications. *Statistics in Medicine*, 29(10),
-1145–1156. [doi:10.1002/sim.3891](https://doi.org/10.1002/sim.3891)
+count data: methods and applications in multiple sclerosis. *Statistics
+in Medicine*, 29(10), 1145–1156.
+[doi:10.1002/sim.3861](https://doi.org/10.1002/sim.3861)
 
 Schneider, S., Schmidli, H., & Friede, T. (2013). Blinded sample size
-reestimation for recurrent event data with time trends. *Statistics in
+re-estimation for recurrent event data with time trends. *Statistics in
 Medicine*, 32(30), 5448–5457.
-[doi:10.1002/sim.5920](https://doi.org/10.1002/sim.5920)
+[doi:10.1002/sim.5977](https://doi.org/10.1002/sim.5977)

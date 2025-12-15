@@ -21,7 +21,8 @@ library(gt)
 This vignette demonstrates how to create a group sequential design for
 negative binomial outcomes using
 [`gsNBCalendar()`](https://keaven.github.io/gsDesignNB/reference/gsNBCalendar.md)
-and simulate the design to confirm design operating characteristicsusing
+and simulate the design to confirm design operating characteristics
+using
 [`nb_sim()`](https://keaven.github.io/gsDesignNB/reference/nb_sim.md).
 
 ## Trial design parameters

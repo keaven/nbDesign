@@ -46,6 +46,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/keaven/gsDesignNB/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -62,7 +63,7 @@
       <h1>Sample size calculation for negative binomial outcomes</h1>
             
       
-
+      <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesignNB/blob/main/vignettes/sample-size-nbinom.Rmd" class="external-link"><code>vignettes/sample-size-nbinom.Rmd</code></a></small>
       <div class="d-none name"><code>sample-size-nbinom.Rmd</code></div>
     </div>
 
@@ -100,7 +101,7 @@ are the event rates in the control and treatment groups,
 respectively.</p>
 <p>The function implements two methods:</p>
 <div class="section level3">
-<h3 id="method-1-zhu-and-lakkis-2014">Method 1: Zhu and Lakkis (2014)<a class="anchor" aria-label="anchor" href="#method-1-zhu-and-lakkis-2014"></a>
+<h3 id="method-1-zhu2014sample">Method 1: <span class="citation">Zhu and Lakkis (2014)</span><a class="anchor" aria-label="anchor" href="#method-1-zhu2014sample"></a>
 </h3>
 <p>This method is based on the asymptotic normality of the log rate
 ratio. The sample size for the control group
@@ -119,7 +120,8 @@ is the expected mean count over exposure duration
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>.</p>
 </div>
 <div class="section level3">
-<h3 id="method-2-friede-and-schmidli-2010-mütze-et-al--2018">Method 2: Friede and Schmidli (2010) / Mütze et al. (2018)<a class="anchor" aria-label="anchor" href="#method-2-friede-and-schmidli-2010-m%C3%BCtze-et-al--2018"></a>
+<h3 id="method-2-friede2010blinded-mutze2019group">Method 2: <span class="citation">Friede and Schmidli (2010)</span> /
+<span class="citation">Mütze et al. (2019)</span><a class="anchor" aria-label="anchor" href="#method-2-friede2010blinded-mutze2019group"></a>
 </h3>
 <p>This method uses a Wald test statistic and is commonly used in group
 sequential designs (as implemented in the <code>gscounts</code>
@@ -249,7 +251,7 @@ distribution depends on the exposure time in a non-linear way
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Q</mi><annotation encoding="application/x-tex">Q</annotation></semantics></math>
 to the dispersion parameter
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>,
-as derived by Zhu and Lakkis (2014):</p>
+as derived by <span class="citation">Zhu and Lakkis (2014)</span>:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo>=</mo><mfrac><mrow><mi>E</mi><mrow><mo stretchy="true" form="prefix">[</mo><msup><mi>t</mi><mn>2</mn></msup><mo stretchy="true" form="postfix">]</mo></mrow></mrow><msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>E</mi><mrow><mo stretchy="true" form="prefix">[</mo><mi>t</mi><mo stretchy="true" form="postfix">]</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup></mfrac></mrow><annotation encoding="application/x-tex"> Q = \frac{E[t^2]}{(E[t])^2} </annotation></semantics></math></p>
 <p>The adjusted dispersion parameter used in the sample size calculation
 is
@@ -278,7 +280,8 @@ effective exposure time reported is also adjusted similarly.</p>
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h2>
 <div class="section level3">
-<h3 id="basic-calculation-zhu-and-lakkis">Basic calculation (Zhu and Lakkis)<a class="anchor" aria-label="anchor" href="#basic-calculation-zhu-and-lakkis"></a>
+<h3 id="basic-calculation-zhu2014sample">Basic calculation <span class="citation">(Zhu and Lakkis
+2014)</span><a class="anchor" aria-label="anchor" href="#basic-calculation-zhu2014sample"></a>
 </h3>
 <p>Calculate sample size for:</p>
 <ul>
@@ -321,7 +324,8 @@ effective exposure time reported is also adjusted similarly.</p>
 <span><span class="co">#&gt; Accrual: 12.0, Trial duration: 12.0</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="using-friede-et-al--method">Using Friede et al. method<a class="anchor" aria-label="anchor" href="#using-friede-et-al--method"></a>
+<h3 id="using-friede2010blinded-method">Using <span class="citation">Friede and Schmidli (2010)</span>
+method<a class="anchor" aria-label="anchor" href="#using-friede2010blinded-method"></a>
 </h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sample_size_nbinom.html">sample_size_nbinom</a></span><span class="op">(</span></span>
@@ -542,18 +546,27 @@ differ.</p>
 exposure (at-risk)” for each group.</p>
 </div>
 </div>
-<div class="section level2">
-<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+<div class="section level2 unnumbered">
+<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<p>Zhu, H., &amp; Lakkis, H. (2014). Sample size calculation for
-comparing two negative binomial rates in clinical trials. <em>Statistics
-in Biopharmaceutical Research</em>, 6(1), 107-115. <a href="https://doi.org/10.1080/19466315.2013.870533" class="external-link uri">https://doi.org/10.1080/19466315.2013.870533</a></p>
-<p>Friede, T., &amp; Schmidli, H. (2010). Sample size estimation for
-clinical trials with negative binomial rates. <em>Methods of Information
-in Medicine</em>, 49(6), 623-631. <a href="https://doi.org/10.3414/ME09-01-0058" class="external-link uri">https://doi.org/10.3414/ME09-01-0058</a></p>
-<p>Mütze, T., Glimm, E., Schmidli, H., &amp; Friede, T. (2018). Group
-sequential designs for negative binomial outcomes. <em>Statistical
-Methods in Medical Research</em>, 27(10), 2978-2993. <a href="https://doi.org/10.1177/0962280218773115" class="external-link uri">https://doi.org/10.1177/0962280218773115</a></p>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-friede2010blinded" class="csl-entry">
+Friede, T, and H Schmidli. 2010. <span>“Blinded Sample Size Reestimation
+with Negative Binomial Counts in Superiority and Non-Inferiority
+Trials.”</span> <em>Methods of Information in Medicine</em> 49 (06):
+618–24.
+</div>
+<div id="ref-mutze2019group" class="csl-entry">
+Mütze, Tobias, Ekkehard Glimm, Heinz Schmidli, and Tim Friede. 2019.
+<span>“Group Sequential Designs for Negative Binomial Outcomes.”</span>
+<em>Statistical Methods in Medical Research</em> 28 (8): 2326–47.
+</div>
+<div id="ref-zhu2014sample" class="csl-entry">
+Zhu, Haiyuan, and Hassan Lakkis. 2014. <span>“Sample Size Calculation
+for Comparing Two Negative Binomial Rates.”</span> <em>Statistics in
+Medicine</em> 33 (3): 376–87.
+</div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
