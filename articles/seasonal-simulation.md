@@ -4,17 +4,6 @@
 library(gsDesignNB)
 library(data.table)
 library(dplyr)
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:data.table':
-#> 
-#>     between, first, last
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
 ```
 
 This vignette demonstrates how to simulate recurrent events when event
@@ -240,9 +229,9 @@ print(coef_summary)
 
 # Estimated Rate Ratio (Experimental / Control)
 rr <- exp(coef(fit)["treatmentExperimental"])
-cat("Estimated Rate Ratio (Experimental / Control):", round(rr, 3), "\n")
+message("Estimated Rate Ratio (Experimental / Control): ", round(rr, 3))
 #> Estimated Rate Ratio (Experimental / Control): 5.538
-cat("True Design Rate Ratio:", 0.7, "\n")
+message("True Design Rate Ratio: ", 0.7)
 #> True Design Rate Ratio: 0.7
 ```
 
@@ -255,11 +244,11 @@ inverse of this variance.
 ``` r
 # Variance of the treatment effect coefficient
 var_beta <- vcov(fit)["treatmentExperimental", "treatmentExperimental"]
-cat("Variance of Treatment Effect (log-scale):", var_beta, "\n")
-#> Variance of Treatment Effect (log-scale): 1.374049
+message("Variance of Treatment Effect (log-scale): ", var_beta)
+#> Variance of Treatment Effect (log-scale): 1.37404900110776
 
 # Statistical Information
 info <- 1 / var_beta
-cat("Statistical Information:", info, "\n")
-#> Statistical Information: 0.7277761
+message("Statistical Information: ", info)
+#> Statistical Information: 0.727776083090051
 ```

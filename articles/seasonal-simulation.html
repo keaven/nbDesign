@@ -72,18 +72,7 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://keaven.github.io/gsDesignNB/">gsDesignNB</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:data.table':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     between, first, last</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:stats':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     filter, lag</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></code></pre></div>
 <p>This vignette demonstrates how to simulate recurrent events when
 event rates vary by season. This is useful for conditions with seasonal
 patterns, such as respiratory infections.</p>
@@ -305,9 +294,9 @@ exposure time as an offset.</p>
 <span></span>
 <span><span class="co"># Estimated Rate Ratio (Experimental / Control)</span></span>
 <span><span class="va">rr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">[</span><span class="st">"treatmentExperimental"</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Estimated Rate Ratio (Experimental / Control):"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">rr</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Estimated Rate Ratio (Experimental / Control): "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">rr</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Estimated Rate Ratio (Experimental / Control): 5.538</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"True Design Rate Ratio:"</span>, <span class="fl">0.7</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"True Design Rate Ratio: "</span>, <span class="fl">0.7</span><span class="op">)</span></span>
 <span><span class="co">#&gt; True Design Rate Ratio: 0.7</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="variance-and-information">Variance and information<a class="anchor" aria-label="anchor" href="#variance-and-information"></a>
@@ -318,13 +307,13 @@ inverse of this variance.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Variance of the treatment effect coefficient</span></span>
 <span><span class="va">var_beta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/vcov.html" class="external-link">vcov</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">[</span><span class="st">"treatmentExperimental"</span>, <span class="st">"treatmentExperimental"</span><span class="op">]</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Variance of Treatment Effect (log-scale):"</span>, <span class="va">var_beta</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Variance of Treatment Effect (log-scale): 1.374049</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Variance of Treatment Effect (log-scale): "</span>, <span class="va">var_beta</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Variance of Treatment Effect (log-scale): 1.37404900110776</span></span>
 <span></span>
 <span><span class="co"># Statistical Information</span></span>
 <span><span class="va">info</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="va">var_beta</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Statistical Information:"</span>, <span class="va">info</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Statistical Information: 0.7277761</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Statistical Information: "</span>, <span class="va">info</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Statistical Information: 0.727776083090051</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

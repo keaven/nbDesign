@@ -190,7 +190,7 @@ ggplot(sim_plot, aes(x = tte, y = factor(id), color = treatment)) +
 
 ![Patient timelines with events (dots), 30-day gaps (gray segments), and
 censoring
-(X)](simulation-example_files/figure-html/unnamed-chunk-6-1.png)
+(X)](simulation-example_files/figure-html/unnamed-chunk-7-1.png)
 
 ## Cutting data by analysis date
 

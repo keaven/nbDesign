@@ -3,19 +3,9 @@
 ``` r
 library(gsDesign)
 library(gsDesignNB)
-#> 
-#> Attaching package: 'gsDesignNB'
-#> The following object is masked from 'package:gsDesign':
-#> 
-#>     toInteger
 library(data.table)
 library(ggplot2)
 library(gt)
-#> 
-#> Attaching package: 'gt'
-#> The following object is masked from 'package:gsDesign':
-#> 
-#>     as_rtf
 ```
 
 This vignette demonstrates how to create a group sequential design for
@@ -71,7 +61,7 @@ nb_ss <- sample_size_nbinom(
 )
 
 # Print key results
-cat("Fixed design\n")
+message("Fixed design")
 #> Fixed design
 nb_ss
 #> Sample size for negative binomial outcome
@@ -577,16 +567,15 @@ futility_by_sim <- as.data.table(all_results)[
 
 overall_futility <- mean(futility_by_sim$futility, na.rm = TRUE)
 
-cat("\n=== Overall Operating Characteristics ===\n")
-#> 
+message("=== Overall Operating Characteristics ===")
 #> === Overall Operating Characteristics ===
-cat(sprintf("Number of simulations: %d\n", n_sims))
+message(sprintf("Number of simulations: %d", n_sims))
 #> Number of simulations: 50
-cat(sprintf("Overall Power (P[reject H0]): %.1f%%\n", overall_power * 100))
+message(sprintf("Overall Power (P[reject H0]): %.1f%%", overall_power * 100))
 #> Overall Power (P[reject H0]): 86.0%
-cat(sprintf("Futility Stopping Rate: %.1f%%\n", overall_futility * 100))
+message(sprintf("Futility Stopping Rate: %.1f%%", overall_futility * 100))
 #> Futility Stopping Rate: 14.0%
-cat(sprintf("Design Power (target): %.1f%%\n", (1 - gs_nb$beta) * 100))
+message(sprintf("Design Power (target): %.1f%%", (1 - gs_nb$beta) * 100))
 #> Design Power (target): 90.0%
 ```
 

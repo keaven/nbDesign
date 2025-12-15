@@ -72,19 +72,9 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://keaven.github.io/gsDesign/" class="external-link">gsDesign</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://keaven.github.io/gsDesignNB/">gsDesignNB</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'gsDesignNB'</span></span>
-<span><span class="co">#&gt; The following object is masked from 'package:gsDesign':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     toInteger</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gt.rstudio.com" class="external-link">gt</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'gt'</span></span>
-<span><span class="co">#&gt; The following object is masked from 'package:gsDesign':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     as_rtf</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gt.rstudio.com" class="external-link">gt</a></span><span class="op">)</span></span></code></pre></div>
 <p>This vignette demonstrates how to create a group sequential design
 for negative binomial outcomes using <code><a href="../reference/gsNBCalendar.html">gsNBCalendar()</a></code> and
 simulate the design to confirm design operating characteristics using
@@ -150,7 +140,7 @@ the Zhu and Lakkis method:</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Print key results</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Fixed design\n"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Fixed design"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Fixed design</span></span>
 <span><span class="va">nb_ss</span></span>
 <span><span class="co">#&gt; Sample size for negative binomial outcome</span></span>
@@ -2654,16 +2644,15 @@ vignette <code>verification-simulation.Rmd</code>.</p>
 <span></span>
 <span><span class="va">overall_futility</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">futility_by_sim</span><span class="op">$</span><span class="va">futility</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\n=== Overall Operating Characteristics ===\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"=== Overall Operating Characteristics ==="</span><span class="op">)</span></span>
 <span><span class="co">#&gt; === Overall Operating Characteristics ===</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Number of simulations: %d\n"</span>, <span class="va">n_sims</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Number of simulations: %d"</span>, <span class="va">n_sims</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Number of simulations: 50</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Overall Power (P[reject H0]): %.1f%%\n"</span>, <span class="va">overall_power</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Overall Power (P[reject H0]): %.1f%%"</span>, <span class="va">overall_power</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Overall Power (P[reject H0]): 86.0%</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Futility Stopping Rate: %.1f%%\n"</span>, <span class="va">overall_futility</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Futility Stopping Rate: %.1f%%"</span>, <span class="va">overall_futility</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Futility Stopping Rate: 14.0%</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Design Power (target): %.1f%%\n"</span>, <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">gs_nb</span><span class="op">$</span><span class="va">beta</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Design Power (target): %.1f%%"</span>, <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">gs_nb</span><span class="op">$</span><span class="va">beta</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Design Power (target): 90.0%</span></span></code></pre></div>
 </div>
 <div class="section level3">

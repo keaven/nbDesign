@@ -3,19 +3,9 @@
 ``` r
 library(gsDesignNB)
 library(gsDesign)
-#> 
-#> Attaching package: 'gsDesign'
-#> The following object is masked from 'package:gsDesignNB':
-#> 
-#>     toInteger
 library(data.table)
 library(ggplot2)
 library(gt)
-#> 
-#> Attaching package: 'gt'
-#> The following object is masked from 'package:gsDesign':
-#> 
-#>     as_rtf
 ```
 
 This vignette demonstrates how to simulate a group sequential design
@@ -166,13 +156,13 @@ info_asymp_final <- compute_info_at_time(
   dropout_rate = dropout_rate$rate[1]
 )
 
-cat("Asymptotic Information (Interim):", round(info_asymp_interim, 2), "\n")
+message("Asymptotic Information (Interim): ", round(info_asymp_interim, 2))
 #> Asymptotic Information (Interim): 15.54
-cat("Mean Simulated Information (Interim):", round(mean(results$interim_info), 2), "\n")
+message("Mean Simulated Information (Interim): ", round(mean(results$interim_info), 2))
 #> Mean Simulated Information (Interim): 14.45
-cat("Asymptotic Information (Final):", round(info_asymp_final, 2), "\n")
+message("Asymptotic Information (Final): ", round(info_asymp_final, 2))
 #> Asymptotic Information (Final): 22.81
-cat("Mean Simulated Information (Final):", round(mean(results$final_info), 2), "\n")
+message("Mean Simulated Information (Final): ", round(mean(results$final_info), 2))
 #> Mean Simulated Information (Final): 17.29
 ```
 
@@ -206,7 +196,7 @@ Comparison of Z-scores at Interim vs Final Analysis.
 ``` r
 # Correlation between interim and final Z-scores
 cor_z <- cor(results$interim_z, results$final_z)
-cat("Correlation between interim and final Z-scores:", round(cor_z, 3), "\n")
+message("Correlation between interim and final Z-scores: ", round(cor_z, 3))
 #> Correlation between interim and final Z-scores: 0.929
 
 ggplot(results, aes(x = interim_z, y = final_z)) +
@@ -281,6 +271,6 @@ for (i in 1:n_sims) {
   }
 }
 
-cat("Power (Empirical Rejection Rate):", mean(reject), "\n")
+message("Power (Empirical Rejection Rate): ", mean(reject))
 #> Power (Empirical Rejection Rate): 0
 ```
