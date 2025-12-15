@@ -2121,12 +2121,8 @@ vignette <code>verification-simulation.Rmd</code>.</p>
 <span><span class="va">crossing_summary</span><span class="op">[</span>, <span class="va">cum_prob_cross_upper</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">prob_cross_upper</span><span class="op">)</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co"># Cumulative power (Design)</span></span>
-<span><span class="co"># Drift parameter for alternative: |log(RR)| * sqrt(I_max)</span></span>
-<span><span class="co"># Note: gs_nb$n.fix is the information at final analysis</span></span>
-<span><span class="va">log_rr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">nb_ss</span><span class="op">$</span><span class="va">inputs</span><span class="op">$</span><span class="va">lambda2</span> <span class="op">/</span> <span class="va">nb_ss</span><span class="op">$</span><span class="va">inputs</span><span class="op">$</span><span class="va">lambda1</span><span class="op">)</span></span>
-<span><span class="va">theta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">log_rr</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">gs_nb</span><span class="op">$</span><span class="va">n.fix</span><span class="op">)</span></span>
-<span><span class="va">design_probs</span> <span class="op">&lt;-</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="https://keaven.github.io/gsDesign/reference/gsProbability.html" class="external-link">gsProbability</a></span><span class="op">(</span>d <span class="op">=</span> <span class="va">gs_nb</span>, theta <span class="op">=</span> <span class="va">theta</span><span class="op">)</span></span>
-<span><span class="va">crossing_summary</span><span class="op">[</span>, <span class="va">design_cum_power</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">design_probs</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">)</span><span class="op">[</span><span class="va">analysis</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="co"># The design object gs_nb already contains power probabilities in the second column of upper$prob</span></span>
+<span><span class="va">crossing_summary</span><span class="op">[</span>, <span class="va">design_cum_power</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">gs_nb</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="va">analysis</span><span class="op">]</span><span class="op">]</span></span>
 <span></span>
 <span><span class="va">crossing_summary</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="va">analysis</span>, <span class="va">n_cross_upper</span>, <span class="va">cum_prob_cross_upper</span>, <span class="va">design_cum_power</span><span class="op">)</span><span class="op">]</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -2604,19 +2600,19 @@ vignette <code>verification-simulation.Rmd</code>.</p>
 <td headers="analysis" class="gt_row gt_right">1</td>
 <td headers="n_cross_upper" class="gt_row gt_right">13</td>
 <td headers="cum_prob_cross_upper" class="gt_row gt_right">0.26</td>
-<td headers="design_cum_power" class="gt_row gt_right">1.000</td>
+<td headers="design_cum_power" class="gt_row gt_right">0.265</td>
 </tr>
 <tr>
 <td headers="analysis" class="gt_row gt_right">2</td>
 <td headers="n_cross_upper" class="gt_row gt_right">17</td>
 <td headers="cum_prob_cross_upper" class="gt_row gt_right">0.60</td>
-<td headers="design_cum_power" class="gt_row gt_right">1.000</td>
+<td headers="design_cum_power" class="gt_row gt_right">0.691</td>
 </tr>
 <tr>
 <td headers="analysis" class="gt_row gt_right">3</td>
 <td headers="n_cross_upper" class="gt_row gt_right">13</td>
 <td headers="cum_prob_cross_upper" class="gt_row gt_right">0.86</td>
-<td headers="design_cum_power" class="gt_row gt_right">1.000</td>
+<td headers="design_cum_power" class="gt_row gt_right">0.952</td>
 </tr>
 </tbody>
 </table>
