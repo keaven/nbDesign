@@ -31,6 +31,7 @@ event gaps)."></head><body>
     <li><a class="dropdown-item" href="../articles/simulation-example.html">Simulation of recurrent events</a></li>
     <li><a class="dropdown-item" href="../articles/verification-simulation.html">Verification of sample size calculation via simulation</a></li>
   </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/keaven/gsDesignNB/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -98,26 +99,26 @@ the truncated follow-up time (<code>tte</code>) and total number of observed eve
 <span class="r-in"><span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="nb_sim.html">nb_sim</a></span><span class="op">(</span><span class="va">enroll_rate</span>, <span class="va">fail_rate</span>, <span class="va">dropout_rate</span>, max_followup <span class="op">=</span> <span class="fl">2</span>, n <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">cut_data_by_date</span><span class="op">(</span><span class="va">sim</span>, cut_date <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    id    treatment enroll_time       tte events</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   1 Experimental  0.04814947 0.9518505      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   2      Control  0.04968518 0.8567431      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   3 Experimental  0.08092913 0.9179037      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   4      Control  0.10135757 0.3342787      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   5 Experimental  0.12509265 0.8749074      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   6 Experimental  0.12654618 0.8734538      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7   7      Control  0.13208227 0.8542285      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8   8      Control  0.13254571 0.8674543      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9   9 Experimental  0.13558272 0.8644173      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 10 Experimental  0.19885878 0.8011412      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 11      Control  0.20239567 0.7839151      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 12      Control  0.22002267 0.7799773      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 13 Experimental  0.22429347 0.7757065      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 14      Control  0.22803670 0.7719633      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 15 Experimental  0.23883497 0.7611650      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16 16      Control  0.25283811 0.7471619      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17 17 Experimental  0.26378892 0.7362111      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18 18 Experimental  0.29216864 0.6005228      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19 19      Control  0.32322892 0.6767711      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20 20      Control  0.37266560 0.6273344      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   1 Experimental  0.01171344 0.9882866      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   2 Experimental  0.02934044 0.9706596      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   3      Control  0.03361124 0.9526995      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   4      Control  0.03735447 0.9626455      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   5 Experimental  0.04815273 0.9518473      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   6 Experimental  0.06215587 0.9378441      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   7      Control  0.07310668 0.9132041      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   8      Control  0.10148641 0.8985136      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   9 Experimental  0.13254668 0.8674533      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 10      Control  0.18198337 0.8180166      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 11      Control  0.18848264 0.8115174      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 12 Experimental  0.19273280 0.8072672      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 13      Control  0.19927430 0.8007257      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 14      Control  0.22032463 0.7796754      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 15 Experimental  0.23065232 0.7693477      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16 16 Experimental  0.26515898 0.7211518      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17 17      Control  0.33279700 0.6672030      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18 18      Control  0.33766844 0.6486423      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19 19 Experimental  0.34177157 0.6582284      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20 20 Experimental  0.36928327 0.6307167      0</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

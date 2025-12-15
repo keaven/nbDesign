@@ -31,6 +31,7 @@ the gsNB object."></head><body>
     <li><a class="dropdown-item" href="../articles/simulation-example.html">Simulation of recurrent events</a></li>
     <li><a class="dropdown-item" href="../articles/verification-simulation.html">Verification of sample size calculation via simulation</a></li>
   </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/keaven/gsDesignNB/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -94,8 +95,24 @@ is also printed to the console.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Hwang-Shih-DeCani (gamma = -4) Lower spending: Hwang-Shih-DeCani (gamma = -2)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># For tabular bounds summary, use gsBoundSummary directly:</span></span></span>
-<span class="r-in"><span><span class="co"># gsDesign::gsBoundSummary(gs_design)</span></span></span>
+<span class="r-in"><span><span class="co"># For tabular bounds summary, use gsBoundSummary() directly:</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://keaven.github.io/gsDesign/reference/gsBoundSummary.html" class="external-link">gsBoundSummary</a></span><span class="op">(</span><span class="va">gs_design</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Analysis                   Value Efficacy Futility</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  IA 1: 33%                       Z   3.0107  -0.2387</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      N: 15             p (1-sided)   0.0013   0.5943</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    ~delta at bound  -0.7945   0.0630</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                P(Cross) if delta=0   0.0013   0.4057</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            P(Cross) if delta=-0.51   0.1412   0.0148</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  IA 2: 67%                       Z   2.5465   0.9411</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      N: 29             p (1-sided)   0.0054   0.1733</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    ~delta at bound  -0.4752  -0.1756</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                P(Cross) if delta=0   0.0062   0.8347</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            P(Cross) if delta=-0.51   0.5815   0.0437</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Final                       Z   1.9992   1.9992</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      N: 44             p (1-sided)   0.0228   0.0228</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    ~delta at bound  -0.3046  -0.3046</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                P(Cross) if delta=0   0.0233   0.9767</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            P(Cross) if delta=-0.51   0.9000   0.1000</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

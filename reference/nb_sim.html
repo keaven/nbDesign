@@ -27,6 +27,7 @@ exponential failure rates (Poisson process), and piecewise exponential dropout."
     <li><a class="dropdown-item" href="../articles/simulation-example.html">Simulation of recurrent events</a></li>
     <li><a class="dropdown-item" href="../articles/verification-simulation.html">Verification of sample size calculation via simulation</a></li>
   </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/keaven/gsDesignNB/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -133,7 +134,7 @@ no new events are counted. Default is 0.</p></dd>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The simulation generates data consistent with the negative binomial models described
-by Friede and Schmidli (2010) and Mutze et al. (2019). Specifically, it simulates
+by Friede and Schmidli (2010) and Mütze et al. (2019). Specifically, it simulates
 a Gamma-distributed frailty variable for each individual (if dispersion &gt; 0),
 which acts as a multiplier for that individual's event rate. Events are then
 generated according to a Poisson process with this subject-specific rate.</p>
@@ -149,6 +150,25 @@ Group sequential designs for negative binomial outcomes.
 28(8), 2326–2347. <a href="https://doi.org/10.1177/0962280218773115" class="external-link">doi:10.1177/0962280218773115</a></p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">enroll_rate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">20</span> <span class="op">/</span> <span class="op">(</span><span class="fl">5</span> <span class="op">/</span> <span class="fl">12</span><span class="op">)</span>, duration <span class="op">=</span> <span class="fl">5</span> <span class="op">/</span> <span class="fl">12</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fail_rate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Control"</span>, <span class="st">"Experimental"</span><span class="op">)</span>, rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.3</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dropout_rate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Control"</span>, <span class="st">"Experimental"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.05</span><span class="op">)</span>, duration <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">100</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu">nb_sim</span><span class="op">(</span><span class="va">enroll_rate</span>, <span class="va">fail_rate</span>, <span class="va">dropout_rate</span>, max_followup <span class="op">=</span> <span class="fl">2</span>, n <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   id id    treatment enroll_time        tte calendar_time event</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1  1 Experimental 0.001753159 0.08721714    0.08897029     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2  2      Control 0.055040405 0.54806160    0.60310200     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  2  2      Control 0.055040405 0.57914127    0.63418168     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  3  3 Experimental 0.079426040 1.99157690    2.07100294     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  3  3 Experimental 0.079426040 2.00000000    2.07942604     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  4  4      Control 0.085921072 1.81278025    1.89870132     1</span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

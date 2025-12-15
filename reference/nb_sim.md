@@ -96,7 +96,7 @@ the final censoring time).
 ## Details
 
 The simulation generates data consistent with the negative binomial
-models described by Friede and Schmidli (2010) and Mutze et al. (2019).
+models described by Friede and Schmidli (2010) and Mütze et al. (2019).
 Specifically, it simulates a Gamma-distributed frailty variable for each
 individual (if dispersion \> 0), which acts as a multiplier for that
 individual's event rate. Events are then generated according to a
@@ -113,3 +113,23 @@ Mütze, T., Glimm, E., Schmidli, H., & Friede, T. (2019). Group
 sequential designs for negative binomial outcomes. *Statistical Methods
 in Medical Research*, 28(8), 2326–2347.
 [doi:10.1177/0962280218773115](https://doi.org/10.1177/0962280218773115)
+
+## Examples
+
+``` r
+enroll_rate <- data.frame(rate = 20 / (5 / 12), duration = 5 / 12)
+fail_rate <- data.frame(treatment = c("Control", "Experimental"), rate = c(0.5, 0.3))
+dropout_rate <- data.frame(
+  treatment = c("Control", "Experimental"),
+  rate = c(0.1, 0.05), duration = c(100, 100)
+)
+sim <- nb_sim(enroll_rate, fail_rate, dropout_rate, max_followup = 2, n = 20)
+head(sim)
+#>   id id    treatment enroll_time        tte calendar_time event
+#> 1  1  1 Experimental 0.001753159 0.08721714    0.08897029     0
+#> 2  2  2      Control 0.055040405 0.54806160    0.60310200     1
+#> 3  2  2      Control 0.055040405 0.57914127    0.63418168     0
+#> 4  3  3 Experimental 0.079426040 1.99157690    2.07100294     1
+#> 5  3  3 Experimental 0.079426040 2.00000000    2.07942604     0
+#> 6  4  4      Control 0.085921072 1.81278025    1.89870132     1
+```

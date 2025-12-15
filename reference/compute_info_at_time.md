@@ -62,3 +62,17 @@ compute_info_at_time(
 ## Value
 
 The statistical information (inverse of variance) at the analysis time.
+
+## Examples
+
+``` r
+compute_info_at_time(
+  analysis_time = 12,
+  accrual_rate = 10,
+  accrual_duration = 10,
+  lambda1 = 0.5,
+  lambda2 = 0.3,
+  dispersion = 0.1
+)
+#> [1] 51.9802
+```
