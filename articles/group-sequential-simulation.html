@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesignNB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -109,9 +109,9 @@ simulate the design to confirm design operating characteristics using
 <li>
 <strong>Event Rates:</strong>
 <ul>
-<li><p>Control: 0.125 events per month (1.5 per year)</p></li>
-<li><p>Experimental: 0.0833 events per month (1.0 per year; rate ratio =
-0.67)</p></li>
+<li>Control: 0.125 events per month (1.5 per year)</li>
+<li>Experimental: 0.0833 events per month (1.0 per year; rate ratio =
+0.67)</li>
 </ul>
 </li>
 <li>
@@ -126,7 +126,8 @@ gap:</strong> 20 days # <strong>dropout rate:</strong> 5% at 1 year #
 <div class="section level3">
 <h3 id="sample-size-calculation">Sample size calculation<a class="anchor" aria-label="anchor" href="#sample-size-calculation"></a>
 </h3>
-<p>First, we calculate the required sample size for a fixed design:</p>
+<p>First, we calculate the required sample size for a fixed design using
+the Zhu and Lakkis method:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Sample size calculation</span></span>
 <span><span class="co"># Enrollment: constant rate over 12 months</span></span>
@@ -139,7 +140,7 @@ gap:</strong> 20 days # <strong>dropout rate:</strong> 5% at 1 year #
 <span>  dispersion <span class="op">=</span> <span class="fl">0.5</span>, <span class="co"># Overdispersion parameter</span></span>
 <span>  power <span class="op">=</span> <span class="fl">0.9</span>, <span class="co"># 90% power</span></span>
 <span>  alpha <span class="op">=</span> <span class="fl">0.025</span>, <span class="co"># One-sided alpha</span></span>
-<span>  accrual_rate <span class="op">=</span> <span class="fl">100</span> <span class="op">/</span> <span class="fl">12</span>, <span class="co"># Patients per month (will determine total n)</span></span>
+<span>  accrual_rate <span class="op">=</span> <span class="fl">1</span>, <span class="co"># This will be scaled to achieve the target power</span></span>
 <span>  accrual_duration <span class="op">=</span> <span class="fl">12</span>, <span class="co"># 12 months enrollment</span></span>
 <span>  trial_duration <span class="op">=</span> <span class="fl">24</span>, <span class="co"># 24 months trial</span></span>
 <span>  max_followup <span class="op">=</span> <span class="fl">12</span>, <span class="co"># 12 months of follow-up per patient</span></span>
@@ -174,8 +175,8 @@ gap:</strong> 20 days # <strong>dropout rate:</strong> 5% at 1 year #
 10, 18 and 24 months. Note that the final analysis time must be the same
 as for the fixed design. The relative enrollment rates will be increased
 to increase the sample size as with standard group sequential design
-theory. We specify <code>usTime = c(0.1, 0.14, 1)</code> which along
-with the <code><a href="https://keaven.github.io/gsDesign/reference/sfLinear.html" class="external-link">sfLinear()</a></code> spending function will spend 10%, 14%
+theory. We specify <code>usTime = c(0.1, 0.18, 1)</code> which along
+with the <code><a href="https://keaven.github.io/gsDesign/reference/sfLinear.html" class="external-link">sfLinear()</a></code> spending function will spend 10%, 18%
 and 100% of the cumulative
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
 at the 3 planned analyses regardless of the observed statistical
@@ -193,7 +194,7 @@ information at each analysis.</p>
 <span>  sfupar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">.5</span><span class="op">)</span>, <span class="co"># Identity function</span></span>
 <span>  sfl <span class="op">=</span> <span class="va">sfHSD</span>, <span class="co"># HSD spending for lower bound</span></span>
 <span>  sflpar <span class="op">=</span> <span class="op">-</span><span class="fl">8</span>, <span class="co"># Conservative futility bound</span></span>
-<span>  usTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">.14</span>, <span class="fl">1</span><span class="op">)</span>, <span class="co"># Upper spending timing</span></span>
+<span>  usTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">.18</span>, <span class="fl">1</span><span class="op">)</span>, <span class="co"># Upper spending timing</span></span>
 <span>  lsTime <span class="op">=</span> <span class="cn">NULL</span>, <span class="co"># Spending based on information</span></span>
 <span>  analysis_times <span class="op">=</span> <span class="va">analysis_times</span> <span class="co"># Calendar times in months</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">gsDesignNB</span><span class="fu">::</span><span class="fu"><a href="../reference/toInteger.html">toInteger</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># Round to integer sample size</span></span></code></pre></div>
@@ -733,50 +734,50 @@ information at each analysis.</p>
 <tr>
 <td headers="Analysis" class="gt_row gt_left">IA 2: 79%</td>
 <td headers="Value" class="gt_row gt_left">Z</td>
-<td headers="Efficacy" class="gt_row gt_right">3.0188</td>
+<td headers="Efficacy" class="gt_row gt_right">2.8191</td>
 <td headers="Futility" class="gt_row gt_right">1.1884</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left">Information: 65.47</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0013</td>
+<td headers="Efficacy" class="gt_row gt_right">0.0024</td>
 <td headers="Futility" class="gt_row gt_right">0.1173</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left">Month: 18</td>
 <td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.6882</td>
+<td headers="Efficacy" class="gt_row gt_right">0.7054</td>
 <td headers="Futility" class="gt_row gt_right">0.8632</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">P(Cross) if RR=1</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0035</td>
+<td headers="Efficacy" class="gt_row gt_right">0.0045</td>
 <td headers="Futility" class="gt_row gt_right">0.8826</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">P(Cross) if RR=0.67</td>
-<td headers="Efficacy" class="gt_row gt_right">0.6256</td>
+<td headers="Efficacy" class="gt_row gt_right">0.6910</td>
 <td headers="Futility" class="gt_row gt_right">0.0186</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left">Final</td>
 <td headers="Value" class="gt_row gt_left">Z</td>
-<td headers="Efficacy" class="gt_row gt_right">1.9857</td>
-<td headers="Futility" class="gt_row gt_right">1.9857</td>
+<td headers="Efficacy" class="gt_row gt_right">1.9875</td>
+<td headers="Futility" class="gt_row gt_right">1.9875</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left">Information: 82.89</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0235</td>
-<td headers="Futility" class="gt_row gt_right">0.0235</td>
+<td headers="Efficacy" class="gt_row gt_right">0.0234</td>
+<td headers="Futility" class="gt_row gt_right">0.0234</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left">Month: 24</td>
 <td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.8038</td>
-<td headers="Futility" class="gt_row gt_right">0.8038</td>
+<td headers="Efficacy" class="gt_row gt_right">0.8036</td>
+<td headers="Futility" class="gt_row gt_right">0.8036</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>

@@ -37,7 +37,6 @@ We design a trial with the following characteristics:
   - Final: 24 months
 - **Event Rates:**
   - Control: 0.125 events per month (1.5 per year)
-
   - Experimental: 0.0833 events per month (1.0 per year; rate ratio =
     0.67)
 - **Dispersion:** 0.5
@@ -47,7 +46,8 @@ We design a trial with the following characteristics:
 
 ### Sample size calculation
 
-First, we calculate the required sample size for a fixed design:
+First, we calculate the required sample size for a fixed design using
+the Zhu and Lakkis method:
 
 ``` r
 # Sample size calculation
@@ -61,7 +61,7 @@ nb_ss <- sample_size_nbinom(
   dispersion = 0.5, # Overdispersion parameter
   power = 0.9, # 90% power
   alpha = 0.025, # One-sided alpha
-  accrual_rate = 100 / 12, # Patients per month (will determine total n)
+  accrual_rate = 1, # This will be scaled to achieve the target power
   accrual_duration = 12, # 12 months enrollment
   trial_duration = 24, # 24 months trial
   max_followup = 12, # 12 months of follow-up per patient
@@ -96,9 +96,9 @@ Now we convert this a group sequential design with 3 analyses after 10,
 18 and 24 months. Note that the final analysis time must be the same as
 for the fixed design. The relative enrollment rates will be increased to
 increase the sample size as with standard group sequential design
-theory. We specify `usTime = c(0.1, 0.14, 1)` which along with the
+theory. We specify `usTime = c(0.1, 0.18, 1)` which along with the
 [`sfLinear()`](https://keaven.github.io/gsDesign/reference/sfLinear.html)
-spending function will spend 10%, 14% and 100% of the cumulative
+spending function will spend 10%, 18% and 100% of the cumulative
 $\alpha$ at the 3 planned analyses regardless of the observed
 statistical information at each analysis.
 
@@ -115,7 +115,7 @@ gs_nb <- gsNBCalendar(
   sfupar = c(.5, .5), # Identity function
   sfl = sfHSD, # HSD spending for lower bound
   sflpar = -8, # Conservative futility bound
-  usTime = c(.1, .14, 1), # Upper spending timing
+  usTime = c(.1, .18, 1), # Upper spending timing
   lsTime = NULL, # Spending based on information
   analysis_times = analysis_times # Calendar times in months
 ) |> gsDesignNB::toInteger() # Round to integer sample size
@@ -174,14 +174,14 @@ gs_nb |>
 | Month: 10                                                    | ~RR at bound        | 0.5931   | 1.2279   |
 |                                                              | P(Cross) if RR=1    | 0.0025   | 0.1350   |
 |                                                              | P(Cross) if RR=0.67 | 0.2649   | 0.0005   |
-| IA 2: 79%                                                    | Z                   | 3.0188   | 1.1884   |
-| Information: 65.47                                           | p (1-sided)         | 0.0013   | 0.1173   |
-| Month: 18                                                    | ~RR at bound        | 0.6882   | 0.8632   |
-|                                                              | P(Cross) if RR=1    | 0.0035   | 0.8826   |
-|                                                              | P(Cross) if RR=0.67 | 0.6256   | 0.0186   |
-| Final                                                        | Z                   | 1.9857   | 1.9857   |
-| Information: 82.89                                           | p (1-sided)         | 0.0235   | 0.0235   |
-| Month: 24                                                    | ~RR at bound        | 0.8038   | 0.8038   |
+| IA 2: 79%                                                    | Z                   | 2.8191   | 1.1884   |
+| Information: 65.47                                           | p (1-sided)         | 0.0024   | 0.1173   |
+| Month: 18                                                    | ~RR at bound        | 0.7054   | 0.8632   |
+|                                                              | P(Cross) if RR=1    | 0.0045   | 0.8826   |
+|                                                              | P(Cross) if RR=0.67 | 0.6910   | 0.0186   |
+| Final                                                        | Z                   | 1.9875   | 1.9875   |
+| Information: 82.89                                           | p (1-sided)         | 0.0234   | 0.0234   |
+| Month: 24                                                    | ~RR at bound        | 0.8036   | 0.8036   |
 |                                                              | P(Cross) if RR=1    | 0.0240   | 0.9760   |
 |                                                              | P(Cross) if RR=0.67 | 0.9524   | 0.0476   |
 
