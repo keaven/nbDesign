@@ -131,7 +131,16 @@ summary(gs_nb)
 #> 0.0833, risk ratio 0.6667, dispersion 0.5000. Accrual duration 12.0, trial
 #> duration 24.0, max follow-up 12.0, event gap 0.66, dropout rate 0.0043, average
 #> exposure (calendar) 11.70, (at-risk n1=10.81, n2=11.09). Randomization ratio
-#> 1:1.
+#> 1:1. Upper spending: Piecewise linear (line points = 0.5) Lower spending:
+#> Hwang-Shih-DeCani (gamma = -8)
+#> Asymmetric two-sided with non-binding futility bound group sequential design
+#> for negative binomial outcomes, 3 analyses, total sample size 370.0, 90 percent
+#> power, 2.5 percent (1-sided) Type I error. Control rate 0.1250, treatment rate
+#> 0.0833, risk ratio 0.6667, dispersion 0.5000. Accrual duration 12.0, trial
+#> duration 24.0, max follow-up 12.0, event gap 0.66, dropout rate 0.0043, average
+#> exposure (calendar) 11.70, (at-risk n1=10.81, n2=11.09). Randomization ratio
+#> 1:1. Upper spending: Piecewise linear (line points = 0.5) Lower spending:
+#> Hwang-Shih-DeCani (gamma = -8)
 ```
 
 Tabular summary:
@@ -160,21 +169,21 @@ gs_nb |>
 |--------------------------------------------------------------|---------------------|----------|----------|
 | N = 370, Expected events = 414.1                             |                     |          |          |
 | Analysis                                                     | Value               | Efficacy | Futility |
-| IA 1: 35%                                                    | Z                   | 2.3767   | -1.1032  |
-| Information: 28.96                                           | p (1-sided)         | 0.0087   | 0.8650   |
-| Month: 10                                                    | ~RR at bound        | 0.6425   | 1.2279   |
-|                                                              | P(Cross) if RR=1    | 0.0087   | 0.1350   |
-|                                                              | P(Cross) if RR=0.67 | 0.4215   | 0.0005   |
-| IA 2: 79%                                                    | Z                   | 2.2080   | 1.1914   |
-| Information: 65.47                                           | p (1-sided)         | 0.0136   | 0.1167   |
-| Month: 18                                                    | ~RR at bound        | 0.7609   | 0.8629   |
-|                                                              | P(Cross) if RR=1    | 0.0197   | 0.8816   |
-|                                                              | P(Cross) if RR=0.67 | 0.8654   | 0.0186   |
-| Final                                                        | Z                   | 2.2379   | 2.2379   |
-| Information: 82.89                                           | p (1-sided)         | 0.0126   | 0.0126   |
-| Month: 24                                                    | ~RR at bound        | 0.7818   | 0.7818   |
-|                                                              | P(Cross) if RR=1    | 0.0248   | 0.9752   |
-|                                                              | P(Cross) if RR=0.67 | 0.9372   | 0.0628   |
+| IA 1: 35%                                                    | Z                   | 2.8070   | -1.1032  |
+| Information: 28.96                                           | p (1-sided)         | 0.0025   | 0.8650   |
+| Month: 10                                                    | ~RR at bound        | 0.5931   | 1.2279   |
+|                                                              | P(Cross) if RR=1    | 0.0025   | 0.1350   |
+|                                                              | P(Cross) if RR=0.67 | 0.2649   | 0.0005   |
+| IA 2: 79%                                                    | Z                   | 3.0188   | 1.1884   |
+| Information: 65.47                                           | p (1-sided)         | 0.0013   | 0.1173   |
+| Month: 18                                                    | ~RR at bound        | 0.6882   | 0.8632   |
+|                                                              | P(Cross) if RR=1    | 0.0035   | 0.8826   |
+|                                                              | P(Cross) if RR=0.67 | 0.6256   | 0.0186   |
+| Final                                                        | Z                   | 1.9857   | 1.9857   |
+| Information: 82.89                                           | p (1-sided)         | 0.0235   | 0.0235   |
+| Month: 24                                                    | ~RR at bound        | 0.8038   | 0.8038   |
+|                                                              | P(Cross) if RR=1    | 0.0240   | 0.9760   |
+|                                                              | P(Cross) if RR=0.67 | 0.9524   | 0.0476   |
 
 ## Simulation study
 

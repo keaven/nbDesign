@@ -206,7 +206,16 @@ information at each analysis.</p>
 <span><span class="co">#&gt; 0.0833, risk ratio 0.6667, dispersion 0.5000. Accrual duration 12.0, trial</span></span>
 <span><span class="co">#&gt; duration 24.0, max follow-up 12.0, event gap 0.66, dropout rate 0.0043, average</span></span>
 <span><span class="co">#&gt; exposure (calendar) 11.70, (at-risk n1=10.81, n2=11.09). Randomization ratio</span></span>
-<span><span class="co">#&gt; 1:1.</span></span></code></pre></div>
+<span><span class="co">#&gt; 1:1. Upper spending: Piecewise linear (line points = 0.5) Lower spending:</span></span>
+<span><span class="co">#&gt; Hwang-Shih-DeCani (gamma = -8)</span></span>
+<span><span class="co">#&gt; Asymmetric two-sided with non-binding futility bound group sequential design</span></span>
+<span><span class="co">#&gt; for negative binomial outcomes, 3 analyses, total sample size 370.0, 90 percent</span></span>
+<span><span class="co">#&gt; power, 2.5 percent (1-sided) Type I error. Control rate 0.1250, treatment rate</span></span>
+<span><span class="co">#&gt; 0.0833, risk ratio 0.6667, dispersion 0.5000. Accrual duration 12.0, trial</span></span>
+<span><span class="co">#&gt; duration 24.0, max follow-up 12.0, event gap 0.66, dropout rate 0.0043, average</span></span>
+<span><span class="co">#&gt; exposure (calendar) 11.70, (at-risk n1=10.81, n2=11.09). Randomization ratio</span></span>
+<span><span class="co">#&gt; 1:1. Upper spending: Piecewise linear (line points = 0.5) Lower spending:</span></span>
+<span><span class="co">#&gt; Hwang-Shih-DeCani (gamma = -8)</span></span></code></pre></div>
 <p>Tabular summary:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gs_nb</span> <span class="op">|&gt;</span></span>
@@ -694,92 +703,92 @@ information at each analysis.</p>
 <tr>
 <td headers="Analysis" class="gt_row gt_left">IA 1: 35%</td>
 <td headers="Value" class="gt_row gt_left">Z</td>
-<td headers="Efficacy" class="gt_row gt_right">2.3767</td>
+<td headers="Efficacy" class="gt_row gt_right">2.8070</td>
 <td headers="Futility" class="gt_row gt_right">-1.1032</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left">Information: 28.96</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0087</td>
+<td headers="Efficacy" class="gt_row gt_right">0.0025</td>
 <td headers="Futility" class="gt_row gt_right">0.8650</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left">Month: 10</td>
 <td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.6425</td>
+<td headers="Efficacy" class="gt_row gt_right">0.5931</td>
 <td headers="Futility" class="gt_row gt_right">1.2279</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">P(Cross) if RR=1</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0087</td>
+<td headers="Efficacy" class="gt_row gt_right">0.0025</td>
 <td headers="Futility" class="gt_row gt_right">0.1350</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">P(Cross) if RR=0.67</td>
-<td headers="Efficacy" class="gt_row gt_right">0.4215</td>
+<td headers="Efficacy" class="gt_row gt_right">0.2649</td>
 <td headers="Futility" class="gt_row gt_right">0.0005</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left">IA 2: 79%</td>
 <td headers="Value" class="gt_row gt_left">Z</td>
-<td headers="Efficacy" class="gt_row gt_right">2.2080</td>
-<td headers="Futility" class="gt_row gt_right">1.1914</td>
+<td headers="Efficacy" class="gt_row gt_right">3.0188</td>
+<td headers="Futility" class="gt_row gt_right">1.1884</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left">Information: 65.47</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0136</td>
-<td headers="Futility" class="gt_row gt_right">0.1167</td>
+<td headers="Efficacy" class="gt_row gt_right">0.0013</td>
+<td headers="Futility" class="gt_row gt_right">0.1173</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left">Month: 18</td>
 <td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.7609</td>
-<td headers="Futility" class="gt_row gt_right">0.8629</td>
+<td headers="Efficacy" class="gt_row gt_right">0.6882</td>
+<td headers="Futility" class="gt_row gt_right">0.8632</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">P(Cross) if RR=1</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0197</td>
-<td headers="Futility" class="gt_row gt_right">0.8816</td>
+<td headers="Efficacy" class="gt_row gt_right">0.0035</td>
+<td headers="Futility" class="gt_row gt_right">0.8826</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">P(Cross) if RR=0.67</td>
-<td headers="Efficacy" class="gt_row gt_right">0.8654</td>
+<td headers="Efficacy" class="gt_row gt_right">0.6256</td>
 <td headers="Futility" class="gt_row gt_right">0.0186</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left">Final</td>
 <td headers="Value" class="gt_row gt_left">Z</td>
-<td headers="Efficacy" class="gt_row gt_right">2.2379</td>
-<td headers="Futility" class="gt_row gt_right">2.2379</td>
+<td headers="Efficacy" class="gt_row gt_right">1.9857</td>
+<td headers="Futility" class="gt_row gt_right">1.9857</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left">Information: 82.89</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0126</td>
-<td headers="Futility" class="gt_row gt_right">0.0126</td>
+<td headers="Efficacy" class="gt_row gt_right">0.0235</td>
+<td headers="Futility" class="gt_row gt_right">0.0235</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left">Month: 24</td>
 <td headers="Value" class="gt_row gt_left">~RR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.7818</td>
-<td headers="Futility" class="gt_row gt_right">0.7818</td>
+<td headers="Efficacy" class="gt_row gt_right">0.8038</td>
+<td headers="Futility" class="gt_row gt_right">0.8038</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">P(Cross) if RR=1</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0248</td>
-<td headers="Futility" class="gt_row gt_right">0.9752</td>
+<td headers="Efficacy" class="gt_row gt_right">0.0240</td>
+<td headers="Futility" class="gt_row gt_right">0.9760</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">P(Cross) if RR=0.67</td>
-<td headers="Efficacy" class="gt_row gt_right">0.9372</td>
-<td headers="Futility" class="gt_row gt_right">0.0628</td>
+<td headers="Efficacy" class="gt_row gt_right">0.9524</td>
+<td headers="Futility" class="gt_row gt_right">0.0476</td>
 </tr>
 </tbody>
 </table>

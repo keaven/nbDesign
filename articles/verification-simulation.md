@@ -11,7 +11,7 @@ library(ggplot2)
 This vignette verifies the accuracy of the `sample_size_nbinom` function
 by comparing its theoretical predictions for average exposure,
 statistical information, and power against results from a large-scale
-simulation.
+simulation study.
 
 We specifically test a scenario with:
 
@@ -22,8 +22,9 @@ We specifically test a scenario with:
 
 ## Simulation design
 
-The simulation parameters are chosen to yield a sample size of
-approximately 200 subjects.
+The study sample size suggested by the Friede method is used to evaluate
+the accuracy of that method. The parameters for both the theoretical
+calculation and the simulation study are as follows:
 
 ### Parameters
 
@@ -97,11 +98,11 @@ print(design)
 
 ## Simulation results
 
-We simulated 3,600 trials using the parameters defined above. This
-number of simulations was chosen to achieve a standard error for the
-power estimate of approximately 0.005 when the true power is 90%
-($\sqrt{0.9 \times 0.1/3600} = 0.005$). The simulation script is located
-in `data-raw/generate_simulation_data.R`.
+We simulated 3,600 trials using the parameters defined above from the
+Friede method. This number of simulations was chosen to achieve a
+standard error for the power estimate of approximately 0.005 when the
+true power is 90% ($\sqrt{0.9 \times 0.1/3600} = 0.005$). The simulation
+script is located in `data-raw/generate_simulation_data.R`.
 
 ``` r
 # Load pre-computed simulation results
@@ -205,12 +206,13 @@ knitr::kable(comparison_var, digits = 5, caption = "Comparison of Variance")
 Comparison of Variance
 
 - **Empirical Var**: The actual variability of the estimated log rate
-  ratios across 10,000 trials.
+  ratios across 3,600 trials.
 - **Avg Estimated Var**: The average of the variance estimates
   ($SE^{2}$) produced by the Wald test in each trial.
 
-Close agreement indicates that the sample size formula correctly
-anticipates the variability of the test statistic.
+While there is reasonable agreement, the sample size formula may
+slightly underestimate the variability of the test statistic and thus
+may overstate power.
 
 ### 3. Power verification
 
@@ -252,6 +254,9 @@ binom.test(sum(results$p_value < design_ref$inputs$alpha, na.rm = TRUE), nrow(re
 
 ## Conclusion
 
-The simulation results confirm that `sample_size_nbinom` accurately
-predicts average exposure, variance, and power for this complex design
-with piecewise accrual and dropout.
+The simulation results confirm that `sample_size_nbinom` reasonably
+predicts average exposure, variance (information), and power for this
+complex design with piecewise accrual and dropout. However, given the
+slight underpowering that the simulation study suggests, it may be
+useful to consider a larger sample size than the Friede approximation
+suggests, with power verified by simulation.
