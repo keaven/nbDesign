@@ -23,7 +23,7 @@ library(gt)
 ```
 
 This vignette demonstrates how to create a group sequential design for
-negative binomial outcomes using `gsNBCalendar()` and simulate the design to confirm design operating characteristicsusing `nb_sim()`.
+negative binomial outcomes using `gsNBCalendar()` and simulate the design to confirm design operating characteristics using `nb_sim()`.
 
 ## Trial design parameters
 
