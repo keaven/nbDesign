@@ -150,6 +150,8 @@ gsNBCalendar <- function(x,
   result$n2 <- n2_cumulative
   result$n_total <- n_cumulative
   result$ratio <- ratio
+  result$usTime <- usTime
+  result$lsTime <- lsTime
 
   # Add calendar times if provided (for gsBoundSummary display)
   if (!is.null(analysis_times)) {
@@ -316,6 +318,17 @@ summary.gsNB <- function(object, ...) {
   event_gap_str <- if (!is.null(inputs$event_gap) && inputs$event_gap > 0) sprintf(", event gap %.2f", inputs$event_gap) else ""
   dropout_str <- if (!is.null(inputs$dropout_rate) && inputs$dropout_rate > 0) sprintf(", dropout rate %.4f", inputs$dropout_rate) else ""
 
+  # Spending function descriptions
+  upper_spend <- if (!is.null(object$upper$name)) {
+    paste0("Upper spending: ", object$upper$name, 
+           if (!is.null(object$upper$parname)) paste0(" (", object$upper$parname, " = ", object$upper$param, ")") else "")
+  } else "Upper spending: Custom"
+  
+  lower_spend <- if (!is.null(object$lower$name)) {
+    paste0("Lower spending: ", object$lower$name, 
+           if (!is.null(object$lower$parname)) paste0(" (", object$lower$parname, " = ", object$lower$param, ")") else "")
+  } else "Lower spending: Custom"
+
   summary_text <- sprintf(
     paste0(
       "%s group sequential design for negative binomial outcomes, ",
@@ -327,7 +340,8 @@ summary.gsNB <- function(object, ...) {
       "risk ratio %.4f, dispersion %.4f. ",
       "Accrual duration %.1f, trial duration %.1f%s%s%s, ",
       "%s. ",
-      "Randomization ratio %.0f:1."
+      "Randomization ratio %.0f:1.\n",
+      "%s\n%s"
     ),
     test_type_desc,
     object$k,
@@ -344,7 +358,9 @@ summary.gsNB <- function(object, ...) {
     event_gap_str,
     dropout_str,
     exposure_text,
-    inputs$ratio
+    inputs$ratio,
+    upper_spend,
+    lower_spend
   )
 
   class(summary_text) <- "gsNBsummary"
@@ -532,7 +548,9 @@ toInteger.gsNB <- function(x, ratio = x$nb_design$inputs$ratio, roundUpFinal = T
     sfl = x$lower$sf,
     sflpar = x$lower$param,
     tol = x$tol,
-    r = x$r
+    r = x$r,
+    usTime = x$usTime,
+    lsTime = x$lsTime
   )
 
   # Copy updated gsDesign slots to result
