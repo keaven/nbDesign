@@ -17,3 +17,12 @@ Invisibly returns the input object.
 \description{
 Print Method for sample_size_nbinom_summary Objects
 }
+\examples{
+x <- sample_size_nbinom(
+  lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, power = 0.8,
+  accrual_rate = 10, accrual_duration = 20, trial_duration = 24
+)
+s <- summary(x)
+print(s)
+
+}
