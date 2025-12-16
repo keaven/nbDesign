@@ -1,6 +1,6 @@
 # Changelog
 
-## gsDesignNB 0.2.1
+## gsDesignNB 0.2.2
 
 ### Sample size and power
 
@@ -34,6 +34,14 @@
 - [`nb_sim_seasonal()`](https://keaven.github.io/gsDesignNB/reference/nb_sim_seasonal.md)
   simulates recurrent events where event rates vary by season (Spring,
   Summer, Fall, Winter).
+- Group sequential simulation helpers:
+  [`sim_gs_nbinom()`](https://keaven.github.io/gsDesignNB/reference/sim_gs_nbinom.md)
+  runs repeated simulations with flexible cut rules via
+  [`get_cut_date()`](https://keaven.github.io/gsDesignNB/reference/get_cut_date.md),
+  [`check_gs_bound()`](https://keaven.github.io/gsDesignNB/reference/check_gs_bound.md)
+  updates spending bounds based on observed information, and
+  [`summarize_gs_sim()`](https://keaven.github.io/gsDesignNB/reference/summarize_gs_sim.md)
+  summarizes operating characteristics across analyses.
 
 ### Interim data handling
 

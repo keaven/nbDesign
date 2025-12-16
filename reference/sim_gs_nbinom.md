@@ -1,4 +1,4 @@
-# Simulate Group Sequential Clinical Trial for Negative Binomial Outcomes
+# Simulate group sequential clinical trial for negative binomial outcomes
 
 Simulates multiple replicates of a group sequential clinical trial with
 negative binomial outcomes, performing interim analyses at specified
@@ -133,3 +133,55 @@ trial. Columns include:
 - unblinded_info:
 
   Observed unblinded statistical information
+
+## Examples
+
+``` r
+set.seed(123)
+enroll_rate <- data.frame(rate = 10, duration = 3)
+fail_rate <- data.frame(
+  treatment = c("Control", "Experimental"),
+  rate = c(0.6, 0.4),
+  dispersion = 0.2
+)
+dropout_rate <- data.frame(
+  treatment = c("Control", "Experimental"),
+  rate = c(0.05, 0.05),
+  duration = c(6, 6)
+)
+design <- sample_size_nbinom(
+  lambda1 = 0.6, lambda2 = 0.4, dispersion = 0.2, power = 0.8,
+  accrual_rate = enroll_rate$rate, accrual_duration = enroll_rate$duration,
+  trial_duration = 6
+)
+cuts <- list(
+  list(planned_calendar = 2),
+  list(planned_calendar = 4)
+)
+sim_results <- sim_gs_nbinom(
+  n_sims = 2,
+  enroll_rate = enroll_rate,
+  fail_rate = fail_rate,
+  dropout_rate = dropout_rate,
+  max_followup = 4,
+  n_target = 30,
+  design = design,
+  cuts = cuts
+)
+head(sim_results)
+#>               sim analysis analysis_time n_enrolled events_total events_ctrl
+#> (Intercept)     1        1             2         23           10           8
+#> (Intercept)1    1        2             4         30           34          25
+#> (Intercept)2    2        1             2         15            4           3
+#> (Intercept)11   2        2             4         30           24          18
+#>               events_exp exposure_ctrl exposure_exp     z_stat blinded_info
+#> (Intercept)            2      13.14534    12.328930 -1.6722616    2.3931338
+#> (Intercept)1           9      37.48061    38.937872 -2.7262091    8.1575704
+#> (Intercept)2           1       7.44672     5.387439 -0.6710723    0.9599658
+#> (Intercept)11          6      31.08699    26.047756 -1.7504986    4.0830727
+#>               unblinded_info
+#> (Intercept)        1.5996214
+#> (Intercept)1       6.6171563
+#> (Intercept)2       0.7499829
+#> (Intercept)11      3.8548194
+```

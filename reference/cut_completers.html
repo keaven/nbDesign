@@ -94,27 +94,27 @@ Contains the truncated follow-up time (<code>tte</code>) and total number of obs
 <span class="r-in"><span><span class="va">date_5</span> <span class="op">&lt;-</span> <span class="fu"><a href="cut_date_for_completers.html">cut_date_for_completers</a></span><span class="op">(</span><span class="va">sim</span>, <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Get analysis dataset for this cut date (includes partial follow-up)</span></span></span>
 <span class="r-in"><span><span class="fu">cut_completers</span><span class="op">(</span><span class="va">sim</span>, <span class="va">date_5</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    id    treatment enroll_time       tte events</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   1 Experimental 0.009703416 2.0000000      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   2      Control 0.021058479 2.0000000      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   3      Control 0.021552943 1.1708783      2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   4 Experimental 0.041858987 2.0000000      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   5 Experimental 0.068993573 1.9863107      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   6      Control 0.109653012 1.9863107      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7   7      Control 0.136888421 1.9316968      3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8   8 Experimental 0.180597272 1.8879880      3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9   9      Control 0.206596281 1.7227390      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 10 Experimental 0.210782490 1.8988705      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 11      Control 0.251489745 1.8170955      3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 12 Experimental 0.252232658 0.5191834      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 13      Control 0.260391986 1.8355718      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 14 Experimental 0.268248487 1.8414045      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 15 Experimental 0.343708569 1.7659444      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16 16      Control 0.352309979 1.7162753      3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17 17      Control 0.354914172 1.7273603      2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18 18 Experimental 0.362420961 1.0672154      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19 19      Control 0.378248170 1.7314048      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20 20 Experimental 0.389484620 1.6654114      4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    id    treatment  enroll_time       tte events</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   1 Experimental 0.0004944642 1.9589322      3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   2      Control 0.0208005081 1.9863107      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   3      Control 0.0479350942 1.0330351      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   4 Experimental 0.0885945325 2.0000000      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   5      Control 0.1158299419 2.0000000      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   6 Experimental 0.1595387931 0.3060113      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   7      Control 0.1855378021 0.2358263      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   8 Experimental 0.1897240110 1.9589322      3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   9      Control 0.2304312657 1.7227390      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 10 Experimental 0.2311741791 1.9585498      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 11 Experimental 0.2393335074 1.9230120      2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 12      Control 0.2471900075 1.9151555      2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 13      Control 0.3226500895 1.8670739      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 14 Experimental 0.3312514995 1.8584725      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 15      Control 0.3338556934 1.8421791      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16 16 Experimental 0.3413624816 1.8209830      2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17 17 Experimental 0.3571896911 1.8325343      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18 18 Experimental 0.3684261413 1.8076086      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19 19      Control 0.3740461607 0.5336077      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20 20      Control 0.3939235397 1.7958005      0</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

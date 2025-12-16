@@ -42,14 +42,14 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.1" id="gsdesignnb-021">gsDesignNB 0.2.1<a class="anchor" aria-label="anchor" href="#gsdesignnb-021"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.2.2" id="gsdesignnb-022">gsDesignNB 0.2.2<a class="anchor" aria-label="anchor" href="#gsdesignnb-022"></a></h2>
 <div class="section level3">
-<h3 id="sample-size-and-power-0-2-1">Sample size and power<a class="anchor" aria-label="anchor" href="#sample-size-and-power-0-2-1"></a></h3>
+<h3 id="sample-size-and-power-0-2-2">Sample size and power<a class="anchor" aria-label="anchor" href="#sample-size-and-power-0-2-2"></a></h3>
 <ul><li>
 <code><a href="../reference/sample_size_nbinom.html">sample_size_nbinom()</a></code> computes sample size or power for fixed designs with two treatment groups. Supports piecewise accrual, exponential dropout, maximum follow-up, and event gaps. Implements the Zhu and Lakkis (2014) and Friede and Schmidli (2010) methods.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="group-sequential-designs-0-2-1">Group sequential designs<a class="anchor" aria-label="anchor" href="#group-sequential-designs-0-2-1"></a></h3>
+<h3 id="group-sequential-designs-0-2-2">Group sequential designs<a class="anchor" aria-label="anchor" href="#group-sequential-designs-0-2-2"></a></h3>
 <ul><li>
 <code><a href="../reference/gsNBCalendar.html">gsNBCalendar()</a></code> creates group sequential designs for negative binomial outcomes, optionally attaching calendar-time analysis schedules (via <code>analysis_times</code>) compatible with gsDesign. Inherits from both <code>gsDesign</code> and <code>sample_size_nbinom_result</code> classes.</li>
 <li>
@@ -58,14 +58,15 @@
 <code><a href="../reference/toInteger.html">toInteger()</a></code> rounds sample sizes in a group sequential design to integers while respecting the randomization ratio.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="simulation-0-2-1">Simulation<a class="anchor" aria-label="anchor" href="#simulation-0-2-1"></a></h3>
+<h3 id="simulation-0-2-2">Simulation<a class="anchor" aria-label="anchor" href="#simulation-0-2-2"></a></h3>
 <ul><li>
 <code><a href="../reference/nb_sim.html">nb_sim()</a></code> simulates recurrent events for trials with piecewise constant enrollment, exponential failure rates, and piecewise exponential dropout. Supports negative binomial overdispersion via gamma frailty and event gaps.</li>
 <li>
 <code><a href="../reference/nb_sim_seasonal.html">nb_sim_seasonal()</a></code> simulates recurrent events where event rates vary by season (Spring, Summer, Fall, Winter).</li>
+<li>Group sequential simulation helpers: <code><a href="../reference/sim_gs_nbinom.html">sim_gs_nbinom()</a></code> runs repeated simulations with flexible cut rules via <code><a href="../reference/get_cut_date.html">get_cut_date()</a></code>, <code><a href="../reference/check_gs_bound.html">check_gs_bound()</a></code> updates spending bounds based on observed information, and <code><a href="../reference/summarize_gs_sim.html">summarize_gs_sim()</a></code> summarizes operating characteristics across analyses.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="interim-data-handling-0-2-1">Interim data handling<a class="anchor" aria-label="anchor" href="#interim-data-handling-0-2-1"></a></h3>
+<h3 id="interim-data-handling-0-2-2">Interim data handling<a class="anchor" aria-label="anchor" href="#interim-data-handling-0-2-2"></a></h3>
 <ul><li>
 <code><a href="../reference/cut_data_by_date.html">cut_data_by_date()</a></code> censors follow-up at a specified calendar time and aggregates events per subject, adjusting for event gaps.</li>
 <li>
@@ -76,19 +77,19 @@
 <code><a href="../reference/cut_date_for_completers.html">cut_date_for_completers()</a></code> finds the calendar time at which a target number of subjects have completed their follow-up.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="statistical-inference-0-2-1">Statistical inference<a class="anchor" aria-label="anchor" href="#statistical-inference-0-2-1"></a></h3>
+<h3 id="statistical-inference-0-2-2">Statistical inference<a class="anchor" aria-label="anchor" href="#statistical-inference-0-2-2"></a></h3>
 <ul><li>
 <code><a href="../reference/mutze_test.html">mutze_test()</a></code> fits a negative binomial (or Poisson) log-rate model and performs a Wald test for the treatment effect, following Mütze et al. (2019).</li>
 </ul></div>
 <div class="section level3">
-<h3 id="blinded-sample-size-re-estimation-0-2-1">Blinded sample size re-estimation<a class="anchor" aria-label="anchor" href="#blinded-sample-size-re-estimation-0-2-1"></a></h3>
+<h3 id="blinded-sample-size-re-estimation-0-2-2">Blinded sample size re-estimation<a class="anchor" aria-label="anchor" href="#blinded-sample-size-re-estimation-0-2-2"></a></h3>
 <ul><li>
 <code><a href="../reference/blinded_ssr.html">blinded_ssr()</a></code> estimates blinded dispersion and event rate from interim data and re-calculates sample size to maintain power, following Friede and Schmidli (2010).</li>
 <li>
 <code><a href="../reference/calculate_blinded_info.html">calculate_blinded_info()</a></code> estimates blinded statistical information for the log rate ratio from aggregated interim data.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="re-exports-from-gsdesign-0-2-1">Re-exports from gsDesign<a class="anchor" aria-label="anchor" href="#re-exports-from-gsdesign-0-2-1"></a></h3>
+<h3 id="re-exports-from-gsdesign-0-2-2">Re-exports from gsDesign<a class="anchor" aria-label="anchor" href="#re-exports-from-gsdesign-0-2-2"></a></h3>
 <ul><li>Re-exports <code><a href="https://keaven.github.io/gsDesign/reference/gsDesign.html" class="external-link">gsDesign()</a></code>, <code><a href="https://keaven.github.io/gsDesign/reference/gsBoundSummary.html" class="external-link">gsBoundSummary()</a></code>, and common spending functions (<code><a href="https://keaven.github.io/gsDesign/reference/sfHSD.html" class="external-link">sfHSD()</a></code>, <code><a href="https://keaven.github.io/gsDesign/reference/sfLDOF.html" class="external-link">sfLDOF()</a></code>, <code><a href="https://keaven.github.io/gsDesign/reference/sfLDOF.html" class="external-link">sfLDPocock()</a></code>, and more) for convenience.</li>
 </ul></div>
 </div>
