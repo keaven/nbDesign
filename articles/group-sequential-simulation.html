@@ -171,7 +171,9 @@ with the <code><a href="https://keaven.github.io/gsDesign/reference/sfLinear.htm
 and 100% of the cumulative
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
 at the 3 planned analyses regardless of the observed statistical
-information at each analysis.</p>
+information at each analysis. The interim spending is intended to
+achieve a nominal p-value of 0.0025 (one-sided) at both interim
+analyses.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Analysis times (in months)</span></span>
 <span><span class="va">analysis_times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">18</span>, <span class="fl">24</span><span class="op">)</span></span>
@@ -191,7 +193,7 @@ information at each analysis.</p>
 <span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">gsDesignNB</span><span class="fu">::</span><span class="fu"><a href="../reference/toInteger.html">toInteger</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># Round to integer sample size</span></span></code></pre></div>
 <p>Textual group sequential design summary:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">gs_nb</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">gs_nb</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Asymmetric two-sided with non-binding futility bound group sequential design</span></span>
 <span><span class="co">#&gt; for negative binomial outcomes, 3 analyses, total sample size 370.0, 90 percent</span></span>
 <span><span class="co">#&gt; power, 2.5 percent (1-sided) Type I error. Control rate 0.1250, treatment rate</span></span>

@@ -90,7 +90,9 @@ theory. We specify `usTime = c(0.1, 0.18, 1)` which along with the
 [`sfLinear()`](https://keaven.github.io/gsDesign/reference/sfLinear.html)
 spending function will spend 10%, 18% and 100% of the cumulative
 $\alpha$ at the 3 planned analyses regardless of the observed
-statistical information at each analysis.
+statistical information at each analysis. The interim spending is
+intended to achieve a nominal p-value of 0.0025 (one-sided) at both
+interim analyses.
 
 ``` r
 # Analysis times (in months)
@@ -114,7 +116,7 @@ gs_nb <- gsNBCalendar(
 Textual group sequential design summary:
 
 ``` r
-summary(gs_nb)
+print(summary(gs_nb))
 #> Asymmetric two-sided with non-binding futility bound group sequential design
 #> for negative binomial outcomes, 3 analyses, total sample size 370.0, 90 percent
 #> power, 2.5 percent (1-sided) Type I error. Control rate 0.1250, treatment rate
