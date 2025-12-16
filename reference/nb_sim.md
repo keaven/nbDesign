@@ -102,6 +102,17 @@ individual (if dispersion \> 0), which acts as a multiplier for that
 individual's event rate. Events are then generated according to a
 Poisson process with this subject-specific rate.
 
+More explicitly, for a subject with baseline rate \\\lambda\\ and
+exposure time \\t\\, the model used here is a Gamma–Poisson mixture:
+\$\$\Lambda_i \sim \mathrm{Gamma}(\text{shape}=1/k,\\
+\text{scale}=k\lambda), \quad Y_i \mid \Lambda_i \sim
+\mathrm{Poisson}(\Lambda_i t).\$\$ Marginally, \\Y_i\\ follows a
+negative binomial distribution with \\E\[Y_i\]=\mu=\lambda t\\ and
+\\Var(Y_i)=\mu + k\mu^2\\. This \\k\\ is the package dispersion
+parameter (and corresponds to \\1/\theta\\ in
+[`MASS::glm.nb()`](https://rdrr.io/pkg/MASS/man/glm.nb.html)
+terminology).
+
 ## References
 
 Friede, T., & Schmidli, H. (2010). Blinded sample size reestimation with

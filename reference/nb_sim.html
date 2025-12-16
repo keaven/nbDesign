@@ -138,6 +138,13 @@ by Friede and Schmidli (2010) and Mütze et al. (2019). Specifically, it simulat
 a Gamma-distributed frailty variable for each individual (if dispersion &gt; 0),
 which acts as a multiplier for that individual's event rate. Events are then
 generated according to a Poisson process with this subject-specific rate.</p>
+<p>More explicitly, for a subject with baseline rate \(\lambda\) and exposure time
+\(t\), the model used here is a Gamma–Poisson mixture:
+$$\Lambda_i \sim \mathrm{Gamma}(\text{shape}=1/k,\ \text{scale}=k\lambda), \quad Y_i \mid \Lambda_i \sim \mathrm{Poisson}(\Lambda_i t).$$
+Marginally, \(Y_i\) follows a negative binomial distribution with
+\(E[Y_i]=\mu=\lambda t\) and \(Var(Y_i)=\mu + k\mu^2\).
+This \(k\) is the package dispersion parameter (and corresponds to
+\(1/\theta\) in <code><a href="https://rdrr.io/pkg/MASS/man/glm.nb.html" class="external-link">MASS::glm.nb()</a></code> terminology).</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
