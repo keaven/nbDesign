@@ -19,6 +19,8 @@
 #' @return Numeric. The calendar date satisfying the criteria. If criteria cannot be met
 #'   within `max_date` (or data limits), returns `max_date` (or max data time).
 #'
+#' @importFrom stats uniroot
+#'
 #' @export
 #'
 #' @examples
