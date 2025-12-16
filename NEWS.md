@@ -1,3 +1,8 @@
+# gsDesignNB 0.2.4
+
+- Fix `cut_date_for_completers()` to support `nb_sim_seasonal()` output (no `tte` column).
+- Correct `calculate_blinded_info()` blinded information calculation to use subject-level exposure.
+
 # gsDesignNB 0.2.3
 
 - Fix `toInteger.gsNB()` to avoid unintended power changes by correctly recomputing
