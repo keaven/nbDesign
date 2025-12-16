@@ -211,13 +211,27 @@ results <- check_gs_bound(
 # Summarize results
 summary_gs <- summarize_gs_sim(results)
 
-summary_gs$analysis_summary |>
+analysis_summary_tbl <- data.table::copy(summary_gs$analysis_summary)
+analysis_summary_tbl[, planned_info := gs_nb$n.I[analysis]]
+data.table::setcolorder(
+  analysis_summary_tbl,
+  c(
+    "analysis",
+    "n_enrolled",
+    "events",
+    "planned_info",
+    setdiff(names(analysis_summary_tbl), c("analysis", "n_enrolled", "events", "planned_info"))
+  )
+)
+
+analysis_summary_tbl |>
   gt() |>
   tab_header(title = "Summary Statistics by Analysis") |>
   cols_label(
     analysis = "Analysis",
     n_enrolled = "N Enrolled",
     events = "Total Events",
+    planned_info = "Planned Info (Design)",
     info_blinded = "Mean Info (Blinded)",
     info_unblinded = "Mean Info (Unblinded)",
     n_cross_upper = "N Cross Upper",

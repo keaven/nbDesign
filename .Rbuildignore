@@ -4,3 +4,7 @@
 ^_pkgdown\.yml$
 ^data-raw$
 ^LICENSE\.md$
+^docs$
+^\.\.Rcheck$
+^\.Rhistory$
+\.DS_Store$
