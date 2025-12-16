@@ -116,7 +116,7 @@ gs_nb <- gsNBCalendar(
 Textual group sequential design summary:
 
 ``` r
-print(summary(gs_nb))
+summary(gs_nb)
 #> Asymmetric two-sided with non-binding futility bound group sequential design
 #> for negative binomial outcomes, 3 analyses, total sample size 370.0, 90 percent
 #> power, 2.5 percent (1-sided) Type I error. Control rate 0.1250, treatment rate
