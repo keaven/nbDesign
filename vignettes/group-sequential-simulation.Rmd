@@ -110,7 +110,7 @@ gs_nb <- gsNBCalendar(
 Textual group sequential design summary:
 
 ```{r}
-print(summary(gs_nb))
+summary(gs_nb)
 ```
 
 Tabular summary:
