@@ -20,52 +20,56 @@
 #'   within `max_date` (or data limits), returns `max_date` (or max data time).
 #'
 #' @export
-get_cut_date <- function(data, planned_calendar = NULL, target_events = NULL,
-                         target_completers = NULL, target_info = NULL,
-                         event_gap = 0, ratio = 1, lambda1 = NULL, lambda2 = NULL,
-                         min_date = 0, max_date = Inf) {
-  
+get_cut_date <- function(
+  data, planned_calendar = NULL, target_events = NULL,
+  target_completers = NULL, target_info = NULL,
+  event_gap = 0, ratio = 1, lambda1 = NULL, lambda2 = NULL,
+  min_date = 0, max_date = Inf
+) {
   dates <- numeric(0)
-  
+
   # 1. Calendar Time
   if (!is.null(planned_calendar)) {
     dates <- c(dates, planned_calendar)
   }
-  
+
   # 2. Events
   if (!is.null(target_events)) {
     d_events <- get_analysis_date(data, planned_events = target_events, event_gap = event_gap)
     dates <- c(dates, d_events)
   }
-  
+
   # 3. Completers
   if (!is.null(target_completers)) {
     d_completers <- cut_date_for_completers(data, target_completers = target_completers)
     dates <- c(dates, d_completers)
   }
-  
+
   # 4. Information
   if (!is.null(target_info)) {
     if (is.null(lambda1) || is.null(lambda2)) {
       stop("lambda1 and lambda2 must be provided for information targeting.")
     }
-    
+
     # Define function to calculate info at time t
     calc_info_at_t <- function(t) {
       cut_dt <- cut_data_by_date(data, cut_date = t, event_gap = event_gap)
       # Check if sufficient data for estimation
-      if (sum(cut_dt$events) < 2) return(0)
-      
+      if (sum(cut_dt$events) < 2) {
+        return(0)
+      }
+
       res <- tryCatch(
         calculate_blinded_info(
-          cut_dt, ratio = ratio, lambda1_planning = lambda1, lambda2_planning = lambda2,
+          cut_dt,
+          ratio = ratio, lambda1_planning = lambda1, lambda2_planning = lambda2,
           event_gap = event_gap
         ),
         error = function(e) list(blinded_info = 0)
       )
       res$blinded_info
     }
-    
+
     # Search for time t where info >= target_info
     # Bound search by min_date and max_date
     # Check max first
@@ -90,7 +94,7 @@ get_cut_date <- function(data, planned_calendar = NULL, target_events = NULL,
           ),
           error = function(e) NULL
         )
-        
+
         if (!is.null(root_res)) {
           d_info <- root_res$root
         } else {
@@ -103,16 +107,16 @@ get_cut_date <- function(data, planned_calendar = NULL, target_events = NULL,
     }
     dates <- c(dates, d_info)
   }
-  
+
   if (length(dates) == 0) {
     return(max_date)
   }
-  
+
   # Take the maximum of required dates (must satisfy ALL criteria)
   final_date <- max(dates, na.rm = TRUE)
-  
+
   # Constrain to limits
   final_date <- max(min_date, min(final_date, max_date))
-  
+
   return(final_date)
 }

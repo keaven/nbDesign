@@ -39,12 +39,15 @@
 #'     \item{unblinded_info}{Observed unblinded statistical information}
 #'   }
 #'
-#' @export
 #' @importFrom data.table as.data.table
-sim_gs_nbinom <- function(n_sims, enroll_rate, fail_rate, dropout_rate = NULL,
-                          max_followup, event_gap = 0, analysis_times = NULL,
-                          n_target = NULL, design = NULL,
-                          data_cut = cut_data_by_date, cuts = NULL) {
+#'
+#' @export
+sim_gs_nbinom <- function(
+  n_sims, enroll_rate, fail_rate, dropout_rate = NULL,
+  max_followup, event_gap = 0, analysis_times = NULL,
+  n_target = NULL, design = NULL,
+  data_cut = cut_data_by_date, cuts = NULL
+) {
   # Validate inputs
   if (is.null(design)) {
     stop("design object must be provided to extract planning parameters.")
@@ -57,7 +60,7 @@ sim_gs_nbinom <- function(n_sims, enroll_rate, fail_rate, dropout_rate = NULL,
     # Create default cuts based on calendar times
     cuts <- lapply(analysis_times, function(t) list(planned_calendar = t))
   }
-  
+
   n_analyses <- length(cuts)
 
   # Extract planning parameters for blinded info estimation
@@ -79,14 +82,14 @@ sim_gs_nbinom <- function(n_sims, enroll_rate, fail_rate, dropout_rate = NULL,
     )
 
     res_list <- vector("list", n_analyses)
-    
+
     # Keep track of previous cut time to ensure monotonicity if needed
     last_cut_time <- 0
 
     for (k in seq_len(n_analyses)) {
       # Determine cut date based on criteria
       cut_args <- cuts[[k]]
-      
+
       # Inject data and parameters if not present (though get_cut_date expects them)
       cut_args$data <- sim_data
       cut_args$event_gap <- event_gap
@@ -96,13 +99,13 @@ sim_gs_nbinom <- function(n_sims, enroll_rate, fail_rate, dropout_rate = NULL,
       cut_args$min_date <- last_cut_time
       # Default max_date to something reasonable if not provided?
       # get_cut_date defaults to Inf.
-      
+
       cut_time <- do.call(get_cut_date, cut_args)
       last_cut_time <- cut_time
-      
+
       # Cut data
       cut_data <- data_cut(sim_data, cut_date = cut_time, event_gap = event_gap)
-      
+
       # Filter enrolled subjects
       enrolled <- unique(sim_data$id[sim_data$enroll_time <= cut_time])
       cut_data <- cut_data[cut_data$id %in% enrolled, ]
@@ -110,7 +113,7 @@ sim_gs_nbinom <- function(n_sims, enroll_rate, fail_rate, dropout_rate = NULL,
       # Summarize counts
       dt <- data.table::as.data.table(cut_data)
       counts <- dt[, .(events = sum(events), exposure = sum(tte)), by = treatment]
-      
+
       n_enrolled <- nrow(cut_data)
       events_ctrl <- sum(counts[treatment == "Control"]$events)
       events_exp <- sum(counts[treatment == "Experimental"]$events)
@@ -125,11 +128,11 @@ sim_gs_nbinom <- function(n_sims, enroll_rate, fail_rate, dropout_rate = NULL,
       # Run analysis if sufficient data
       if (n_enrolled >= 4 && events_total >= 2) {
         test_res <- tryCatch(mutze_test(cut_data), error = function(e) NULL)
-        
+
         if (!is.null(test_res)) {
           z_stat <- test_res$z
           unblinded_info <- 1 / test_res$se^2
-          
+
           # Blinded info estimation
           blinded_res <- calculate_blinded_info(
             cut_data,
