@@ -16,7 +16,8 @@ compute_info_at_time(
   dispersion,
   ratio = 1,
   dropout_rate = 0,
-  event_gap = 0
+  event_gap = 0,
+  max_followup = Inf
 )
 ```
 
@@ -58,6 +59,11 @@ compute_info_at_time(
 
   Gap duration after each event during which no new events are counted.
   Default is 0.
+
+- max_followup:
+
+  Maximum follow-up time per subject. Exposure time is truncated at this
+  value. Default is `Inf` (no truncation).
 
 ## Value
 

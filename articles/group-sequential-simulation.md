@@ -255,13 +255,27 @@ results <- check_gs_bound(
 # Summarize results
 summary_gs <- summarize_gs_sim(results)
 
-summary_gs$analysis_summary |>
+analysis_summary_tbl <- data.table::as.data.table(summary_gs$analysis_summary)
+analysis_summary_tbl[, planned_info := gs_nb$n.I[analysis]]
+data.table::setcolorder(
+  analysis_summary_tbl,
+  c(
+    "analysis",
+    "n_enrolled",
+    "events",
+    "planned_info",
+    setdiff(names(analysis_summary_tbl), c("analysis", "n_enrolled", "events", "planned_info"))
+  )
+)
+
+analysis_summary_tbl |>
   gt() |>
   tab_header(title = "Summary Statistics by Analysis") |>
   cols_label(
     analysis = "Analysis",
     n_enrolled = "N Enrolled",
     events = "Total Events",
+    planned_info = "Planned Info (Design)",
     info_blinded = "Mean Info (Blinded)",
     info_unblinded = "Mean Info (Unblinded)",
     n_cross_upper = "N Cross Upper",
@@ -273,12 +287,12 @@ summary_gs$analysis_summary |>
   fmt_number(columns = contains("prob"), decimals = 3)
 ```
 
-| Summary Statistics by Analysis |            |              |                     |                       |               |               |                  |                  |                |
-|--------------------------------|------------|--------------|---------------------|-----------------------|---------------|---------------|------------------|------------------|----------------|
-| Analysis                       | N Enrolled | Total Events | Mean Info (Blinded) | Mean Info (Unblinded) | N Cross Upper | N Cross Lower | Prob Cross Upper | Prob Cross Lower | cum_prob_upper |
-| 1.00                           | 301.18     | 122.66       | 22.67               | 21.56                 | 13.00         | 0.00          | 0.260            | 0.000            | 0.260          |
-| 2.00                           | 364.00     | 278.88       | 48.10               | 47.02                 | 17.00         | 0.00          | 0.340            | 0.000            | 0.600          |
-| 3.00                           | 364.00     | 311.06       | 51.92               | 50.81                 | 13.00         | 7.00          | 0.260            | 0.140            | 0.860          |
+| Summary Statistics by Analysis |            |              |                       |                     |                       |               |               |                  |                  |                |
+|--------------------------------|------------|--------------|-----------------------|---------------------|-----------------------|---------------|---------------|------------------|------------------|----------------|
+| Analysis                       | N Enrolled | Total Events | Planned Info (Design) | Mean Info (Blinded) | Mean Info (Unblinded) | N Cross Upper | N Cross Lower | Prob Cross Upper | Prob Cross Lower | cum_prob_upper |
+| 1.00                           | 301.18     | 122.66       | 28.96                 | 22.67               | 21.56                 | 13.00         | 0.00          | 0.260            | 0.000            | 0.260          |
+| 2.00                           | 364.00     | 278.88       | 60.12                 | 48.10               | 47.02                 | 17.00         | 0.00          | 0.340            | 0.000            | 0.600          |
+| 3.00                           | 364.00     | 311.06       | 65.55                 | 51.92               | 50.81                 | 13.00         | 7.00          | 0.260            | 0.140            | 0.860          |
 
 ### Power and Operating Characteristics
 

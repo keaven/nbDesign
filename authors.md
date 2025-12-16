@@ -4,6 +4,10 @@
 
 - **Keaven Anderson**. Author, maintainer.
 
+- **Nan Xiao**. Contributor.
+
+- **Hongtao Zhang**. Contributor.
+
 - **Merck & Co., Inc., Rahway, NJ, USA and its affiliates**. Copyright
   holder.
   [![ROR](https://raw.githubusercontent.com/ror-community/ror-logos/main/ror-icon-rgb.svg)](https://ror.org/02891sr49)

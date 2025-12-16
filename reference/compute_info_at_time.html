@@ -60,7 +60,8 @@ analysis time, accounting for staggered enrollment and varying exposure times.</
 <span>  <span class="va">dispersion</span>,</span>
 <span>  ratio <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  dropout_rate <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>  event_gap <span class="op">=</span> <span class="fl">0</span></span>
+<span>  event_gap <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  max_followup <span class="op">=</span> <span class="cn">Inf</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -103,6 +104,11 @@ analysis time, accounting for staggered enrollment and varying exposure times.</
 <dt id="arg-event-gap">event_gap<a class="anchor" aria-label="anchor" href="#arg-event-gap"></a></dt>
 <dd><p>Gap duration after each event during which no new events are counted.
 Default is 0.</p></dd>
+
+
+<dt id="arg-max-followup">max_followup<a class="anchor" aria-label="anchor" href="#arg-max-followup"></a></dt>
+<dd><p>Maximum follow-up time per subject. Exposure time is
+truncated at this value. Default is <code>Inf</code> (no truncation).</p></dd>
 
 </dl></div>
     <div class="section level2">
