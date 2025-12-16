@@ -161,21 +161,21 @@ gs_nb |>
 |--------------------------------------------------------------|---------------------|----------|----------|
 | N = 370, Expected events = 414.1                             |                     |          |          |
 | Analysis                                                     | Value               | Efficacy | Futility |
-| IA 1: 35%                                                    | Z                   | 2.8070   | -1.1032  |
-| Information: 28.96                                           | p (1-sided)         | 0.0025   | 0.8650   |
-| Month: 10                                                    | ~RR at bound        | 0.5931   | 1.2279   |
-|                                                              | P(Cross) if RR=1    | 0.0025   | 0.1350   |
-|                                                              | P(Cross) if RR=0.67 | 0.2649   | 0.0005   |
-| IA 2: 79%                                                    | Z                   | 2.8191   | 1.1884   |
-| Information: 65.47                                           | p (1-sided)         | 0.0024   | 0.1173   |
-| Month: 18                                                    | ~RR at bound        | 0.7054   | 0.8632   |
-|                                                              | P(Cross) if RR=1    | 0.0045   | 0.8826   |
-|                                                              | P(Cross) if RR=0.67 | 0.6910   | 0.0186   |
-| Final                                                        | Z                   | 1.9875   | 1.9875   |
-| Information: 82.89                                           | p (1-sided)         | 0.0234   | 0.0234   |
-| Month: 24                                                    | ~RR at bound        | 0.8036   | 0.8036   |
-|                                                              | P(Cross) if RR=1    | 0.0240   | 0.9760   |
-|                                                              | P(Cross) if RR=0.67 | 0.9524   | 0.0476   |
+| IA 1: 44%                                                    | Z                   | 2.8070   | -0.8788  |
+| Information: 28.96                                           | p (1-sided)         | 0.0025   | 0.8102   |
+| Month: 10                                                    | ~RR at bound        | 0.5931   | 1.1777   |
+|                                                              | P(Cross) if RR=1    | 0.0025   | 0.1898   |
+|                                                              | P(Cross) if RR=0.67 | 0.2649   | 0.0011   |
+| IA 2: 92%                                                    | Z                   | 2.8107   | 1.5082   |
+| Information: 60.12                                           | p (1-sided)         | 0.0025   | 0.0658   |
+| Month: 18                                                    | ~RR at bound        | 0.6956   | 0.8230   |
+|                                                              | P(Cross) if RR=1    | 0.0045   | 0.9339   |
+|                                                              | P(Cross) if RR=0.67 | 0.6461   | 0.0515   |
+| Final                                                        | Z                   | 1.9800   | 1.9800   |
+| Information: 65.55                                           | p (1-sided)         | 0.0239   | 0.0239   |
+| Month: 24                                                    | ~RR at bound        | 0.7828   | 0.7828   |
+|                                                              | P(Cross) if RR=1    | 0.0244   | 0.9756   |
+|                                                              | P(Cross) if RR=0.67 | 0.9013   | 0.0987   |
 
 ## Simulation study
 
@@ -314,8 +314,8 @@ crossing_summary[, c("analysis", "cum_prob_upper", "design_cum_power")] |>
 |-----------------------------|-----------------|--------------------|
 | Analysis                    | Cum Power (Sim) | Cum Power (Design) |
 | 1.000                       | 0.260           | 0.265              |
-| 2.000                       | 0.600           | 0.691              |
-| 3.000                       | 0.860           | 0.952              |
+| 2.000                       | 0.600           | 0.646              |
+| 3.000                       | 0.860           | 0.901              |
 
 ### Visualization of Z-statistics
 
