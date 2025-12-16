@@ -1,4 +1,4 @@
-#' Simulate Group Sequential Clinical Trial for Negative Binomial Outcomes
+#' Simulate group sequential clinical trial for negative binomial outcomes
 #'
 #' Simulates multiple replicates of a group sequential clinical trial with negative
 #' binomial outcomes, performing interim analyses at specified calendar times.
@@ -42,6 +42,40 @@
 #' @importFrom data.table as.data.table
 #'
 #' @export
+#'
+#' @examples
+#' set.seed(123)
+#' enroll_rate <- data.frame(rate = 10, duration = 3)
+#' fail_rate <- data.frame(
+#'   treatment = c("Control", "Experimental"),
+#'   rate = c(0.6, 0.4),
+#'   dispersion = 0.2
+#' )
+#' dropout_rate <- data.frame(
+#'   treatment = c("Control", "Experimental"),
+#'   rate = c(0.05, 0.05),
+#'   duration = c(6, 6)
+#' )
+#' design <- sample_size_nbinom(
+#'   lambda1 = 0.6, lambda2 = 0.4, dispersion = 0.2, power = 0.8,
+#'   accrual_rate = enroll_rate$rate, accrual_duration = enroll_rate$duration,
+#'   trial_duration = 6
+#' )
+#' cuts <- list(
+#'   list(planned_calendar = 2),
+#'   list(planned_calendar = 4)
+#' )
+#' sim_results <- sim_gs_nbinom(
+#'   n_sims = 2,
+#'   enroll_rate = enroll_rate,
+#'   fail_rate = fail_rate,
+#'   dropout_rate = dropout_rate,
+#'   max_followup = 4,
+#'   n_target = 30,
+#'   design = design,
+#'   cuts = cuts
+#' )
+#' head(sim_results)
 sim_gs_nbinom <- function(
   n_sims, enroll_rate, fail_rate, dropout_rate = NULL,
   max_followup, event_gap = 0, analysis_times = NULL,

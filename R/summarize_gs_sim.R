@@ -1,4 +1,4 @@
-#' Summarize Group Sequential Simulation Results
+#' Summarize group sequential simulation results
 #'
 #' Provides a summary of the operating characteristics of the group sequential design
 #' based on simulation results.
@@ -17,6 +17,20 @@
 #' @importFrom data.table as.data.table
 #'
 #' @export
+#'
+#' @examples
+#' design <- gsDesign::gsDesign(k = 2, n.fix = 80, test.type = 2, timing = c(0.5, 1))
+#' sim_df <- data.frame(
+#'   sim = c(1, 1, 2, 2),
+#'   analysis = c(1, 2, 1, 2),
+#'   z_stat = c(2.4, NA, -0.5, 1.9),
+#'   blinded_info = c(40, 80, 40, 80),
+#'   unblinded_info = c(40, 80, 40, 80),
+#'   n_enrolled = c(30, 60, 30, 60),
+#'   events_total = c(12, 25, 10, 22)
+#' )
+#' bounds_checked <- check_gs_bound(sim_df, design)
+#' summarize_gs_sim(bounds_checked)
 summarize_gs_sim <- function(x) {
   dt <- data.table::as.data.table(x)
 
