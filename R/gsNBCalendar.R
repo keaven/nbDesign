@@ -185,6 +185,8 @@ gsNBCalendar <- function(
 #' @param dropout_rate Dropout rate (hazard rate). Default is 0.
 #' @param event_gap Gap duration after each event during which no new events are counted.
 #'   Default is 0.
+#' @param max_followup Maximum follow-up time per subject. Exposure time is
+#'   truncated at this value. Default is `Inf` (no truncation).
 #'
 #' @return The statistical information (inverse of variance) at the analysis time.
 #'
@@ -202,7 +204,7 @@ gsNBCalendar <- function(
 compute_info_at_time <- function(
   analysis_time, accrual_rate, accrual_duration,
   lambda1, lambda2, dispersion, ratio = 1,
-  dropout_rate = 0, event_gap = 0
+  dropout_rate = 0, event_gap = 0, max_followup = Inf
 ) {
   # Number of subjects enrolled by analysis_time
   enrollment_time <- min(analysis_time, accrual_duration)
@@ -214,7 +216,7 @@ compute_info_at_time <- function(
   # We integrate dropout probability over the enrollment period and follow-up
 
   # Helper for expected exposure for a subject enrolled at time t
-  # Exposure is min(analysis_time - t, dropout_time)
+  # Exposure is min(analysis_time - t, dropout_time, max_followup)
   # If analysis_time - t > 0
 
   # Simplified average exposure calculation with dropout
@@ -231,21 +233,41 @@ compute_info_at_time <- function(
   # Range of follow-up times: [min_f, max_f]
   max_f <- analysis_time
   min_f <- analysis_time - enrollment_time
-
-  if (dropout_rate <= 0) {
-    avg_exposure <- (max_f + min_f) / 2
-  } else {
-    # Average of (1 - exp(-rate * tau)) / rate
-    # = 1/rate - (1/rate) * mean(exp(-rate * tau))
-    # mean(exp(-rate * tau)) over [min_f, max_f]
-    # = (integral_{min_f}^{max_f} exp(-rate * x) dx) / (max_f - min_f)
-    # = ([-1/rate * exp(-rate * x)]) / (max_f - min_f)
-    # = (exp(-rate * min_f) - exp(-rate * max_f)) / (rate * (max_f - min_f))
-
-    term2 <- (exp(-dropout_rate * min_f) - exp(-dropout_rate * max_f)) /
-      (dropout_rate * (max_f - min_f))
-    avg_exposure <- (1 - term2) / dropout_rate
+  
+  # Cap follow-up at max_followup
+  # We need to calculate average exposure over [min_f, max_f]
+  # but exposure is capped at max_followup
+  
+  calc_avg_exposure <- function(min_t, max_t, rate, max_fu) {
+    if (min_t >= max_t) return(0)
+    
+    # If entire range is above max_fu, exposure is constant (capped)
+    if (min_t >= max_fu) {
+      if (rate <= 0) return(max_fu)
+      return((1 - exp(-rate * max_fu)) / rate)
+    }
+    
+    # If entire range is below max_fu, standard calculation
+    if (max_t <= max_fu) {
+      if (rate <= 0) {
+        return((min_t + max_t) / 2)
+      } else {
+        term <- (exp(-rate * min_t) - exp(-rate * max_t)) / (rate * (max_t - min_t))
+        return((1 - term) / rate)
+      }
+    }
+    
+    # Split range: [min_t, max_fu] and [max_fu, max_t]
+    w1 <- (max_fu - min_t) / (max_t - min_t)
+    w2 <- (max_t - max_fu) / (max_t - min_t)
+    
+    e1 <- calc_avg_exposure(min_t, max_fu, rate, max_fu)
+    e2 <- calc_avg_exposure(max_fu, max_t, rate, max_fu) # This will hit the first case
+    
+    return(w1 * e1 + w2 * e2)
   }
+
+  avg_exposure <- calc_avg_exposure(min_f, max_f, dropout_rate, max_followup)
 
   # Adjust rates for event gap
   if (!is.null(event_gap) && event_gap > 0) {
@@ -456,8 +478,9 @@ toInteger.gsDesign <- function(x, ratio = x$ratio, roundUpFinal = TRUE, ...) {
 #' respecting the randomization ratio.
 #'
 #' @param ratio Randomization ratio (n2/n1). If an integer is provided, rounding
-#'   is done to a multiple of `ratio + 1`. Default uses the ratio from the
-#'   original design.
+#'   is done to a multiple of `ratio + 1`. If `ratio < 1` and `1/ratio` is an
+#'   integer (e.g., 1:2 allocation, ratio = 0.5), rounding is done to a multiple
+#'   of `1/ratio + 1`. Default uses the ratio from the original design.
 #' @param roundUpFinal If `TRUE` (default), the final sample size is rounded
 #'   up to ensure the target is met. If `FALSE`, rounding is to the nearest
 #'   integer.
@@ -485,21 +508,19 @@ toInteger.gsNB <- function(x, ratio = x$nb_design$inputs$ratio, roundUpFinal = T
   n_total_new <- x$n_total
 
   # Round final analysis sample size
+  group_size <- 1
+  if (is.numeric(ratio) && ratio > 0) {
+    if (ratio >= 1 && abs(ratio - round(ratio)) < 1e-8) {
+      group_size <- ratio + 1
+    } else if (ratio < 1 && abs(1 / ratio - round(1 / ratio)) < 1e-8) {
+      group_size <- 1 / ratio + 1
+    }
+  }
+
   if (roundUpFinal) {
-    if (is.numeric(ratio) && ratio == floor(ratio) && ratio >= 0) {
-      # Round up to nearest multiple of (ratio + 1)
-      group_size <- ratio + 1
-      n_total_new[k] <- ceiling(x$n_total[k] / group_size) * group_size
-    } else {
-      n_total_new[k] <- ceiling(x$n_total[k])
-    }
+    n_total_new[k] <- ceiling(x$n_total[k] / group_size) * group_size
   } else {
-    if (is.numeric(ratio) && ratio == floor(ratio) && ratio >= 0) {
-      group_size <- ratio + 1
-      n_total_new[k] <- round(x$n_total[k] / group_size) * group_size
-    } else {
-      n_total_new[k] <- round(x$n_total[k])
-    }
+    n_total_new[k] <- round(x$n_total[k] / group_size) * group_size
   }
 
   # Recalculate interim sample sizes based on timing and new final sample size
@@ -522,6 +543,8 @@ toInteger.gsNB <- function(x, ratio = x$nb_design$inputs$ratio, roundUpFinal = T
     lambda1 <- nb$inputs$lambda1
     lambda2 <- nb$inputs$lambda2
     dispersion <- nb$inputs$dispersion
+    max_followup <- nb$inputs$max_followup
+    if (is.null(max_followup)) max_followup <- Inf
 
     # Compute accrual rate based on new final sample size
     # accrual_rate = n_total_final / accrual_duration
@@ -540,7 +563,8 @@ toInteger.gsNB <- function(x, ratio = x$nb_design$inputs$ratio, roundUpFinal = T
         dispersion = dispersion,
         ratio = ratio,
         dropout_rate = nb$inputs$dropout_rate,
-        event_gap = nb$inputs$event_gap
+        event_gap = nb$inputs$event_gap,
+        max_followup = max_followup
       )
     }
     result$n.I <- info_at_analyses
@@ -573,6 +597,8 @@ toInteger.gsNB <- function(x, ratio = x$nb_design$inputs$ratio, roundUpFinal = T
     beta = x$beta,
     astar = x$astar,
     delta = x$delta,
+    delta1 = x$delta1,
+    delta0 = x$delta0,
     n.I = result$n.I,
     maxn.IPlan = result$n.I[k],
     sfu = x$upper$sf,
