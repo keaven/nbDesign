@@ -211,7 +211,7 @@ results <- check_gs_bound(
 # Summarize results
 summary_gs <- summarize_gs_sim(results)
 
-analysis_summary_tbl <- data.table::copy(summary_gs$analysis_summary)
+analysis_summary_tbl <- data.table::as.data.table(summary_gs$analysis_summary)
 analysis_summary_tbl[, planned_info := gs_nb$n.I[analysis]]
 data.table::setcolorder(
   analysis_summary_tbl,
