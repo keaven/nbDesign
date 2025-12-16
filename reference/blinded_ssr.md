@@ -165,12 +165,10 @@ blinded_ssr(
 #>    1.346155 
 #> 
 #> $info_fraction
-#> (Intercept) 
-#>  0.05454262 
+#> [1] 0.05454259
 #> 
 #> $blinded_info
-#> (Intercept) 
-#>    1.640583 
+#> [1] 1.640582
 #> 
 #> $target_info
 #> [1] 30.07893

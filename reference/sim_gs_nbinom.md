@@ -169,19 +169,14 @@ sim_results <- sim_gs_nbinom(
   cuts = cuts
 )
 head(sim_results)
-#>               sim analysis analysis_time n_enrolled events_total events_ctrl
-#> (Intercept)     1        1             2         23           10           8
-#> (Intercept)1    1        2             4         30           34          25
-#> (Intercept)2    2        1             2         15            4           3
-#> (Intercept)11   2        2             4         30           24          18
-#>               events_exp exposure_ctrl exposure_exp     z_stat blinded_info
-#> (Intercept)            2      13.14534    12.328930 -1.6722616    2.3931338
-#> (Intercept)1           9      37.48061    38.937872 -2.7262091    8.1575704
-#> (Intercept)2           1       7.44672     5.387439 -0.6710723    0.9599658
-#> (Intercept)11          6      31.08699    26.047756 -1.7504986    4.0830727
-#>               unblinded_info
-#> (Intercept)        1.5996214
-#> (Intercept)1       6.6171563
-#> (Intercept)2       0.7499829
-#> (Intercept)11      3.8548194
+#>   sim analysis analysis_time n_enrolled events_total events_ctrl events_exp
+#> 1   1        1             2         23           10           8          2
+#> 2   1        2             4         30           34          25          9
+#> 3   2        1             2         15            4           3          1
+#> 4   2        2             4         30           24          18          6
+#>   exposure_ctrl exposure_exp     z_stat blinded_info unblinded_info
+#> 1      13.14534    12.328930 -1.6722616     2.391287      1.5996214
+#> 2      37.48061    38.937872 -2.7262091     8.157183      6.6171563
+#> 3       7.44672     5.387439 -0.6710723     0.959958      0.7499829
+#> 4      31.08699    26.047756 -1.7504986     3.842925      3.8548194
 ```

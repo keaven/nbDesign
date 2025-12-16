@@ -76,8 +76,7 @@ calculate_blinded_info(
   lambda2_planning = 0.3
 )
 #> $blinded_info
-#> (Intercept) 
-#>    1.640583 
+#> [1] 1.640582
 #> 
 #> $dispersion_blinded
 #> [1] 1.617394e-05
