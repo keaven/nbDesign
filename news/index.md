@@ -1,5 +1,16 @@
 # Changelog
 
+## gsDesignNB 0.2.4
+
+- Fix
+  [`cut_date_for_completers()`](https://keaven.github.io/gsDesignNB/reference/cut_date_for_completers.md)
+  to support
+  [`nb_sim_seasonal()`](https://keaven.github.io/gsDesignNB/reference/nb_sim_seasonal.md)
+  output (no `tte` column).
+- Correct
+  [`calculate_blinded_info()`](https://keaven.github.io/gsDesignNB/reference/calculate_blinded_info.md)
+  blinded information calculation to use subject-level exposure.
+
 ## gsDesignNB 0.2.3
 
 - Fix
