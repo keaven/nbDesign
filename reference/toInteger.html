@@ -77,8 +77,9 @@ package to work with <code>gsNB</code> objects.</p>
 
 <dt id="arg-ratio">ratio<a class="anchor" aria-label="anchor" href="#arg-ratio"></a></dt>
 <dd><p>Randomization ratio (n2/n1). If an integer is provided, rounding
-is done to a multiple of <code>ratio + 1</code>. Default uses the ratio from the
-original design.</p></dd>
+is done to a multiple of <code>ratio + 1</code>. If <code>ratio &lt; 1</code> and <code>1/ratio</code> is an
+integer (e.g., 1:2 allocation, ratio = 0.5), rounding is done to a multiple
+of <code>1/ratio + 1</code>. Default uses the ratio from the original design.</p></dd>
 
 
 <dt id="arg-roundupfinal">roundUpFinal<a class="anchor" aria-label="anchor" href="#arg-roundupfinal"></a></dt>

@@ -30,8 +30,10 @@ toInteger(x, ratio = x$nb_design$inputs$ratio, roundUpFinal = TRUE, ...)
 - ratio:
 
   Randomization ratio (n2/n1). If an integer is provided, rounding is
-  done to a multiple of `ratio + 1`. Default uses the ratio from the
-  original design.
+  done to a multiple of `ratio + 1`. If `ratio < 1` and `1/ratio` is an
+  integer (e.g., 1:2 allocation, ratio = 0.5), rounding is done to a
+  multiple of `1/ratio + 1`. Default uses the ratio from the original
+  design.
 
 - roundUpFinal:
 
