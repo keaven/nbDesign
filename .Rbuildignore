@@ -8,3 +8,4 @@
 ^\.\.Rcheck$
 ^\.Rhistory$
 \.DS_Store$
+^codecov\.yml$
