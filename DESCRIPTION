@@ -1,10 +1,6 @@
 Package: gsDesignNB
 Version: 0.2.4
 Title: Sample Size Calculation and Simulation for Negative Binomial Outcomes
-Author: Keaven Anderson [aut, cre],
-    Nan Xiao [ctb],
-    Hongtao Zhang [ctb]
-Maintainer: Keaven Anderson <keaven_anderson@merck.com>
 Authors@R: c(
     person("Keaven", "Anderson", email = "keaven_anderson@merck.com", role = c("aut", "cre")),
     person("Nan", "Xiao", role = "ctb"),
@@ -27,8 +23,6 @@ License: GPL (>= 3)
 URL: https://keaven.github.io/gsDesignNB/, https://github.com/keaven/gsDesignNB
 BugReports: https://github.com/keaven/gsDesignNB/issues
 Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Depends:
     R (>= 3.5.0)
 Imports:
@@ -46,3 +40,5 @@ Suggests:
     gt
 VignetteBuilder: knitr
 Config/testthat/edition: 3
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
