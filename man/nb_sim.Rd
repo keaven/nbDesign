@@ -72,7 +72,7 @@ More explicitly, for a subject with baseline rate \eqn{\lambda} and exposure tim
 Marginally, \eqn{Y_i} follows a negative binomial distribution with
 \eqn{E[Y_i]=\mu=\lambda t} and \eqn{Var(Y_i)=\mu + k\mu^2}.
 This \eqn{k} is the package dispersion parameter (and corresponds to
-\eqn{1/\theta} in \code{MASS::glm.nb()} terminology).
+\eqn{1/\theta} in \code{\link[MASS:glm.nb]{MASS::glm.nb()}} terminology).
 }
 \examples{
 enroll_rate <- data.frame(rate = 20 / (5 / 12), duration = 5 / 12)

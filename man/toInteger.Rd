@@ -18,8 +18,9 @@ toInteger(x, ...)
 \item{...}{Additional arguments passed to methods.}
 
 \item{ratio}{Randomization ratio (n2/n1). If an integer is provided, rounding
-is done to a multiple of \code{ratio + 1}. Default uses the ratio from the
-original design.}
+is done to a multiple of \code{ratio + 1}. If \code{ratio < 1} and \code{1/ratio} is an
+integer (e.g., 1:2 allocation, ratio = 0.5), rounding is done to a multiple
+of \code{1/ratio + 1}. Default uses the ratio from the original design.}
 
 \item{roundUpFinal}{If \code{TRUE} (default), the final sample size is rounded
 up to ensure the target is met. If \code{FALSE}, rounding is to the nearest
