@@ -79,7 +79,8 @@ for (k in k_values) {
     size <- 1 / k
     probs <- dnbinom(x, size = size, mu = mu)
   }
-  plot(x, probs, type='h', lwd =2, main=paste("k =", k), xlab="Event Count", ylab="Probability")
+  barplot(probs, names.arg = x, horiz = TRUE, main = paste("k =", k), 
+          xlab = "Probability", ylab = "Event Count", las = 1, xlim = c(0, 0.2))
 }
 ```
 
