@@ -9,3 +9,4 @@
 ^\.Rhistory$
 \.DS_Store$
 ^codecov\.yml$
+^AGENTS\.md$
