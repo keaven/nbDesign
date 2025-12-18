@@ -79,8 +79,7 @@ design <- sample_size_nbinom(
   trial_duration = trial_duration,
   dropout_rate = dropout_rate,
   max_followup = max_followup,
-  event_gap = event_gap,
-  method = "friede"
+  event_gap = event_gap
 )
 
 # Extract calculated absolute accrual rates
