@@ -136,8 +136,7 @@ the Zhu and Lakkis method:</p>
 <span>  trial_duration <span class="op">=</span> <span class="fl">24</span>, <span class="co"># 24 months trial</span></span>
 <span>  max_followup <span class="op">=</span> <span class="fl">12</span>, <span class="co"># 12 months of follow-up per patient</span></span>
 <span>  dropout_rate <span class="op">=</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">0.95</span><span class="op">)</span> <span class="op">/</span> <span class="fl">12</span>, <span class="co"># 5% dropout rate at 1 year</span></span>
-<span>  event_gap <span class="op">=</span> <span class="va">event_gap_val</span>,</span>
-<span>  method <span class="op">=</span> <span class="st">"zhu"</span> <span class="co"># Zhu and Lakkis sample size method</span></span>
+<span>  event_gap <span class="op">=</span> <span class="va">event_gap_val</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Print key results</span></span>
@@ -147,7 +146,6 @@ the Zhu and Lakkis method:</p>
 <span><span class="co">#&gt; Sample size for negative binomial outcome</span></span>
 <span><span class="co">#&gt; ==========================================</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Method:          zhu</span></span>
 <span><span class="co">#&gt; Sample size:     n1 = 182, n2 = 182, total = 364</span></span>
 <span><span class="co">#&gt; Expected events: 414.1 (n1: 245.9, n2: 168.2)</span></span>
 <span><span class="co">#&gt; Power: 90%, Alpha: 0.025 (1-sided)</span></span>

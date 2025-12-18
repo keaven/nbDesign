@@ -72,8 +72,7 @@ design <- sample_size_nbinom(
   trial_duration = trial_duration,
   dropout_rate = dropout_rate,
   max_followup = max_followup,
-  event_gap = event_gap,
-  method = "friede"
+  event_gap = event_gap
 )
 
 # Extract calculated absolute accrual rates
@@ -83,7 +82,6 @@ print(design)
 #> Sample size for negative binomial outcome
 #> ==========================================
 #> 
-#> Method:          friede
 #> Sample size:     n1 = 211, n2 = 211, total = 422
 #> Expected events: 1366.9 (n1: 763.1, n2: 603.8)
 #> Power: 90%, Alpha: 0.025 (1-sided)

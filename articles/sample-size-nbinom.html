@@ -84,9 +84,9 @@ rates.</p>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>
 follows a negative binomial distribution with mean
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math>
-and dispersion parameter
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>,
-such that the variance is given by:</p>
+and a common dispersion parameter
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
+for both treatment groups, such that the variance is given by:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mi>a</mi><mi>r</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>Y</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>μ</mi><mo>+</mo><mi>k</mi><msup><mi>μ</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex"> Var(Y) = \mu + k \mu^2 </annotation></semantics></math></p>
 <p>Note that in R’s <code>rnbinom</code> parameterization,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mn>1</mn><mi>/</mi><mtext mathvariant="monospace">𝚜𝚒𝚣𝚎</mtext></mrow><annotation encoding="application/x-tex">k = 1/\texttt{size}</annotation></semantics></math>.</p>
@@ -100,47 +100,111 @@ and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mn>2</mn></msub><annotation encoding="application/x-tex">\lambda_2</annotation></semantics></math>
 are the event rates in the control and treatment groups,
 respectively.</p>
-<p>The function implements two methods:</p>
 <div class="section level3">
-<h3 id="method-1-zhu2014sample">Method 1: <span class="citation">Zhu and Lakkis (2014)</span><a class="anchor" aria-label="anchor" href="#method-1-zhu2014sample"></a>
+<h3 id="connection-between-rates-and-counts">Connection between rates and counts<a class="anchor" aria-label="anchor" href="#connection-between-rates-and-counts"></a>
 </h3>
-<p>This method is based on the asymptotic normality of the log rate
-ratio. The sample size for the control group
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>n</mi><mn>1</mn></msub><annotation encoding="application/x-tex">n_1</annotation></semantics></math>)
-is:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mn>1</mn></msub><mo>=</mo><mfrac><mrow><msup><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>z</mi><mrow><mi>α</mi><mi>/</mi><mi>s</mi></mrow></msub><mo>+</mo><msub><mi>z</mi><mi>β</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mo>⋅</mo><mi>V</mi></mrow><msup><mrow><mo stretchy="true" form="prefix">(</mo><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>μ</mi><mn>1</mn></msub><mi>/</mi><msub><mi>μ</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup></mfrac></mrow><annotation encoding="application/x-tex"> n_1 = \frac{(z_{\alpha/s} + z_{\beta})^2 \cdot V}{(\log(\mu_1/\mu_2))^2} </annotation></semantics></math></p>
-<p>where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>V</mi><annotation encoding="application/x-tex">V</annotation></semantics></math>
-is the variance component:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mn>1</mn><msub><mi>μ</mi><mn>1</mn></msub></mfrac><mo>+</mo><mi>k</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mfrac><mn>1</mn><mi>r</mi></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mn>1</mn><msub><mi>μ</mi><mn>2</mn></msub></mfrac><mo>+</mo><mi>k</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex"> V = \left(\frac{1}{\mu_1} + k\right) + \frac{1}{r}\left(\frac{1}{\mu_2} + k\right) </annotation></semantics></math></p>
-<p>where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>=</mo><msub><mi>n</mi><mn>2</mn></msub><mi>/</mi><msub><mi>n</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">r = n_2/n_1</annotation></semantics></math>
-is the allocation ratio, and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>μ</mi><mi>i</mi></msub><mo>=</mo><msub><mi>λ</mi><mi>i</mi></msub><mo>⋅</mo><mi>t</mi></mrow><annotation encoding="application/x-tex">\mu_i = \lambda_i \cdot t</annotation></semantics></math>
-is the expected mean count over exposure duration
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>.</p>
+<p>The negative binomial distribution can be motivated by a
+Gamma-Poisson mixture model. Suppose that for each subject
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>,
+the event rate
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Λ</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\Lambda_i</annotation></semantics></math>
+is a random variable following a Gamma distribution with shape
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>1</mn><mi>/</mi><mi>k</mi></mrow><annotation encoding="application/x-tex">\alpha = 1/k</annotation></semantics></math>
+and rate
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo>=</mo><mn>1</mn><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>k</mi><mi>λ</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\beta = 1/(k \lambda)</annotation></semantics></math>,
+where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>
+is the underlying population event rate and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
+is the dispersion parameter. The mean of this Gamma distribution is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mrow><mo stretchy="true" form="prefix">[</mo><msub><mi>Λ</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">]</mo></mrow><mo>=</mo><mi>α</mi><mi>/</mi><mi>β</mi><mo>=</mo><mi>λ</mi></mrow><annotation encoding="application/x-tex">E[\Lambda_i] = \alpha / \beta = \lambda</annotation></semantics></math>
+and the variance is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mi>a</mi><mi>r</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>Λ</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>α</mi><mi>/</mi><msup><mi>β</mi><mn>2</mn></msup><mo>=</mo><mi>k</mi><msup><mi>λ</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">Var(\Lambda_i) = \alpha / \beta^2 = k \lambda^2</annotation></semantics></math>.</p>
+<p>Given the subject-specific rate
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Λ</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\Lambda_i</annotation></semantics></math>,
+the number of events
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Y</mi><mi>i</mi></msub><annotation encoding="application/x-tex">Y_i</annotation></semantics></math>
+observed over a time period
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>t</mi><mi>i</mi></msub><annotation encoding="application/x-tex">t_i</annotation></semantics></math>
+follows a Poisson distribution with rate
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Λ</mi><mi>i</mi></msub><msub><mi>t</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\Lambda_i t_i</annotation></semantics></math>:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Y</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">|</mo><msub><mi>Λ</mi><mi>i</mi></msub><mo>∼</mo><mtext mathvariant="normal">Poisson</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>Λ</mi><mi>i</mi></msub><msub><mi>t</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex"> Y_i | \Lambda_i \sim \text{Poisson}(\Lambda_i t_i) </annotation></semantics></math></p>
+<p>The marginal distribution of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Y</mi><mi>i</mi></msub><annotation encoding="application/x-tex">Y_i</annotation></semantics></math>
+(integrating out
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Λ</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\Lambda_i</annotation></semantics></math>)
+is then a negative binomial distribution with mean
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>μ</mi><mi>i</mi></msub><mo>=</mo><mi>λ</mi><msub><mi>t</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\mu_i = \lambda t_i</annotation></semantics></math>
+and dispersion parameter
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>.
+The variance is:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mi>a</mi><mi>r</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>Y</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>E</mi><mrow><mo stretchy="true" form="prefix">[</mo><mi>V</mi><mi>a</mi><mi>r</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>Y</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">|</mo><msub><mi>Λ</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">]</mo></mrow><mo>+</mo><mi>V</mi><mi>a</mi><mi>r</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>E</mi><mrow><mo stretchy="true" form="prefix">[</mo><msub><mi>Y</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">|</mo><msub><mi>Λ</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">]</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex"> Var(Y_i) = E[Var(Y_i|\Lambda_i)] + Var(E[Y_i|\Lambda_i]) </annotation></semantics></math><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><mi>E</mi><mrow><mo stretchy="true" form="prefix">[</mo><msub><mi>Λ</mi><mi>i</mi></msub><msub><mi>t</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">]</mo></mrow><mo>+</mo><mi>V</mi><mi>a</mi><mi>r</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>Λ</mi><mi>i</mi></msub><msub><mi>t</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex"> = E[\Lambda_i t_i] + Var(\Lambda_i t_i) </annotation></semantics></math><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><mi>λ</mi><msub><mi>t</mi><mi>i</mi></msub><mo>+</mo><msubsup><mi>t</mi><mi>i</mi><mn>2</mn></msubsup><mrow><mo stretchy="true" form="prefix">(</mo><mi>k</mi><msup><mi>λ</mi><mn>2</mn></msup><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex"> = \lambda t_i + t_i^2 (k \lambda^2) </annotation></semantics></math><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><msub><mi>μ</mi><mi>i</mi></msub><mo>+</mo><mi>k</mi><msubsup><mi>μ</mi><mi>i</mi><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex"> = \mu_i + k \mu_i^2 </annotation></semantics></math></p>
+<p>This formulation connects the event rate
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>
+(used in the hypothesis testing framework) with the expected count
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math>
+(used in the negative binomial parameterization), showing how
+heterogeneity in individual rates leads to the overdispersion
+characteristic of the negative binomial distribution.</p>
 </div>
 <div class="section level3">
-<h3 id="method-2-friede2010blinded-mutze2019group">Method 2: <span class="citation">Friede and Schmidli (2010)</span> /
-<span class="citation">Mütze et al. (2019)</span><a class="anchor" aria-label="anchor" href="#method-2-friede2010blinded-mutze2019group"></a>
+<h3 id="sample-size-formula">Sample size formula<a class="anchor" aria-label="anchor" href="#sample-size-formula"></a>
 </h3>
-<p>This method uses a Wald test statistic and is commonly used in group
-sequential designs (as implemented in the <code>gscounts</code>
-package). The total sample size
+<p>The sample size calculation is based on the asymptotic normality of
+the log rate ratio. This approach corresponds to <strong>Method
+3</strong> of <span class="citation">Zhu and Lakkis (2014)</span>, which
+uses a Wald statistic for the log rate ratio. It is also the method
+described by <span class="citation">Friede and Schmidli (2010)</span>
+and <span class="citation">Mütze et al. (2019)</span> (as implemented in
+the <code>gscounts</code> package).</p>
+<p>The total sample size
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>n</mi><mrow><mi>t</mi><mi>o</mi><mi>t</mi><mi>a</mi><mi>l</mi></mrow></msub><annotation encoding="application/x-tex">n_{total}</annotation></semantics></math>
 is calculated as:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mrow><mi>t</mi><mi>o</mi><mi>t</mi><mi>a</mi><mi>l</mi></mrow></msub><mo>=</mo><mfrac><mrow><msup><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>z</mi><mrow><mi>α</mi><mi>/</mi><mi>s</mi></mrow></msub><mo>+</mo><msub><mi>z</mi><mi>β</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mo>⋅</mo><mover><mi>V</mi><mo accent="true">‾</mo></mover></mrow><msup><mrow><mo stretchy="true" form="prefix">(</mo><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>λ</mi><mn>1</mn></msub><mi>/</mi><msub><mi>λ</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup></mfrac></mrow><annotation encoding="application/x-tex"> n_{total} = \frac{(z_{\alpha/s} + z_{\beta})^2 \cdot \bar{V}}{(\log(\lambda_1/\lambda_2))^2} </annotation></semantics></math></p>
-<p>where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>V</mi><mo accent="true">‾</mo></mover><annotation encoding="application/x-tex">\bar{V}</annotation></semantics></math>
-is the average variance per subject:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>V</mi><mo accent="true">‾</mo></mover><mo>=</mo><mfrac><mrow><mn>1</mn><mi>/</mi><msub><mi>μ</mi><mn>1</mn></msub><mo>+</mo><mi>k</mi></mrow><msub><mi>p</mi><mn>1</mn></msub></mfrac><mo>+</mo><mfrac><mrow><mn>1</mn><mi>/</mi><msub><mi>μ</mi><mn>2</mn></msub><mo>+</mo><mi>k</mi></mrow><msub><mi>p</mi><mn>2</mn></msub></mfrac></mrow><annotation encoding="application/x-tex"> \bar{V} = \frac{1/ \mu_1 + k}{p_1} + \frac{1/ \mu_2 + k}{p_2} </annotation></semantics></math></p>
-<p>where
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mrow><mi>t</mi><mi>o</mi><mi>t</mi><mi>a</mi><mi>l</mi></mrow></msub><mo>=</mo><mfrac><mrow><msup><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>z</mi><mrow><mi>α</mi><mi>/</mi><mi>s</mi></mrow></msub><mo>+</mo><msub><mi>z</mi><mi>β</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mo>⋅</mo><mover><mi>V</mi><mo accent="true">̃</mo></mover></mrow><msup><mrow><mo stretchy="true" form="prefix">(</mo><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>λ</mi><mn>1</mn></msub><mi>/</mi><msub><mi>λ</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup></mfrac></mrow><annotation encoding="application/x-tex"> n_{total} = \frac{(z_{\alpha/s} + z_{\beta})^2 \cdot \tilde{V}}{(\log(\lambda_1/\lambda_2))^2} </annotation></semantics></math></p>
+<p>where:</p>
+<ul>
+<li>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>z</mi><mrow><mi>α</mi><mi>/</mi><mi>s</mi></mrow></msub><annotation encoding="application/x-tex">z_{\alpha/s}</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>z</mi><mi>β</mi></msub><annotation encoding="application/x-tex">z_{\beta}</annotation></semantics></math>
+are the standard normal critical values for the significance level
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
+(with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">s=1</annotation></semantics></math>
+or
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2</mn><annotation encoding="application/x-tex">2</annotation></semantics></math>
+sided) and power
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>β</mi></mrow><annotation encoding="application/x-tex">1-\beta</annotation></semantics></math>.</li>
+<li>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mn>1</mn></msub><annotation encoding="application/x-tex">\lambda_1</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mn>2</mn></msub><annotation encoding="application/x-tex">\lambda_2</annotation></semantics></math>
+are the event rates in the control and treatment groups.</li>
+<li>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>V</mi><mo accent="true">̃</mo></mover><annotation encoding="application/x-tex">\tilde{V}</annotation></semantics></math>
+is the average variance per subject, defined as:</li>
+</ul>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>V</mi><mo accent="true">̃</mo></mover><mo>=</mo><mfrac><mrow><mn>1</mn><mi>/</mi><msub><mi>μ</mi><mn>1</mn></msub><mo>+</mo><mi>k</mi></mrow><msub><mi>p</mi><mn>1</mn></msub></mfrac><mo>+</mo><mfrac><mrow><mn>1</mn><mi>/</mi><msub><mi>μ</mi><mn>2</mn></msub><mo>+</mo><mi>k</mi></mrow><msub><mi>p</mi><mn>2</mn></msub></mfrac></mrow><annotation encoding="application/x-tex"> \tilde{V} = \frac{1/ \mu_1 + k}{p_1} + \frac{1/ \mu_2 + k}{p_2} </annotation></semantics></math></p>
+<p>where:</p>
+<ul>
+<li>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mn>1</mn></msub><mo>=</mo><msub><mi>n</mi><mn>1</mn></msub><mi>/</mi><msub><mi>n</mi><mrow><mi>t</mi><mi>o</mi><mi>t</mi><mi>a</mi><mi>l</mi></mrow></msub></mrow><annotation encoding="application/x-tex">p_1 = n_1/n_{total}</annotation></semantics></math>
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mn>2</mn></msub><mo>=</mo><msub><mi>n</mi><mn>2</mn></msub><mi>/</mi><msub><mi>n</mi><mrow><mi>t</mi><mi>o</mi><mi>t</mi><mi>a</mi><mi>l</mi></mrow></msub></mrow><annotation encoding="application/x-tex">p_2 = n_2/n_{total}</annotation></semantics></math>
-are the allocation proportions.</p>
-<p><strong>Note:</strong> For a fixed design with equal allocation, both
-methods yield identical sample sizes.</p>
+are the allocation proportions.</li>
+<li>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>μ</mi><mi>i</mi></msub><mo>=</mo><msub><mi>λ</mi><mi>i</mi></msub><mo>⋅</mo><mover><mi>t</mi><mo accent="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">\mu_i = \lambda_i \cdot \bar{t}</annotation></semantics></math>
+is the expected mean count for group
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
+over the average exposure duration
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>t</mi><mo accent="true">‾</mo></mover><annotation encoding="application/x-tex">\bar{t}</annotation></semantics></math>.</li>
+<li>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
+is the dispersion parameter.</li>
+</ul>
+<p>This formula assumes that the exposure duration is the same for both
+groups (or uses an average exposure
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>t</mi><mo accent="true">‾</mo></mover><annotation encoding="application/x-tex">\bar{t}</annotation></semantics></math>).</p>
 </div>
 </div>
 <div class="section level2">
@@ -310,41 +374,11 @@ effective exposure time reported is also adjusted similarly.</p>
 <span>  sided <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  accrual_rate <span class="op">=</span> <span class="fl">10</span>, <span class="co"># arbitrary, just for average exposure</span></span>
 <span>  accrual_duration <span class="op">=</span> <span class="fl">12</span>,</span>
-<span>  trial_duration <span class="op">=</span> <span class="fl">12</span>,</span>
-<span>  method <span class="op">=</span> <span class="st">"zhu"</span></span>
+<span>  trial_duration <span class="op">=</span> <span class="fl">12</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Sample size for negative binomial outcome</span></span>
 <span><span class="co">#&gt; ==========================================</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Method:          zhu</span></span>
-<span><span class="co">#&gt; Sample size:     n1 = 35, n2 = 35, total = 70</span></span>
-<span><span class="co">#&gt; Expected events: 168.0 (n1: 105.0, n2: 63.0)</span></span>
-<span><span class="co">#&gt; Power: 80%, Alpha: 0.025 (1-sided)</span></span>
-<span><span class="co">#&gt; Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)</span></span>
-<span><span class="co">#&gt; Dispersion: 0.1000, Avg exposure (calendar): 6.00</span></span>
-<span><span class="co">#&gt; Accrual: 12.0, Trial duration: 12.0</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="using-friede2010blinded-method">Using <span class="citation">Friede and Schmidli (2010)</span>
-method<a class="anchor" aria-label="anchor" href="#using-friede2010blinded-method"></a>
-</h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/sample_size_nbinom.html">sample_size_nbinom</a></span><span class="op">(</span></span>
-<span>  lambda1 <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span>  lambda2 <span class="op">=</span> <span class="fl">0.3</span>,</span>
-<span>  dispersion <span class="op">=</span> <span class="fl">0.1</span>,</span>
-<span>  power <span class="op">=</span> <span class="fl">0.8</span>,</span>
-<span>  alpha <span class="op">=</span> <span class="fl">0.025</span>,</span>
-<span>  sided <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  accrual_rate <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  accrual_duration <span class="op">=</span> <span class="fl">12</span>,</span>
-<span>  trial_duration <span class="op">=</span> <span class="fl">12</span>,</span>
-<span>  method <span class="op">=</span> <span class="st">"friede"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; Sample size for negative binomial outcome</span></span>
-<span><span class="co">#&gt; ==========================================</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Method:          friede</span></span>
 <span><span class="co">#&gt; Sample size:     n1 = 35, n2 = 35, total = 70</span></span>
 <span><span class="co">#&gt; Expected events: 168.0 (n1: 105.0, n2: 63.0)</span></span>
 <span><span class="co">#&gt; Power: 80%, Alpha: 0.025 (1-sided)</span></span>
@@ -363,7 +397,7 @@ method<a class="anchor" aria-label="anchor" href="#using-friede2010blinded-metho
 </ul>
 <p>The function automatically calculates the average exposure based on
 this accrual pattern.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sample_size_nbinom.html">sample_size_nbinom</a></span><span class="op">(</span></span>
 <span>  lambda1 <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  lambda2 <span class="op">=</span> <span class="fl">0.3</span>,</span>
@@ -376,7 +410,6 @@ this accrual pattern.</p>
 <span><span class="co">#&gt; Sample size for negative binomial outcome</span></span>
 <span><span class="co">#&gt; ==========================================</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Method:          zhu</span></span>
 <span><span class="co">#&gt; Sample size:     n1 = 26, n2 = 26, total = 52</span></span>
 <span><span class="co">#&gt; Expected events: 176.8 (n1: 110.5, n2: 66.3)</span></span>
 <span><span class="co">#&gt; Power: 80%, Alpha: 0.025 (1-sided)</span></span>
@@ -389,7 +422,7 @@ this accrual pattern.</p>
 </h3>
 <p>Same design as above, but with a 5% dropout rate per unit time and a
 maximum follow-up of 6 months.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sample_size_nbinom.html">sample_size_nbinom</a></span><span class="op">(</span></span>
 <span>  lambda1 <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  lambda2 <span class="op">=</span> <span class="fl">0.3</span>,</span>
@@ -404,7 +437,6 @@ maximum follow-up of 6 months.</p>
 <span><span class="co">#&gt; Sample size for negative binomial outcome</span></span>
 <span><span class="co">#&gt; ==========================================</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Method:          zhu</span></span>
 <span><span class="co">#&gt; Sample size:     n1 = 38, n2 = 38, total = 76</span></span>
 <span><span class="co">#&gt; Expected events: 157.6 (n1: 98.5, n2: 59.1)</span></span>
 <span><span class="co">#&gt; Power: 80%, Alpha: 0.025 (1-sided)</span></span>
@@ -423,7 +455,7 @@ we want to calculate the power if the treatment effect is smaller
 instead of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.3</mn><annotation encoding="application/x-tex">0.3</annotation></semantics></math>).
 We use the <code>accrual_rate</code> computed in the previous step.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Store the result from the previous calculation</span></span>
 <span><span class="va">design_result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sample_size_nbinom.html">sample_size_nbinom</a></span><span class="op">(</span></span>
 <span>  lambda1 <span class="op">=</span> <span class="fl">0.5</span>,</span>
@@ -452,7 +484,6 @@ We use the <code>accrual_rate</code> computed in the previous step.</p>
 <span><span class="co">#&gt; Sample size for negative binomial outcome</span></span>
 <span><span class="co">#&gt; ==========================================</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Method:          zhu</span></span>
 <span><span class="co">#&gt; Sample size:     n1 = 38, n2 = 38, total = 76</span></span>
 <span><span class="co">#&gt; Expected events: 177.3 (n1: 98.5, n2: 78.8)</span></span>
 <span><span class="co">#&gt; Power: 26%, Alpha: 0.025 (1-sided)</span></span>
@@ -467,7 +498,7 @@ We use the <code>accrual_rate</code> computed in the previous step.</p>
 </h3>
 <p>Sample size with a 2:1 allocation ratio
 (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mn>2</mn></msub><mo>=</mo><mn>2</mn><msub><mi>n</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">n_2 = 2 n_1</annotation></semantics></math>).</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sample_size_nbinom.html">sample_size_nbinom</a></span><span class="op">(</span></span>
 <span>  lambda1 <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  lambda2 <span class="op">=</span> <span class="fl">0.3</span>,</span>
@@ -480,7 +511,6 @@ We use the <code>accrual_rate</code> computed in the previous step.</p>
 <span><span class="co">#&gt; Sample size for negative binomial outcome</span></span>
 <span><span class="co">#&gt; ==========================================</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Method:          zhu</span></span>
 <span><span class="co">#&gt; Sample size:     n1 = 40, n2 = 80, total = 120</span></span>
 <span><span class="co">#&gt; Expected events: 264.0 (n1: 120.0, n2: 144.0)</span></span>
 <span><span class="co">#&gt; Power: 95%, Alpha: 0.025 (1-sided)</span></span>
@@ -520,7 +550,7 @@ differ.</p>
 </h3>
 <p>Calculate sample size assuming a 5-day gap after each event (approx
 0.0137 years).</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sample_size_nbinom.html">sample_size_nbinom</a></span><span class="op">(</span></span>
 <span>  lambda1 <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  lambda2 <span class="op">=</span> <span class="fl">0.3</span>,</span>
@@ -534,7 +564,6 @@ differ.</p>
 <span><span class="co">#&gt; Sample size for negative binomial outcome</span></span>
 <span><span class="co">#&gt; ==========================================</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Method:          zhu</span></span>
 <span><span class="co">#&gt; Sample size:     n1 = 35, n2 = 35, total = 70</span></span>
 <span><span class="co">#&gt; Expected events: 167.0 (n1: 104.3, n2: 62.7)</span></span>
 <span><span class="co">#&gt; Power: 80%, Alpha: 0.025 (1-sided)</span></span>

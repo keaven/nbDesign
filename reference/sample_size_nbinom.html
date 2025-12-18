@@ -64,8 +64,7 @@ binomial distribution for the outcome.</p>
 <span>  <span class="va">trial_duration</span>,</span>
 <span>  dropout_rate <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  max_followup <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  event_gap <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  method <span class="op">=</span> <span class="st">"zhu"</span></span>
+<span>  event_gap <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -127,11 +126,6 @@ as <code>accrual_rate</code>.</p></dd>
 <dd><p>Gap duration after each event during which no new events are counted.
 Default is NULL (no gap). If provided, the effective event rate is reduced.</p></dd>
 
-
-<dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
-<dd><p>Method for sample size calculation. "zhu" for Zhu and Lakkis (2014),
-or "friede" for Friede and Schmidli (2010) / Mütze et al. (2019).</p></dd>
-
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -191,11 +185,7 @@ for a detailed explanation of the methodology.</p></div>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "sample_size_nbinom_result" "list"                     </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Fixed sample size design for negative binomial outcome (zhu method), total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample size 38 (n1=19, n2=19), 80 percent power, 2.5 percent (1-sided) Type I</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> error. Control rate 0.5000, treatment rate 0.3000, risk ratio 0.6000,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> dispersion 0.1000. Accrual duration 20.0, trial duration 24.0, average exposure</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14.00. Expected events 212.8. Randomization ratio 1:1.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># With piecewise accrual</span></span></span>
@@ -207,11 +197,7 @@ for a detailed explanation of the methodology.</p></div>
 <span class="r-in"><span>  trial_duration <span class="op">=</span> <span class="fl">12</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">x2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Fixed sample size design for negative binomial outcome (zhu method), total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample size 52 (n1=26, n2=26), 80 percent power, 2.5 percent (1-sided) Type I</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> error. Control rate 0.5000, treatment rate 0.3000, risk ratio 0.6000,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> dispersion 0.1000. Accrual duration 6.0, trial duration 12.0, average exposure</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8.50. Expected events 176.8. Randomization ratio 1:1.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>

@@ -56,8 +56,7 @@ nb_ss <- sample_size_nbinom(
   trial_duration = 24, # 24 months trial
   max_followup = 12, # 12 months of follow-up per patient
   dropout_rate = -log(0.95) / 12, # 5% dropout rate at 1 year
-  event_gap = event_gap_val,
-  method = "zhu" # Zhu and Lakkis sample size method
+  event_gap = event_gap_val
 )
 
 # Print key results
@@ -67,7 +66,6 @@ nb_ss
 #> Sample size for negative binomial outcome
 #> ==========================================
 #> 
-#> Method:          zhu
 #> Sample size:     n1 = 182, n2 = 182, total = 364
 #> Expected events: 414.1 (n1: 245.9, n2: 168.2)
 #> Power: 90%, Alpha: 0.025 (1-sided)

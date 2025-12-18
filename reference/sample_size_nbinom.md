@@ -19,8 +19,7 @@ sample_size_nbinom(
   trial_duration,
   dropout_rate = 0,
   max_followup = NULL,
-  event_gap = NULL,
-  method = "zhu"
+  event_gap = NULL
 )
 ```
 
@@ -84,11 +83,6 @@ sample_size_nbinom(
   Gap duration after each event during which no new events are counted.
   Default is NULL (no gap). If provided, the effective event rate is
   reduced.
-
-- method:
-
-  Method for sample size calculation. "zhu" for Zhu and Lakkis (2014),
-  or "friede" for Friede and Schmidli (2010) / Mütze et al. (2019).
 
 ## Value
 
@@ -156,11 +150,7 @@ x <- sample_size_nbinom(
 class(x)
 #> [1] "sample_size_nbinom_result" "list"                     
 summary(x)
-#> Fixed sample size design for negative binomial outcome (zhu method), total
-#> sample size 38 (n1=19, n2=19), 80 percent power, 2.5 percent (1-sided) Type I
-#> error. Control rate 0.5000, treatment rate 0.3000, risk ratio 0.6000,
-#> dispersion 0.1000. Accrual duration 20.0, trial duration 24.0, average exposure
-#> 14.00. Expected events 212.8. Randomization ratio 1:1.
+#> 
 #> 
 
 # With piecewise accrual
@@ -172,10 +162,6 @@ x2 <- sample_size_nbinom(
   trial_duration = 12
 )
 summary(x2)
-#> Fixed sample size design for negative binomial outcome (zhu method), total
-#> sample size 52 (n1=26, n2=26), 80 percent power, 2.5 percent (1-sided) Type I
-#> error. Control rate 0.5000, treatment rate 0.3000, risk ratio 0.6000,
-#> dispersion 0.1000. Accrual duration 6.0, trial duration 12.0, average exposure
-#> 8.50. Expected events 176.8. Randomization ratio 1:1.
+#> 
 #> 
 ```

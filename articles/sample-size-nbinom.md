@@ -12,8 +12,8 @@ and how to account for variable accrual rates.
 ## Methodology
 
 We assume the outcome $Y$ follows a negative binomial distribution with
-mean $\mu$ and dispersion parameter $k$, such that the variance is given
-by:
+mean $\mu$ and a common dispersion parameter $k$ for both treatment
+groups, such that the variance is given by:
 
 $$Var(Y) = \mu + k\mu^{2}$$
 
@@ -24,38 +24,67 @@ against the alternative $H_{1}:\lambda_{1} \neq \lambda_{2}$, where
 $\lambda_{1}$ and $\lambda_{2}$ are the event rates in the control and
 treatment groups, respectively.
 
-The function implements two methods:
+### Connection between rates and counts
 
-### Method 1: Zhu and Lakkis (2014)
+The negative binomial distribution can be motivated by a Gamma-Poisson
+mixture model. Suppose that for each subject $i$, the event rate
+$\Lambda_{i}$ is a random variable following a Gamma distribution with
+shape $\alpha = 1/k$ and rate $\beta = 1/(k\lambda)$, where $\lambda$ is
+the underlying population event rate and $k$ is the dispersion
+parameter. The mean of this Gamma distribution is
+$E\left\lbrack \Lambda_{i} \right\rbrack = \alpha/\beta = \lambda$ and
+the variance is
+$Var\left( \Lambda_{i} \right) = \alpha/\beta^{2} = k\lambda^{2}$.
 
-This method is based on the asymptotic normality of the log rate ratio.
-The sample size for the control group ($n_{1}$) is:
+Given the subject-specific rate $\Lambda_{i}$, the number of events
+$Y_{i}$ observed over a time period $t_{i}$ follows a Poisson
+distribution with rate $\Lambda_{i}t_{i}$:
+$$Y_{i}|\Lambda_{i} \sim \text{Poisson}\left( \Lambda_{i}t_{i} \right)$$
 
-$$n_{1} = \frac{\left( z_{\alpha/s} + z_{\beta} \right)^{2} \cdot V}{\left( \log\left( \mu_{1}/\mu_{2} \right) \right)^{2}}$$
+The marginal distribution of $Y_{i}$ (integrating out $\Lambda_{i}$) is
+then a negative binomial distribution with mean
+$\mu_{i} = \lambda t_{i}$ and dispersion parameter $k$. The variance is:
+$$Var\left( Y_{i} \right) = E\left\lbrack Var\left( Y_{i}|\Lambda_{i} \right) \right\rbrack + Var\left( E\left\lbrack Y_{i}|\Lambda_{i} \right\rbrack \right)$$$$= E\left\lbrack \Lambda_{i}t_{i} \right\rbrack + Var\left( \Lambda_{i}t_{i} \right)$$$$= \lambda t_{i} + t_{i}^{2}\left( k\lambda^{2} \right)$$$$= \mu_{i} + k\mu_{i}^{2}$$
 
-where $V$ is the variance component:
-$$V = \left( \frac{1}{\mu_{1}} + k \right) + \frac{1}{r}\left( \frac{1}{\mu_{2}} + k \right)$$
+This formulation connects the event rate $\lambda$ (used in the
+hypothesis testing framework) with the expected count $\mu$ (used in the
+negative binomial parameterization), showing how heterogeneity in
+individual rates leads to the overdispersion characteristic of the
+negative binomial distribution.
 
-where $r = n_{2}/n_{1}$ is the allocation ratio, and
-$\mu_{i} = \lambda_{i} \cdot t$ is the expected mean count over exposure
-duration $t$.
+### Sample size formula
 
-### Method 2: Friede and Schmidli (2010) / Mütze et al. (2019)
+The sample size calculation is based on the asymptotic normality of the
+log rate ratio. This approach corresponds to **Method 3** of Zhu and
+Lakkis (2014), which uses a Wald statistic for the log rate ratio. It is
+also the method described by Friede and Schmidli (2010) and Mütze et al.
+(2019) (as implemented in the `gscounts` package).
 
-This method uses a Wald test statistic and is commonly used in group
-sequential designs (as implemented in the `gscounts` package). The total
-sample size $n_{total}$ is calculated as:
+The total sample size $n_{total}$ is calculated as:
 
-$$n_{total} = \frac{\left( z_{\alpha/s} + z_{\beta} \right)^{2} \cdot \bar{V}}{\left( \log\left( \lambda_{1}/\lambda_{2} \right) \right)^{2}}$$
+$$n_{total} = \frac{\left( z_{\alpha/s} + z_{\beta} \right)^{2} \cdot \widetilde{V}}{\left( \log\left( \lambda_{1}/\lambda_{2} \right) \right)^{2}}$$
 
-where $\bar{V}$ is the average variance per subject:
-$$\bar{V} = \frac{1/\mu_{1} + k}{p_{1}} + \frac{1/\mu_{2} + k}{p_{2}}$$
+where:
 
-where $p_{1} = n_{1}/n_{total}$ and $p_{2} = n_{2}/n_{total}$ are the
-allocation proportions.
+- $z_{\alpha/s}$ and $z_{\beta}$ are the standard normal critical values
+  for the significance level $\alpha$ (with $s = 1$ or $2$ sided) and
+  power $1 - \beta$.
+- $\lambda_{1}$ and $\lambda_{2}$ are the event rates in the control and
+  treatment groups.
+- $\widetilde{V}$ is the average variance per subject, defined as:
 
-**Note:** For a fixed design with equal allocation, both methods yield
-identical sample sizes.
+$$\widetilde{V} = \frac{1/\mu_{1} + k}{p_{1}} + \frac{1/\mu_{2} + k}{p_{2}}$$
+
+where:
+
+- $p_{1} = n_{1}/n_{total}$ and $p_{2} = n_{2}/n_{total}$ are the
+  allocation proportions.
+- $\mu_{i} = \lambda_{i} \cdot \bar{t}$ is the expected mean count for
+  group $i$ over the average exposure duration $\bar{t}$.
+- $k$ is the dispersion parameter.
+
+This formula assumes that the exposure duration is the same for both
+groups (or uses an average exposure $\bar{t}$).
 
 ## Average exposure with variable accrual and dropout
 
@@ -167,40 +196,11 @@ sample_size_nbinom(
   sided = 1,
   accrual_rate = 10, # arbitrary, just for average exposure
   accrual_duration = 12,
-  trial_duration = 12,
-  method = "zhu"
+  trial_duration = 12
 )
 #> Sample size for negative binomial outcome
 #> ==========================================
 #> 
-#> Method:          zhu
-#> Sample size:     n1 = 35, n2 = 35, total = 70
-#> Expected events: 168.0 (n1: 105.0, n2: 63.0)
-#> Power: 80%, Alpha: 0.025 (1-sided)
-#> Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)
-#> Dispersion: 0.1000, Avg exposure (calendar): 6.00
-#> Accrual: 12.0, Trial duration: 12.0
-```
-
-### Using Friede and Schmidli (2010) method
-
-``` r
-sample_size_nbinom(
-  lambda1 = 0.5,
-  lambda2 = 0.3,
-  dispersion = 0.1,
-  power = 0.8,
-  alpha = 0.025,
-  sided = 1,
-  accrual_rate = 10,
-  accrual_duration = 12,
-  trial_duration = 12,
-  method = "friede"
-)
-#> Sample size for negative binomial outcome
-#> ==========================================
-#> 
-#> Method:          friede
 #> Sample size:     n1 = 35, n2 = 35, total = 70
 #> Expected events: 168.0 (n1: 105.0, n2: 63.0)
 #> Power: 80%, Alpha: 0.025 (1-sided)
@@ -233,7 +233,6 @@ sample_size_nbinom(
 #> Sample size for negative binomial outcome
 #> ==========================================
 #> 
-#> Method:          zhu
 #> Sample size:     n1 = 26, n2 = 26, total = 52
 #> Expected events: 176.8 (n1: 110.5, n2: 66.3)
 #> Power: 80%, Alpha: 0.025 (1-sided)
@@ -262,7 +261,6 @@ sample_size_nbinom(
 #> Sample size for negative binomial outcome
 #> ==========================================
 #> 
-#> Method:          zhu
 #> Sample size:     n1 = 38, n2 = 38, total = 76
 #> Expected events: 157.6 (n1: 98.5, n2: 59.1)
 #> Power: 80%, Alpha: 0.025 (1-sided)
@@ -309,7 +307,6 @@ sample_size_nbinom(
 #> Sample size for negative binomial outcome
 #> ==========================================
 #> 
-#> Method:          zhu
 #> Sample size:     n1 = 38, n2 = 38, total = 76
 #> Expected events: 177.3 (n1: 98.5, n2: 78.8)
 #> Power: 26%, Alpha: 0.025 (1-sided)
@@ -337,7 +334,6 @@ sample_size_nbinom(
 #> Sample size for negative binomial outcome
 #> ==========================================
 #> 
-#> Method:          zhu
 #> Sample size:     n1 = 40, n2 = 80, total = 120
 #> Expected events: 264.0 (n1: 120.0, n2: 144.0)
 #> Power: 95%, Alpha: 0.025 (1-sided)
@@ -386,7 +382,6 @@ sample_size_nbinom(
 #> Sample size for negative binomial outcome
 #> ==========================================
 #> 
-#> Method:          zhu
 #> Sample size:     n1 = 35, n2 = 35, total = 70
 #> Expected events: 167.0 (n1: 104.3, n2: 62.7)
 #> Power: 80%, Alpha: 0.025 (1-sided)
