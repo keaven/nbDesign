@@ -17,8 +17,7 @@ sample_size_nbinom(
   trial_duration,
   dropout_rate = 0,
   max_followup = NULL,
-  event_gap = NULL,
-  method = "zhu"
+  event_gap = NULL
 )
 }
 \arguments{
@@ -50,9 +49,6 @@ as \code{accrual_rate}.}
 
 \item{event_gap}{Gap duration after each event during which no new events are counted.
 Default is NULL (no gap). If provided, the effective event rate is reduced.}
-
-\item{method}{Method for sample size calculation. "zhu" for Zhu and Lakkis (2014),
-or "friede" for Friede and Schmidli (2010) / Mütze et al. (2019).}
 }
 \value{
 An object of class \code{sample_size_nbinom_result}, which is a list containing:

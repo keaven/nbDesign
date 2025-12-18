@@ -71,58 +71,6 @@ test_that("sample_size_nbinom calculates correctly", {
   expect_error(sample_size_nbinom(lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, accrual_rate = 10, accrual_duration = c(5, 5), trial_duration = 10)) # Mismatch
   expect_error(sample_size_nbinom(lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, accrual_rate = 10, accrual_duration = 11, trial_duration = 10)) # Accrual > Trial
 
-  # Test Friede method
-  res_friede <- sample_size_nbinom(
-    lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, power = 0.8, method = "friede",
-    accrual_rate = 10, accrual_duration = 2, trial_duration = 2
-  )
-  expect_type(res_friede, "list")
-  expect_s3_class(res_friede, "sample_size_nbinom_result")
-  expect_true(res_friede$n1 > 0)
-  expect_true(res_friede$n2 > 0)
-
-  # Friede and Zhu methods usually give similar but slightly different results
-  # because variance estimation details differ slightly or are equivalent under specific conditions
-  res_zhu <- sample_size_nbinom(
-    lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, power = 0.8, method = "zhu",
-    accrual_rate = 10, accrual_duration = 2, trial_duration = 2
-  )
-
-  # In this implementation:
-  # Zhu: V = (1/mu1 + k) + 1/r * (1/mu2 + k)
-  # Friede: V_bar = (1/mu1 + k)/p1 + (1/mu2 + k)/p2
-  # If r=1, p1=0.5, p2=0.5.
-  # Friede V_bar = 2(1/mu1 + k) + 2(1/mu2 + k) = 2 * [ (1/mu1+k) + (1/mu2+k) ]
-  # Zhu V = (1/mu1+k) + (1/mu2+k)
-  # Zhu n1 = (z+z)^2 * V / log^2
-  # Friede n_total = (z+z)^2 * V_bar / log^2 = (z+z)^2 * 2*V / log^2
-  # Friede n1 = n_total/2 = (z+z)^2 * V / log^2
-  # So for r=1 they should be identical.
-  expect_equal(res_zhu$n1, res_friede$n1)
-  expect_equal(res_zhu$n2, res_friede$n2)
-
-  # Test unequal allocation r=2
-  # p1=1/3, p2=2/3.
-  # Friede V_bar = 3(1/mu1+k) + 1.5(1/mu2+k)
-  # Zhu V = (1/mu1+k) + 0.5(1/mu2+k)
-  # Friede n_total = C * V_bar. n1 = C * V_bar / 3 = C * ( (1/mu1+k) + 0.5(1/mu2+k) ) = C * Zhu_V
-  # So they should still be identical for n1.
-  res_zhu_r2 <- sample_size_nbinom(
-    lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, ratio = 2, method = "zhu",
-    accrual_rate = 10, accrual_duration = 2, trial_duration = 2
-  )
-  res_friede_r2 <- sample_size_nbinom(
-    lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, ratio = 2, method = "friede",
-    accrual_rate = 10, accrual_duration = 2, trial_duration = 2
-  )
-
-  expect_equal(res_zhu_r2$n1, res_friede_r2$n1)
-
-  # Error check for unknown method
-  expect_error(sample_size_nbinom(
-    lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, method = "unknown",
-    accrual_rate = 10, accrual_duration = 2, trial_duration = 2
-  ))
 })
 
 # Test Exposure Reporting with Event Gap
@@ -135,7 +83,7 @@ test_that("Event gap results in correct exposure reporting", {
   res <- sample_size_nbinom(
     lambda1 = lambda1, lambda2 = lambda2, dispersion = 0.1, power = 0.8,
     accrual_rate = 10, accrual_duration = 20, trial_duration = 24,
-    event_gap = gap, method = "zhu"
+    event_gap = gap
   )
 
   # Calendar exposure
@@ -150,45 +98,44 @@ test_that("Event gap results in correct exposure reporting", {
   expect_equal(res$exposure_at_risk_n2, exp2_expected)
 
   # Check method name remains "zhu"
-  expect_equal(res$inputs$method, "zhu")
+  # expect_equal(res$inputs$method, "zhu") # Method removed
 })
 
 test_that("sample_size_nbinom matches published results", {
   # Helper to simulate fixed exposure of 1.0
   # We use a very short accrual duration and trial duration = 1 + accrual duration
   # This ensures everyone is followed for approximately 1.0 unit of time.
-  calc_fixed_exp <- function(lambda1, lambda2, dispersion, power, alpha, method) {
+  calc_fixed_exp <- function(lambda1, lambda2, dispersion, power, alpha) {
     sample_size_nbinom(
       lambda1 = lambda1, lambda2 = lambda2, dispersion = dispersion, power = power,
       alpha = alpha, sided = 1,
-      accrual_rate = 1000, accrual_duration = 0.001, trial_duration = 1.001,
-      method = method
+      accrual_rate = 1000, accrual_duration = 0.001, trial_duration = 1.001
     )
   }
 
   # Zhu and Lakkis (2014)
   # Example 1: Moderate Rates
   # L1=0.5, L2=0.3, k=0.1, Power=0.8, Alpha=0.025 -> n=167
-  res_zhu_1 <- calc_fixed_exp(0.5, 0.3, 0.1, 0.8, 0.025, "zhu")
+  res_zhu_1 <- calc_fixed_exp(0.5, 0.3, 0.1, 0.8, 0.025)
   expect_equal(res_zhu_1$n1, 167)
   expect_equal(res_zhu_1$n2, 167)
 
   # Example 2: High Rates
   # L1=1.0, L2=0.5, k=0.5, Power=0.9, Alpha=0.025 -> n=88
-  res_zhu_2 <- calc_fixed_exp(1.0, 0.5, 0.5, 0.9, 0.025, "zhu")
+  res_zhu_2 <- calc_fixed_exp(1.0, 0.5, 0.5, 0.9, 0.025)
   expect_equal(res_zhu_2$n1, 88)
   expect_equal(res_zhu_2$n2, 88)
 
   # Friede and Schmidli (2010)
   # Example 1: Standard Scenario
   # L1=0.6, L2=0.3, k=0.4, Power=0.8, Alpha=0.025 -> n=95
-  res_friede_1 <- calc_fixed_exp(0.6, 0.3, 0.4, 0.8, 0.025, "friede")
+  res_friede_1 <- calc_fixed_exp(0.6, 0.3, 0.4, 0.8, 0.025)
   expect_equal(res_friede_1$n1, 95)
   expect_equal(res_friede_1$n2, 95)
 
   # Example 2: High Dispersion
   # L1=1.0, L2=0.5, k=0.5, Power=0.8, Alpha=0.025 -> n=66
-  res_friede_2 <- calc_fixed_exp(1.0, 0.5, 0.5, 0.8, 0.025, "friede")
+  res_friede_2 <- calc_fixed_exp(1.0, 0.5, 0.5, 0.8, 0.025)
   expect_equal(res_friede_2$n1, 66)
   expect_equal(res_friede_2$n2, 66)
 })

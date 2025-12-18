@@ -23,7 +23,7 @@ This vignette describes the methodology used in the `sample_size_nbinom` functio
 
 ## Methodology
 
-We assume the outcome $Y$ follows a negative binomial distribution with mean $\mu$ and dispersion parameter $k$, such that the variance is given by:
+We assume the outcome $Y$ follows a negative binomial distribution with mean $\mu$ and a common dispersion parameter $k$ for both treatment groups, such that the variance is given by:
 
 $$ Var(Y) = \mu + k \mu^2 $$
 
@@ -31,31 +31,48 @@ Note that in R's `rnbinom` parameterization, $k = 1/\texttt{size}$.
 
 We wish to test the null hypothesis $H_0: \lambda_1 = \lambda_2$ against the alternative $H_1: \lambda_1 \neq \lambda_2$, where $\lambda_1$ and $\lambda_2$ are the event rates in the control and treatment groups, respectively.
 
-The function implements two methods:
+### Connection between rates and counts
 
-### Method 1: @zhu2014sample
+The negative binomial distribution can be motivated by a Gamma-Poisson mixture model.
+Suppose that for each subject $i$, the event rate $\Lambda_i$ is a random variable following a Gamma distribution with shape $\alpha = 1/k$ and rate $\beta = 1/(k \lambda)$, where $\lambda$ is the underlying population event rate and $k$ is the dispersion parameter.
+The mean of this Gamma distribution is $E[\Lambda_i] = \alpha / \beta = \lambda$ and the variance is $Var(\Lambda_i) = \alpha / \beta^2 = k \lambda^2$.
 
-This method is based on the asymptotic normality of the log rate ratio. The sample size for the control group ($n_1$) is:
+Given the subject-specific rate $\Lambda_i$, the number of events $Y_i$ observed over a time period $t_i$ follows a Poisson distribution with rate $\Lambda_i t_i$:
+$$ Y_i | \Lambda_i \sim \text{Poisson}(\Lambda_i t_i) $$
 
-$$ n_1 = \frac{(z_{\alpha/s} + z_{\beta})^2 \cdot V}{(\log(\mu_1/\mu_2))^2} $$
+The marginal distribution of $Y_i$ (integrating out $\Lambda_i$) is then a negative binomial distribution with mean $\mu_i = \lambda t_i$ and dispersion parameter $k$.
+The variance is:
+$$ Var(Y_i) = E[Var(Y_i|\Lambda_i)] + Var(E[Y_i|\Lambda_i]) $$
+$$ = E[\Lambda_i t_i] + Var(\Lambda_i t_i) $$
+$$ = \lambda t_i + t_i^2 (k \lambda^2) $$
+$$ = \mu_i + k \mu_i^2 $$
 
-where $V$ is the variance component:
-$$ V = \left(\frac{1}{\mu_1} + k\right) + \frac{1}{r}\left(\frac{1}{\mu_2} + k\right) $$
+This formulation connects the event rate $\lambda$ (used in the hypothesis testing framework) with the expected count $\mu$ (used in the negative binomial parameterization), showing how heterogeneity in individual rates leads to the overdispersion characteristic of the negative binomial distribution.
 
-where $r = n_2/n_1$ is the allocation ratio, and $\mu_i = \lambda_i \cdot t$ is the expected mean count over exposure duration $t$.
+### Sample size formula
 
-### Method 2: @friede2010blinded / @mutze2019group
+The sample size calculation is based on the asymptotic normality of the log rate ratio. This approach corresponds to **Method 3** of @zhu2014sample, 
+which uses a Wald statistic for the log rate ratio. It is also the method described by @friede2010blinded and @mutze2019group (as implemented in the `gscounts` package).
 
-This method uses a Wald test statistic and is commonly used in group sequential designs (as implemented in the `gscounts` package). The total sample size $n_{total}$ is calculated as:
+The total sample size $n_{total}$ is calculated as:
 
-$$ n_{total} = \frac{(z_{\alpha/s} + z_{\beta})^2 \cdot \bar{V}}{(\log(\lambda_1/\lambda_2))^2} $$
+$$ n_{total} = \frac{(z_{\alpha/s} + z_{\beta})^2 \cdot \tilde{V}}{(\log(\lambda_1/\lambda_2))^2} $$
 
-where $\bar{V}$ is the average variance per subject:
-$$ \bar{V} = \frac{1/ \mu_1 + k}{p_1} + \frac{1/ \mu_2 + k}{p_2} $$
+where:
 
-where $p_1 = n_1/n_{total}$ and $p_2 = n_2/n_{total}$ are the allocation proportions.
+*   $z_{\alpha/s}$ and $z_{\beta}$ are the standard normal critical values for the significance level $\alpha$ (with $s=1$ or $2$ sided) and power $1-\beta$.
+*   $\lambda_1$ and $\lambda_2$ are the event rates in the control and treatment groups.
+*   $\tilde{V}$ is the average variance per subject, defined as:
 
-**Note:** For a fixed design with equal allocation, both methods yield identical sample sizes.
+$$ \tilde{V} = \frac{1/ \mu_1 + k}{p_1} + \frac{1/ \mu_2 + k}{p_2} $$
+
+where:
+
+*   $p_1 = n_1/n_{total}$ and $p_2 = n_2/n_{total}$ are the allocation proportions.
+*   $\mu_i = \lambda_i \cdot \bar{t}$ is the expected mean count for group $i$ over the average exposure duration $\bar{t}$.
+*   $k$ is the dispersion parameter.
+
+This formula assumes that the exposure duration is the same for both groups (or uses an average exposure $\bar{t}$).
 
 ## Average exposure with variable accrual and dropout
 
@@ -134,25 +151,7 @@ sample_size_nbinom(
   sided = 1,
   accrual_rate = 10, # arbitrary, just for average exposure
   accrual_duration = 12,
-  trial_duration = 12,
-  method = "zhu"
-)
-```
-
-### Using @friede2010blinded method
-
-```{r}
-sample_size_nbinom(
-  lambda1 = 0.5,
-  lambda2 = 0.3,
-  dispersion = 0.1,
-  power = 0.8,
-  alpha = 0.025,
-  sided = 1,
-  accrual_rate = 10,
-  accrual_duration = 12,
-  trial_duration = 12,
-  method = "friede"
+  trial_duration = 12
 )
 ```
 

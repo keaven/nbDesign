@@ -19,8 +19,6 @@
 #' @param max_followup Maximum follow-up time for any patient. Default is NULL (infinite).
 #' @param event_gap Gap duration after each event during which no new events are counted.
 #'   Default is NULL (no gap). If provided, the effective event rate is reduced.
-#' @param method Method for sample size calculation. "zhu" for Zhu and Lakkis (2014),
-#'   or "friede" for Friede and Schmidli (2010) / Mütze et al. (2019).
 #'
 #' @return An object of class `sample_size_nbinom_result`, which is a list containing:
 #' \describe{
@@ -82,7 +80,7 @@ sample_size_nbinom <- function(
   alpha = 0.025, sided = 1, ratio = 1,
   accrual_rate, accrual_duration,
   trial_duration, dropout_rate = 0,
-  max_followup = NULL, event_gap = NULL, method = "zhu"
+  max_followup = NULL, event_gap = NULL
 ) {
   if (lambda1 <= 0 || lambda2 <= 0) {
     stop("Rates lambda1 and lambda2 must be positive.")
@@ -117,8 +115,7 @@ sample_size_nbinom <- function(
     trial_duration = trial_duration,
     dropout_rate = dropout_rate,
     max_followup = max_followup,
-    event_gap = event_gap,
-    method = method
+    event_gap = event_gap
   )
 
   # Determine mode: Calculate N or Calculate Power
@@ -312,24 +309,10 @@ sample_size_nbinom <- function(
   if (mode == "solve_n") {
     z_beta <- qnorm(power)
 
-    if (method == "zhu") {
-      num <- (z_alpha + z_beta)^2 * ((1 / mu1 + k) + (1 / ratio) * (1 / mu2 + k))
-      den <- (log(lambda1 / lambda2))^2
-      n1 <- num / den
-      n2 <- n1 * ratio
-    } else if (method == "friede") {
-      # Variance term for Friede
-      p1 <- 1 / (1 + ratio)
-      p2 <- ratio / (1 + ratio)
-      V <- (1 / mu1 + k) / p1 + (1 / mu2 + k) / p2
-      num <- (z_alpha + z_beta)^2 * V
-      den <- (log(lambda1 / lambda2))^2
-      n_total <- num / den
-      n1 <- n_total * p1
-      n2 <- n_total * p2
-    } else {
-      stop("Unknown method. Choose 'zhu' or 'friede'.")
-    }
+    num <- (z_alpha + z_beta)^2 * ((1 / mu1 + k) + (1 / ratio) * (1 / mu2 + k))
+    den <- (log(lambda1 / lambda2))^2
+    n1 <- num / den
+    n2 <- n1 * ratio
 
     n1_c <- ceiling(n1)
     n2_c <- ceiling(n2)
@@ -347,19 +330,9 @@ sample_size_nbinom <- function(
     n1_c <- n_total_c / (1 + ratio)
     n2_c <- n_total_c * ratio / (1 + ratio)
 
-    if (method == "zhu") {
-      # z_beta = sqrt( n1 * (log(mu1/mu2))^2 / V ) - z_alpha
-      V <- (1 / mu1 + k) + (1 / ratio) * (1 / mu2 + k)
-      z_beta <- sqrt(n1_c * (log(lambda1 / lambda2))^2 / V) - z_alpha
-    } else if (method == "friede") {
-      # z_beta = sqrt( n_total * (log(lambda1/lambda2))^2 / V_bar ) - z_alpha
-      p1 <- 1 / (1 + ratio)
-      p2 <- ratio / (1 + ratio)
-      V <- (1 / mu1 + k) / p1 + (1 / mu2 + k) / p2
-      z_beta <- sqrt(n_total_c * (log(lambda1 / lambda2))^2 / V) - z_alpha
-    } else {
-      stop("Unknown method. Choose 'zhu' or 'friede'.")
-    }
+    # z_beta = sqrt( n1 * (log(mu1/mu2))^2 / V ) - z_alpha
+    V <- (1 / mu1 + k) + (1 / ratio) * (1 / mu2 + k)
+    z_beta <- sqrt(n1_c * (log(lambda1 / lambda2))^2 / V) - z_alpha
 
     power <- pnorm(z_beta)
   }
@@ -417,7 +390,6 @@ print.sample_size_nbinom_result <- function(x, ...) {
   cat("Sample size for negative binomial outcome\n")
   cat("==========================================\n\n")
 
-  cat(sprintf("Method:          %s\n", x$inputs$method))
   cat(sprintf(
     "Sample size:     n1 = %d, n2 = %d, total = %d\n",
     x$n1, x$n2, x$n_total
