@@ -80,6 +80,23 @@ rates.</p>
 <div class="section level2">
 <h2 id="methodology">Methodology<a class="anchor" aria-label="anchor" href="#methodology"></a>
 </h2>
+<p>We wish to test for differences in rates of recurrent events between
+two treatment groups using a negative binomial model to account for
+overdispersion. The underlying test is to evaluate the log rate ratio
+between the two groups. This is parameterized in terms of event rates
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mn>1</mn></msub><annotation encoding="application/x-tex">\lambda_1</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mn>2</mn></msub><annotation encoding="application/x-tex">\lambda_2</annotation></semantics></math>
+(events per unit time) for the control and treatment groups,
+respectively. The usual null hypothesis is that the rates are equal
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mn>0</mn></msub><mo>:</mo><msub><mi>λ</mi><mn>1</mn></msub><mo>=</mo><msub><mi>λ</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">H_0: \lambda_1 = \lambda_2</annotation></semantics></math>)
+with a one-sided alternative
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mn>1</mn></msub><mo>:</mo><msub><mi>λ</mi><mn>1</mn></msub><mo>&gt;</mo><msub><mi>λ</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">H_1: \lambda_1 &gt; \lambda_2</annotation></semantics></math>).
+However, non-inferiority or equivalence tests can also be performed by
+specifying an appropriate null hypothesis.</p>
+<div class="section level3">
+<h3 id="negative-binomial-distribution">Negative binomial distribution<a class="anchor" aria-label="anchor" href="#negative-binomial-distribution"></a>
+</h3>
 <p>We assume the outcome
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Y</mi><annotation encoding="application/x-tex">Y</annotation></semantics></math>
 follows a negative binomial distribution with mean
@@ -90,16 +107,7 @@ for both treatment groups, such that the variance is given by:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mi>a</mi><mi>r</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>Y</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>μ</mi><mo>+</mo><mi>k</mi><msup><mi>μ</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex"> Var(Y) = \mu + k \mu^2 </annotation></semantics></math></p>
 <p>Note that in R’s <code>rnbinom</code> parameterization,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mn>1</mn><mi>/</mi><mtext mathvariant="monospace">𝚜𝚒𝚣𝚎</mtext></mrow><annotation encoding="application/x-tex">k = 1/\texttt{size}</annotation></semantics></math>.</p>
-<p>We wish to test the null hypothesis
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mn>0</mn></msub><mo>:</mo><msub><mi>λ</mi><mn>1</mn></msub><mo>=</mo><msub><mi>λ</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">H_0: \lambda_1 = \lambda_2</annotation></semantics></math>
-against the alternative
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mn>1</mn></msub><mo>:</mo><msub><mi>λ</mi><mn>1</mn></msub><mo>≠</mo><msub><mi>λ</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">H_1: \lambda_1 \neq \lambda_2</annotation></semantics></math>,
-where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mn>1</mn></msub><annotation encoding="application/x-tex">\lambda_1</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mn>2</mn></msub><annotation encoding="application/x-tex">\lambda_2</annotation></semantics></math>
-are the event rates in the control and treatment groups,
-respectively.</p>
+</div>
 <div class="section level3">
 <h3 id="connection-between-rates-and-counts">Connection between rates and counts<a class="anchor" aria-label="anchor" href="#connection-between-rates-and-counts"></a>
 </h3>
@@ -146,6 +154,32 @@ The variance is:
 (used in the negative binomial parameterization), showing how
 heterogeneity in individual rates leads to the overdispersion
 characteristic of the negative binomial distribution.</p>
+</div>
+<div class="section level3">
+<h3 id="graphical-representation-of-negative-binomial-distributions">Graphical representation of negative binomial distributions<a class="anchor" aria-label="anchor" href="#graphical-representation-of-negative-binomial-distributions"></a>
+</h3>
+<p>In the following panel, we illustrate an expected value of 5 events
+over a fixed time period for different dispersion parameters
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
+(0, 0.5, 1). As
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
+increases, the variance increases, leading to a wider spread of possible
+event counts.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">k_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">k</span> <span class="kw">in</span> <span class="va">k_values</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">mu</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
+<span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fl">0</span><span class="op">:</span><span class="fl">15</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="va">k</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">dpois</a></span><span class="op">(</span><span class="va">x</span>, lambda <span class="op">=</span> <span class="va">mu</span><span class="op">)</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="va">size</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="va">k</span></span>
+<span>    <span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/NegBinomial.html" class="external-link">dnbinom</a></span><span class="op">(</span><span class="va">x</span>, size <span class="op">=</span> <span class="va">size</span>, mu <span class="op">=</span> <span class="va">mu</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">probs</span>, type<span class="op">=</span><span class="st">'h'</span>, lwd <span class="op">=</span><span class="fl">2</span>, main<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"k ="</span>, <span class="va">k</span><span class="op">)</span>, xlab<span class="op">=</span><span class="st">"Event Count"</span>, ylab<span class="op">=</span><span class="st">"Probability"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p><img src="sample-size-nbinom_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="768"></p>
 </div>
 <div class="section level3">
 <h3 id="sample-size-formula">Sample size formula<a class="anchor" aria-label="anchor" href="#sample-size-formula"></a>
@@ -407,7 +441,7 @@ effective exposure time reported is also adjusted similarly.</p>
 <li>Accrual over 12 months</li>
 <li>Trial duration 12 months (implying exposure approx 6 months)</li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sample_size_nbinom.html">sample_size_nbinom</a></span><span class="op">(</span></span>
 <span>  lambda1 <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  lambda2 <span class="op">=</span> <span class="fl">0.3</span>,</span>
@@ -440,7 +474,7 @@ effective exposure time reported is also adjusted similarly.</p>
 </ul>
 <p>The function automatically calculates the average exposure based on
 this accrual pattern.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sample_size_nbinom.html">sample_size_nbinom</a></span><span class="op">(</span></span>
 <span>  lambda1 <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  lambda2 <span class="op">=</span> <span class="fl">0.3</span>,</span>
@@ -465,7 +499,7 @@ this accrual pattern.</p>
 </h3>
 <p>Same design as above, but with a 5% dropout rate per unit time and a
 maximum follow-up of 6 months.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sample_size_nbinom.html">sample_size_nbinom</a></span><span class="op">(</span></span>
 <span>  lambda1 <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  lambda2 <span class="op">=</span> <span class="fl">0.3</span>,</span>
@@ -494,7 +528,7 @@ maximum follow-up of 6 months.</p>
 </h3>
 <p>Suppose the control group has a higher dropout rate (10%) than the
 treatment group (5%).</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sample_size_nbinom.html">sample_size_nbinom</a></span><span class="op">(</span></span>
 <span>  lambda1 <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  lambda2 <span class="op">=</span> <span class="fl">0.3</span>,</span>
@@ -527,7 +561,7 @@ we want to calculate the power if the treatment effect is smaller
 instead of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.3</mn><annotation encoding="application/x-tex">0.3</annotation></semantics></math>).
 We use the <code>accrual_rate</code> computed in the previous step.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Store the result from the previous calculation</span></span>
 <span><span class="va">design_result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sample_size_nbinom.html">sample_size_nbinom</a></span><span class="op">(</span></span>
 <span>  lambda1 <span class="op">=</span> <span class="fl">0.5</span>,</span>
@@ -570,7 +604,7 @@ We use the <code>accrual_rate</code> computed in the previous step.</p>
 </h3>
 <p>Sample size with a 2:1 allocation ratio
 (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mn>2</mn></msub><mo>=</mo><mn>2</mn><msub><mi>n</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">n_2 = 2 n_1</annotation></semantics></math>).</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sample_size_nbinom.html">sample_size_nbinom</a></span><span class="op">(</span></span>
 <span>  lambda1 <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  lambda2 <span class="op">=</span> <span class="fl">0.3</span>,</span>
@@ -627,7 +661,7 @@ groups because the group with the higher event rate
 (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mn>1</mn></msub><mo>=</mo><mn>2.0</mn></mrow><annotation encoding="application/x-tex">\lambda_1 = 2.0</annotation></semantics></math>)
 spends more time in the “gap” period than the group with the lower rate
 (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mn>2</mn></msub><mo>=</mo><mn>1.0</mn></mrow><annotation encoding="application/x-tex">\lambda_2 = 1.0</annotation></semantics></math>).</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sample_size_nbinom.html">sample_size_nbinom</a></span><span class="op">(</span></span>
 <span>  lambda1 <span class="op">=</span> <span class="fl">2.0</span>,</span>
 <span>  lambda2 <span class="op">=</span> <span class="fl">1.0</span>,</span>

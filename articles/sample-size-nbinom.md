@@ -11,6 +11,19 @@ and how to account for variable accrual rates.
 
 ## Methodology
 
+We wish to test for differences in rates of recurrent events between two
+treatment groups using a negative binomial model to account for
+overdispersion. The underlying test is to evaluate the log rate ratio
+between the two groups. This is parameterized in terms of event rates
+$\lambda_{1}$ and $\lambda_{2}$ (events per unit time) for the control
+and treatment groups, respectively. The usual null hypothesis is that
+the rates are equal ($H_{0}:\lambda_{1} = \lambda_{2}$) with a one-sided
+alternative ($H_{1}:\lambda_{1} > \lambda_{2}$). However,
+non-inferiority or equivalence tests can also be performed by specifying
+an appropriate null hypothesis.
+
+### Negative binomial distribution
+
 We assume the outcome $Y$ follows a negative binomial distribution with
 mean $\mu$ and a common dispersion parameter $k$ for both treatment
 groups, such that the variance is given by:
@@ -18,11 +31,6 @@ groups, such that the variance is given by:
 $$Var(Y) = \mu + k\mu^{2}$$
 
 Note that in R’s `rnbinom` parameterization, $k = 1/\texttt{𝚜𝚒𝚣𝚎}$.
-
-We wish to test the null hypothesis $H_{0}:\lambda_{1} = \lambda_{2}$
-against the alternative $H_{1}:\lambda_{1} \neq \lambda_{2}$, where
-$\lambda_{1}$ and $\lambda_{2}$ are the event rates in the control and
-treatment groups, respectively.
 
 ### Connection between rates and counts
 
@@ -51,6 +59,31 @@ hypothesis testing framework) with the expected count $\mu$ (used in the
 negative binomial parameterization), showing how heterogeneity in
 individual rates leads to the overdispersion characteristic of the
 negative binomial distribution.
+
+### Graphical representation of negative binomial distributions
+
+In the following panel, we illustrate an expected value of 5 events over
+a fixed time period for different dispersion parameters $k$ (0, 0.5, 1).
+As $k$ increases, the variance increases, leading to a wider spread of
+possible event counts.
+
+``` r
+par(mfrow=c(1,3))
+k_values <- c(0, 0.5, 1)
+for (k in k_values) {
+  mu <- 5
+  x <- 0:15
+  if (k == 0) {
+    probs <- dpois(x, lambda = mu)
+  } else {
+    size <- 1 / k
+    probs <- dnbinom(x, size = size, mu = mu)
+  }
+  plot(x, probs, type='h', lwd =2, main=paste("k =", k), xlab="Event Count", ylab="Probability")
+}
+```
+
+![](sample-size-nbinom_files/figure-html/unnamed-chunk-3-1.png)
 
 ### Sample size formula
 
