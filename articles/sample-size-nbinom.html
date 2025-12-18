@@ -200,11 +200,32 @@ over the average exposure duration
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>t</mi><mo accent="true">‾</mo></mover><annotation encoding="application/x-tex">\bar{t}</annotation></semantics></math>.</li>
 <li>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
-is the dispersion parameter.</li>
+is the dispersion parameter. While the cited literature assumes a common
+dispersion parameter across groups, <code>sample_size_nbinom</code>
+allows for different dispersion parameters
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>k</mi><mn>1</mn></msub><annotation encoding="application/x-tex">k_1</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>k</mi><mn>2</mn></msub><annotation encoding="application/x-tex">k_2</annotation></semantics></math>
+for the control and treatment groups, respectively. In this case, the
+variance formula becomes:</li>
 </ul>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>V</mi><mo accent="true">̃</mo></mover><mo>=</mo><mfrac><mrow><mn>1</mn><mi>/</mi><msub><mi>μ</mi><mn>1</mn></msub><mo>+</mo><msub><mi>k</mi><mn>1</mn></msub></mrow><msub><mi>p</mi><mn>1</mn></msub></mfrac><mo>+</mo><mfrac><mrow><mn>1</mn><mi>/</mi><msub><mi>μ</mi><mn>2</mn></msub><mo>+</mo><msub><mi>k</mi><mn>2</mn></msub></mrow><msub><mi>p</mi><mn>2</mn></msub></mfrac></mrow><annotation encoding="application/x-tex"> \tilde{V} = \frac{1/ \mu_1 + k_1}{p_1} + \frac{1/ \mu_2 + k_2}{p_2} </annotation></semantics></math></p>
 <p>This formula assumes that the exposure duration is the same for both
 groups (or uses an average exposure
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>t</mi><mo accent="true">‾</mo></mover><annotation encoding="application/x-tex">\bar{t}</annotation></semantics></math>).</p>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>t</mi><mo accent="true">‾</mo></mover><annotation encoding="application/x-tex">\bar{t}</annotation></semantics></math>).
+However, <code>sample_size_nbinom</code> allows for different dropout
+rates for the two groups, which results in different average exposure
+durations
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>t</mi><mo accent="true">‾</mo></mover><mn>1</mn></msub><annotation encoding="application/x-tex">\bar{t}_1</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>t</mi><mo accent="true">‾</mo></mover><mn>2</mn></msub><annotation encoding="application/x-tex">\bar{t}_2</annotation></semantics></math>.
+In this case,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>μ</mi><mn>1</mn></msub><mo>=</mo><msub><mi>λ</mi><mn>1</mn></msub><msub><mover><mi>t</mi><mo accent="true">‾</mo></mover><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\mu_1 = \lambda_1 \bar{t}_1</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>μ</mi><mn>2</mn></msub><mo>=</mo><msub><mi>λ</mi><mn>2</mn></msub><msub><mover><mi>t</mi><mo accent="true">‾</mo></mover><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">\mu_2 = \lambda_2 \bar{t}_2</annotation></semantics></math>.
+Also, when the assumed gap between events is &gt; 0, the expected
+exposure is impacted differently for each group based on their event
+rates.</p>
 </div>
 </div>
 <div class="section level2">
@@ -268,6 +289,25 @@ and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mo>−</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>S</mi><mrow><mi>j</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>D</mi><mi>j</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">T - (S_{j-1} + D_j)</annotation></semantics></math>
 respectively).</p>
 <div class="section level3">
+<h3 id="group-specific-parameters">Group-specific parameters<a class="anchor" aria-label="anchor" href="#group-specific-parameters"></a>
+</h3>
+<p>The function supports specifying <code>dropout_rate</code> as a
+vector of length 2, corresponding to the control and treatment groups
+respectively. This allows for scenarios where the dropout rate differs
+between arms.</p>
+<p>If these parameters differ, the average exposure is calculated
+separately for each group
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>t</mi><mo accent="true">‾</mo></mover><mn>1</mn></msub><annotation encoding="application/x-tex">\bar{t}_1</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>t</mi><mo accent="true">‾</mo></mover><mn>2</mn></msub><annotation encoding="application/x-tex">\bar{t}_2</annotation></semantics></math>).
+The variance inflation factor
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Q</mi><annotation encoding="application/x-tex">Q</annotation></semantics></math>
+(see below) is also calculated separately for each group
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Q</mi><mn>1</mn></msub><annotation encoding="application/x-tex">Q_1</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Q</mi><mn>2</mn></msub><annotation encoding="application/x-tex">Q_2</annotation></semantics></math>).</p>
+</div>
+<div class="section level3">
 <h3 id="maximum-follow-up">Maximum follow-up<a class="anchor" aria-label="anchor" href="#maximum-follow-up"></a>
 </h3>
 <p>If <code>max_followup</code>
@@ -325,7 +365,10 @@ The function automatically calculates
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mrow><mo stretchy="true" form="prefix">[</mo><mi>t</mi><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">E[t]</annotation></semantics></math>
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mrow><mo stretchy="true" form="prefix">[</mo><msup><mi>t</mi><mn>2</mn></msup><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">E[t^2]</annotation></semantics></math>
-based on the accrual, dropout, and trial duration parameters.</p>
+based on the accrual, dropout, and trial duration parameters. If
+exposure differs between groups,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Q</mi><annotation encoding="application/x-tex">Q</annotation></semantics></math>
+is calculated separately for each group.</p>
 </div>
 <div class="section level3">
 <h3 id="event-gaps">Event gaps<a class="anchor" aria-label="anchor" href="#event-gaps"></a>
@@ -447,6 +490,35 @@ maximum follow-up of 6 months.</p>
 <span><span class="co">#&gt; Max follow-up: 6.0</span></span></code></pre></div>
 </div>
 <div class="section level3">
+<h3 id="group-specific-dropout-rates">Group-specific dropout rates<a class="anchor" aria-label="anchor" href="#group-specific-dropout-rates"></a>
+</h3>
+<p>Suppose the control group has a higher dropout rate (10%) than the
+treatment group (5%).</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/sample_size_nbinom.html">sample_size_nbinom</a></span><span class="op">(</span></span>
+<span>  lambda1 <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  lambda2 <span class="op">=</span> <span class="fl">0.3</span>,</span>
+<span>  dispersion <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>  power <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  accrual_rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span>,</span>
+<span>  accrual_duration <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>,</span>
+<span>  trial_duration <span class="op">=</span> <span class="fl">12</span>,</span>
+<span>  dropout_rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.10</span>, <span class="fl">0.05</span><span class="op">)</span>, <span class="co"># Control, Treatment</span></span>
+<span>  max_followup <span class="op">=</span> <span class="fl">6</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Sample size for negative binomial outcome</span></span>
+<span><span class="co">#&gt; ==========================================</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Sample size:     n1 = 40, n2 = 40, total = 80</span></span>
+<span><span class="co">#&gt; Expected events: 152.4 (n1: 90.2, n2: 62.2)</span></span>
+<span><span class="co">#&gt; Power: 80%, Alpha: 0.025 (1-sided)</span></span>
+<span><span class="co">#&gt; Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)</span></span>
+<span><span class="co">#&gt; Dispersion: 0.1000, Avg exposure (calendar): 4.51 (n1), 5.18 (n2)</span></span>
+<span><span class="co">#&gt; Dropout rate: 0.1000 (n1), 0.0500 (n2)</span></span>
+<span><span class="co">#&gt; Accrual: 6.0, Trial duration: 12.0</span></span>
+<span><span class="co">#&gt; Max follow-up: 6.0</span></span></code></pre></div>
+</div>
+<div class="section level3">
 <h3 id="calculating-power-for-fixed-design">Calculating power for fixed design<a class="anchor" aria-label="anchor" href="#calculating-power-for-fixed-design"></a>
 </h3>
 <p>Using the accrual rates and design from the previous example, suppose
@@ -455,7 +527,7 @@ we want to calculate the power if the treatment effect is smaller
 instead of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.3</mn><annotation encoding="application/x-tex">0.3</annotation></semantics></math>).
 We use the <code>accrual_rate</code> computed in the previous step.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Store the result from the previous calculation</span></span>
 <span><span class="va">design_result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sample_size_nbinom.html">sample_size_nbinom</a></span><span class="op">(</span></span>
 <span>  lambda1 <span class="op">=</span> <span class="fl">0.5</span>,</span>
@@ -498,7 +570,7 @@ We use the <code>accrual_rate</code> computed in the previous step.</p>
 </h3>
 <p>Sample size with a 2:1 allocation ratio
 (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mn>2</mn></msub><mo>=</mo><mn>2</mn><msub><mi>n</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">n_2 = 2 n_1</annotation></semantics></math>).</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sample_size_nbinom.html">sample_size_nbinom</a></span><span class="op">(</span></span>
 <span>  lambda1 <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  lambda2 <span class="op">=</span> <span class="fl">0.3</span>,</span>
@@ -544,36 +616,42 @@ the actual time subjects are at risk for events.</li>
 <p>Since the gap reduction depends on the event rate
 (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>),
 the at-risk exposure differs between treatment groups if their rates
-differ.</p>
+differ, even if the calendar exposure is the same. This is a key reason
+why average exposure may differ between groups in the output.</p>
 <div class="section level3">
 <h3 id="example-with-event-gap">Example with event gap<a class="anchor" aria-label="anchor" href="#example-with-event-gap"></a>
 </h3>
-<p>Calculate sample size assuming a 5-day gap after each event (approx
-0.0137 years).</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<p>Calculate sample size assuming a 30-day gap after each event (approx
+0.082 years). Note how the <code>exposure_at_risk</code> differs between
+groups because the group with the higher event rate
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mn>1</mn></msub><mo>=</mo><mn>2.0</mn></mrow><annotation encoding="application/x-tex">\lambda_1 = 2.0</annotation></semantics></math>)
+spends more time in the “gap” period than the group with the lower rate
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mn>2</mn></msub><mo>=</mo><mn>1.0</mn></mrow><annotation encoding="application/x-tex">\lambda_2 = 1.0</annotation></semantics></math>).</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sample_size_nbinom.html">sample_size_nbinom</a></span><span class="op">(</span></span>
-<span>  lambda1 <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span>  lambda2 <span class="op">=</span> <span class="fl">0.3</span>,</span>
+<span>  lambda1 <span class="op">=</span> <span class="fl">2.0</span>,</span>
+<span>  lambda2 <span class="op">=</span> <span class="fl">1.0</span>,</span>
 <span>  dispersion <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>  power <span class="op">=</span> <span class="fl">0.8</span>,</span>
 <span>  accrual_rate <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  accrual_duration <span class="op">=</span> <span class="fl">12</span>,</span>
 <span>  trial_duration <span class="op">=</span> <span class="fl">12</span>,</span>
-<span>  event_gap <span class="op">=</span> <span class="fl">5</span> <span class="op">/</span> <span class="fl">365.25</span></span>
+<span>  event_gap <span class="op">=</span> <span class="fl">30</span> <span class="op">/</span> <span class="fl">365.25</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Sample size for negative binomial outcome</span></span>
 <span><span class="co">#&gt; ==========================================</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Sample size:     n1 = 35, n2 = 35, total = 70</span></span>
-<span><span class="co">#&gt; Expected events: 167.0 (n1: 104.3, n2: 62.7)</span></span>
+<span><span class="co">#&gt; Sample size:     n1 = 9, n2 = 9, total = 18</span></span>
+<span><span class="co">#&gt; Expected events: 142.7 (n1: 92.8, n2: 49.9)</span></span>
 <span><span class="co">#&gt; Power: 80%, Alpha: 0.025 (1-sided)</span></span>
-<span><span class="co">#&gt; Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)</span></span>
+<span><span class="co">#&gt; Rates: control = 2.0000, treatment = 1.0000 (RR = 0.5000)</span></span>
 <span><span class="co">#&gt; Dispersion: 0.1000, Avg exposure (calendar): 6.00</span></span>
-<span><span class="co">#&gt; Avg exposure (at-risk): n1 = 5.96, n2 = 5.98</span></span>
-<span><span class="co">#&gt; Event gap: 0.01</span></span>
+<span><span class="co">#&gt; Avg exposure (at-risk): n1 = 5.15, n2 = 5.54</span></span>
+<span><span class="co">#&gt; Event gap: 0.08</span></span>
 <span><span class="co">#&gt; Accrual: 12.0, Trial duration: 12.0</span></span></code></pre></div>
-<p>The output shows both the “Avg exposure (calendar)” and the “Avg
-exposure (at-risk)” for each group.</p>
+<p>In this example, even though the calendar time is the same for both
+groups, the effective at-risk exposure is lower for Group 1 because they
+have more events and thus more “gap” time.</p>
 </div>
 </div>
 <div class="section level2 unnumbered">

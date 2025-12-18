@@ -81,10 +81,23 @@ where:
   allocation proportions.
 - $\mu_{i} = \lambda_{i} \cdot \bar{t}$ is the expected mean count for
   group $i$ over the average exposure duration $\bar{t}$.
-- $k$ is the dispersion parameter.
+- $k$ is the dispersion parameter. While the cited literature assumes a
+  common dispersion parameter across groups, `sample_size_nbinom` allows
+  for different dispersion parameters $k_{1}$ and $k_{2}$ for the
+  control and treatment groups, respectively. In this case, the variance
+  formula becomes:
+
+$$\widetilde{V} = \frac{1/\mu_{1} + k_{1}}{p_{1}} + \frac{1/\mu_{2} + k_{2}}{p_{2}}$$
 
 This formula assumes that the exposure duration is the same for both
-groups (or uses an average exposure $\bar{t}$).
+groups (or uses an average exposure $\bar{t}$). However,
+`sample_size_nbinom` allows for different dropout rates for the two
+groups, which results in different average exposure durations
+${\bar{t}}_{1}$ and ${\bar{t}}_{2}$. In this case,
+$\mu_{1} = \lambda_{1}{\bar{t}}_{1}$ and
+$\mu_{2} = \lambda_{2}{\bar{t}}_{2}$. Also, when the assumed gap between
+events is \> 0, the expected exposure is impacted differently for each
+group based on their event rates.
 
 ## Average exposure with variable accrual and dropout
 
@@ -119,6 +132,17 @@ E_{j} & {= \frac{1}{D_{j}}\int_{u_{min}}^{u_{max}}\frac{1 - e^{- \delta u}}{\del
 minimum potential follow-up times for patients in that segment
 ($T - S_{j - 1}$ and $T - \left( S_{j - 1} + D_{j} \right)$
 respectively).
+
+### Group-specific parameters
+
+The function supports specifying `dropout_rate` as a vector of length 2,
+corresponding to the control and treatment groups respectively. This
+allows for scenarios where the dropout rate differs between arms.
+
+If these parameters differ, the average exposure is calculated
+separately for each group (${\bar{t}}_{1}$ and ${\bar{t}}_{2}$). The
+variance inflation factor $Q$ (see below) is also calculated separately
+for each group ($Q_{1}$ and $Q_{2}$).
 
 ### Maximum follow-up
 
@@ -158,7 +182,8 @@ $$Q = \frac{E\left\lbrack t^{2} \right\rbrack}{\left( E\lbrack t\rbrack \right)^
 The adjusted dispersion parameter used in the sample size calculation is
 $k_{adj} = k \cdot Q$. The function automatically calculates
 $E\lbrack t\rbrack$ and $E\left\lbrack t^{2} \right\rbrack$ based on the
-accrual, dropout, and trial duration parameters.
+accrual, dropout, and trial duration parameters. If exposure differs
+between groups, $Q$ is calculated separately for each group.
 
 ### Event gaps
 
@@ -271,6 +296,36 @@ sample_size_nbinom(
 #> Max follow-up: 6.0
 ```
 
+### Group-specific dropout rates
+
+Suppose the control group has a higher dropout rate (10%) than the
+treatment group (5%).
+
+``` r
+sample_size_nbinom(
+  lambda1 = 0.5,
+  lambda2 = 0.3,
+  dispersion = 0.1,
+  power = 0.8,
+  accrual_rate = c(5, 10),
+  accrual_duration = c(3, 3),
+  trial_duration = 12,
+  dropout_rate = c(0.10, 0.05), # Control, Treatment
+  max_followup = 6
+)
+#> Sample size for negative binomial outcome
+#> ==========================================
+#> 
+#> Sample size:     n1 = 40, n2 = 40, total = 80
+#> Expected events: 152.4 (n1: 90.2, n2: 62.2)
+#> Power: 80%, Alpha: 0.025 (1-sided)
+#> Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)
+#> Dispersion: 0.1000, Avg exposure (calendar): 4.51 (n1), 5.18 (n2)
+#> Dropout rate: 0.1000 (n1), 0.0500 (n2)
+#> Accrual: 6.0, Trial duration: 12.0
+#> Max follow-up: 6.0
+```
+
 ### Calculating power for fixed design
 
 Using the accrual rates and design from the previous example, suppose we
@@ -361,39 +416,45 @@ calculation as follows:
     time subjects are at risk for events.
 
 Since the gap reduction depends on the event rate ($\lambda$), the
-at-risk exposure differs between treatment groups if their rates differ.
+at-risk exposure differs between treatment groups if their rates differ,
+even if the calendar exposure is the same. This is a key reason why
+average exposure may differ between groups in the output.
 
 ### Example with event gap
 
-Calculate sample size assuming a 5-day gap after each event (approx
-0.0137 years).
+Calculate sample size assuming a 30-day gap after each event (approx
+0.082 years). Note how the `exposure_at_risk` differs between groups
+because the group with the higher event rate ($\lambda_{1} = 2.0$)
+spends more time in the “gap” period than the group with the lower rate
+($\lambda_{2} = 1.0$).
 
 ``` r
 sample_size_nbinom(
-  lambda1 = 0.5,
-  lambda2 = 0.3,
+  lambda1 = 2.0,
+  lambda2 = 1.0,
   dispersion = 0.1,
   power = 0.8,
   accrual_rate = 10,
   accrual_duration = 12,
   trial_duration = 12,
-  event_gap = 5 / 365.25
+  event_gap = 30 / 365.25
 )
 #> Sample size for negative binomial outcome
 #> ==========================================
 #> 
-#> Sample size:     n1 = 35, n2 = 35, total = 70
-#> Expected events: 167.0 (n1: 104.3, n2: 62.7)
+#> Sample size:     n1 = 9, n2 = 9, total = 18
+#> Expected events: 142.7 (n1: 92.8, n2: 49.9)
 #> Power: 80%, Alpha: 0.025 (1-sided)
-#> Rates: control = 0.5000, treatment = 0.3000 (RR = 0.6000)
+#> Rates: control = 2.0000, treatment = 1.0000 (RR = 0.5000)
 #> Dispersion: 0.1000, Avg exposure (calendar): 6.00
-#> Avg exposure (at-risk): n1 = 5.96, n2 = 5.98
-#> Event gap: 0.01
+#> Avg exposure (at-risk): n1 = 5.15, n2 = 5.54
+#> Event gap: 0.08
 #> Accrual: 12.0, Trial duration: 12.0
 ```
 
-The output shows both the “Avg exposure (calendar)” and the “Avg
-exposure (at-risk)” for each group.
+In this example, even though the calendar time is the same for both
+groups, the effective at-risk exposure is lower for Group 1 because they
+have more events and thus more “gap” time.
 
 ## References
 

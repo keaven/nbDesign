@@ -82,7 +82,8 @@ binomial distribution for the outcome.</p>
 
 <dt id="arg-dispersion">dispersion<a class="anchor" aria-label="anchor" href="#arg-dispersion"></a></dt>
 <dd><p>Dispersion parameter <code>k</code> such that \(Var(Y) = \mu + k \mu^2\).
-Note that this is equivalent to <code>1/size</code> in R's <code><a href="https://rdrr.io/r/stats/NegBinomial.html" class="external-link">stats::rnbinom()</a></code> parameterization.</p></dd>
+Note that this is equivalent to <code>1/size</code> in R's <code><a href="https://rdrr.io/r/stats/NegBinomial.html" class="external-link">stats::rnbinom()</a></code> parameterization.
+Can be a scalar (common dispersion) or a vector of length 2 (dispersion for control and treatment groups, respectively).</p></dd>
 
 
 <dt id="arg-power">power<a class="anchor" aria-label="anchor" href="#arg-power"></a></dt>
@@ -185,7 +186,11 @@ for a detailed explanation of the methodology.</p></div>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "sample_size_nbinom_result" "list"                     </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fixed sample size design for negative binomial outcome, total sample size 38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (n1=19, n2=19), 80 percent power, 2.5 percent (1-sided) Type I error. Control</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rate 0.5000, treatment rate 0.3000, risk ratio 0.6000, dispersion 0.1000.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Accrual duration 20.0, trial duration 24.0, average exposure 14.00. Expected</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> events 212.8. Randomization ratio 1:1.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># With piecewise accrual</span></span></span>
@@ -197,7 +202,11 @@ for a detailed explanation of the methodology.</p></div>
 <span class="r-in"><span>  trial_duration <span class="op">=</span> <span class="fl">12</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">x2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fixed sample size design for negative binomial outcome, total sample size 52</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (n1=26, n2=26), 80 percent power, 2.5 percent (1-sided) Type I error. Control</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rate 0.5000, treatment rate 0.3000, risk ratio 0.6000, dispersion 0.1000.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Accrual duration 6.0, trial duration 12.0, average exposure 8.50. Expected</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> events 176.8. Randomization ratio 1:1.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>

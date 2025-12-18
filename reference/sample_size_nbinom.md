@@ -38,7 +38,8 @@ sample_size_nbinom(
   Dispersion parameter `k` such that \\Var(Y) = \mu + k \mu^2\\. Note
   that this is equivalent to `1/size` in R's
   [`stats::rnbinom()`](https://rdrr.io/r/stats/NegBinomial.html)
-  parameterization.
+  parameterization. Can be a scalar (common dispersion) or a vector of
+  length 2 (dispersion for control and treatment groups, respectively).
 
 - power:
 
@@ -150,7 +151,11 @@ x <- sample_size_nbinom(
 class(x)
 #> [1] "sample_size_nbinom_result" "list"                     
 summary(x)
-#> 
+#> Fixed sample size design for negative binomial outcome, total sample size 38
+#> (n1=19, n2=19), 80 percent power, 2.5 percent (1-sided) Type I error. Control
+#> rate 0.5000, treatment rate 0.3000, risk ratio 0.6000, dispersion 0.1000.
+#> Accrual duration 20.0, trial duration 24.0, average exposure 14.00. Expected
+#> events 212.8. Randomization ratio 1:1.
 #> 
 
 # With piecewise accrual
@@ -162,6 +167,10 @@ x2 <- sample_size_nbinom(
   trial_duration = 12
 )
 summary(x2)
-#> 
+#> Fixed sample size design for negative binomial outcome, total sample size 52
+#> (n1=26, n2=26), 80 percent power, 2.5 percent (1-sided) Type I error. Control
+#> rate 0.5000, treatment rate 0.3000, risk ratio 0.6000, dispersion 0.1000.
+#> Accrual duration 6.0, trial duration 12.0, average exposure 8.50. Expected
+#> events 176.8. Randomization ratio 1:1.
 #> 
 ```
