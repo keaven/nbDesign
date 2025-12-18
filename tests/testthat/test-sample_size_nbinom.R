@@ -15,7 +15,7 @@ test_that("sample_size_nbinom calculates correctly", {
   expect_true(res$n1 > 0)
   expect_true(res$n2 > 0)
   expect_equal(res$n_total, res$n1 + res$n2)
-  expect_equal(res$exposure, 1)
+  expect_equal(res$exposure[1], 1)
 
   # Check Poisson limit (dispersion = 0)
   res_nb_0 <- sample_size_nbinom(
@@ -43,9 +43,18 @@ test_that("sample_size_nbinom calculates correctly", {
   )
   expect_equal(res_ratio$n2, 2 * res_ratio$n1)
 
+  # Check vector dispersion
+  res_vec_disp <- sample_size_nbinom(
+    lambda1 = 0.5, lambda2 = 0.3, dispersion = c(0.1, 0.2), power = 0.8,
+    accrual_rate = 10, accrual_duration = 2, trial_duration = 2
+  )
+  expect_type(res_vec_disp, "list")
+  expect_true(res_vec_disp$n1 > 0)
+
   # Error handling
   expect_error(sample_size_nbinom(lambda1 = -1, lambda2 = 0.3, dispersion = 0.1, accrual_rate = 1, accrual_duration = 1, trial_duration = 1))
   expect_error(sample_size_nbinom(lambda1 = 0.5, lambda2 = 0.3, dispersion = -1, accrual_rate = 1, accrual_duration = 1, trial_duration = 1))
+  expect_error(sample_size_nbinom(lambda1 = 0.5, lambda2 = 0.3, dispersion = c(0.1, 0.2, 0.3), accrual_rate = 1, accrual_duration = 1, trial_duration = 1))
 
   # Variable accrual
   # Case 1: Uniform accrual over [0, 10], trial ends at 10. Avg exposure = 5.
@@ -53,7 +62,7 @@ test_that("sample_size_nbinom calculates correctly", {
     lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, power = 0.8,
     accrual_rate = 10, accrual_duration = 10, trial_duration = 10
   )
-  expect_equal(res_accrual$exposure, 5)
+  expect_equal(res_accrual$exposure[1], 5)
 
   # Case 2: Piecewise accrual
   # Rate 10 for 5 units, Rate 20 for 5 units. Trial duration 15.
@@ -64,7 +73,7 @@ test_that("sample_size_nbinom calculates correctly", {
     lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, power = 0.8,
     accrual_rate = c(10, 20), accrual_duration = c(5, 5), trial_duration = 15
   )
-  expect_equal(res_piecewise$exposure, 1375 / 150)
+  expect_equal(res_piecewise$exposure[1], 1375 / 150)
 
   # Error checks for accrual
   expect_error(sample_size_nbinom(lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, accrual_rate = 10, trial_duration = 10)) # Missing duration
@@ -87,7 +96,7 @@ test_that("Event gap results in correct exposure reporting", {
   )
 
   # Calendar exposure
-  exp_cal <- res$exposure
+  exp_cal <- res$exposure[1]
   expect_true(exp_cal > 0)
 
   # Expected at-risk exposures
@@ -139,3 +148,36 @@ test_that("sample_size_nbinom matches published results", {
   expect_equal(res_friede_2$n1, 66)
   expect_equal(res_friede_2$n2, 66)
 })
+
+test_that("sample_size_nbinom handles vector dropout_rate", {
+  # Case 1: Same dropout and max_followup for both groups
+  # Should give same result as scalar input
+  res_scalar <- sample_size_nbinom(
+    lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, power = 0.8,
+    accrual_rate = 10, accrual_duration = 20, trial_duration = 24,
+    dropout_rate = 0.05, max_followup = 12
+  )
+
+  res_vector <- sample_size_nbinom(
+    lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, power = 0.8,
+    accrual_rate = 10, accrual_duration = 20, trial_duration = 24,
+    dropout_rate = c(0.05, 0.05), max_followup = 12
+  )
+
+  expect_equal(res_scalar$n_total, res_vector$n_total)
+  expect_equal(res_scalar$exposure[1], res_vector$exposure[1])
+  expect_equal(res_scalar$exposure[2], res_vector$exposure[2])
+
+  # Case 2: Different dropout rates
+  # Group 1 has higher dropout, so exposure should be lower
+  res_diff <- sample_size_nbinom(
+    lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, power = 0.8,
+    accrual_rate = 10, accrual_duration = 20, trial_duration = 24,
+    dropout_rate = c(0.1, 0.01), max_followup = 12
+  )
+
+  expect_true(res_diff$exposure[1] < res_diff$exposure[2])
+  expect_true(length(res_diff$exposure) == 2)
+})
+
+

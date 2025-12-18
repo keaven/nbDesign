@@ -42,6 +42,6 @@ test_that("sample_size_nbinom adjusts for event_gap", {
   expect_true(res2$n_total < res3$n_total)
 
   # Calculated events should match
-  mu1_eff <- eff_l1 * res2$exposure
+  mu1_eff <- eff_l1 * res2$exposure[1]
   expect_equal(res2$events_n1, res2$n1 * mu1_eff)
 })

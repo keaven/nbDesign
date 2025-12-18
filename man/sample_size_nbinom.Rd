@@ -26,7 +26,8 @@ sample_size_nbinom(
 \item{lambda2}{Rate in group 2 (treatment).}
 
 \item{dispersion}{Dispersion parameter \code{k} such that \eqn{Var(Y) = \mu + k \mu^2}.
-Note that this is equivalent to \code{1/size} in R's \code{\link[stats:NegBinomial]{stats::rnbinom()}} parameterization.}
+Note that this is equivalent to \code{1/size} in R's \code{\link[stats:NegBinomial]{stats::rnbinom()}} parameterization.
+Can be a scalar (common dispersion) or a vector of length 2 (dispersion for control and treatment groups, respectively).}
 
 \item{power}{Power of the test (1 - beta). Default is 0.9.}
 

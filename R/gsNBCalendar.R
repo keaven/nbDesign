@@ -267,7 +267,13 @@ compute_info_at_time <- function(
     return(w1 * e1 + w2 * e2)
   }
 
-  avg_exposure <- calc_avg_exposure(min_f, max_f, dropout_rate, max_followup)
+  # Handle vector parameters
+  if (length(dropout_rate) == 1) dropout_rate <- rep(dropout_rate, 2)
+  if (length(max_followup) == 1) max_followup <- rep(max_followup, 2)
+  if (length(dispersion) == 1) dispersion <- rep(dispersion, 2)
+
+  avg_exposure1 <- calc_avg_exposure(min_f, max_f, dropout_rate[1], max_followup[1])
+  avg_exposure2 <- calc_avg_exposure(min_f, max_f, dropout_rate[2], max_followup[2])
 
   # Adjust rates for event gap
   if (!is.null(event_gap) && event_gap > 0) {
@@ -279,13 +285,14 @@ compute_info_at_time <- function(
   }
 
   # Expected events per subject
-  mu1 <- lambda1_eff * avg_exposure
-  mu2 <- lambda2_eff * avg_exposure
+  mu1 <- lambda1_eff * avg_exposure1
+  mu2 <- lambda2_eff * avg_exposure2
 
   # Variance of log rate ratio
   # Var(log(lambda2/lambda1)) = (1/mu1 + k)/n1 + (1/mu2 + k)/n2
-  k <- dispersion
-  variance <- (1 / mu1 + k) / n1 + (1 / mu2 + k) / n2
+  k1 <- dispersion[1]
+  k2 <- dispersion[2]
+  variance <- (1 / mu1 + k1) / n1 + (1 / mu2 + k2) / n2
 
 
   # Information is inverse of variance
@@ -349,10 +356,29 @@ summary.gsNB <- function(object, ...) {
   }
 
   # Build the summary text
-  max_followup_str <- if (!is.null(inputs$max_followup)) sprintf(", max follow-up %.1f", inputs$max_followup) else ""
+  max_followup_str <- ""
+  if (!is.null(inputs$max_followup)) {
+    # max_followup is stored as a vector of length 2, but enforced to be scalar
+    max_followup_str <- sprintf(", max follow-up %.1f", inputs$max_followup[1])
+  }
 
-  event_gap_str <- if (!is.null(inputs$event_gap) && inputs$event_gap > 0) sprintf(", event gap %.2f", inputs$event_gap) else ""
-  dropout_str <- if (!is.null(inputs$dropout_rate) && inputs$dropout_rate > 0) sprintf(", dropout rate %.4f", inputs$dropout_rate) else ""
+  event_gap_str <- ""
+  if (!is.null(inputs$event_gap) && any(inputs$event_gap > 0)) {
+    event_gap_str <- sprintf(", event gap %.2f", inputs$event_gap[1])
+  }
+
+  dropout_str <- ""
+  if (!is.null(inputs$dropout_rate)) {
+    if (length(inputs$dropout_rate) == 1) {
+      if (inputs$dropout_rate > 0) {
+        dropout_str <- sprintf(", dropout rate %.4f", inputs$dropout_rate)
+      }
+    } else {
+      if (any(inputs$dropout_rate > 0)) {
+        dropout_str <- sprintf(", dropout rates (%.4f, %.4f)", inputs$dropout_rate[1], inputs$dropout_rate[2])
+      }
+    }
+  }
 
   # Spending function descriptions
   upper_spend <- if (!is.null(object$upper$name)) {

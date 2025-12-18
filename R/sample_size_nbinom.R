@@ -15,7 +15,7 @@
 #' @param accrual_duration Vector of durations for each accrual rate. Must be same length
 #'   as `accrual_rate`.
 #' @param trial_duration Total planned duration of the trial.
-#' @param dropout_rate Dropout rate (hazard rate). Default is 0.
+#' @param dropout_rate Dropout rate (hazard rate). Default is 0. Can be a vector of length 2.
 #' @param max_followup Maximum follow-up time for any patient. Default is NULL (infinite).
 #' @param event_gap Gap duration after each event during which no new events are counted.
 #'   Default is NULL (no gap). If provided, the effective event rate is reduced.
@@ -26,7 +26,7 @@
 #'   \item{n1}{Sample size for group 1}
 #'   \item{n2}{Sample size for group 2}
 #'   \item{n_total}{Total sample size}
-#'   \item{exposure}{Average exposure time used in calculation (calendar time)}
+#'   \item{exposure}{Average exposure time used in calculation (calendar time). Vector of length 2.}
 #'   \item{exposure_at_risk_n1}{Average at-risk exposure time for group 1 (accounts for event gap)}
 #'   \item{exposure_at_risk_n2}{Average at-risk exposure time for group 2 (accounts for event gap)}
 #' }
@@ -85,20 +85,40 @@ sample_size_nbinom <- function(
   if (lambda1 <= 0 || lambda2 <= 0) {
     stop("Rates lambda1 and lambda2 must be positive.")
   }
-  if (dispersion < 0) {
+  if (any(dispersion < 0)) {
     stop("Dispersion parameter must be non-negative.")
   }
+  if (length(dispersion) == 1) {
+    dispersion <- rep(dispersion, 2)
+  } else if (length(dispersion) != 2) {
+    stop("Dispersion must be a scalar or a vector of length 2.")
+  }
+
   if (!is.null(power) && (power <= 0 || power >= 1)) {
     stop("Power must be between 0 and 1.")
   }
   if (alpha <= 0 || alpha >= 1) {
     stop("Alpha must be between 0 and 1.")
   }
-  if (dropout_rate < 0) {
+  if (any(dropout_rate < 0)) {
     stop("Dropout rate must be non-negative.")
   }
-  if (!is.null(max_followup) && max_followup <= 0) {
-    stop("max_followup must be positive.")
+  if (length(dropout_rate) == 1) {
+    dropout_rate <- rep(dropout_rate, 2)
+  } else if (length(dropout_rate) != 2) {
+    stop("Dropout rate must be a scalar or a vector of length 2.")
+  }
+
+  if (!is.null(max_followup)) {
+    if (any(max_followup <= 0)) {
+      stop("max_followup must be positive.")
+    }
+    if (length(max_followup) != 1) {
+      stop("max_followup must be a scalar.")
+    }
+    max_followup <- rep(max_followup, 2)
+  } else {
+    max_followup <- c(Inf, Inf)
   }
 
   power_input <- power
@@ -174,8 +194,8 @@ sample_size_nbinom <- function(
   # Calculate average exposure
   current_time <- 0
   total_n_accrual <- 0
-  total_exposure_mass <- 0
-  total_exposure_sq_mass <- 0
+  total_exposure_mass <- c(0, 0)
+  total_exposure_sq_mass <- c(0, 0)
 
   if (length(accrual_rate) != length(accrual_duration)) {
     stop("accrual_rate and accrual_duration must have the same length.")
@@ -196,66 +216,56 @@ sample_size_nbinom <- function(
       u_max <- trial_duration - current_time
       u_min <- trial_duration - (current_time + d)
 
-      avg_followup <- 0
-      avg_followup_sq <- 0
+      # Calculate for each group (1 and 2)
+      for (g in 1:2) {
+        dr <- dropout_rate[g]
+        mf <- max_followup[g]
 
-      if (is.null(max_followup) || is.infinite(max_followup) || u_max <= max_followup) {
-        # Case 1: No truncation by max_followup (or negligible)
-        avg_followup <- avg_exp_func(u_min, u_max, dropout_rate)
-        avg_followup_sq <- avg_exp_sq_func(u_min, u_max, dropout_rate)
-      } else if (u_min >= max_followup) {
-        # Case 2: All truncated by max_followup
-        # Effectively fixed exposure of max_followup
-        if (dropout_rate == 0) {
-          avg_followup <- max_followup
-          avg_followup_sq <- max_followup^2
+        avg_followup <- 0
+        avg_followup_sq <- 0
+
+        if (is.infinite(mf) || u_max <= mf) {
+          # Case 1: No truncation by max_followup (or negligible)
+          avg_followup <- avg_exp_func(u_min, u_max, dr)
+          avg_followup_sq <- avg_exp_sq_func(u_min, u_max, dr)
+        } else if (u_min >= mf) {
+          # Case 2: All truncated by max_followup
+          # Effectively fixed exposure of max_followup
+          if (dr == 0) {
+            avg_followup <- mf
+            avg_followup_sq <- mf^2
+          } else {
+            avg_followup <- (1 - exp(-dr * mf)) / dr
+            avg_followup_sq <- m2_func(mf, dr)
+          }
         } else {
-          avg_followup <- (1 - exp(-dropout_rate * max_followup)) / dropout_rate
-          avg_followup_sq <- m2_func(max_followup, dropout_rate)
-        }
-      } else {
-        # Case 3: Split
-        # The segment part [current_time, tau_star] has potential follow-up >= max_followup
-        # This corresponds to u in [max_followup, u_max] in terms of potential follow-up?
-        # Wait, u = trial_duration - enrollment_time.
-        # Enrollment time t_e in [current, current+d].
-        # u in [u_min, u_max].
-        # u_min = T - (c+d), u_max = T - c.
-        # Truncation happens if u > max_followup.
-        # So u in [max_followup, u_max] are truncated to max_followup.
-        # u in [u_min, max_followup] are not truncated.
+          # Case 3: Split
+          len_truncated <- u_max - mf
+          len_not_truncated <- mf - u_min
 
-        # Split point in u is max_followup.
-        # Range 1 (Truncated): [max_followup, u_max] -> Follow-up is min(max_followup, dropout)
-        # Range 2 (Not Truncated): [u_min, max_followup] -> Follow-up is min(u, dropout)
+          # Avg for truncated part
+          if (dr == 0) {
+            avg_1 <- mf
+            avg_sq_1 <- mf^2
+          } else {
+            avg_1 <- (1 - exp(-dr * mf)) / dr
+            avg_sq_1 <- m2_func(mf, dr)
+          }
 
-        len_truncated <- u_max - max_followup
-        len_not_truncated <- max_followup - u_min
+          # Avg for not truncated part
+          avg_2 <- avg_exp_func(u_min, mf, dr)
+          avg_sq_2 <- avg_exp_sq_func(u_min, mf, dr)
 
-        # Check weights
-        # Total length = u_max - u_min = d.
-        # len_truncated + len_not_truncated = u_max - u_min = d. Correct.
-
-        # Avg for truncated part
-        if (dropout_rate == 0) {
-          avg_1 <- max_followup
-          avg_sq_1 <- max_followup^2
-        } else {
-          avg_1 <- (1 - exp(-dropout_rate * max_followup)) / dropout_rate
-          avg_sq_1 <- m2_func(max_followup, dropout_rate)
+          # Weighted average
+          avg_followup <- (len_truncated * avg_1 + len_not_truncated * avg_2) / d
+          avg_followup_sq <- (len_truncated * avg_sq_1 + len_not_truncated * avg_sq_2) / d
         }
 
-        # Avg for not truncated part
-        avg_2 <- avg_exp_func(u_min, max_followup, dropout_rate)
-        avg_sq_2 <- avg_exp_sq_func(u_min, max_followup, dropout_rate)
-
-        avg_followup <- (len_truncated * avg_1 + len_not_truncated * avg_2) / d
-        avg_followup_sq <- (len_truncated * avg_sq_1 + len_not_truncated * avg_sq_2) / d
+        total_exposure_mass[g] <- total_exposure_mass[g] + n_seg * avg_followup
+        total_exposure_sq_mass[g] <- total_exposure_sq_mass[g] + n_seg * avg_followup_sq
       }
 
       total_n_accrual <- total_n_accrual + n_seg
-      total_exposure_mass <- total_exposure_mass + n_seg * avg_followup
-      total_exposure_sq_mass <- total_exposure_sq_mass + n_seg * avg_followup_sq
     }
     current_time <- current_time + d
   }
@@ -270,10 +280,11 @@ sample_size_nbinom <- function(
   # Calculate inflation factor Q for variance due to variable follow-up
   # Q = E[t^2] / (E[t])^2
   # If exposure is constant, Q = 1.
-  if (exposure_calendar > 0) {
-    Q_inflation <- exposure_sq_avg / (exposure_calendar^2)
-  } else {
-    Q_inflation <- 1
+  Q_inflation <- rep(1, 2)
+  for (g in 1:2) {
+    if (exposure_calendar[g] > 0) {
+      Q_inflation[g] <- exposure_sq_avg[g] / (exposure_calendar[g]^2)
+    }
   }
 
   # Setup effective rates and exposures based on event_gap
@@ -283,21 +294,22 @@ sample_size_nbinom <- function(
     lambda2_eff <- lambda2 / (1 + lambda2 * event_gap)
 
     # Adjusted exposures for reporting (at-risk)
-    exposure1_at_risk <- exposure_calendar / (1 + lambda1 * event_gap)
-    exposure2_at_risk <- exposure_calendar / (1 + lambda2 * event_gap)
+    exposure1_at_risk <- exposure_calendar[1] / (1 + lambda1 * event_gap)
+    exposure2_at_risk <- exposure_calendar[2] / (1 + lambda2 * event_gap)
   } else {
     lambda1_eff <- lambda1
     lambda2_eff <- lambda2
 
-    exposure1_at_risk <- exposure_calendar
-    exposure2_at_risk <- exposure_calendar
+    exposure1_at_risk <- exposure_calendar[1]
+    exposure2_at_risk <- exposure_calendar[2]
   }
 
-  mu1 <- lambda1_eff * exposure_calendar
-  mu2 <- lambda2_eff * exposure_calendar
+  mu1 <- lambda1_eff * exposure_calendar[1]
+  mu2 <- lambda2_eff * exposure_calendar[2]
 
   # Apply inflation factor to dispersion
-  k <- dispersion * Q_inflation
+  k1 <- dispersion[1] * Q_inflation[1]
+  k2 <- dispersion[2] * Q_inflation[2]
 
   z_alpha <- qnorm(1 - alpha / sided)
 
@@ -309,7 +321,7 @@ sample_size_nbinom <- function(
   if (mode == "solve_n") {
     z_beta <- qnorm(power)
 
-    num <- (z_alpha + z_beta)^2 * ((1 / mu1 + k) + (1 / ratio) * (1 / mu2 + k))
+    num <- (z_alpha + z_beta)^2 * ((1 / mu1 + k1) + (1 / ratio) * (1 / mu2 + k2))
     den <- (log(lambda1 / lambda2))^2
     n1 <- num / den
     n2 <- n1 * ratio
@@ -331,13 +343,13 @@ sample_size_nbinom <- function(
     n2_c <- n_total_c * ratio / (1 + ratio)
 
     # z_beta = sqrt( n1 * (log(mu1/mu2))^2 / V ) - z_alpha
-    V <- (1 / mu1 + k) + (1 / ratio) * (1 / mu2 + k)
+    V <- (1 / mu1 + k1) + (1 / ratio) * (1 / mu2 + k2)
     z_beta <- sqrt(n1_c * (log(lambda1 / lambda2))^2 / V) - z_alpha
 
     power <- pnorm(z_beta)
   }
 
-  variance <- (1 / mu1 + k) / n1_c + (1 / mu2 + k) / n2_c
+  variance <- (1 / mu1 + k1) / n1_c + (1 / mu2 + k2) / n2_c
 
   # Calculate expected events
   events_n1 <- n1_c * mu1
@@ -408,9 +420,23 @@ print.sample_size_nbinom_result <- function(x, ...) {
     x$inputs$lambda2 / x$inputs$lambda1
   ))
 
+  # Handle dispersion display
+  if (x$inputs$dispersion[1] == x$inputs$dispersion[2]) {
+    disp_str <- sprintf("%.4f", x$inputs$dispersion[1])
+  } else {
+    disp_str <- sprintf("%.4f (n1), %.4f (n2)", x$inputs$dispersion[1], x$inputs$dispersion[2])
+  }
+
+  # Handle exposure display
+  if (abs(x$exposure[1] - x$exposure[2]) < 1e-6) {
+    exp_str <- sprintf("%.2f", x$exposure[1])
+  } else {
+    exp_str <- sprintf("%.2f (n1), %.2f (n2)", x$exposure[1], x$exposure[2])
+  }
+
   cat(sprintf(
-    "Dispersion: %.4f, Avg exposure (calendar): %.2f\n",
-    x$inputs$dispersion, x$exposure
+    "Dispersion: %s, Avg exposure (calendar): %s\n",
+    disp_str, exp_str
   ))
 
   if (!is.null(x$inputs$event_gap) && x$inputs$event_gap > 0) {
@@ -421,8 +447,12 @@ print.sample_size_nbinom_result <- function(x, ...) {
     cat(sprintf("Event gap: %.2f\n", x$inputs$event_gap))
   }
 
-  if (!is.null(x$inputs$dropout_rate) && x$inputs$dropout_rate > 0) {
-    cat(sprintf("Dropout rate: %.4f\n", x$inputs$dropout_rate))
+  if (!is.null(x$inputs$dropout_rate) && any(x$inputs$dropout_rate > 0)) {
+    if (x$inputs$dropout_rate[1] == x$inputs$dropout_rate[2]) {
+      cat(sprintf("Dropout rate: %.4f\n", x$inputs$dropout_rate[1]))
+    } else {
+      cat(sprintf("Dropout rate: %.4f (n1), %.4f (n2)\n", x$inputs$dropout_rate[1], x$inputs$dropout_rate[2]))
+    }
   }
 
   cat(sprintf(
@@ -431,7 +461,11 @@ print.sample_size_nbinom_result <- function(x, ...) {
   ))
 
   if (!is.null(x$inputs$max_followup)) {
-    cat(sprintf("Max follow-up: %.1f\n", x$inputs$max_followup))
+    if (all(is.infinite(x$inputs$max_followup))) {
+      # Do nothing if both are infinite (default)
+    } else {
+      cat(sprintf("Max follow-up: %.1f\n", x$inputs$max_followup[1]))
+    }
   }
 
   invisible(x)
@@ -462,21 +496,43 @@ summary.sample_size_nbinom_result <- function(object, ...) {
   inputs <- object$inputs
   risk_ratio <- inputs$lambda2 / inputs$lambda1
 
+  # Handle dispersion
+  if (inputs$dispersion[1] == inputs$dispersion[2]) {
+    disp_text <- sprintf("dispersion %.4f", inputs$dispersion[1])
+  } else {
+    disp_text <- sprintf("dispersion %.4f (n1) / %.4f (n2)", inputs$dispersion[1], inputs$dispersion[2])
+  }
+
+  # Handle exposure
+  if (abs(object$exposure[1] - object$exposure[2]) < 1e-6) {
+    exp_text <- sprintf("average exposure %.2f", object$exposure[1])
+  } else {
+    exp_text <- sprintf("average exposure %.2f (n1) / %.2f (n2)", object$exposure[1], object$exposure[2])
+  }
+
+  # Handle event gap in summary
+  gap_text <- ""
+  if (!is.null(inputs$event_gap) && inputs$event_gap > 0) {
+    gap_text <- sprintf(
+      " Event gap %.2f implies average at-risk exposure %.2f (n1) / %.2f (n2).",
+      inputs$event_gap, object$exposure_at_risk_n1, object$exposure_at_risk_n2
+    )
+  }
+
   # Build the summary text
   summary_text <- sprintf(
     paste0(
-      "Fixed sample size design for negative binomial outcome (%s method), ",
+      "Fixed sample size design for negative binomial outcome, ",
       "total sample size %d (n1=%d, n2=%d), ",
       "%.0f percent power, ",
       "%.1f percent (%d-sided) Type I error. ",
       "Control rate %.4f, treatment rate %.4f, ",
-      "risk ratio %.4f, dispersion %.4f. ",
+      "risk ratio %.4f, %s. ",
       "Accrual duration %.1f, trial duration %.1f, ",
-      "average exposure %.2f. ",
+      "%s.%s ",
       "Expected events %.1f. ",
       "Randomization ratio %.0f:1."
     ),
-    inputs$method,
     object$n_total,
     object$n1,
     object$n2,
@@ -486,10 +542,11 @@ summary.sample_size_nbinom_result <- function(object, ...) {
     inputs$lambda1,
     inputs$lambda2,
     risk_ratio,
-    inputs$dispersion,
+    disp_text,
     sum(inputs$accrual_duration),
     inputs$trial_duration,
-    object$exposure,
+    exp_text,
+    gap_text,
     object$total_events,
     inputs$ratio
   )
