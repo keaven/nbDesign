@@ -159,11 +159,11 @@ info_asymp_final <- compute_info_at_time(
 message("Asymptotic Information (Interim): ", round(info_asymp_interim, 2))
 #> Asymptotic Information (Interim): 15.54
 message("Mean Simulated Information (Interim): ", round(mean(results$interim_info), 2))
-#> Mean Simulated Information (Interim): 14.45
+#> Mean Simulated Information (Interim): 14.51
 message("Asymptotic Information (Final): ", round(info_asymp_final, 2))
 #> Asymptotic Information (Final): 22.81
 message("Mean Simulated Information (Final): ", round(mean(results$final_info), 2))
-#> Mean Simulated Information (Final): 17.29
+#> Mean Simulated Information (Final): 17.34
 ```
 
 ## Results summary
@@ -173,20 +173,20 @@ interim and final analyses.
 
 ``` r
 summary(results[, c("interim_date", "interim_z", "interim_info", "final_date", "final_z", "final_info", "info_frac")])
-#>   interim_date     interim_z        interim_info     final_date   
-#>  Min.   :1.310   Min.   :-3.3950   Min.   : 9.10   Min.   :1.877  
-#>  1st Qu.:1.387   1st Qu.:-2.2002   1st Qu.:13.10   1st Qu.:1.950  
-#>  Median :1.406   Median :-1.3360   Median :14.05   Median :1.983  
-#>  Mean   :1.416   Mean   :-1.3850   Mean   :14.45   Mean   :1.992  
-#>  3rd Qu.:1.445   3rd Qu.:-0.8207   3rd Qu.:15.57   3rd Qu.:2.029  
-#>  Max.   :1.544   Max.   : 1.3095   Max.   :21.56   Max.   :2.173  
-#>     final_z          final_info      info_frac     
-#>  Min.   :-3.8041   Min.   :10.57   Min.   :0.7213  
-#>  1st Qu.:-2.1767   1st Qu.:15.76   1st Qu.:0.7930  
-#>  Median :-1.5857   Median :17.01   Median :0.8301  
-#>  Mean   :-1.5420   Mean   :17.29   Mean   :0.8361  
-#>  3rd Qu.:-0.8692   3rd Qu.:19.04   3rd Qu.:0.8703  
-#>  Max.   : 1.3956   Max.   :24.31   Max.   :0.9479
+#>   interim_date     interim_z       interim_info     final_date   
+#>  Min.   :1.310   Min.   :-3.461   Min.   : 9.16   Min.   :1.877  
+#>  1st Qu.:1.387   1st Qu.:-2.192   1st Qu.:13.11   1st Qu.:1.950  
+#>  Median :1.406   Median :-1.333   Median :14.07   Median :1.983  
+#>  Mean   :1.416   Mean   :-1.357   Mean   :14.51   Mean   :1.992  
+#>  3rd Qu.:1.445   3rd Qu.:-0.620   3rd Qu.:15.65   3rd Qu.:2.029  
+#>  Max.   :1.544   Max.   : 1.303   Max.   :21.49   Max.   :2.173  
+#>     final_z         final_info      info_frac     
+#>  Min.   :-3.949   Min.   :10.71   Min.   :0.7194  
+#>  1st Qu.:-2.163   1st Qu.:15.92   1st Qu.:0.7933  
+#>  Median :-1.628   Median :17.03   Median :0.8296  
+#>  Mean   :-1.523   Mean   :17.34   Mean   :0.8373  
+#>  3rd Qu.:-0.904   3rd Qu.:19.06   3rd Qu.:0.8809  
+#>  Max.   : 1.396   Max.   :24.68   Max.   :0.9460
 ```
 
 ### Visualization

@@ -51,24 +51,24 @@ date_5 <- cut_date_for_completers(sim, 5)
 # Get analysis dataset for this cut date (includes partial follow-up)
 cut_completers(sim, date_5)
 #>    id    treatment  enroll_time       tte events
-#> 1   1 Experimental 0.0004944642 1.9589322      3
-#> 2   2      Control 0.0208005081 1.9863107      1
+#> 1   1 Experimental 0.0004944642 2.0000000      3
+#> 2   2      Control 0.0208005081 2.0000000      1
 #> 3   3      Control 0.0479350942 1.0330351      0
 #> 4   4 Experimental 0.0885945325 2.0000000      0
 #> 5   5      Control 0.1158299419 2.0000000      0
 #> 6   6 Experimental 0.1595387931 0.3060113      0
 #> 7   7      Control 0.1855378021 0.2358263      0
-#> 8   8 Experimental 0.1897240110 1.9589322      3
+#> 8   8 Experimental 0.1897240110 2.0000000      3
 #> 9   9      Control 0.2304312657 1.7227390      0
 #> 10 10 Experimental 0.2311741791 1.9585498      0
-#> 11 11 Experimental 0.2393335074 1.9230120      2
-#> 12 12      Control 0.2471900075 1.9151555      2
+#> 11 11 Experimental 0.2393335074 1.9503905      2
+#> 12 12      Control 0.2471900075 1.9425340      2
 #> 13 13      Control 0.3226500895 1.8670739      0
 #> 14 14 Experimental 0.3312514995 1.8584725      0
-#> 15 15      Control 0.3338556934 1.8421791      1
-#> 16 16 Experimental 0.3413624816 1.8209830      2
+#> 15 15      Control 0.3338556934 1.8558683      1
+#> 16 16 Experimental 0.3413624816 1.8483615      2
 #> 17 17 Experimental 0.3571896911 1.8325343      0
-#> 18 18 Experimental 0.3684261413 1.8076086      1
+#> 18 18 Experimental 0.3684261413 1.8212979      1
 #> 19 19      Control 0.3740461607 0.5336077      0
 #> 20 20      Control 0.3939235397 1.7958005      0
 ```

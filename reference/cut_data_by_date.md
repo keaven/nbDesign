@@ -51,16 +51,16 @@ dropout_rate <- data.frame(
 sim <- nb_sim(enroll_rate, fail_rate, dropout_rate, max_followup = 2, n = 20)
 cut_data_by_date(sim, cut_date = 1)
 #>    id    treatment enroll_time       tte events
-#> 1   1 Experimental  0.02373508 0.9625757      1
-#> 2   2 Experimental  0.02518861 0.9611221      1
-#> 3   3      Control  0.03072470 0.3342787      1
+#> 1   1 Experimental  0.02373508 0.9762649      1
+#> 2   2 Experimental  0.02518861 0.9748114      1
+#> 3   3      Control  0.03072470 0.3479680      1
 #> 4   4      Control  0.03118814 0.9688119      0
 #> 5   5 Experimental  0.03422514 0.9657749      0
 #> 6   6 Experimental  0.09750120 0.9024988      0
 #> 7   7      Control  0.10103810 0.8989619      0
 #> 8   8      Control  0.11866510 0.5366065      0
 #> 9   9 Experimental  0.12293590 0.8770641      0
-#> 10 10      Control  0.12667913 0.8596316      1
+#> 10 10      Control  0.12667913 0.8733209      1
 #> 11 11 Experimental  0.13747740 0.8625226      0
 #> 12 12      Control  0.15148053 0.8485195      0
 #> 13 13 Experimental  0.16243134 0.8375687      0
@@ -68,7 +68,7 @@ cut_data_by_date(sim, cut_date = 1)
 #> 15 15      Control  0.22187134 0.7781287      0
 #> 16 16      Control  0.27130803 0.7286920      0
 #> 17 17 Experimental  0.27780731 0.7221927      0
-#> 18 18 Experimental  0.28205747 0.7042533      1
+#> 18 18 Experimental  0.28205747 0.7179425      1
 #> 19 19      Control  0.28859896 0.7114010      0
-#> 20 20      Control  0.30964929 0.6766615      1
+#> 20 20      Control  0.30964929 0.6903507      1
 ```

@@ -206,7 +206,7 @@ cut_summary <- cut_data_by_date(sim_data, cut_date = 1.5)
 head(cut_summary)
 #>   id    treatment enroll_time      tte events
 #> 1  1      Control  0.01757203 1.482428      0
-#> 2  2 Experimental  0.02958474 1.456726      1
+#> 2  2 Experimental  0.02958474 1.470415      1
 #> 3  3 Experimental  0.05727338 1.442727      0
 #> 4  4      Control  0.05793124 1.442069      0
 #> 5  5 Experimental  0.05910231 1.440898      0
@@ -229,12 +229,12 @@ mutze_res$group_summary |>
 | Mütze Test: Group Summary |          |        |          |
 |---------------------------|----------|--------|----------|
 | treatment                 | subjects | events | exposure |
-| Control                   | 10       | 6.00   | 12.58    |
-| Experimental              | 10       | 4.00   | 13.58    |
+| Control                   | 10       | 6.00   | 12.66    |
+| Experimental              | 10       | 4.00   | 13.63    |
 
 ``` r
 mutze_res$rate_ratio
-#> [1] 0.5273708
+#> [1] 0.5370395
 ```
 
 ## Finding analysis date for target events
