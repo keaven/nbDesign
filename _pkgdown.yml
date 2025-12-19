@@ -72,3 +72,13 @@ reference:
       - sfXG1
       - sfXG2
       - sfXG3
+
+articles:
+  - title: "Vignettes"
+    contents:
+      - sample-size-nbinom
+      - simulation-example
+      - verification-simulation
+      - group-sequential-simulation
+      - completers-interim-example
+      - seasonal-simulation
