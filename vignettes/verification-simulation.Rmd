@@ -178,7 +178,7 @@ knitr::kable(comparison_var, digits = 5, caption = "Comparison of Variance")
 ```
 
 *   **Empirical Var**: The actual variability of the estimated log rate ratios across 3,600 trials.
-*   **Avg Estimated Var**: The average of the variance estimates ($SE^2$) produced by the Wald test in each trial.
+*   **Avg Estimated Var**: The average of the variance estimates ($\text{SE}^2$) produced by the Wald test in each trial.
 
 While there is reasonable agreement, the sample size formula may slightly underestimate the variability of the test statistic 
 and thus may overstate power.
