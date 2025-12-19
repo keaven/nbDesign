@@ -30,13 +30,13 @@ We will simulate a small trial with the following parameters:
 
 *   **Enrollment:** 20 patients total, recruited over 5 months with a constant rate.
 *   **Treatments:** Two groups (Control vs. Experimental) with a 1:1 allocation ratio.
-*   **Event Rates:**
+*   **Event rates:**
     *   Control: 0.5 events per year.
     *   Experimental: 0.3 events per year.
 *   **Dropout:**
     *   Control: 10% annual dropout rate.
     *   Experimental: 5% annual dropout rate.
-*   **Maximum Follow-up:** Each patient is followed for a maximum of 2 years from randomization.
+*   **Maximum follow-up:** Each patient is followed for a maximum of 2 years from randomization.
 
 ### Defining input parameters
 

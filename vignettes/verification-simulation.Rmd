@@ -44,9 +44,9 @@ The parameters for both the theoretical calculation and the simulation study are
 *   **Power**: 90%.
 *   **Alpha**: 0.025 (one-sided).
 *   **Dropout**: 10% per year adjusted to monthly rate ($\delta = 0.1 / 12$).
-*   **Trial Duration**: 24 months.
-*   **Max Follow-up**: 12 months.
-*   **Event Gap**: 30 days (approx 0.082 years).
+*   **Trial duration**: 24 months.
+*   **Max follow-up**: 12 months.
+*   **Event gap**: 30 days (approx 0.082 years).
 *   **Accrual**: Piecewise linear ramp-up over 12 months (Rate $R$ for 0-6mo, $2R$ for 6-12mo).
 
 ### Theoretical calculation
@@ -177,8 +177,8 @@ comparison_var <- data.frame(
 knitr::kable(comparison_var, digits = 5, caption = "Comparison of Variance")
 ```
 
-*   **Empirical Var**: The actual variability of the estimated log rate ratios across 3,600 trials.
-*   **Avg Estimated Var**: The average of the variance estimates ($\text{SE}^2$) produced by the Wald test in each trial.
+*   **Empirical var**: The actual variability of the estimated log rate ratios across 3,600 trials.
+*   **Avg estimated var**: The average of the variance estimates ($\text{SE}^2$) produced by the Wald test in each trial.
 
 While there is reasonable agreement, the sample size formula may slightly underestimate the variability of the test statistic 
 and thus may overstate power.

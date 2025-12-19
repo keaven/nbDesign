@@ -26,11 +26,11 @@ This vignette demonstrates a group sequential trial with a single interim analys
 
 We simulate a single trial where the actual dispersion parameter is higher than the planned dispersion parameter. This scenario typically leads to a loss of power if the sample size is not adjusted. We will show how to increase the sample size based on both blinded and unblinded interim data to maintain the desired power.
 
-## Trial Setup and Initial Design
+## Trial setup and initial design
 
 We plan a trial to compare two treatment groups (Control vs. Experimental) with respect to recurrent event rates.
 
-**Planned Parameters:**
+**Planned parameters:**
 
 *   Control rate ($\lambda_1$): 2.0 events/year
 *   Experimental rate ($\lambda_2$): 1.5 events/year (Hazard Ratio = 0.75)
@@ -40,12 +40,12 @@ We plan a trial to compare two treatment groups (Control vs. Experimental) with 
 *   Enrollment: 20 patients/month for 12 months
 *   Study duration: 24 months (12 months accrual + 12 months follow-up)
 
-**Actual Parameters (Simulation Truth):**
+**Actual parameters (simulation truth):**
 
 *   Dispersion ($k$): 0.8 (Higher than planned, implying higher variability)
 *   Rates are as planned.
 
-### Initial Sample Size Calculation
+### Initial sample size calculation
 
 First, we calculate the required sample size under the *planned* parameters.
 
@@ -77,7 +77,7 @@ print(design_plan)
 
 The design requires a total of `r ceiling(design_plan$n_total)` patients.
 
-## Simulation of a Single Trial
+## Simulation of a single trial
 
 We simulate a single realization of the trial using the *actual* parameters (higher dispersion).
 
@@ -116,7 +116,7 @@ sim_data <- nb_sim(
 head(sim_data)
 ```
 
-## Interim Analysis
+## Interim analysis
 
 We perform an interim analysis 9 months after the start of the trial. At this point, enrollment is still ongoing (planned 12 months).
 
@@ -131,7 +131,7 @@ table(interim_data$treatment)
 sum(interim_data$events)
 ```
 
-## Blinded Sample Size Re-estimation
+## Blinded sample size re-estimation
 
 We use the `blinded_ssr()` function to estimate the nuisance parameters (dispersion and overall rate) from the blinded data and recalculate the sample size.
 
@@ -156,7 +156,7 @@ print(blinded_result)
 
 The blinded estimate of dispersion is `r round(blinded_result$dispersion_blinded, 3)`, which is higher than the planned `r k_plan`. Consequently, the re-estimated sample size `r ceiling(blinded_result$n_total_blinded)` is larger than the planned `r ceiling(design_plan$n_total)`.
 
-## Unblinded Sample Size Re-estimation
+## Unblinded sample size re-estimation
 
 Alternatively, if the interim analysis is performed by an Independent Data Monitoring Committee (IDMC) with access to unblinded data, we can estimate the rates and dispersion separately for each group.
 
@@ -198,7 +198,7 @@ print(unblinded_design)
 
 The unblinded re-estimation uses the observed rates and dispersion. In this specific simulation, the observed dispersion `r round(est_k, 3)` is close to the true value `r k_true`. The rates might also fluctuate. The resulting sample size `r ceiling(unblinded_design$n_total)` reflects the actual variability and effect size observed so far.
 
-## Comparison and Conclusion
+## Comparison and conclusion
 
 ```{r comparison}
 comparison <- data.frame(

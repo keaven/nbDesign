@@ -30,12 +30,12 @@ negative binomial outcomes using `gsNBCalendar()` and simulate the design to con
 We design a trial with the following characteristics:
 
 * **Enrollment:** 12 months with a constant rate
-* **Trial Duration:** 24 months
+* **Trial duration:** 24 months
 * **Analyses:**
   - Interim 1: 10 months
   - Interim 2: 18 months
   - Final: 24 months
-* **Event Rates:**
+* **Event rates:**
   - Control: 0.125 events per month (1.5 per year)
   - Experimental: 0.0833 events per month (1.0 per year; rate ratio = 0.67)
 * **Dispersion:** 0.5
@@ -242,7 +242,7 @@ analysis_summary_tbl |>
   fmt_number(columns = contains("prob"), decimals = 3)
 ```
 
-### Power and Operating Characteristics
+### Power and operating characteristics
 
 ```{r overall-power}
 # Overall Power
