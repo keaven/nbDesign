@@ -74,8 +74,7 @@ binomial distribution for the outcome.</p>
 
 <dt id="arg-dispersion">dispersion<a class="anchor" aria-label="anchor" href="#arg-dispersion"></a></dt>
 <dd><p>Dispersion parameter <code>k</code> such that \(Var(Y) = \mu + k \mu^2\).
-Note that this is equivalent to <code>1/size</code> in R's <code><a href="https://rdrr.io/r/stats/NegBinomial.html" class="external-link">stats::rnbinom()</a></code> parameterization.
-Can be a scalar (common dispersion) or a vector of length 2 (dispersion for control and treatment groups, respectively).</p></dd>
+Note that this is equivalent to <code>1/size</code> in R's <code><a href="https://rdrr.io/r/stats/NegBinomial.html" class="external-link">stats::rnbinom()</a></code> parameterization.</p></dd>
 
 
 <dt id="arg-power">power<a class="anchor" aria-label="anchor" href="#arg-power"></a></dt>
@@ -108,7 +107,7 @@ as <code>accrual_rate</code>.</p></dd>
 
 
 <dt id="arg-dropout-rate">dropout_rate<a class="anchor" aria-label="anchor" href="#arg-dropout-rate"></a></dt>
-<dd><p>Dropout rate (hazard rate). Default is 0.</p></dd>
+<dd><p>Dropout rate (hazard rate). Default is 0. Can be a vector of length 2.</p></dd>
 
 
 <dt id="arg-max-followup">max_followup<a class="anchor" aria-label="anchor" href="#arg-max-followup"></a></dt>
@@ -135,7 +134,7 @@ Default is NULL (no gap). If provided, the effective event rate is reduced.</p><
 <dd><p>Total sample size</p></dd>
 
 <dt>exposure</dt>
-<dd><p>Average exposure time used in calculation (calendar time)</p></dd>
+<dd><p>Average exposure time used in calculation (calendar time). Vector of length 2.</p></dd>
 
 <dt>exposure_at_risk_n1</dt>
 <dd><p>Average at-risk exposure time for group 1 (accounts for event gap)</p></dd>

@@ -38,8 +38,7 @@ sample_size_nbinom(
   Dispersion parameter `k` such that \\Var(Y) = \mu + k \mu^2\\. Note
   that this is equivalent to `1/size` in R's
   [`stats::rnbinom()`](https://rdrr.io/r/stats/NegBinomial.html)
-  parameterization. Can be a scalar (common dispersion) or a vector of
-  length 2 (dispersion for control and treatment groups, respectively).
+  parameterization.
 
 - power:
 
@@ -73,7 +72,7 @@ sample_size_nbinom(
 
 - dropout_rate:
 
-  Dropout rate (hazard rate). Default is 0.
+  Dropout rate (hazard rate). Default is 0. Can be a vector of length 2.
 
 - max_followup:
 
@@ -108,7 +107,8 @@ containing:
 
 - exposure:
 
-  Average exposure time used in calculation (calendar time)
+  Average exposure time used in calculation (calendar time). Vector of
+  length 2.
 
 - exposure_at_risk_n1:
 

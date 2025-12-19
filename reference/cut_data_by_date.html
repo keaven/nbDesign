@@ -49,7 +49,7 @@ event gaps).</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">cut_data_by_date</span><span class="op">(</span><span class="va">data</span>, <span class="va">cut_date</span>, event_gap <span class="op">=</span> <span class="fl">5</span><span class="op">/</span><span class="fl">365.25</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">cut_data_by_date</span><span class="op">(</span><span class="va">data</span>, <span class="va">cut_date</span>, event_gap <span class="op">=</span> <span class="fl">0</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -66,7 +66,7 @@ event gaps).</p>
 
 <dt id="arg-event-gap">event_gap<a class="anchor" aria-label="anchor" href="#arg-event-gap"></a></dt>
 <dd><p>Gap duration after each event during which no new events are counted.
-Can be a numeric value (default <code>5 / 365.25</code>) or a function returning a numeric value.
+Can be a numeric value (default <code>0</code>) or a function returning a numeric value.
 The time at risk is reduced by the sum of these gaps (truncated by the cut date).</p></dd>
 
 

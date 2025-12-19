@@ -9,7 +9,7 @@ typically used with a date determined by
 ## Usage
 
 ``` r
-cut_completers(data, cut_date, event_gap = 5/365.25)
+cut_completers(data, cut_date, event_gap = 0)
 ```
 
 ## Arguments
@@ -26,9 +26,9 @@ cut_completers(data, cut_date, event_gap = 5/365.25)
 - event_gap:
 
   Gap duration after each event during which no new events are counted.
-  Can be a numeric value (default `5 / 365.25`) or a function returning
-  a numeric value. The time at risk is reduced by the sum of these gaps
-  (truncated by the cut date).
+  Can be a numeric value (default `0`) or a function returning a numeric
+  value. The time at risk is reduced by the sum of these gaps (truncated
+  by the cut date).
 
 ## Value
 
