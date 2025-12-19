@@ -12,5 +12,7 @@
   simulation](https://keaven.github.io/gsDesignNB/articles/group-sequential-simulation.md):
 - [Group sequential simulation with completers
   analysis](https://keaven.github.io/gsDesignNB/articles/completers-interim-example.md):
+- [Sample Size Re-estimation
+  Example](https://keaven.github.io/gsDesignNB/articles/ssr-example.md):
 - [Seasonal event
   simulation](https://keaven.github.io/gsDesignNB/articles/seasonal-simulation.md):
