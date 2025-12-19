@@ -308,7 +308,7 @@ In some recurrent event trials, there may be a mandatory "gap" period after each
 If an `event_gap` ($g$) is specified, the function adjusts the calculation as follows:
 
 1.  **Effective Rates**: The event rates are adjusted to $\lambda^* = \lambda / (1 + \lambda g)$ for the sample size calculation (Zhu and Lakkis method).
-2.  **At-Risk Exposure**: The function reports the "average at-risk exposure" $E_{risk} = E_{cal} / (1 + \lambda g)$ alongside the standard calendar exposure. This provides transparency on the actual time subjects are at risk for events.
+2.  **At-Risk Exposure**: The function reports the "average at-risk exposure" $\mathrm{E}_{\text{risk}} = \mathrm{E}_{\text{cal}} / (1 + \lambda g)$ alongside the standard calendar exposure. This provides transparency on the actual time subjects are at risk for events.
 
 Since the gap reduction depends on the event rate ($\lambda$), the at-risk exposure differs between treatment groups if their rates differ, even if the calendar exposure is the same. This is a key reason why average exposure may differ between groups in the output.
 
