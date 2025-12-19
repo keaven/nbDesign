@@ -68,17 +68,18 @@ test_that("cut_data_by_date applies random gap correctly", {
   expect_equal(res$tte, 0.8)
 })
 
-test_that("cut_data_by_date uses default gap", {
-  # Default gap is 5/365.25 ~ 0.01369
-  # Event at 0.1. Next event at 0.11 (diff 0.01). Should be ignored.
+test_that("cut_data_by_date uses default gap (0)", {
+  # Default gap is now 0
+  # Event at 0.1. Next event at 0.11.
+  # With gap=0, both events should count.
 
-  gap <- 5 / 365.25
+  gap <- 0
 
   d <- data.frame(
     id = c(1, 1, 1),
     treatment = "A",
     enroll_time = 0,
-    tte = c(0.1, 0.1 + gap / 2, 1.0),
+    tte = c(0.1, 0.11, 1.0),
     event = c(1, 1, 0)
   )
   d$calendar_time <- d$enroll_time + d$tte
@@ -86,6 +87,6 @@ test_that("cut_data_by_date uses default gap", {
 
   res <- cut_data_by_date(d, cut_date = 1.0)
 
-  expect_equal(res$events, 1)
-  expect_equal(res$tte, 1.0 - gap)
+  expect_equal(res$events, 2)
+  expect_equal(res$tte, 1.0)
 })

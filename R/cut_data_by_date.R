@@ -9,7 +9,7 @@
 #' @param ... Additional arguments passed to methods.
 #' @param cut_date Calendar time (relative to trial start) at which to censor follow-up.
 #' @param event_gap Gap duration after each event during which no new events are counted.
-#'   Can be a numeric value (default `5 / 365.25`) or a function returning a numeric value.
+#'   Can be a numeric value (default `0`) or a function returning a numeric value.
 #'   The time at risk is reduced by the sum of these gaps (truncated by the cut date).
 #'
 #' @return A data frame with one row per subject randomized prior to `cut_date` containing
@@ -26,17 +26,17 @@
 #' )
 #' sim <- nb_sim(enroll_rate, fail_rate, dropout_rate, max_followup = 2, n = 20)
 #' cut_data_by_date(sim, cut_date = 1)
-cut_data_by_date <- function(data, cut_date, event_gap = 5 / 365.25, ...) {
+cut_data_by_date <- function(data, cut_date, event_gap = 0, ...) {
   UseMethod("cut_data_by_date")
 }
 
 #' @export
-cut_data_by_date.default <- function(data, cut_date, event_gap = 5 / 365.25, ...) {
+cut_data_by_date.default <- function(data, cut_date, event_gap = 0, ...) {
   stop("No cut_data_by_date() method for objects of class ", class(data)[1], call. = FALSE)
 }
 
 #' @export
-cut_data_by_date.nb_sim_data <- function(data, cut_date, event_gap = 5 / 365.25, ...) {
+cut_data_by_date.nb_sim_data <- function(data, cut_date, event_gap = 0, ...) {
   if (is.null(cut_date) || length(cut_date) != 1L || !is.finite(cut_date)) {
     stop("cut_date must be a single finite numeric value", call. = FALSE)
   }
@@ -105,7 +105,7 @@ cut_data_by_date.nb_sim_data <- function(data, cut_date, event_gap = 5 / 365.25,
 }
 
 #' @export
-cut_data_by_date.nb_sim_seasonal <- function(data, cut_date, event_gap = 5 / 365.25, ...) {
+cut_data_by_date.nb_sim_seasonal <- function(data, cut_date, event_gap = 0, ...) {
   if (is.null(cut_date) || length(cut_date) != 1L || !is.finite(cut_date)) {
     stop("cut_date must be a single finite numeric value", call. = FALSE)
   }
