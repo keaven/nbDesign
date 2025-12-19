@@ -79,7 +79,6 @@ test_that("sample_size_nbinom calculates correctly", {
   expect_error(sample_size_nbinom(lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, accrual_rate = 10, trial_duration = 10)) # Missing duration
   expect_error(sample_size_nbinom(lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, accrual_rate = 10, accrual_duration = c(5, 5), trial_duration = 10)) # Mismatch
   expect_error(sample_size_nbinom(lambda1 = 0.5, lambda2 = 0.3, dispersion = 0.1, accrual_rate = 10, accrual_duration = 11, trial_duration = 10)) # Accrual > Trial
-
 })
 
 # Test Exposure Reporting with Event Gap
@@ -179,5 +178,3 @@ test_that("sample_size_nbinom handles vector dropout_rate", {
   expect_true(res_diff$exposure[1] < res_diff$exposure[2])
   expect_true(length(res_diff$exposure) == 2)
 })
-
-
