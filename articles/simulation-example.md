@@ -20,13 +20,13 @@ We will simulate a small trial with the following parameters:
   constant rate.
 - **Treatments:** Two groups (Control vs. Experimental) with a 1:1
   allocation ratio.
-- **Event Rates:**
+- **Event rates:**
   - Control: 0.5 events per year.
   - Experimental: 0.3 events per year.
 - **Dropout:**
   - Control: 10% annual dropout rate.
   - Experimental: 5% annual dropout rate.
-- **Maximum Follow-up:** Each patient is followed for a maximum of 2
+- **Maximum follow-up:** Each patient is followed for a maximum of 2
   years from randomization.
 
 ### Defining input parameters
@@ -86,9 +86,11 @@ head(sim_data)
 #> 6  5  5 Experimental  0.05910231 2.0000000     2.0591023     0
 ```
 
-The output contains multiple rows per subject: \* `event = 1`: An actual
-recurrent event. \* `event = 0`: The censoring time (either due to
-dropout or reaching `max_followup`).
+The output contains multiple rows per subject:
+
+- `event = 1`: An actual recurrent event.
+- `event = 0`: The censoring time (either due to dropout or reaching
+  `max_followup`).
 
 ## Analyzing the data
 
@@ -269,8 +271,8 @@ The
 [`nb_sim()`](https://keaven.github.io/gsDesignNB/reference/nb_sim.md)
 function can also generate data where the counts follow a negative
 binomial distribution. This is achieved by providing a `dispersion`
-parameter in the `fail_rate` data frame. The dispersion parameter $k$
-relates the variance to the mean as $Var(Y) = \mu + k\mu^{2}$.
+parameter in the `fail_rate` data frame. The dispersion parameter \\k\\
+relates the variance to the mean as \\\mathrm{Var}(Y) = \mu + k\mu^2\\.
 
 ### Simulation with dispersion
 
@@ -306,7 +308,7 @@ We can verify that the simulated data reflects the input dispersion
 parameter by estimating it back from the data. We use the Method of
 Moments (MoM) estimator:
 
-$$\widehat{k} = \frac{Var(Y) - \bar{Y}}{{\bar{Y}}^{2}}$$
+\\ \hat{k} = \frac{\mathrm{Var}(Y) - \bar{Y}}{\bar{Y}^2} \\
 
 ``` r
 # Count events per subject

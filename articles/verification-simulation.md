@@ -8,8 +8,9 @@ library(ggplot2)
 
 ## Introduction
 
-This vignette verifies the accuracy of the `sample_size_nbinom` function
-by comparing its theoretical predictions for average exposure,
+This vignette verifies the accuracy of the
+[`sample_size_nbinom()`](https://keaven.github.io/gsDesignNB/reference/sample_size_nbinom.md)
+function by comparing its theoretical predictions for average exposure,
 statistical information, and power against results from a large-scale
 simulation study.
 
@@ -28,23 +29,24 @@ calculation and the simulation study are as follows:
 
 ### Parameters
 
-- **Rates**: $\lambda_{1} = 0.4$ (Control), $\lambda_{2} = 0.3$
+- **Rates**: \\\lambda_1 = 0.4\\ (Control), \\\lambda_2 = 0.3\\
   (Experimental).
-- **Dispersion**: $k = 0.5$.
+- **Dispersion**: \\k = 0.5\\.
 - **Power**: 90%.
 - **Alpha**: 0.025 (one-sided).
-- **Dropout**: 10% per year adjusted to monthly rate
-  ($\delta = 0.1/12$).
-- **Trial Duration**: 24 months.
-- **Max Follow-up**: 12 months.
-- **Event Gap**: 30 days (approx 0.082 years).
-- **Accrual**: Piecewise linear ramp-up over 12 months (Rate $R$ for
-  0-6mo, $2R$ for 6-12mo).
+- **Dropout**: 10% per year adjusted to monthly rate (\\\delta = 0.1 /
+  12\\).
+- **Trial duration**: 24 months.
+- **Max follow-up**: 12 months.
+- **Event gap**: 30 days (approx 0.082 years).
+- **Accrual**: Piecewise linear ramp-up over 12 months (Rate \\R\\ for
+  0-6mo, \\2R\\ for 6-12mo).
 
 ### Theoretical calculation
 
 First, we calculate the required sample size and expected properties
-using `sample_size_nbinom`.
+using
+[`sample_size_nbinom()`](https://keaven.github.io/gsDesignNB/reference/sample_size_nbinom.md).
 
 ``` r
 # Parameters
@@ -99,8 +101,8 @@ print(design)
 We simulated 3,600 trials using the parameters defined above from the
 Friede method. This number of simulations was chosen to achieve a
 standard error for the power estimate of approximately 0.005 when the
-true power is 90% ($\sqrt{0.9 \times 0.1/3600} = 0.005$). The simulation
-script is located in `data-raw/generate_simulation_data.R`.
+true power is 90% (\\\sqrt{0.9 \times 0.1 / 3600} = 0.005\\). The
+simulation script is located in `data-raw/generate_simulation_data.R`.
 
 ``` r
 # Load pre-computed simulation results
@@ -126,8 +128,8 @@ if (results_file != "") {
 ### 1. Average exposure verification
 
 We compare the theoretical average exposure calculated by
-`sample_size_nbinom` with the observed average exposure in the
-simulation.
+[`sample_size_nbinom()`](https://keaven.github.io/gsDesignNB/reference/sample_size_nbinom.md)
+with the observed average exposure in the simulation.
 
 ``` r
 # Theoretical Exposure
@@ -162,17 +164,18 @@ exposure.
 The theoretical variance of the log rate ratio estimator (Wald test) is
 given by:
 
-$$V_{theo} = \frac{1/\mu_{1} + k_{adj}}{n_{1}} + \frac{1/\mu_{2} + k_{adj}}{n_{2}}$$
+\\ V\_{\text{theo}} = \frac{1/\mu_1 + k\_{\text{adj}}}{n_1} +
+\frac{1/\mu_2 + k\_{\text{adj}}}{n_2} \\
 
-where $\mu_{i} = \lambda_{i,eff}\bar{t}$ is the expected number of
-events per subject in group $i$ (using effective rates adjusted for
-event gaps), and $k_{adj} = k \cdot Q$ is the dispersion parameter
-inflated for variable follow-up.
+where \\\mu_i = \lambda\_{i,\text{eff}} \bar{t}\\ is the expected number
+of events per subject in group \\i\\ (using effective rates adjusted for
+event gaps), and \\k\_{\text{adj}} = k \cdot Q\\ is the dispersion
+parameter inflated for variable follow-up.
 
-The dispersion parameter $k$ directly increases the variance of the
-estimator. In a standard Poisson model, $k = 0$, and the variance
+The dispersion parameter \\k\\ directly increases the variance of the
+estimator. In a standard Poisson model, \\k=0\\, and the variance
 depends only on the expected number of events. With negative binomial
-dispersion ($k > 0$), the variance is inflated, reflecting the extra
+dispersion (\\k \> 0\\), the variance is inflated, reflecting the extra
 variability (overdispersion) in the data.
 
 We compare this with the variance of the estimates from the simulation.
@@ -203,10 +206,10 @@ knitr::kable(comparison_var, digits = 5, caption = "Comparison of Variance")
 
 Comparison of Variance
 
-- **Empirical Var**: The actual variability of the estimated log rate
+- **Empirical var**: The actual variability of the estimated log rate
   ratios across 3,600 trials.
-- **Avg Estimated Var**: The average of the variance estimates
-  ($SE^{2}$) produced by the Wald test in each trial.
+- **Avg estimated var**: The average of the variance estimates
+  (\\\text{SE}^2\\) produced by the Wald test in each trial.
 
 While there is reasonable agreement, the sample size formula may
 slightly underestimate the variability of the test statistic and thus
@@ -252,9 +255,10 @@ binom.test(sum(results$p_value < design_ref$inputs$alpha, na.rm = TRUE), nrow(re
 
 ## Conclusion
 
-The simulation results confirm that `sample_size_nbinom` reasonably
-predicts average exposure, variance (information), and power for this
-complex design with piecewise accrual and dropout. However, given the
-slight underpowering that the simulation study suggests, it may be
-useful to consider a larger sample size than the Friede approximation
-suggests, with power verified by simulation.
+The simulation results confirm that
+[`sample_size_nbinom()`](https://keaven.github.io/gsDesignNB/reference/sample_size_nbinom.md)
+reasonably predicts average exposure, variance (information), and power
+for this complex design with piecewise accrual and dropout. However,
+given the slight underpowering that the simulation study suggests, it
+may be useful to consider a larger sample size than the Friede
+approximation suggests, with power verified by simulation.

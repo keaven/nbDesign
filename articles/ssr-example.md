@@ -1,4 +1,4 @@
-# Sample Size Re-estimation Example
+# Sample size re-estimation example
 
 ``` r
 library(gsDesignNB)
@@ -20,29 +20,29 @@ leads to a loss of power if the sample size is not adjusted. We will
 show how to increase the sample size based on both blinded and unblinded
 interim data to maintain the desired power.
 
-## Trial Setup and Initial Design
+## Trial setup and initial design
 
 We plan a trial to compare two treatment groups (Control
 vs. Experimental) with respect to recurrent event rates.
 
-**Planned Parameters:**
+**Planned parameters:**
 
-- Control rate ($\lambda_{1}$): 2.0 events/year
-- Experimental rate ($\lambda_{2}$): 1.5 events/year (Hazard Ratio =
+- Control rate (\\\lambda_1\\): 2.0 events/year
+- Experimental rate (\\\lambda_2\\): 1.5 events/year (Hazard Ratio =
   0.75)
-- Dispersion ($k$): 0.5
+- Dispersion (\\k\\): 0.5
 - Power: 90%
-- One-sided Type I error ($\alpha$): 0.025
+- One-sided Type I error (\\\alpha\\): 0.025
 - Enrollment: 20 patients/month for 12 months
 - Study duration: 24 months (12 months accrual + 12 months follow-up)
 
-**Actual Parameters (Simulation Truth):**
+**Actual parameters (simulation truth):**
 
-- Dispersion ($k$): 0.8 (Higher than planned, implying higher
+- Dispersion (\\k\\): 0.8 (Higher than planned, implying higher
   variability)
 - Rates are as planned.
 
-### Initial Sample Size Calculation
+### Initial sample size calculation
 
 First, we calculate the required sample size under the *planned*
 parameters.
@@ -84,7 +84,7 @@ print(design_plan)
 
 The design requires a total of 280 patients.
 
-## Simulation of a Single Trial
+## Simulation of a single trial
 
 We simulate a single realization of the trial using the *actual*
 parameters (higher dispersion).
@@ -131,7 +131,7 @@ head(sim_data)
 #> 6  1  1 Experimental   0.1250879 1.58735933     1.7124473     1
 ```
 
-## Interim Analysis
+## Interim analysis
 
 We perform an interim analysis 9 months after the start of the trial. At
 this point, enrollment is still ongoing (planned 12 months).
@@ -151,11 +151,12 @@ sum(interim_data$events)
 #> [1] 1347
 ```
 
-## Blinded Sample Size Re-estimation
+## Blinded sample size re-estimation
 
-We use the `blinded_ssr` function to estimate the nuisance parameters
-(dispersion and overall rate) from the blinded data and recalculate the
-sample size.
+We use the
+[`blinded_ssr()`](https://keaven.github.io/gsDesignNB/reference/blinded_ssr.md)
+function to estimate the nuisance parameters (dispersion and overall
+rate) from the blinded data and recalculate the sample size.
 
 The method assumes the treatment effect (rate ratio) is maintained as
 planned, but updates the sample size based on the observed variance
@@ -209,7 +210,7 @@ The blinded estimate of dispersion is 0.802, which is higher than the
 planned 0.5. Consequently, the re-estimated sample size 440 is larger
 than the planned 280.
 
-## Unblinded Sample Size Re-estimation
+## Unblinded sample size re-estimation
 
 Alternatively, if the interim analysis is performed by an Independent
 Data Monitoring Committee (IDMC) with access to unblinded data, we can
@@ -295,7 +296,7 @@ true value 0.8. The rates might also fluctuate. The resulting sample
 size 414 reflects the actual variability and effect size observed so
 far.
 
-## Comparison and Conclusion
+## Comparison and conclusion
 
 ``` r
 comparison <- data.frame(
@@ -327,3 +328,9 @@ efficacy.
 **Note:** In practice, sample size is typically not reduced if the
 re-estimated size is smaller than planned. We would take
 `max(n_planned, n_reestimated)`.
+
+## References
+
+Friede, T, and H Schmidli. 2010. “Blinded Sample Size Reestimation with
+Negative Binomial Counts in Superiority and Non-Inferiority Trials.”
+*Methods of Information in Medicine* 49 (06): 618–24.

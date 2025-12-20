@@ -35,8 +35,8 @@ sample_size_nbinom(
 
 - dispersion:
 
-  Dispersion parameter `k` such that \\Var(Y) = \mu + k \mu^2\\. Note
-  that this is equivalent to `1/size` in R's
+  Dispersion parameter `k` such that \\\mathrm{Var}(Y) = \mu + k
+  \mu^2\\. Note that this is equivalent to `1/size` in R's
   [`stats::rnbinom()`](https://rdrr.io/r/stats/NegBinomial.html)
   parameterization.
 

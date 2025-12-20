@@ -14,8 +14,8 @@ patterns, such as respiratory infections.
 
 We design a small trial with the following characteristics:
 
-- **Randomization Start:** January 1, 2024.
-- **Sample Size:** 20 subjects.
+- **Randomization start:** January 1, 2024.
+- **Sample size:** 20 subjects.
 - **Enrollment:** 6 months duration.
 - **Follow-up:** 1 year.
 - **Seasonality:** Higher event rates in Winter/Fall, lower in

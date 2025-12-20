@@ -6,7 +6,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Group sequential design and simulation • gsDesignNB</title>
-<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- mathjax math --><script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script><script>
+  window.MathJax = {
+    chtml: {
+      fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
+    }
+  };
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -78,7 +84,7 @@ simulate the design to confirm design operating characteristics using
 <li>
 <strong>Enrollment:</strong> 12 months with a constant rate</li>
 <li>
-<strong>Trial Duration:</strong> 24 months</li>
+<strong>Trial duration:</strong> 24 months</li>
 <li>
 <strong>Analyses:</strong>
 <ul>
@@ -88,7 +94,7 @@ simulate the design to confirm design operating characteristics using
 </ul>
 </li>
 <li>
-<strong>Event Rates:</strong>
+<strong>Event rates:</strong>
 <ul>
 <li>Control: 0.125 events per month (1.5 per year)</li>
 <li>Experimental: 0.0833 events per month (1.0 per year; rate ratio =
@@ -156,8 +162,7 @@ as for the fixed design. The relative enrollment rates will be increased
 to increase the sample size as with standard group sequential design
 theory. We specify <code>usTime = c(0.1, 0.18, 1)</code> which along
 with the <code><a href="https://keaven.github.io/gsDesign/reference/sfLinear.html" class="external-link">sfLinear()</a></code> spending function will spend 10%, 18%
-and 100% of the cumulative
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
+and 100% of the cumulative <span class="math inline">\(\alpha\)</span>
 at the 3 planned analyses regardless of the observed statistical
 information at each analysis. The interim spending is intended to
 achieve a nominal p-value of 0.0025 (one-sided) at both interim
@@ -1398,7 +1403,7 @@ sequential boundaries.</p>
 </div>
 </div>
 <div class="section level3">
-<h3 id="power-and-operating-characteristics">Power and Operating Characteristics<a class="anchor" aria-label="anchor" href="#power-and-operating-characteristics"></a>
+<h3 id="power-and-operating-characteristics">Power and operating characteristics<a class="anchor" aria-label="anchor" href="#power-and-operating-characteristics"></a>
 </h3>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Overall Power</span></span>

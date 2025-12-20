@@ -20,12 +20,12 @@ using
 We design a trial with the following characteristics:
 
 - **Enrollment:** 12 months with a constant rate
-- **Trial Duration:** 24 months
+- **Trial duration:** 24 months
 - **Analyses:**
   - Interim 1: 10 months
   - Interim 2: 18 months
   - Final: 24 months
-- **Event Rates:**
+- **Event rates:**
   - Control: 0.125 events per month (1.5 per year)
   - Experimental: 0.0833 events per month (1.0 per year; rate ratio =
     0.67)
@@ -87,7 +87,7 @@ increase the sample size as with standard group sequential design
 theory. We specify `usTime = c(0.1, 0.18, 1)` which along with the
 [`sfLinear()`](https://keaven.github.io/gsDesign/reference/sfLinear.html)
 spending function will spend 10%, 18% and 100% of the cumulative
-$\alpha$ at the 3 planned analyses regardless of the observed
+\\\alpha\\ at the 3 planned analyses regardless of the observed
 statistical information at each analysis. The interim spending is
 intended to achieve a nominal p-value of 0.0025 (one-sided) at both
 interim analyses.
@@ -292,7 +292,7 @@ analysis_summary_tbl |>
 | 2.00                           | 364.00     | 278.88       | 60.12                 | 45.66               | 47.02                 | 17.00         | 0.00          | 0.340            | 0.000            | 0.600          |
 | 3.00                           | 364.00     | 311.06       | 65.55                 | 49.17               | 50.81                 | 13.00         | 7.00          | 0.260            | 0.140            | 0.860          |
 
-### Power and Operating Characteristics
+### Power and operating characteristics
 
 ``` r
 # Overall Power

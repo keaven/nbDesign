@@ -6,7 +6,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Simulation of recurrent events • gsDesignNB</title>
-<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- mathjax math --><script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script><script>
+  window.MathJax = {
+    chtml: {
+      fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
+    }
+  };
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -80,7 +86,7 @@ months with a constant rate.</li>
 <strong>Treatments:</strong> Two groups (Control vs. Experimental)
 with a 1:1 allocation ratio.</li>
 <li>
-<strong>Event Rates:</strong>
+<strong>Event rates:</strong>
 <ul>
 <li>Control: 0.5 events per year.</li>
 <li>Experimental: 0.3 events per year.</li>
@@ -94,7 +100,7 @@ with a 1:1 allocation ratio.</li>
 </ul>
 </li>
 <li>
-<strong>Maximum Follow-up:</strong> Each patient is followed for a
+<strong>Maximum follow-up:</strong> Each patient is followed for a
 maximum of 2 years from randomization.</li>
 </ul>
 <div class="section level3">
@@ -154,10 +160,14 @@ maximum of 2 years from randomization.</li>
 <span><span class="co">#&gt; 4  3  3 Experimental  0.05727338 2.0000000     2.0572734     0</span></span>
 <span><span class="co">#&gt; 5  4  4      Control  0.05793124 2.0000000     2.0579312     0</span></span>
 <span><span class="co">#&gt; 6  5  5 Experimental  0.05910231 2.0000000     2.0591023     0</span></span></code></pre></div>
-<p>The output contains multiple rows per subject: *
-<code>event = 1</code>: An actual recurrent event. *
+<p>The output contains multiple rows per subject:</p>
+<ul>
+<li>
+<code>event = 1</code>: An actual recurrent event.</li>
+<li>
 <code>event = 0</code>: The censoring time (either due to dropout or
-reaching <code>max_followup</code>).</p>
+reaching <code>max_followup</code>).</li>
+</ul>
 </div>
 <div class="section level2">
 <h2 id="analyzing-the-data">Analyzing the data<a class="anchor" aria-label="anchor" href="#analyzing-the-data"></a>
@@ -1272,10 +1282,8 @@ accordingly. This function also respects the <code>event_gap</code>
 <p>The <code><a href="../reference/nb_sim.html">nb_sim()</a></code> function can also generate data where the
 counts follow a negative binomial distribution. This is achieved by
 providing a <code>dispersion</code> parameter in the
-<code>fail_rate</code> data frame. The dispersion parameter
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
-relates the variance to the mean as
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mi>a</mi><mi>r</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>Y</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>μ</mi><mo>+</mo><mi>k</mi><msup><mi>μ</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">Var(Y) = \mu + k\mu^2</annotation></semantics></math>.</p>
+<code>fail_rate</code> data frame. The dispersion parameter <span class="math inline">\(k\)</span> relates the variance to the mean as
+<span class="math inline">\(\mathrm{Var}(Y) = \mu + k\mu^2\)</span>.</p>
 <div class="section level3">
 <h3 id="simulation-with-dispersion">Simulation with dispersion<a class="anchor" aria-label="anchor" href="#simulation-with-dispersion"></a>
 </h3>
@@ -1309,7 +1317,8 @@ relates the variance to the mean as
 <p>We can verify that the simulated data reflects the input dispersion
 parameter by estimating it back from the data. We use the Method of
 Moments (MoM) estimator:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>k</mi><mo accent="true">̂</mo></mover><mo>=</mo><mfrac><mrow><mi>V</mi><mi>a</mi><mi>r</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>Y</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mover><mi>Y</mi><mo accent="true">‾</mo></mover></mrow><msup><mover><mi>Y</mi><mo accent="true">‾</mo></mover><mn>2</mn></msup></mfrac></mrow><annotation encoding="application/x-tex"> \hat{k} = \frac{Var(Y) - \bar{Y}}{\bar{Y}^2} </annotation></semantics></math></p>
+<p><span class="math display">\[ \hat{k} = \frac{\mathrm{Var}(Y) -
+\bar{Y}}{\bar{Y}^2} \]</span></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Count events per subject</span></span>
 <span><span class="va">counts_nb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">sim_nb</span><span class="op">)</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">event</span><span class="op">)</span><span class="op">)</span>, by <span class="op">=</span> <span class="va">id</span><span class="op">]</span></span>

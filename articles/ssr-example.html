@@ -5,12 +5,18 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Sample Size Re-estimation Example • gsDesignNB</title>
-<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Sample size re-estimation example • gsDesignNB</title>
+<!-- mathjax math --><script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script><script>
+  window.MathJax = {
+    chtml: {
+      fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
+    }
+  };
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Sample Size Re-estimation Example">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Sample size re-estimation example">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -51,7 +57,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Sample Size Re-estimation Example</h1>
+      <h1>Sample size re-estimation example</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesignNB/blob/main/vignettes/ssr-example.Rmd" class="external-link"><code>vignettes/ssr-example.Rmd</code></a></small>
@@ -69,9 +75,8 @@
 </h2>
 <p>This vignette demonstrates a group sequential trial with a single
 interim analysis where information-based sample size re-estimation (SSR)
-is performed. We follow the methodology suggested by Friede and Schmidli
-(2010) for blinded sample size re-estimation with negative binomial
-counts.</p>
+is performed. We follow the methodology suggested by <span class="citation">Friede and Schmidli (2010)</span> for blinded sample
+size re-estimation with negative binomial counts.</p>
 <p>We simulate a single trial where the actual dispersion parameter is
 higher than the planned dispersion parameter. This scenario typically
 leads to a loss of power if the sample size is not adjusted. We will
@@ -79,38 +84,31 @@ show how to increase the sample size based on both blinded and unblinded
 interim data to maintain the desired power.</p>
 </div>
 <div class="section level2">
-<h2 id="trial-setup-and-initial-design">Trial Setup and Initial Design<a class="anchor" aria-label="anchor" href="#trial-setup-and-initial-design"></a>
+<h2 id="trial-setup-and-initial-design">Trial setup and initial design<a class="anchor" aria-label="anchor" href="#trial-setup-and-initial-design"></a>
 </h2>
 <p>We plan a trial to compare two treatment groups (Control
 vs. Experimental) with respect to recurrent event rates.</p>
-<p><strong>Planned Parameters:</strong></p>
+<p><strong>Planned parameters:</strong></p>
 <ul>
-<li>Control rate
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mn>1</mn></msub><annotation encoding="application/x-tex">\lambda_1</annotation></semantics></math>):
-2.0 events/year</li>
-<li>Experimental rate
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mn>2</mn></msub><annotation encoding="application/x-tex">\lambda_2</annotation></semantics></math>):
+<li>Control rate (<span class="math inline">\(\lambda_1\)</span>): 2.0
+events/year</li>
+<li>Experimental rate (<span class="math inline">\(\lambda_2\)</span>):
 1.5 events/year (Hazard Ratio = 0.75)</li>
-<li>Dispersion
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>):
-0.5</li>
+<li>Dispersion (<span class="math inline">\(k\)</span>): 0.5</li>
 <li>Power: 90%</li>
-<li>One-sided Type I error
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>):
-0.025</li>
+<li>One-sided Type I error (<span class="math inline">\(\alpha\)</span>): 0.025</li>
 <li>Enrollment: 20 patients/month for 12 months</li>
 <li>Study duration: 24 months (12 months accrual + 12 months
 follow-up)</li>
 </ul>
-<p><strong>Actual Parameters (Simulation Truth):</strong></p>
+<p><strong>Actual parameters (simulation truth):</strong></p>
 <ul>
-<li>Dispersion
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>):
-0.8 (Higher than planned, implying higher variability)</li>
+<li>Dispersion (<span class="math inline">\(k\)</span>): 0.8 (Higher
+than planned, implying higher variability)</li>
 <li>Rates are as planned.</li>
 </ul>
 <div class="section level3">
-<h3 id="initial-sample-size-calculation">Initial Sample Size Calculation<a class="anchor" aria-label="anchor" href="#initial-sample-size-calculation"></a>
+<h3 id="initial-sample-size-calculation">Initial sample size calculation<a class="anchor" aria-label="anchor" href="#initial-sample-size-calculation"></a>
 </h3>
 <p>First, we calculate the required sample size under the
 <em>planned</em> parameters.</p>
@@ -151,7 +149,7 @@ follow-up)</li>
 </div>
 </div>
 <div class="section level2">
-<h2 id="simulation-of-a-single-trial">Simulation of a Single Trial<a class="anchor" aria-label="anchor" href="#simulation-of-a-single-trial"></a>
+<h2 id="simulation-of-a-single-trial">Simulation of a single trial<a class="anchor" aria-label="anchor" href="#simulation-of-a-single-trial"></a>
 </h2>
 <p>We simulate a single realization of the trial using the
 <em>actual</em> parameters (higher dispersion).</p>
@@ -197,7 +195,7 @@ follow-up)</li>
 <span><span class="co">#&gt; 6  1  1 Experimental   0.1250879 1.58735933     1.7124473     1</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="interim-analysis">Interim Analysis<a class="anchor" aria-label="anchor" href="#interim-analysis"></a>
+<h2 id="interim-analysis">Interim analysis<a class="anchor" aria-label="anchor" href="#interim-analysis"></a>
 </h2>
 <p>We perform an interim analysis 9 months after the start of the trial.
 At this point, enrollment is still ongoing (planned 12 months).</p>
@@ -216,11 +214,11 @@ At this point, enrollment is still ongoing (planned 12 months).</p>
 <span><span class="co">#&gt; [1] 1347</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="blinded-sample-size-re-estimation">Blinded Sample Size Re-estimation<a class="anchor" aria-label="anchor" href="#blinded-sample-size-re-estimation"></a>
+<h2 id="blinded-sample-size-re-estimation">Blinded sample size re-estimation<a class="anchor" aria-label="anchor" href="#blinded-sample-size-re-estimation"></a>
 </h2>
-<p>We use the <code>blinded_ssr</code> function to estimate the nuisance
-parameters (dispersion and overall rate) from the blinded data and
-recalculate the sample size.</p>
+<p>We use the <code><a href="../reference/blinded_ssr.html">blinded_ssr()</a></code> function to estimate the
+nuisance parameters (dispersion and overall rate) from the blinded data
+and recalculate the sample size.</p>
 <p>The method assumes the treatment effect (rate ratio) is maintained as
 planned, but updates the sample size based on the observed variance
 structure.</p>
@@ -271,7 +269,7 @@ planned 0.5. Consequently, the re-estimated sample size 440 is larger
 than the planned 280.</p>
 </div>
 <div class="section level2">
-<h2 id="unblinded-sample-size-re-estimation">Unblinded Sample Size Re-estimation<a class="anchor" aria-label="anchor" href="#unblinded-sample-size-re-estimation"></a>
+<h2 id="unblinded-sample-size-re-estimation">Unblinded sample size re-estimation<a class="anchor" aria-label="anchor" href="#unblinded-sample-size-re-estimation"></a>
 </h2>
 <p>Alternatively, if the interim analysis is performed by an Independent
 Data Monitoring Committee (IDMC) with access to unblinded data, we can
@@ -355,7 +353,7 @@ size 414 reflects the actual variability and effect size observed so
 far.</p>
 </div>
 <div class="section level2">
-<h2 id="comparison-and-conclusion">Comparison and Conclusion<a class="anchor" aria-label="anchor" href="#comparison-and-conclusion"></a>
+<h2 id="comparison-and-conclusion">Comparison and conclusion<a class="anchor" aria-label="anchor" href="#comparison-and-conclusion"></a>
 </h2>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">comparison</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
@@ -401,6 +399,18 @@ efficacy.</p>
 <p><strong>Note:</strong> In practice, sample size is typically not
 reduced if the re-estimated size is smaller than planned. We would take
 <code>max(n_planned, n_reestimated)</code>.</p>
+</div>
+<div class="section level2 unnumbered">
+<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-friede2010blinded" class="csl-entry">
+Friede, T, and H Schmidli. 2010. <span>“Blinded Sample Size Reestimation
+with Negative Binomial Counts in Superiority and Non-Inferiority
+Trials.”</span> <em>Methods of Information in Medicine</em> 49 (06):
+618–24.
+</div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

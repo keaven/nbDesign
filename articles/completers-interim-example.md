@@ -16,13 +16,13 @@ where an interim analysis is conducted based on a specific number of
 
 We define a trial with the following parameters:
 
-- **Sample Size:** 200 patients.
+- **Sample size:** 200 patients.
 - **Enrollment:** Recruited over 12 months.
 - **Follow-up:** 2 years maximum follow-up per patient.
-- **Interim Analysis:** Conducted when 40% of patients (80 subjects)
+- **Interim analysis:** Conducted when 40% of patients (80 subjects)
   have completed their 2-year follow-up. The interim analysis includes
   all data available at that time (completers and partial follow-up).
-- **Final Analysis:** Conducted when all patients have completed
+- **Final analysis:** Conducted when all patients have completed
   follow-up (or dropped out). Includes all available data.
 
 ``` r
