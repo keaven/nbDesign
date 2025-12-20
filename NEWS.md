@@ -1,3 +1,8 @@
+# gsDesignNB 0.2.5
+
+- Added `rr0` parameter to `sample_size_nbinom()` and `blinded_ssr()` to support non-inferiority and super-superiority testing.
+- Changed default `event_gap` to 0 in `nb_sim()`.
+
 # gsDesignNB 0.2.4
 
 - Fix `cut_date_for_completers()` to support `nb_sim_seasonal()` output (no `tte` column).

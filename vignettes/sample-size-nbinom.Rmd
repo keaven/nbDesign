@@ -82,18 +82,17 @@ for (k in k_values) {
 The sample size calculation is based on the asymptotic normality of the log rate ratio, $\theta = \log(\lambda_2 / \lambda_1)$. 
 This approach corresponds to **Method 3** of @zhu2014sample, which uses a Wald statistic for the log rate ratio. 
 It is also the method described by @friede2010blinded and @mutze2019group (as implemented in the `gscounts` package).
-Note that the method described by @kong2016sample (Method 2 of @zhu2014sample) uses a score test statistic, which has slightly different variance approximations.
 
 
 The total sample size $n_{total}$ is calculated as:
 
-$$ n_{total} = \frac{(z_{\alpha/s} + z_{\beta})^2 \cdot \tilde{V}}{(\log(\lambda_1 \theta_0 /\lambda_2))^2} $$
+$$ n_{total} = \frac{(z_{\alpha/s} + z_{\beta})^2 \cdot \tilde{V}}{(\theta - \theta_0)^2} $$
 
 where:
 
 *   $z_{\alpha/s}$ and $z_{\beta}$ are the standard normal critical values for the significance level $\alpha$ (with $s=1$ or $2$ sided) and power $1-\beta$.
-*   $\lambda_1$ and $\lambda_2$ are the event rates in the control and treatment groups.
-*   $\theta_0$ is the rate ratio under the null hypothesis (default is 1 for superiority).
+*   $\theta = \log(\lambda_2 / \lambda_1)$ is the log rate ratio.
+*   $\theta_0$ is the log rate ratio under the null hypothesis (default is 0 for superiority).
 *   $\tilde{V}$ is the average variance per subject for $\hat{\theta} = \log(\widehat{\lambda_2 / \lambda_1})$, defined as:
 
 $$ \tilde{V} = \frac{1/ \mu_1 + k}{p_1} + \frac{1/ \mu_2 + k}{p_2} $$

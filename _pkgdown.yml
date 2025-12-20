@@ -83,6 +83,7 @@ articles:
       - sample-size-nbinom
       - simulation-example
       - verification-simulation
+      - non-inferiority-example
       - group-sequential-simulation
       - completers-interim-example
       - ssr-example
