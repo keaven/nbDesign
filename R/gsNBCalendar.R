@@ -233,20 +233,24 @@ compute_info_at_time <- function(
   # Range of follow-up times: [min_f, max_f]
   max_f <- analysis_time
   min_f <- analysis_time - enrollment_time
-  
+
   # Cap follow-up at max_followup
   # We need to calculate average exposure over [min_f, max_f]
   # but exposure is capped at max_followup
-  
+
   calc_avg_exposure <- function(min_t, max_t, rate, max_fu) {
-    if (min_t >= max_t) return(0)
-    
+    if (min_t >= max_t) {
+      return(0)
+    }
+
     # If entire range is above max_fu, exposure is constant (capped)
     if (min_t >= max_fu) {
-      if (rate <= 0) return(max_fu)
+      if (rate <= 0) {
+        return(max_fu)
+      }
       return((1 - exp(-rate * max_fu)) / rate)
     }
-    
+
     # If entire range is below max_fu, standard calculation
     if (max_t <= max_fu) {
       if (rate <= 0) {
@@ -256,14 +260,14 @@ compute_info_at_time <- function(
         return((1 - term) / rate)
       }
     }
-    
+
     # Split range: [min_t, max_fu] and [max_fu, max_t]
     w1 <- (max_fu - min_t) / (max_t - min_t)
     w2 <- (max_t - max_fu) / (max_t - min_t)
-    
+
     e1 <- calc_avg_exposure(min_t, max_fu, rate, max_fu)
     e2 <- calc_avg_exposure(max_fu, max_t, rate, max_fu) # This will hit the first case
-    
+
     return(w1 * e1 + w2 * e2)
   }
 
