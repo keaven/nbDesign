@@ -9,6 +9,7 @@ blinded_ssr(
   ratio = 1,
   lambda1_planning,
   lambda2_planning,
+  rr0 = 1,
   power = 0.8,
   alpha = 0.025,
   method = "friede",
@@ -30,6 +31,8 @@ This is typically the output of \code{\link[=cut_data_by_date]{cut_data_by_date(
 \item{lambda1_planning}{Planned event rate for the control group used in original calculation.}
 
 \item{lambda2_planning}{Planned event rate for the experimental group used in original calculation.}
+
+\item{rr0}{Rate ratio under the null hypothesis (lambda2/lambda1). Default is 1.}
 
 \item{power}{Target power (1 - beta). Default is 0.8.}
 

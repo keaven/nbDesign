@@ -12,6 +12,7 @@
 #' @param ratio Planned allocation ratio (experimental / control). Default is 1.
 #' @param lambda1_planning Planned event rate for the control group used in original calculation.
 #' @param lambda2_planning Planned event rate for the experimental group used in original calculation.
+#' @param rr0 Rate ratio under the null hypothesis (lambda2/lambda1). Default is 1.
 #' @param power Target power (1 - beta). Default is 0.8.
 #' @param alpha One-sided significance level. Default is 0.025.
 #' @param method Method for sample size recalculation. Currently "friede" (Friede & Schmidli 2010)
@@ -64,7 +65,7 @@
 #'   trial_duration = 18
 #' )
 blinded_ssr <- function(
-  data, ratio = 1, lambda1_planning, lambda2_planning,
+  data, ratio = 1, lambda1_planning, lambda2_planning, rr0 = 1,
   power = 0.8, alpha = 0.025, method = "friede",
   accrual_rate, accrual_duration, trial_duration,
   dropout_rate = 0, max_followup = NULL, event_gap = NULL
@@ -85,6 +86,7 @@ blinded_ssr <- function(
   res_new <- sample_size_nbinom(
     lambda1 = lambda1_new,
     lambda2 = lambda2_new,
+    rr0 = rr0,
     dispersion = dispersion_est,
     power = power,
     alpha = alpha,

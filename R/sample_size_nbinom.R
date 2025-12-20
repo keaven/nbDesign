@@ -4,8 +4,10 @@
 #' binomial distribution for the outcome.
 #'
 #' @param lambda1 Rate in group 1 (control).
-#' @param lambda2 Rate in group 2 (treatment).
-#' @param dispersion Dispersion parameter `k` such that \eqn{\mathrm{Var}(Y) = \mu + k \mu^2}.
+#' @param lambda2 Rate in group 2 (treatment).#' @param rr0 Rate ratio under the null hypothesis (lambda2/lambda1).
+#'   Default is 1 (superiority).
+#'   For non-inferiority, use a value > 1 (e.g., 1.1).
+#'   For super-superiority, use a value < 1 (e.g., 0.8).#' @param dispersion Dispersion parameter `k` such that \eqn{\mathrm{Var}(Y) = \mu + k \mu^2}.
 #'   Note that this is equivalent to `1/size` in R's [stats::rnbinom()] parameterization.
 #' @param power Power of the test (1 - beta). Default is 0.9.
 #' @param alpha Significance level. Default is 0.025.
@@ -77,13 +79,16 @@
 #' summary(x2)
 sample_size_nbinom <- function(
   lambda1, lambda2, dispersion, power = NULL,
-  alpha = 0.025, sided = 1, ratio = 1,
+  alpha = 0.025, sided = 1, ratio = 1, rr0 = 1,
   accrual_rate, accrual_duration,
   trial_duration, dropout_rate = 0,
   max_followup = NULL, event_gap = NULL
 ) {
   if (lambda1 <= 0 || lambda2 <= 0) {
     stop("Rates lambda1 and lambda2 must be positive.")
+  }
+  if (rr0 <= 0) {
+    stop("Null hypothesis rate ratio rr0 must be positive.")
   }
   if (any(dispersion < 0)) {
     stop("Dispersion parameter must be non-negative.")
@@ -125,6 +130,7 @@ sample_size_nbinom <- function(
   inputs <- list(
     lambda1 = lambda1,
     lambda2 = lambda2,
+    rr0 = rr0,
     dispersion = dispersion,
     power = power_input,
     alpha = alpha,
@@ -322,7 +328,7 @@ sample_size_nbinom <- function(
     z_beta <- qnorm(power)
 
     num <- (z_alpha + z_beta)^2 * ((1 / mu1 + k1) + (1 / ratio) * (1 / mu2 + k2))
-    den <- (log(lambda1 / lambda2))^2
+    den <- (log(lambda1 * rr0 / lambda2))^2
     n1 <- num / den
     n2 <- n1 * ratio
 
@@ -344,7 +350,7 @@ sample_size_nbinom <- function(
 
     # z_beta = sqrt( n1 * (log(mu1/mu2))^2 / V ) - z_alpha
     V <- (1 / mu1 + k1) + (1 / ratio) * (1 / mu2 + k2)
-    z_beta <- sqrt(n1_c * (log(lambda1 / lambda2))^2 / V) - z_alpha
+    z_beta <- sqrt(n1_c * (log(lambda1 * rr0 / lambda2))^2 / V) - z_alpha
 
     power <- pnorm(z_beta)
   }
@@ -419,6 +425,10 @@ print.sample_size_nbinom_result <- function(x, ...) {
     x$inputs$lambda1, x$inputs$lambda2,
     x$inputs$lambda2 / x$inputs$lambda1
   ))
+
+  if (!is.null(x$inputs$rr0) && x$inputs$rr0 != 1) {
+    cat(sprintf("Null hypothesis RR: %.4f\n", x$inputs$rr0))
+  }
 
   # Handle dispersion display
   if (x$inputs$dispersion[1] == x$inputs$dispersion[2]) {
@@ -496,6 +506,11 @@ summary.sample_size_nbinom_result <- function(object, ...) {
   inputs <- object$inputs
   risk_ratio <- inputs$lambda2 / inputs$lambda1
 
+  rr0_text <- ""
+  if (!is.null(inputs$rr0) && inputs$rr0 != 1) {
+    rr0_text <- sprintf("null hypothesis RR %.4f, ", inputs$rr0)
+  }
+
   # Handle dispersion
   if (inputs$dispersion[1] == inputs$dispersion[2]) {
     disp_text <- sprintf("dispersion %.4f", inputs$dispersion[1])
@@ -527,7 +542,7 @@ summary.sample_size_nbinom_result <- function(object, ...) {
       "%.0f percent power, ",
       "%.1f percent (%d-sided) Type I error. ",
       "Control rate %.4f, treatment rate %.4f, ",
-      "risk ratio %.4f, %s. ",
+      "risk ratio %.4f, %s%s. ",
       "Accrual duration %.1f, trial duration %.1f, ",
       "%s.%s ",
       "Expected events %.1f. ",
@@ -542,6 +557,7 @@ summary.sample_size_nbinom_result <- function(object, ...) {
     inputs$lambda1,
     inputs$lambda2,
     risk_ratio,
+    rr0_text,
     disp_text,
     sum(inputs$accrual_duration),
     inputs$trial_duration,
