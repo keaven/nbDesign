@@ -136,6 +136,8 @@ for convenience.
   events](https://keaven.github.io/gsDesignNB/articles/simulation-example.md):
 - [Verification of sample size calculation via
   simulation](https://keaven.github.io/gsDesignNB/articles/verification-simulation.md):
+- [Non-inferiority and super-superiority
+  designs](https://keaven.github.io/gsDesignNB/articles/non-inferiority-example.md):
 - [Group sequential design and
   simulation](https://keaven.github.io/gsDesignNB/articles/group-sequential-simulation.md):
 - [Group sequential simulation with completers

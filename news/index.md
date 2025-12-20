@@ -1,5 +1,15 @@
 # Changelog
 
+## gsDesignNB 0.2.5
+
+- Added `rr0` parameter to
+  [`sample_size_nbinom()`](https://keaven.github.io/gsDesignNB/reference/sample_size_nbinom.md)
+  and
+  [`blinded_ssr()`](https://keaven.github.io/gsDesignNB/reference/blinded_ssr.md)
+  to support non-inferiority and super-superiority testing.
+- Changed default `event_gap` to 0 in
+  [`nb_sim()`](https://keaven.github.io/gsDesignNB/reference/nb_sim.md).
+
 ## gsDesignNB 0.2.4
 
 - Fix

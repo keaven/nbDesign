@@ -14,6 +14,7 @@ sample_size_nbinom(
   alpha = 0.025,
   sided = 1,
   ratio = 1,
+  rr0 = 1,
   accrual_rate,
   accrual_duration,
   trial_duration,
@@ -56,6 +57,12 @@ sample_size_nbinom(
 - ratio:
 
   Allocation ratio n2/n1. Default is 1.
+
+- rr0:
+
+  Rate ratio under the null hypothesis (lambda2/lambda1). Default is 1
+  (superiority). For non-inferiority, use a value \> 1 (e.g., 1.1). For
+  super-superiority, use a value \< 1 (e.g., 0.8).
 
 - accrual_rate:
 

@@ -21,7 +21,7 @@ rates (Schneider et al. 2013) by using the exposure-adjusted rate."></head><body
 
     <a class="navbar-brand me-2" href="../index.html">gsDesignNB</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,6 +63,7 @@ rates (Schneider et al. 2013) by using the exposure-adjusted rate.</p>
 <span>  ratio <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  <span class="va">lambda1_planning</span>,</span>
 <span>  <span class="va">lambda2_planning</span>,</span>
+<span>  rr0 <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  power <span class="op">=</span> <span class="fl">0.8</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="fl">0.025</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"friede"</span>,</span>
@@ -95,6 +96,10 @@ This is typically the output of <code><a href="cut_data_by_date.html">cut_data_b
 
 <dt id="arg-lambda-planning">lambda2_planning<a class="anchor" aria-label="anchor" href="#arg-lambda-planning"></a></dt>
 <dd><p>Planned event rate for the experimental group used in original calculation.</p></dd>
+
+
+<dt id="arg-rr-">rr0<a class="anchor" aria-label="anchor" href="#arg-rr-"></a></dt>
+<dd><p>Rate ratio under the null hypothesis (lambda2/lambda1). Default is 1.</p></dd>
 
 
 <dt id="arg-power">power<a class="anchor" aria-label="anchor" href="#arg-power"></a></dt>
