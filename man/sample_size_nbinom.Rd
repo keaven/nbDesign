@@ -24,10 +24,9 @@ sample_size_nbinom(
 \arguments{
 \item{lambda1}{Rate in group 1 (control).}
 
-\item{lambda2}{Rate in group 2 (treatment).#' @param rr0 Rate ratio under the null hypothesis (lambda2/lambda1).
-Default is 1 (superiority).
-For non-inferiority, use a value > 1 (e.g., 1.1).
-For super-superiority, use a value < 1 (e.g., 0.8).#' @param dispersion Dispersion parameter \code{k} such that \eqn{\mathrm{Var}(Y) = \mu + k \mu^2}.
+\item{lambda2}{Rate in group 2 (treatment).}
+
+\item{dispersion}{Dispersion parameter \code{k} such that \eqn{\mathrm{Var}(Y) = \mu + k \mu^2}.
 Note that this is equivalent to \code{1/size} in R's \code{\link[stats:NegBinomial]{stats::rnbinom()}} parameterization.}
 
 \item{power}{Power of the test (1 - beta). Default is 0.9.}
@@ -37,6 +36,11 @@ Note that this is equivalent to \code{1/size} in R's \code{\link[stats:NegBinomi
 \item{sided}{One-sided or two-sided test. 1 for one-sided, 2 for two-sided. Default is 1.}
 
 \item{ratio}{Allocation ratio n2/n1. Default is 1.}
+
+\item{rr0}{Rate ratio under the null hypothesis (lambda2/lambda1).
+Default is 1 (superiority).
+For non-inferiority, use a value > 1 (e.g., 1.1).
+For super-superiority, use a value < 1 (e.g., 0.8).}
 
 \item{accrual_rate}{Vector of accrual rates (patients per unit time).}
 
