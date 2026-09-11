@@ -4,9 +4,9 @@
 
 - Updated selective bound tests and documentation to support both the finite
   absent bound values in gsDesign <= 3.11.0 and the infinite values in the
-  upcoming release.
+  upcoming release (#47).
 - Added regression test coverage for `update_gsNB()` summaries with skipped
-  and zero-spending harm bounds in binding and non-binding designs.
+  and zero-spending harm bounds in binding and non-binding designs (#47).
 
 # gsDesignNB 0.3.2
 
